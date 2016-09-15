@@ -21,4 +21,5 @@ group :test do
   gem 'webmock', '~> 2.1'
   gem 'capybara'
   gem 'selenium-webdriver'
+  gem 'launchy'
 end
