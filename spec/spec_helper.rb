@@ -1,6 +1,5 @@
-ENV['RAILS_ENV'] = 'test'
-ENV['RACK_ENV'] = 'test'
-ENV[ 'I_AM_PLUS_ENV' ] = 'test'
+# Config
+require 'shared/config'
 
 # Gems
 require File.expand_path('../../config/environment', __FILE__)
@@ -11,19 +10,22 @@ require 'webmock/rspec'
 # Shared
 require 'shared'
 
-WebMock.disable_net_connect!
+WebMock.disable_net_connect!( allow_localhost:true )
 
 Capybara.javascript_driver = :selenium
+Capybara.register_driver :rack_test do |app|
+  Capybara::RackTest::Driver.new app,
+    follow_redirects:false
+end
 
 
 RSpec.configure do |config|
   config.include Capybara::DSL
   config.include FactoryGirl::Syntax::Methods
-
+  
   config.filter_run_including focus: true
   config.run_all_when_everything_filtered = true  
   config.infer_spec_type_from_file_location!
-
 
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
@@ -36,14 +38,14 @@ RSpec.configure do |config|
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
   config.backtrace_exclusion_patterns = [
-    /\/lib\d*\/ruby\//,
-    /bin\//,
-    /gems/,
-    /spec\/spec_helper\.rb/,
-    /lib\/rspec\/(core|expectations|matchers|mocks)/
+    /gems/
   ]
 
   config.before(:suite) do
     FactoryGirl.find_definitions
   end
+end
+
+def app
+  Capybara.app
 end
