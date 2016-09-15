@@ -10,14 +10,11 @@ require 'webmock/rspec'
 # Shared
 require 'shared'
 
+Mongoid.logger.level = Logger::ERROR
+
 WebMock.disable_net_connect!( allow_localhost:true )
 
 Capybara.javascript_driver = :selenium
-Capybara.register_driver :rack_test do |app|
-  Capybara::RackTest::Driver.new app,
-    follow_redirects:false
-end
-
 
 RSpec.configure do |config|
   config.include Capybara::DSL
@@ -41,8 +38,8 @@ RSpec.configure do |config|
     /gems/
   ]
 
-  config.before(:suite) do
-    FactoryGirl.find_definitions
+  config.before(:each) do
+    Mongoid.purge!
   end
 end
 

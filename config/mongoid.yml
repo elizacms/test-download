@@ -5,7 +5,6 @@ test:
       hosts:
         - localhost:27017
       options:
-        raise_not_found_error: false
         max_pool_size: 5
 
 
@@ -16,7 +15,6 @@ development:
       hosts:
         - localhost:27017
       options:
-        raise_not_found_error: false
         max_pool_size: 5
 
 
@@ -25,7 +23,6 @@ staging:
     default:
       uri: <%= ENV[ 'MONGO_DB_URI'] %>
       options:
-        raise_not_found_error: false
         max_pool_size: 5
 
 
@@ -34,5 +31,4 @@ production:
     default:
       uri: <%= ENV[ 'MONGO_DB_URI'] %>
       options:
-        raise_not_found_error: false
         max_pool_size: 5
