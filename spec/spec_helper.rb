@@ -1,14 +1,29 @@
-ENV['RAILS_ENV'] ||= 'test'
+ENV['RAILS_ENV'] = 'test'
+ENV['RACK_ENV'] = 'test'
+ENV[ 'I_AM_PLUS_ENV' ] = 'test'
 
 # Gems
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
+require 'capybara/rspec'
 require 'webmock/rspec'
 
 # Shared
 require 'shared'
 
+WebMock.disable_net_connect!
+
+Capybara.javascript_driver = :selenium
+
+
 RSpec.configure do |config|
+  config.include Capybara::DSL
+  config.include FactoryGirl::Syntax::Methods
+
+  config.filter_run_including focus: true
+  config.run_all_when_everything_filtered = true  
+  config.infer_spec_type_from_file_location!
+
 
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
@@ -18,9 +33,17 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+  config.shared_context_metadata_behavior = :apply_to_host_groups
+
+  config.backtrace_exclusion_patterns = [
+    /\/lib\d*\/ruby\//,
+    /bin\//,
+    /gems/,
+    /spec\/spec_helper\.rb/,
+    /lib\/rspec\/(core|expectations|matchers|mocks)/
+  ]
+
   config.before(:suite) do
     FactoryGirl.find_definitions
   end
-
-  config.shared_context_metadata_behavior = :apply_to_host_groups
 end
