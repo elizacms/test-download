@@ -19,4 +19,6 @@ group :test do
   gem 'guard-rspec', '~> 4.7'
   gem 'factory_girl_rails', '~> 4.7'
   gem 'webmock', '~> 2.1'
+  gem 'capybara'
+  gem 'selenium-webdriver'
 end
