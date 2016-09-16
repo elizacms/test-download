@@ -43,17 +43,6 @@ class SkillsController < ApplicationController
 
   private
 
-  def validate_admin_or_developer
-    if current_user.nil?
-      redirect_to :root
-      return
-    end
-
-    if ! current_user.admin? && ! current_user.developer?
-      redirect_to :root
-    end
-  end
-
   def skill_params
     params.require( :skill ).permit( :name, :description )
   end
@@ -62,13 +51,5 @@ class SkillsController < ApplicationController
     @skill = current_user_skills.find_by( id: params[ :id ] )
 
     redirect_to skills_path if @skill.nil?
-  end
-
-  def current_user_skills
-    if current_user.admin?
-      Skill.all
-    else
-      current_user.skills
-    end
   end
 end

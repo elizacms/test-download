@@ -3,6 +3,7 @@ class Skill
   include Mongoid::Timestamps
   
   belongs_to :user
+  has_many   :intents
 
   field :name, type:String
 

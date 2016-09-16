@@ -1,0 +1,7 @@
+<%= form_for [ @skill, @intent ] do | f |%>
+  Name:<%= f.text_field :name %>
+  Description:<%= f.text_field :description %>
+  Web Hook URL:<%= f.text_field :web_hook %>
+  <%= f.submit 'Submit' %>
+<% end %>
+

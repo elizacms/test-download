@@ -7,6 +7,7 @@
   <tr>
     <td><%= s.name %></td>
     <td><%= link_to( "Edit", edit_skill_path( s.id )) %></td>
+    <td><%= link_to( "Intents", skill_intents_path( s.id )) %></td>
   </tr>
 <% end %>
 </table>

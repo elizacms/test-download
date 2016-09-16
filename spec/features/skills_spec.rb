@@ -76,7 +76,7 @@ feature 'Skills pages' do
   context 'When name is blank fails' do
     specify do
       visit "/login/success?code=0123abc"
-       visit '/skills'
+      visit '/skills'
 
       click_link 'Create new Skill'
 
@@ -104,7 +104,7 @@ feature 'Skills pages' do
     end
   end
 
-  describe "User can update the Skill's name" do
+  describe "Developer can update the Skill's name" do
     let!( :skill ){ create :skill, user:developer }
     let( :updated_name ){ "Best Riding App" }
 

@@ -6,7 +6,11 @@ class PagesController < ApplicationController
   end
 
   def login_success
-    redirect_to users_path
+    if current_user.admin? 
+      redirect_to users_path
+    else
+      redirect_to skills_path
+    end
   end
 
 
