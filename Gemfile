@@ -6,21 +6,22 @@ gem 'mongoid', '= 6.0.0.rc0'
 gem 'puma', '~> 3.0'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
-gem 'jquery-rails'
+gem 'jquery-rails', '~> 4.2'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'awesome_print', '~> 1.7'
-gem 'oauth2'
+gem 'oauth2', '~> 1.2'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.5'
+  gem 'parallel_tests', '~> 2.9'
 end
 
 group :test do
   gem 'guard-rspec', '~> 4.7'
   gem 'factory_girl_rails', '~> 4.7'
   gem 'webmock', '~> 2.1'
-  gem 'capybara'
-  gem 'selenium-webdriver'
-  gem 'launchy'
+  gem 'capybara', '~> 2.8'
+  gem 'selenium-webdriver', '~> 2.53'
+  gem 'launchy', '~> 2.4'
 end

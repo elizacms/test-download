@@ -1,7 +1,7 @@
 test:
   clients:
     default:
-      database: skills_manager_test
+      database: skills_manager_test<%= ENV['TEST_ENV_NUMBER'] %>
       hosts:
         - localhost:27017
       options:
