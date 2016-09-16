@@ -44,7 +44,7 @@ class UsersController < ApplicationController
   private
 
   def validate_admin
-    if User.find_by( id: session[ :user_id ] ).nil?
+    if current_user.nil? || ! current_user.admin?
       redirect_to :root
     end
   end
