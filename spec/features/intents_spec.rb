@@ -19,7 +19,7 @@ feature 'Intents pages' do
   describe "Admin can see Intents even when they don't own the skill" do
     let( :admin   ){ create :admin  }
     let!( :intent ){ create :intent, skill:skill }
-    
+
     before do
       stub_identity_account_for admin.email
     end
@@ -62,7 +62,7 @@ feature 'Intents pages' do
     let( :intent_name ){ 'get_ride' }
     let( :intent_description ){ 'Get a ride a with Uber.' }
     let( :intent_web_hook ){ 'https://i.am.uber' }
-    
+
     specify do
       visit "/login/success?code=0123abc"
       click_link 'Intents'
@@ -107,7 +107,7 @@ feature 'Intents pages' do
     specify do
       visit "/login/success?code=0123abc"
       click_link 'Intents'
-      
+
       click_link 'Edit Details'
 
       expect( current_path ).to eq "/skills/#{skill.id}/intents/#{intent.id}/edit"
@@ -122,7 +122,7 @@ feature 'Intents pages' do
     specify do
       visit '/login/success?code=0123abc'
       click_link 'Intents'
-      
+
       click_link 'Edit Details'
 
       within 'form' do
@@ -141,7 +141,7 @@ feature 'Intents pages' do
     specify do
       visit '/login/success?code=0123abc'
       click_link 'Intents'
-      
+
       click_link 'Edit Details'
       click_link 'Delete this intent'
 

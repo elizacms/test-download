@@ -7,7 +7,7 @@ class Role
   belongs_to :user
 
   field :name, type:String
-  
+
   validate :validate_role
   validates_presence_of :name
 
@@ -23,5 +23,5 @@ class Role
 
   def validate_role
     Role.validate_role_for name
-  end  
+  end
 end

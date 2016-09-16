@@ -56,7 +56,7 @@ feature 'Skills pages' do
 
   describe 'Developer can create a skill' do
     let( :skill_name        ){ 'Uber' }
-    
+
     specify do
       visit "/login/success?code=0123abc"
       visit '/skills'
