@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :validate_admin
-  before_action :find_user, only: [ :edit, :update ]
+  before_action :find_user, only: [ :edit, :update, :destroy ]
 
   def index
     @users = User.all
@@ -31,6 +31,13 @@ class UsersController < ApplicationController
       flash.now[ :alert ] = @user.errors.full_messages.join( "\n" )
       render :edit
     end
+  end
+
+  def destroy
+    email = @user.email
+    @user.destroy
+
+    redirect_to users_path, notice: "Destroyed user with email: #{email}."
   end
 
 

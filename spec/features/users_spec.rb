@@ -113,4 +113,16 @@ feature 'Users pages' do
       expect( User.first.email ).to eq updated_email
     end
   end
+
+  describe "Admin can delete a user" do
+    specify do
+      visit '/login/success?code=0123abc'
+      visit '/users'
+
+      click_link 'Edit'
+      click_link 'Delete this user'
+
+      expect( User.count ).to eq 0
+    end
+  end
 end
