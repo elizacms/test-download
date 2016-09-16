@@ -2,9 +2,8 @@ class SkillsController < ApplicationController
   before_action :validate_admin_or_developer
   before_action :find_skill, only: [ :edit, :update, :destroy ]
 
-
   def index
-    @skills = current_user.skills
+    @skills = current_user_skills
   end
 
   def new
@@ -60,8 +59,16 @@ class SkillsController < ApplicationController
   end
 
   def find_skill
-    @skill = current_user.skills.find_by( id: params[ :id ] )
+    @skill = current_user_skills.find_by( id: params[ :id ] )
 
     redirect_to skills_path if @skill.nil?
+  end
+
+  def current_user_skills
+    if current_user.admin?
+      Skill.all
+    else
+      current_user.skills
+    end
   end
 end

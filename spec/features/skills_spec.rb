@@ -13,8 +13,22 @@ feature 'Skills pages' do
     expect( page ).to have_content '0 Skills'
   end
 
-  specify 'Admin can see all Skills'
-  specify 'Admin cannot edit Skills'
+  describe 'Admin can see all Skills' do
+    let(  :admin ){ create :admin }
+    let!( :skill ){ create :skill, user:developer }
+
+    before do
+      stub_identity_account_for admin.email
+    end
+
+    specify do
+      visit "/login/success?code=0123abc"
+      visit '/skills'
+
+      expect( page ).to have_content '1 Skills'
+      expect( page ).to have_content skill.name
+    end
+  end
 
   context 'When not logged in cannot see Skills' do
     specify do
@@ -151,5 +165,4 @@ feature 'Skills pages' do
       expect( page ).to_not have_content skill.name
     end
   end
-
 end
