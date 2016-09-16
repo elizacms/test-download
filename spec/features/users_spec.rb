@@ -32,12 +32,16 @@ feature 'Users pages' do
 
       within 'form' do
         fill_in :user_email, with: new_email
+        check :user_role_admin
+        check :user_role_developer
         click_button 'Submit'
       end
 
       expect( page ).to have_content '2 Users'
       expect( page ).to have_content new_email
       expect( page ).to have_content "User #{ new_email } created."
+      expect( page ).to have_content "admin role_true"
+      expect( page ).to have_content "developer role_true"
     end
   end
 

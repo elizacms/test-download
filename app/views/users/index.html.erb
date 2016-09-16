@@ -4,8 +4,12 @@
 
 <table>
 <% @users.each do |u| %>
-  <tr><td><%= u.email %></td></tr>
-  <tr><td><%= link_to( "Edit", edit_user_path(u.id) ) %></td></tr>
+  <tr>
+    <td><%= u.email %></td>
+    <td><%= "admin role_#{ u.admin? }" %></td>
+    <td><%= "developer role_#{ u.developer? }" %></td>
+    <td><%= link_to( "Edit", edit_user_path(u.id) ) %></td>
+  </tr>
 <% end %>
 </table>
 
