@@ -13,7 +13,11 @@ module Rollable
         alias_method "role_#{ role }", "#{ role }?"
 
         define_method "role_#{ role }=" do | val |
-          set_role( role ) if val.to_s == '1'
+          if val.to_s == '1'
+            set_role( role )
+          else
+            remove_role( role )
+          end
         end
       end
     end

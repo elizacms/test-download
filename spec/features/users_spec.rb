@@ -130,6 +130,42 @@ feature 'Users pages' do
     end
   end
 
+  describe "Admin can update the user's role to admin" do
+    let!( :user ){ create :user, email: "a_new_admin@iamplus.com" }
+    specify do
+      visit '/login/success?code=0123abc'
+      visit '/users'
+
+      visit "/users/#{user.id}/edit"
+
+      within 'form' do
+        check :user_role_admin
+        click_button 'Submit'
+      end
+
+      expect( page ).to have_content "User #{user.email} updated."
+      expect( User.find( user ).admin? ).to eq true
+    end
+  end
+
+  describe "Admin can take away a user's admin role" do
+    let( :admin2 ){ create :admin, email: "another_admin@iamplus.com" }
+    specify do
+      visit '/login/success?code=0123abc'
+      visit '/users'
+
+      visit "/users/#{admin2.id}/edit"
+
+      within 'form' do
+        uncheck :user_role_admin
+        click_button 'Submit'
+      end
+
+      expect( page ).to have_content "User #{admin2.email} updated."
+      expect( User.find( admin2 ).admin? ).to eq false
+    end
+  end
+
   describe "Admin can delete a user" do
     specify do
       visit '/login/success?code=0123abc'
