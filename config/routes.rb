@@ -4,4 +4,5 @@ Rails.application.routes.draw do
   get '/login/success', to:'pages#login_success'
 
   resources :users
+  resources :skills
 end

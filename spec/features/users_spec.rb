@@ -178,6 +178,8 @@ feature 'Users pages' do
     end
   end
 
+  specify 'Admin cannot delete themselves'
+
   describe 'A regular user cannot visit the user_edit page' do
     let!( :regular_user ){ create :user, email: "regular_joe@iamplus.com" }
     before do

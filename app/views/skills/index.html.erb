@@ -1,0 +1,16 @@
+<%= @skills.count %> Skills
+
+<a href='/skills/new'>Create new Skill</a>
+
+<table>
+<% @skills.each do |s| %>
+  <tr>
+    <td><%= s.name %></td>
+    <td><%= s.description %></td>
+    <td><%= link_to( "Edit", edit_skill_path( s.id )) %></td>
+  </tr>
+<% end %>
+</table>
+
+<div class="alert"><%= flash[:alert] %></div>
+<div class="notice"><%= flash[:notice] %></div>
