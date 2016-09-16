@@ -1,4 +1,4 @@
-<%= @skills.count %> Skills
+<%= pluralize @skills.count, 'Skill' %>
 
 <a href='/skills/new'>Create new Skill</a>
 
@@ -6,7 +6,6 @@
 <% @skills.each do |s| %>
   <tr>
     <td><%= s.name %></td>
-    <td><%= s.description %></td>
     <td><%= link_to( "Edit", edit_skill_path( s.id )) %></td>
   </tr>
 <% end %>

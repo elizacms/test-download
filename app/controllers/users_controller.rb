@@ -35,7 +35,7 @@ class UsersController < ApplicationController
 
   def destroy
     if current_user == @user
-      redirect_to users_path
+      redirect_to users_path, alert:'Admin cannot delete themselves.'
       return
     end
 

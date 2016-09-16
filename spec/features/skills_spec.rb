@@ -25,7 +25,7 @@ feature 'Skills pages' do
       visit "/login/success?code=0123abc"
       visit '/skills'
 
-      expect( page ).to have_content '1 Skills'
+      expect( page ).to have_content '1 Skill'
       expect( page ).to have_content skill.name
     end
   end
@@ -56,8 +56,7 @@ feature 'Skills pages' do
 
   describe 'Developer can create a skill' do
     let( :skill_name        ){ 'Uber' }
-    let( :skill_description ){ 'Get the rides.' }
-
+    
     specify do
       visit "/login/success?code=0123abc"
       visit '/skills'
@@ -66,13 +65,11 @@ feature 'Skills pages' do
 
       within 'form' do
         fill_in :skill_name,        with: skill_name
-        fill_in :skill_description, with: skill_description
         click_button 'Submit'
       end
 
       expect( page ).to have_content '1 Skill'
       expect( page ).to have_content skill_name
-      expect( page ).to have_content skill_description
     end
   end
 

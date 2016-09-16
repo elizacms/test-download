@@ -189,6 +189,7 @@ feature 'Users pages' do
 
       expect( User.count ).to eq 1
       expect( current_path ).to eq '/users'
+      expect( page ).to have_content 'Admin cannot delete themselves.'
     end
   end
 
