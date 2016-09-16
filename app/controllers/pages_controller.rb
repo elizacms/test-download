@@ -24,7 +24,7 @@ class PagesController < ApplicationController
     identity_path = ENV[ 'IDENTITY_SERVICE_URI' ]
     client_id     = ENV[ 'CLIENT_ID'     ]
     client_secret = ENV[ 'CLIENT_SECRET' ]
-    
+
     OAuth2::Client.new client_id, client_secret, site:identity_path
   end
 
@@ -41,7 +41,7 @@ class PagesController < ApplicationController
     if user.nil?
       flash.now[ :alert ] = 'Authorization failed.'
       render :index
-      return 
+      return
     end
 
     session[ :user_id ] = user.id.to_s
