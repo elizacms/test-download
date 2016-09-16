@@ -1,4 +1,4 @@
-feature 'Login' do
+feature 'Login and logout' do
   let!( :admin ){ create :admin }
 
   let( :identity_login_path ){ 'https://test.identity.com/oauth/authorize?client_id=CLIENT_ID&redirect_uri=http%3A%2F%2Fwww.example.com%2Flogin%2Fsuccess&response_type=code' }
@@ -47,4 +47,6 @@ feature 'Login' do
       expect( page ).to have_content 'Login'
     end
   end
+
+  specify 'Logout'
 end

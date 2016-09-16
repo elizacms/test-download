@@ -167,6 +167,19 @@ feature 'Users pages' do
   end
 
   describe 'Admin can delete a user' do
+    let( :admin2 ){ create :admin, email:'admin2@iamplus.com' }
+
+    specify do
+      visit '/login/success?code=0123abc'
+      visit "/users/#{ admin2.id }/edit"
+
+      click_link 'Delete this user'
+
+      expect( User.count ).to eq 1
+    end
+  end
+
+  describe 'Admin cannot delete themselves' do
     specify do
       visit '/login/success?code=0123abc'
       visit '/users'
@@ -174,11 +187,10 @@ feature 'Users pages' do
       click_link 'Edit'
       click_link 'Delete this user'
 
-      expect( User.count ).to eq 0
+      expect( User.count ).to eq 1
+      expect( current_path ).to eq '/users'
     end
   end
-
-  specify 'Admin cannot delete themselves'
 
   describe 'A regular user cannot visit the user_edit page' do
     let!( :regular_user ){ create :user, email: "regular_joe@iamplus.com" }

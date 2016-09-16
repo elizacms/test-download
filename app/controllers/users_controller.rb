@@ -34,6 +34,11 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    if current_user == @user
+      redirect_to users_path
+      return
+    end
+
     email = @user.email
     @user.destroy
 
