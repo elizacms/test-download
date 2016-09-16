@@ -5,7 +5,7 @@ feature 'Users pages' do
     stub_identity_token
     stub_identity_account_for admin.email
   end
-  
+
   specify 'Admin can see users' do
     visit "/login/success?code=0123abc"
     visit '/users'
@@ -31,7 +31,7 @@ feature 'Users pages' do
       click_link 'Invite new User'
 
       within 'form' do
-        fill_in :user_email, with:new_email
+        fill_in :user_email, with: new_email
         click_button 'Submit'
       end
 
@@ -70,13 +70,43 @@ feature 'Users pages' do
       click_link 'Invite new User'
 
       within 'form' do
-        fill_in :user_email, with:new_email
+        fill_in :user_email, with: new_email
         click_button 'Submit'
       end
 
       expect( page ).to have_content '2 Users'
       expect( page ).to have_content new_email.downcase
       expect( page ).to have_content "User #{ new_email.downcase } created."
+    end
+  end
+
+  describe 'Admin can visit the edit page for users' do
+    specify do
+      visit '/login/success?code=0123abc'
+      visit '/users'
+
+      click_link 'Edit'
+
+      expect( current_path ).to eq "/users/#{admin.id}/edit"
+      expect( page ).to have_content "Edit #{ admin.email }"
+    end
+  end
+
+  describe "Admin can update the user's email address" do
+    let( :updated_email ){ "tiny_chihuahua@iamplus.com" }
+    specify do
+      visit '/login/success?code=0123abc'
+      visit '/users'
+
+      click_link 'Edit'
+
+      within 'form' do
+        fill_in :user_email, with: updated_email
+        click_button 'Submit'
+      end
+
+      expect( page ).to have_content "User #{updated_email} updated."
+      expect( User.first.email ).to eq updated_email
     end
   end
 end

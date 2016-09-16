@@ -7,12 +7,12 @@ feature 'Login' do
     stub_identity_token
     stub_identity_account_for admin.email
   end
-  
+
   specify 'Click login redirects to Identity' do
     visit '/'
 
     expect( page.status_code ).to eq 200
-    expect( page ).to have_css "a[href='#{ identity_login_path }']" 
+    expect( page ).to have_css "a[href='#{ identity_login_path }']"
   end
 
   context 'When code is present get token from Identity and redirect to Users page' do
@@ -40,7 +40,7 @@ feature 'Login' do
     before do
       User.delete_all
     end
-    
+
     specify do
       visit "/login/success?code=0123abc"
 

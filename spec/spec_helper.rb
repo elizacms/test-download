@@ -20,9 +20,9 @@ Capybara.javascript_driver = :selenium
 RSpec.configure do |config|
   config.include Capybara::DSL
   config.include FactoryGirl::Syntax::Methods
-  
+
   config.filter_run_including focus: true
-  config.run_all_when_everything_filtered = true  
+  config.run_all_when_everything_filtered = true
   config.infer_spec_type_from_file_location!
 
   config.expect_with :rspec do |expectations|

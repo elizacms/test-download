@@ -3,8 +3,9 @@
 <a href='/users/new'>Invite new User</a>
 
 <table>
-<% @users.each do | u | %>
+<% @users.each do |u| %>
   <tr><td><%= u.email %></td></tr>
+  <tr><td><%= link_to( "Edit", edit_user_path(u.id) ) %></td></tr>
 <% end %>
 </table>
 
