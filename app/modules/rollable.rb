@@ -41,6 +41,10 @@ module Rollable
     end
   end
 
+  def get_roles
+    roles.pluck( :name )
+  end
+
   def remove_roles *roles
     Array( roles.flatten ).each{| r | remove_role r }
   end
