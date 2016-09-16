@@ -1,5 +1,5 @@
 feature 'Users pages' do
-  let!( :admin ){ create :user }
+  let!( :admin ){ create :admin }
 
   before do
     stub_identity_token
@@ -18,6 +18,22 @@ feature 'Users pages' do
       visit '/users'
 
       expect( page ).to have_content 'Login'
+    end
+  end
+
+  context 'When not admin cannot see users' do
+    let( :user ){ create :user }
+
+    before do
+      stub_identity_account_for user.email
+    end
+
+    specify do
+      visit "/login/success?code=0123abc"
+      visit '/users'
+
+      expect( page ).to have_content 'Login'
+      expect( page ).to_not have_content '1 Users'
     end
   end
 
