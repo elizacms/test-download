@@ -1,7 +1,9 @@
 Invite User
 
 <%= form_for @user do | f |%>
-  <%= f.email_field :email %>
+  Email:<%= f.email_field :email %>
+  <%= f.check_box :role_admin %>Admin
+  <%= f.check_box :role_developer %>Developer
   <%= f.submit 'Submit' %>
 <% end %>
 
