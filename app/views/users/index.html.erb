@@ -1,1 +1,11 @@
-<%= User.count %> Users
+<%= @users.count %> Users
+
+<a href='/users/new'>Invite new User</a>
+
+<table>
+<% @users.each do | u | %>
+  <tr><td><%= u.email %></td></tr>
+<% end %>
+</table>
+
+<div class="notice"><%= flash[:notice] %></div>

@@ -38,7 +38,13 @@ class PagesController < ApplicationController
     email = JSON.parse( account_response.body )[ 'email' ]
     user = User.find_by( email:email )
 
-    render :index if user.nil?
+    if user.nil?
+      flash.now[ :alert ] = 'Authorization failed.'
+      render :index
+      return 
+    end
+
+    session[ :user_id ] = user.id.to_s
   end
 
   def get_account_from_identity
@@ -48,7 +54,7 @@ class PagesController < ApplicationController
     begin
       token = oauth_client.auth_code.get_token( params[ :code ], redirect_uri:redirect_uri )
       token.get( identity_account_path, headers:{ 'Accept':'application/json' })
-      
+
     rescue OAuth2::Error => e
       logger.info e.message
 
