@@ -1,4 +1,4 @@
-feature 'Users pages', :focus do
+feature 'Users pages' do
   let!( :admin ){ create :admin }
 
   before do
