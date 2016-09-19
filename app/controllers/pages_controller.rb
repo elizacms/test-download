@@ -33,7 +33,7 @@ class PagesController < ApplicationController
   end
 
   def redirect_uri
-    "#{ request.protocol }#{ request.host }/login/success"
+    "#{ request.protocol }#{ request.host_with_port }/login/success"
   end
 
   def validate_user_from_identity
