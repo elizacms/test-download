@@ -1,4 +1,4 @@
-feature 'Users pages' do
+feature 'Users pages', :focus do
   let!( :admin ){ create :admin }
 
   before do
@@ -58,6 +58,26 @@ feature 'Users pages' do
       expect( page ).to have_content "User #{ new_email } created."
       expect( page ).to have_content "admin role_true"
       expect( page ).to have_content "developer role_true"
+    end
+  end
+
+  context 'When admin invites user, he or she should receive an email' do
+    specify do
+      visit "/login/success?code=0123abc"
+      visit '/users'
+
+      click_link 'Invite new User'
+
+      within 'form' do
+        fill_in :user_email, with: "cash_is_hungry@iamplus.com"
+        check :user_role_admin
+        check :user_role_developer
+        click_button "Submit"
+      end
+
+      expect( last_email.from ).to eq ['mailer@iamplus.com']
+      expect( last_email.to ).to eq ['cash_is_hungry@iamplus.com']
+      expect( last_email.subject ).to eq "You've been given access to the Skills Manager"
     end
   end
 

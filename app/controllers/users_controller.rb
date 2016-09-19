@@ -15,6 +15,8 @@ class UsersController < ApplicationController
 
     if @user.persisted?
       redirect_to users_path, notice:"User #{ @user.email } created."
+
+      UserMailer.invite_user( @user.email ).deliver_now
     else
       flash.now[ :alert ] = @user.errors.full_messages.join( "\n" )
       render :new

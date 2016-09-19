@@ -1,1 +1,12 @@
-# shared methods should go in here
+# Shared ActionMailer methods
+def last_email
+  ActionMailer::Base.deliveries.last
+end
+
+def reset_email
+  ActionMailer::Base.deliveries = []
+end
+
+def email_count
+  ActionMailer::Base.deliveries.count
+end
