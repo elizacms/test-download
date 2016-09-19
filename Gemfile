@@ -12,6 +12,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'awesome_print', '~> 1.7'
 gem 'oauth2', '~> 1.2'
 gem 'sendgrid-ruby', '~> 4.0'
+gem 'bootstrap', '~> 4.0.0.alpha4'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.5'

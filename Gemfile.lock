@@ -40,7 +40,12 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.4.0)
     arel (7.1.2)
+    autoprefixer-rails (6.4.1.1)
+      execjs
     awesome_print (1.7.0)
+    bootstrap (4.0.0.alpha4)
+      autoprefixer-rails (>= 6.0.3)
+      sass (>= 3.4.19)
     bson (4.1.1)
     builder (3.2.2)
     capybara (2.8.1)
@@ -245,6 +250,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print (~> 1.7)
+  bootstrap (~> 4.0.0.alpha4)
   capybara (~> 2.8)
   factory_girl_rails (~> 4.7)
   guard-rspec (~> 4.7)
