@@ -6,9 +6,9 @@
     </a>
 
     <div id="desktop-menu" class="nav navbar-nav pull-right">
-      <ul>
-        <li><a href="/logout">Logout</a></li>
-      </ul>
+      <% if @current_user %>
+        <a href="/logout">Logout</a>
+      <% end %>
     </div>
   </div>
 </nav>

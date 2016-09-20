@@ -14,6 +14,10 @@ gem 'oauth2', '~> 1.2'
 gem 'sendgrid-ruby', '~> 4.0'
 gem 'bootstrap', '~> 4.0.0.alpha4'
 
+source 'https://rails-assets.org' do
+  gem 'rails-assets-tether', '>= 1.1.0'
+end
+
 group :development, :test do
   gem 'rspec-rails', '~> 3.5'
   gem 'parallel_tests', '~> 2.9'
