@@ -56,6 +56,9 @@ class IntentsController < ApplicationController
     )
   end
 
+  def fields_and_dialogs
+  end
+
 
   private
 
