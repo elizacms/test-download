@@ -50,7 +50,7 @@ feature 'Skills pages' do
       visit '/skills'
 
       expect( page ).to have_content 'Login'
-      expect( page ).to_not have_content 'Skills'
+      expect( current_path ).to eq root_path
     end
   end
 
