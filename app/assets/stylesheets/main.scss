@@ -14,3 +14,10 @@
     vertical-align: baseline;
   }
 }
+
+.icon-check:after{
+  content:'\2713';
+}
+.icon-cross:after{
+  content:'\2717';
+}
