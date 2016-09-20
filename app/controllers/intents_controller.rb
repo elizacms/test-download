@@ -34,7 +34,7 @@ class IntentsController < ApplicationController
     end
   end
 
- def destroy
+  def destroy
     name = @intent.name
     @intent.destroy
 
