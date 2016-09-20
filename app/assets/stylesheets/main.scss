@@ -1,7 +1,16 @@
 .top-margin{
   margin-top: 20%;
 }
-.textCenter{
+
+.text-center{
   text-align: center;
   vertical-align: middle;
+}
+
+.form-center{
+  text-align: center;
+
+  & .btn{
+    vertical-align: baseline;
+  }
 }
