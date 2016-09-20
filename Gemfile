@@ -30,4 +30,5 @@ group :test do
   gem 'capybara', '~> 2.8'
   gem 'selenium-webdriver', '~> 2.53'
   gem 'launchy', '~> 2.4'
+  gem 'pry'
 end

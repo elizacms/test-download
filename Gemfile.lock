@@ -262,6 +262,7 @@ DEPENDENCIES
   mongoid (= 6.0.0.rc0)
   oauth2 (~> 1.2)
   parallel_tests (~> 2.9)
+  pry
   puma (~> 3.0)
   rails (~> 5.0.0, >= 5.0.0.1)
   rails-assets-tether (>= 1.1.0)!
