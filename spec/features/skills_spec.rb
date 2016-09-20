@@ -61,7 +61,7 @@ feature 'Skills pages' do
       visit "/login/success?code=0123abc"
       visit '/skills'
 
-      click_link 'Create new Skill'
+      click_link 'Create New Skill'
 
       within 'form' do
         fill_in :skill_name,        with: skill_name
@@ -78,7 +78,7 @@ feature 'Skills pages' do
       visit "/login/success?code=0123abc"
       visit '/skills'
 
-      click_link 'Create new Skill'
+      click_link 'Create New Skill'
 
       within 'form' do
         fill_in :skill_name, with: ''
