@@ -5,13 +5,21 @@
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <link rel="icon" type="image/png" href="https://s3.amazonaws.com/iamplus-shared-assets/favicon.png" />
     <link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/iamplus-shared-assets/css/production/styles.css">
+
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag "https://s3.amazonaws.com/iamplus-shared-assets/js/production/alert.js" %>
   </head>
+
 
   <body>
     <%= render partial: '/layouts/header' %>
-    <%= yield %>
+    <%= render partial: '/layouts/flash' %>
+    <div class="container">
+      <div class="component-inner">
+        <%= yield %>
+      </div>
+    </div>
   </body>
 </html>

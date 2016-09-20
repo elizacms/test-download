@@ -1,0 +1,20 @@
+<% flash.each do |key, value| %>
+  <% if value.present? %>
+    <%= value %>
+    <% if key.to_s == "notice" %>
+      <script>
+        IAM.alert.run('<%= value %>', '' , 2500);
+      </script>
+    <% end %>
+    <% if key.to_s == "alert" %>
+      <script>
+        IAM.alert.run('<%= value %>', 'icon-attention', false);
+      </script>
+    <% end %>
+    <% if key.to_s == "success" %>
+      <script>
+        IAM.alert.run('<%= value %>', 'icon-ok', false);
+      </script>
+    <% end %>
+  <% end %>
+<% end %>

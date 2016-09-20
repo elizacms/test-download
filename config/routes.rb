@@ -10,5 +10,5 @@ Rails.application.routes.draw do
 
   get '/skills/:skill_id/intents/:id/fields_and_dialogs',
     to: 'intents#fields_and_dialogs',
-    as:'fields_and_dialogs'
+    as: 'fields_and_dialogs'
 end

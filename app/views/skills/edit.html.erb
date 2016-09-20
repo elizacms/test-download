@@ -2,9 +2,11 @@
 
 <%= render partial: "form" %>
 
-<% if flash.present? %>
-  <div class="notice"><%= flash[:notice] %></div>
-  <div class="alert"><%= flash[:alert] %></div>
-<% end %>
-
-<%= link_to "Delete this skill", skill_path(@skill), method: :delete, data: { confirm: "Are you sure you want to delete this skill?" } %>
+<%= link_to(
+  "Delete this skill",
+  skill_path(@skill),
+  method: :delete,
+  data: {
+    confirm: "Are you sure you want to delete this skill?"
+  }
+) %>
