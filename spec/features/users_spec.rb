@@ -10,7 +10,7 @@ feature 'Users pages' do
     visit "/login/success?code=0123abc"
     visit '/users'
 
-    expect( page ).to have_content '1 Users'
+    expect( page ).to have_content 'Total Users: 1'
   end
 
   context 'When not logged in cannot see users' do
@@ -33,7 +33,7 @@ feature 'Users pages' do
       visit '/users'
 
       expect( page ).to have_content 'Login'
-      expect( page ).to_not have_content '1 Users'
+      expect( page ).to_not have_content 'Total Users: 1'
     end
   end
 
@@ -53,11 +53,11 @@ feature 'Users pages' do
         click_button 'Submit'
       end
 
-      expect( page ).to have_content '2 Users'
+      expect( page ).to have_content 'Total Users: 2'
       expect( page ).to have_content new_email
       expect( page ).to have_content "User #{ new_email } created."
-      expect( page ).to have_content "admin role_true"
-      expect( page ).to have_content "developer role_true"
+      expect( page ).to have_css "td[class='icon-check']"
+      expect( page ).to have_css "td[class='icon-check']"
     end
   end
 
@@ -114,7 +114,7 @@ feature 'Users pages' do
         click_button 'Submit'
       end
 
-      expect( page ).to have_content '2 Users'
+      expect( page ).to have_content 'Total Users: 2'
       expect( page ).to have_content new_email.downcase
       expect( page ).to have_content "User #{ new_email.downcase } created."
     end

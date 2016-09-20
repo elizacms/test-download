@@ -1,14 +1,23 @@
-<%= @users.count %> Users
+<h2>
+  <div class="pull-left">Total Users: <%= @users.count %></div>
+  <a class="btn black lg pull-right" href='/users/new'>Invite new User</a>
+</h2>
 
-<a href='/users/new'>Invite new User</a>
-
-<table>
+<table class="table table-hover">
+  <thead class="thead-default">
+    <tr>
+      <th>Email</th>
+      <th>Admin</th>
+      <th>Developer</th>
+      <th></th>
+    </tr>
+  </thead>
 <% @users.each do |u| %>
   <tr>
     <td><%= u.email %></td>
-    <td><%= "admin role_#{ u.admin? }" %></td>
-    <td><%= "developer role_#{ u.developer? }" %></td>
-    <td><%= link_to( "Edit", edit_user_path(u.id) ) %></td>
+    <td class='<%= u.admin? ? "icon-check" : "icon-cross" %>'></td>
+    <td class='<%= u.developer? ? "icon-check" : "icon-cross" %>'></td>
+    <td><%= link_to( "Edit", edit_user_path(u.id), class: "btn sm black" ) %></td>
   </tr>
 <% end %>
 </table>

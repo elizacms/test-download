@@ -19,7 +19,7 @@ feature 'Login and logout' do
     specify do
       visit "/login/success?code=0123abc"
 
-      expect( page ).to have_content '1 Users'
+      expect( page ).to have_content 'Total Users: 1'
     end
   end
 

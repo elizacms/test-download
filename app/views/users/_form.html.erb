@@ -1,6 +1,19 @@
-<%= form_for @user do | f |%>
-  Email:<%= f.email_field :email %>
-  <%= f.check_box :role_admin %>Admin
-  <%= f.check_box :role_developer %>Developer
-  <%= f.submit 'Submit' %>
-<% end %>
+<div class="row">
+  <div class="offset-sm-2 col-sm-8">
+    <%= form_for @user do |f|%>
+      <label>Email</label>
+      <%= f.email_field :email %>
+      <br>
+
+      <label>Admin</label>
+      <%= f.check_box :role_admin %>
+      <br>
+
+      <label>Developer</label>
+      <%= f.check_box :role_developer %>
+      <br>
+
+      <%= f.submit 'Submit', class: "btn lg black pull-right" %>
+    <% end %>
+  </div>
+</div>

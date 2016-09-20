@@ -14,7 +14,12 @@ class UsersController < ApplicationController
     @user = User.create( user_params )
 
     if @user.persisted?
-      redirect_to users_path, notice:"User #{ @user.email } created."
+      redirect_to(
+        users_path,
+        flash: {
+          success: "User #{ @user.email } created."
+        }
+      )
 
       UserMailer.invite_user( @user.email ).deliver_now
     else
@@ -28,7 +33,12 @@ class UsersController < ApplicationController
 
   def update
     if @user.update( user_params )
-      redirect_to edit_user_path( @user ), notice: "User #{@user.email} updated."
+      redirect_to(
+        edit_user_path( @user ),
+        flash: {
+          success: "User #{ @user.email } updated."
+        }
+      )
     else
       flash.now[ :alert ] = @user.errors.full_messages.join( "\n" )
       render :edit
@@ -37,22 +47,37 @@ class UsersController < ApplicationController
 
   def destroy
     if current_user == @user
-      redirect_to users_path, alert:'Admin cannot delete themselves.'
+      redirect_to(
+        users_path,
+        flash: {
+          notice: 'Admin cannot delete themselves.'
+        }
+      )
       return
     end
 
     email = @user.email
     @user.destroy
 
-    redirect_to users_path, notice: "Destroyed user with email: #{email}."
+    redirect_to(
+      users_path,
+      flash: {
+        alert: "Destroyed user with email: #{ email }."
+      }
+    )
   end
 
 
   private
 
   def validate_admin
-    if current_user.nil? || ! current_user.admin?
-      redirect_to :root
+    if current_user.nil? || !current_user.admin?
+      redirect_to(
+        root_path,
+        flash: {
+          notice: "Please login."
+        }
+      )
     end
   end
 

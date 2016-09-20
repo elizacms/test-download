@@ -14,7 +14,12 @@ class SkillsController < ApplicationController
     @skill = current_user.skills.create( skill_params )
 
     if @skill.persisted?
-      redirect_to skills_path, notice:"Skill #{ @skill.name } created."
+      redirect_to(
+        skills_path,
+        flash: {
+          success: "Skill #{ @skill.name } created."
+        }
+      )
     else
       flash.now[ :alert ] = @skill.errors.full_messages.join( "\n" )
       render :new
@@ -26,7 +31,12 @@ class SkillsController < ApplicationController
 
   def update
     if @skill.update( skill_params )
-      redirect_to edit_skill_path( @skill ), notice: "Skill #{@skill.name} updated."
+      redirect_to(
+        edit_skill_path( @skill ),
+        flash: {
+          success: "Skill #{@skill.name} updated."
+        }
+      )
     else
       flash.now[ :alert ] = @skill.errors.full_messages.join( "\n" )
       render :edit
@@ -37,7 +47,12 @@ class SkillsController < ApplicationController
     name = @skill.name
     @skill.destroy
 
-    redirect_to skills_path, notice: "Destroyed skill with name: #{name}."
+    redirect_to(
+      skills_path,
+      flash: {
+        alert: "Destroyed skill with name: #{name}."
+      }
+    )
   end
 
 
@@ -50,6 +65,6 @@ class SkillsController < ApplicationController
   def find_skill
     @skill = current_user_skills.find_by( id: params[ :id ] )
 
-    redirect_to skills_path if @skill.nil?
+    redirect_to( skills_path ) if @skill.nil?
   end
 end

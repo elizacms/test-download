@@ -1,5 +1,8 @@
-Invite User
+<%= link_to(
+  "<span class='icon-left-dir'></span> All Users".html_safe,
+  users_path
+) %>
+
+<h1>Invite User</h1>
 
 <%= render partial: "form" %>
-
-<div class="alert"><%= flash[:alert] %></div>

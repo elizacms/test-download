@@ -15,7 +15,12 @@ class IntentsController < ApplicationController
     @intent = @skill.intents.create( intent_params )
 
     if @intent.persisted?
-      redirect_to skill_intents_path, notice:"Intent #{ @intent.name } created."
+      redirect_to(
+        skill_intents_path,
+        flash: {
+          success: "Intent #{ @intent.name } created."
+        }
+      )
     else
       flash.now[ :alert ] = @intent.errors.full_messages.join( "\n" )
       render :new
@@ -27,7 +32,12 @@ class IntentsController < ApplicationController
 
   def update
     if @intent.update( intent_params )
-      redirect_to edit_skill_intent_path( @skill, @intent ), notice: "Intent #{@intent.name} updated."
+      redirect_to(
+        edit_skill_intent_path( @skill, @intent ),
+        flash: {
+          success: "Intent #{@intent.name} updated."
+        }
+      )
     else
       flash.now[ :alert ] = @intent.errors.full_messages.join( "\n" )
       render :edit
@@ -38,7 +48,12 @@ class IntentsController < ApplicationController
     name = @intent.name
     @intent.destroy
 
-    redirect_to skills_path, notice: "Destroyed intent with name: #{name}."
+    redirect_to(
+      skills_path,
+      flash: {
+        alert: "Destroyed intent with name: #{name}."
+      }
+    )
   end
 
 
@@ -47,7 +62,7 @@ class IntentsController < ApplicationController
   def find_skill
     @skill = current_user_skills.find_by( id: params[ :skill_id ])
 
-    redirect_to skills_path if @skill.nil?
+    redirect_to( skills_path ) if @skill.nil?
   end
 
   def find_intent

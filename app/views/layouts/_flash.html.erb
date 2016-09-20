@@ -1,19 +1,19 @@
 <% flash.each do |key, value| %>
   <% if value.present? %>
-    <%= value %>
+    <span style="color: #e9eaed;"><%= value %></span>
     <% if key.to_s == "notice" %>
       <script>
-        IAM.alert.run('<%= value %>', '' , 2500);
+        IAM.alert.run('yellow', '<%= value %>' , 2500);
       </script>
     <% end %>
     <% if key.to_s == "alert" %>
       <script>
-        IAM.alert.run('<%= value %>', 'icon-attention', false);
+        IAM.alert.run('red', '<%= value %>', false);
       </script>
     <% end %>
     <% if key.to_s == "success" %>
       <script>
-        IAM.alert.run('<%= value %>', 'icon-ok', false);
+        IAM.alert.run('green', '<%= value %>', false);
       </script>
     <% end %>
   <% end %>
