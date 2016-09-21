@@ -1,6 +1,6 @@
 <% flash.each do |key, value| %>
   <% if value.present? %>
-    <span style="color: #e9eaed;"><%= value %></span>
+    <span style="color: #e9eaed; z-index: -10"><%= value %></span>
     <% if key.to_s == "notice" %>
       <script>
         IAM.alert.run('yellow', '<%= value %>' , 2500);
