@@ -38,7 +38,7 @@ class IntentsController < ApplicationController
     name = @intent.name
     @intent.destroy
 
-    redirect_to skills_path, notice: "Destroyed intent with name: #{name}."
+    redirect_to skill_intents_path(@skill), notice: "Destroyed intent with name: #{name}."
   end
 
 
