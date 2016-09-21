@@ -1,6 +1,14 @@
-<%= form_for [ @skill, @intent ] do | f |%>
-  Name:<%= f.text_field :name %>
-  Description:<%= f.text_field :description %>
-  Web Hook URL:<%= f.text_field :web_hook %>
-  <%= f.submit 'Submit' %>
-<% end %>
+<div>
+  <%= form_for [ @skill, @intent ] do | f |%>
+    Name:<br>
+    <%= f.text_field :name %><br><br>
+    Description:<br>
+    <%= f.text_area :description %><br><br>
+    Web Hook URL:<br>
+    <%= f.text_field :web_hook %><br><br>
+    <%= f.submit 'Submit', :class=>"btn md black" %>
+  <% end %>
+</div>
+
+<%= link_to "Cancel", skill_intents_path(@skill),class: 'btn sm grey pull-right' %>
+<br>

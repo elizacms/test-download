@@ -49,7 +49,7 @@ class IntentsController < ApplicationController
     @intent.destroy
 
     redirect_to(
-      skills_path,
+      skill_intents_path(@skill),
       flash: {
         alert: "Destroyed intent with name: #{name}."
       }

@@ -1,13 +1,15 @@
-<%= pluralize @skills.count, 'Skill' %>
+<h2>
+  <%= pluralize @skills.count, 'Skill' %>
+  <a href='/skills/new' class="btn md black pull-right">Create New Skill</a>
+</h2>
+<br>
 
-<a href='/skills/new'>Create new Skill</a>
-
-<table>
-<% @skills.each do |s| %>
-  <tr>
-    <td><%= s.name %></td>
-    <td><%= link_to( "Edit", edit_skill_path( s.id )) %></td>
-    <td><%= link_to( "Intents", skill_intents_path( s.id )) %></td>
-  </tr>
-<% end %>
+<table class="table table-hover">
+  <% @skills.each do |s| %>
+    <tr>
+      <td><%= s.name %></td>
+      <td><%= link_to( "Edit", edit_skill_path( s.id )) %></td>
+      <td><%= link_to( "Intents", skill_intents_path( s.id )) %></td>
+    </tr>
+  <% end %>
 </table>
