@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  domain = {
+    production: ENV['SKILLS_MANAGER_URI'],
+    development: 'http://localhost:3000'
+  }
+  default_url_options host: domain[Rails.env.to_sym] #'https://developer.aneeda.ai'
+
   root to:'pages#index'
 
   get '/login/success',

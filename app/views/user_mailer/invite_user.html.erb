@@ -1,3 +1,64 @@
-<table>
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>iam+</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+ </head>
+ <body>
+  <table height="660px" width="600px" border="0" cellpadding="0" cellspacing="0" style="background-color:#000000; font-family: 'Open Sans', sans-serif;">
 
-</table>
+  <tr height="80px">
+    <td colspan="3" style="text-align:center;">
+      <img src="http://iamplus-shared-assets.s3.amazonaws.com/imgs/puls-76x76-black-white.png"/>
+    </td>
+  </tr>
+
+  <tr height="500px">
+    <td style="padding:14px"></td>
+    <td style="background-color:#FFFFFF; padding:0 20px 200px 20px; vertical-align:top">
+      <h3 style="color:#FFC000;">Your Invitation to Skills Manager</h3>
+      <p style="color:#000000; text-decoration:none;">
+        Hey <%= @user.email %>,
+        <br />
+        You've been given access to the Skills Manager Service.
+        <br />
+        To use your new account, just login
+        <a
+          style="color:#FFC000; text-decoration:none;"
+          href="<%= root_url %>"
+        >
+          here
+        </a>.
+      </p>
+    </td>
+    <td style="padding:14px"></td>
+  </tr>
+
+  <tr>
+    <td colspan="3" style="text-align:center;">
+      <a href="https://www.facebook.com/iamplusofficial/">
+        <img src="http://iamplus-shared-assets.s3.amazonaws.com/imgs/email-icon-facebook.png" />
+      </a>
+      &nbsp;&nbsp;
+      <a href="https://www.instagram.com/iamplusofficial/">
+        <img src="http://iamplus-shared-assets.s3.amazonaws.com/imgs/email-icon-instagram.png" />
+      </a>
+      &nbsp;&nbsp;
+      <a href="https://twitter.com/iamplusofficial">
+        <img src="http://iamplus-shared-assets.s3.amazonaws.com/imgs/email-icon-twitter.png" />
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3" style="text-align:center;">
+      <span style="color:#FFFFFF">
+        Copyright &#169; <%= Time.now.year %> Iam<span style="color:#FFC000;">+</span>
+        All rights reserved.
+      </span>
+    </td>
+  </tr>
+
+  </table>
+ </body>
+</html>
