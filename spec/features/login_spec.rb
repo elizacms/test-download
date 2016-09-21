@@ -48,5 +48,17 @@ feature 'Login and logout' do
     end
   end
 
-  specify 'Logout'
+  context 'When user is logged in, he or she can logout' do
+    specify do
+      visit "/login/success?code=0123abc"
+
+      click_link 'Logout'
+      expect( current_path ).to eq root_path
+
+      # Try to visit admin-only page.
+      visit '/users'
+      expect( current_path ).to eq root_path
+      expect( page ).to have_content "You do not have access."
+    end
+  end
 end

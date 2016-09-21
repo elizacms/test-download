@@ -1,0 +1,28 @@
+<nav class="navbar">
+  <div class="container">
+    <a id="logo" class="clearfix" href="#" title="i.am+">
+      <div class="icon-pyramid pull-left"></div>
+      <div class="txt pull-left">Skills Manager</div>
+    </a>
+
+    <div id="desktop-menu" class="nav navbar-nav pull-right">
+      <% if @current_user %>
+        <% if @current_user.admin? %>
+          <%= link_to 'Users', users_path %>
+        <% end %>
+
+        <%= link_to 'Skills', skills_path %>
+
+        <div id="regularLogout" class="dropdown pull-right">
+          <a id="userMenu" class="navlink dropdown-toggle" href="javascript:void(0);" data-toggle="dropdown">
+            <span class="icon-contacts"></span>
+            <span class="txt"><%= @current_user.email %></span>
+          </a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="userMenu">
+            <li><%= link_to 'Logout', '/logout', method: :post %></li>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</nav>

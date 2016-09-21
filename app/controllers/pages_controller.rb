@@ -13,6 +13,17 @@ class PagesController < ApplicationController
     end
   end
 
+  def current_user_session_destroy
+    session[:user_id] = nil
+
+    redirect_to(
+      root_path,
+      flash: {
+        notice: "You've been successfully logged out."
+      }
+    )
+  end
+
 
   private
 
