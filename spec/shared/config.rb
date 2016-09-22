@@ -1,6 +1,7 @@
 ENV['RAILS_ENV'] = 'test'
 ENV['RACK_ENV'] = 'test'
 ENV[ 'I_AM_PLUS_ENV' ] = 'test'
+ENV['SKILLS_MANAGER_URI'] = 'http://localhost:3000'
 ENV[ 'IDENTITY_SERVICE_URI' ] = 'https://test.identity.com'
 ENV[ 'CLIENT_ID' ] = 'CLIENT_ID'
 ENV[ 'CLIENT_SECRET' ] = 'CLIENT_SECRET'

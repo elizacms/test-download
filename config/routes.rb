@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   domain = {
     production: ENV['SKILLS_MANAGER_URI'],
-    development: 'http://localhost:3000'
+    development: 'http://localhost:3000',
+    test: ENV['SKILLS_MANAGER_URI']
   }
   default_url_options host: domain[Rails.env.to_sym] # 'https://developer.aneeda.ai'
 
