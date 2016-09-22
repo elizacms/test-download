@@ -1,8 +1,9 @@
-feature 'Fields and Dialogs' ,:focus ,:js do
+feature 'Fields and Dialogs' ,:js do
   let(  :developer ){ create :developer }
   let!( :skill     ){ create :skill, user:developer }
   let!( :intent    ){ create :intent, skill:skill }
-  let!( :field     ){ create :field }
+  let!( :field     ){ create :field  }
+  let!( :dialog    ){ create :dialog, field:field }
 
   before do
     stub_identity_token
@@ -15,9 +16,21 @@ feature 'Fields and Dialogs' ,:focus ,:js do
     click_link 'Intents'
     click_link 'Edit Fields and Dialogs'
 
-    sleep 3
+    expect( page ).to have_content field.name
+    expect( page ).to have_content field.type
 
-    expect( page ).to have_content 'Otto Clay'
-    expect( page ).to have_content 'Time'
+    find( 'td', text:field.name ).click
+    expect( page ).to have_content dialog.response
+  end
+
+  specify 'Has Skill info' do
+    visit "/login/success?code=0123abc"
+
+    click_link 'Intents'
+    click_link 'Edit Fields and Dialogs'
+
+    expect( page ).to have_content skill.name
+    expect( page ).to have_content intent.name
+    expect( page ).to have_content intent.web_hook
   end
 end

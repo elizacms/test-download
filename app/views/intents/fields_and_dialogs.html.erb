@@ -1,7 +1,14 @@
+<div><%= @skill.name %>
+<div><%= @intent.name %>
+<div><%= @intent.web_hook %>
+
+<div>Fields</div>
 <div id="fields"></div>
+<div id="dialogs"></div>
 
 <script>
 $(function() {
-    initJSGrid();
+    initFields();
+    initDialogs();
 });
 </script>

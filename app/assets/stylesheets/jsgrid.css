@@ -4,6 +4,10 @@
  * Licensed under MIT (https://github.com/tabalinas/jsgrid/blob/master/LICENSE)
  */
 
+#dialogs .jsgrid-insert-mode-button {
+    display:none;
+}
+
 .jsgrid {
     position: relative;
     overflow: hidden;

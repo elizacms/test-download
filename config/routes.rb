@@ -17,8 +17,13 @@ Rails.application.routes.draw do
     as: :logout
 
   resources :users
+  
   resources :skills do
     resources :intents
+  end
+  
+  resources :fields do
+    resources :dialogs
   end
 
   get '/skills/:skill_id/intents/:id/fields_and_dialogs',
