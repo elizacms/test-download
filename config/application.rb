@@ -23,7 +23,7 @@ module SkillsManager
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     config.mongoid.logger = Logger.new($stdout, :warn)
-
+    
     config.force_ssl = true
   end
 end
