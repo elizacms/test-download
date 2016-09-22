@@ -3,8 +3,6 @@ class FieldsController < ApplicationController
 
   before_action :set_field, only: [:update, :destroy]
 
-  # before_action ->{ puts request.path; puts field_params.to_h }
-
   def index
     fields = Field.all.map( &:serialize )
     
