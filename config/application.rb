@@ -27,3 +27,5 @@ module SkillsManager
     config.force_ssl = true
   end
 end
+
+Mongoid.logger.level = Logger::WARN
