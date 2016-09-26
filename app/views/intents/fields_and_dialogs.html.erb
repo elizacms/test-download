@@ -1,14 +1,19 @@
-<div><%= @skill.name %>
-<div><%= @intent.name %>
-<div><%= @intent.web_hook %>
+<div><%= @skill.name %></div>
+<div><%= @intent.name %></div>
+<div><%= @intent.web_hook %></div>
 
-<div>Fields</div>
-<div id="fields"></div>
-<div id="dialogs"></div>
+<div class='fields-and-dialogs'>
+  <div>Fields</div>
+  <div id="fields"></div>
+  <button id='json'>Create JSON</button><br>
+  <div id="json"></div>
+</div>
 
 <script>
+var intent = <%= @intent.to_json.html_safe %>;
+
 $(function() {
     initFields();
-    initDialogs();
+    initJSON();
 });
 </script>

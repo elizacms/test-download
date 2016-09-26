@@ -1,0 +1,31 @@
+.fields-and-dialogs button#json {
+  margin: 2.5em 0 0.8em;
+}
+
+.fields-and-dialogs div#json {
+  height:200px;
+  white-space: pre;
+  font-family: Courier;
+  border: 1px solid #eee;
+}
+
+td.jsgrid-cell input,
+td.jsgrid-cell select {
+  width: 230px;
+  min-width: unset;
+  margin: 0.5em 0.5em;
+}
+
+th.jsgrid-header-cell {
+  text-transform: uppercase;
+  text-align: center;
+}
+
+td.jsgrid-cell {
+  text-align: left;
+  padding-left: 1em !important;
+}
+
+table.jsgrid-table {
+  margin: 0;
+}

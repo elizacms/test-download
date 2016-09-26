@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :field do
-    name 'set_alarm'
+    id   'set_alarm'
     type 'Boolean'
+    mturk_field 'Answer.AlarmTime'
   end
 end

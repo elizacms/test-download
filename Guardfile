@@ -1,14 +1,11 @@
 guard :rspec, cmd: "bundle exec rspec" do
-  # require "guard/rspec/dsl"
-  # dsl = Guard::RSpec::Dsl.new(self)
-
-
   watch(%r{^spec/.+_spec\.rb$})                       { "spec" }
   watch('spec/spec_helper.rb')                        { "spec" }
   watch('spec/shared.rb')                             { "spec" }
 
   watch(%r{^app/(.+)\.rb$})                           { "spec" }
   watch(%r{^app/assets/javascripts/(.+)\.js$})        { "spec" }
+  watch(%r{^app/assets/stylesheets/(.+)\.css$})       { "spec" }
   watch(%r{^app/controllers/(.+)_controller\.rb$})    { "spec" }
   watch(%r{^app/views/.+/.+\.erb$})                   { "spec" }
   watch(%r{^spec/factories/(.+)\.rb$})                { "spec" }
