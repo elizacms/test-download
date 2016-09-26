@@ -27,6 +27,7 @@ feature 'Skills pages' do
 
       expect( page ).to have_content '1 Skill'
       expect( page ).to have_content skill.name
+      expect( page ).to have_content skill.user.email
     end
   end
 
