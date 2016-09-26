@@ -1,11 +1,24 @@
+<%= link_to(
+  "&larr; Skills".html_safe,
+  skills_path,
+  class: "btn sm grey"
+) %>
 <h2>
   <%= pluralize @intents.count, 'Intent' %>
-  <a href='<%= new_skill_intent_path @skill.id %>' 
+  <a href='<%= new_skill_intent_path @skill.id %>'
      class="btn md black pull-right">Create new Intent</a>
 </h2>
 <br>
 
 <table class="table table-hover">
+  <thead class="thead-default">
+    <tr>
+      <th>Intent Name</th>
+      <th>Intent Description</th>
+      <th>Edit</th>
+      <th>Fields and Dialogs</th>
+    </tr>
+  </thead>
   <% @intents.each do |i| %>
     <tr>
       <td><%= i.name %></td>
@@ -15,6 +28,3 @@
     </tr>
   <% end %>
 </table>
-
-<%= link_to "Cancel", skills_path(),class: 'btn sm grey pull-right' %>
-<br>

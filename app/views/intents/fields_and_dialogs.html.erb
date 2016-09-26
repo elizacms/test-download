@@ -1,11 +1,20 @@
-<div><%= @skill.name %></div>
-<div><%= @intent.name %></div>
-<div><%= @intent.web_hook %></div>
+<%= link_to(
+  "&larr; Intents".html_safe,
+  skill_intents_path(@skill),
+  class: "btn sm grey"
+) %>
+<br><br>
+
+<div><strong>Skill Name:</strong> <%= @skill.name %></div>
+<div><strong>Intent Name:</strong> <%= @intent.name %></div>
+<div><strong>Web Hook:</strong> <%= @intent.web_hook %></div>
+<br>
 
 <div class='fields-and-dialogs'>
-  <div>Fields</div>
+  <div><strong>Intent Fields:</strong></div>
   <div id="fields"></div>
-  <button id='json'>Create JSON</button><br>
+  <button id='json' class="btn lg ghost">Create JSON</button>
+  <br>
   <div id="json"></div>
 </div>
 

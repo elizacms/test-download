@@ -1,6 +1,8 @@
-<h1>Edit <%= @skill.name %></h1>
-
-<%= render partial: "form" %>
+<%= link_to(
+  "&larr; Skills".html_safe,
+  skills_path,
+  class: "btn sm grey"
+) %>
 
 <%= link_to(
   "Delete this skill",
@@ -9,5 +11,9 @@
   data: {
     confirm: "Are you sure you want to delete this skill?"
   },
-  class: "btn sm grey abs-btm-20"
+  class: "btn sm red pull-right"
 ) %>
+
+<h1>Edit <%= @skill.name %></h1>
+
+<%= render partial: "form" %>
