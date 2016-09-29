@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :field do
-    id   'set_alarm'
+    id   'get_ride'
     type 'Boolean'
-    mturk_field 'Answer.AlarmTime'
+    mturk_field 'Uber.GetRide'
   end
 end

@@ -1,8 +1,8 @@
-.fields-and-dialogs button#json {
+.fields button.json {
   margin: 2.5em 0 0.8em;
 }
 
-.fields-and-dialogs div#json {
+.fields div.json {
   min-height:200px;
   white-space: pre;
   font-family: Courier;

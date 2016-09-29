@@ -39,6 +39,11 @@ RSpec.configure do |config|
     /gems/
   ]
 
+  config.before(:all) do
+    visit '/' # Boot app
+    sleep 1
+  end
+
   config.before(:each) do
     Mongoid.purge!
     ActionMailer::Base.deliveries = []

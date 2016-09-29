@@ -6,7 +6,7 @@ var types = [
 ];
 
 function initFields(){
-    $('#fields').jsGrid({
+    $('#jsGrid').jsGrid({
         width: '100%',
         height: '300px',
 
@@ -44,8 +44,8 @@ function initFields(){
 })}
 
 function initJSON(){
-    $( 'button#json' ).click(function() {
-        $( 'div#json' ).text( createJSON() );
+    $( 'button.json' ).click(function() {
+        $( 'div.json' ).text( createJSON() );
     });
 }
 
@@ -57,3 +57,13 @@ function ajaxCall( type, url, data ){
         data: data
     });
 }
+
+function createJSON(){
+  var data = $("#jsGrid").jsGrid("option", "data");
+
+  var top = { id:     intent.name ,
+              fields: data       };
+
+  return JSON.stringify( top, null, 2 );
+}
+

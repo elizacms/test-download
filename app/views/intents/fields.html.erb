@@ -10,12 +10,13 @@
 <div><strong>Web Hook:</strong> <%= @intent.web_hook %></div>
 <br>
 
-<div class='fields-and-dialogs'>
+<div id='jsGrid'></div>
+
+<div class='fields'>
   <div><strong>Intent Fields:</strong></div>
-  <div id="fields"></div>
-  <button id='json' class="btn lg ghost">Create JSON</button>
+  <button class="btn lg ghost json">Create JSON</button>
   <br>
-  <div id="json"></div>
+  <div class="json"></div>
 </div>
 
 <script>
