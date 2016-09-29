@@ -3,10 +3,12 @@
 }
 
 .fields-and-dialogs div#json {
-  height:200px;
+  min-height:200px;
   white-space: pre;
   font-family: Courier;
   border: 1px solid #eee;
+  padding:10px;
+  margin-bottom: 20px;
 }
 
 td.jsgrid-cell input,
