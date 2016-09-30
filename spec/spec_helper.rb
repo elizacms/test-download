@@ -40,8 +40,10 @@ RSpec.configure do |config|
   ]
 
   config.before(:all) do
-    visit '/' # Boot app
-    sleep 1
+    # Fix issue with browser hanging on first spec
+    visit '/'
+    # sleep 1
+    execute_script( 'window.reload();' ) if Capybara.current_driver == Capybara.javascript_driver
   end
 
   config.before(:each) do

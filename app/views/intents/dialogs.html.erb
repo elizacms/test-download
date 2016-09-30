@@ -1,0 +1,73 @@
+<%= link_to(
+  "&larr; Intents".html_safe,
+  skill_intents_path(@skill),
+  class: "btn sm grey"
+) %>
+<br><br>
+
+<div><strong>Skill Name:</strong> <%= @skill.name %></div>
+<div><strong>Intent Name:</strong> <%= @intent.name %></div>
+<div><strong>Web Hook:</strong> <%= @intent.web_hook %></div>
+<br>
+
+Dialogs<br>
+
+<table class='dialogs'>
+  <tr>
+    <th>ID</th>
+    <th>AneedA Says</th>
+    <th>Rules</th>
+    <th>Awaiting Field</th>
+  </tr>
+</table>
+
+<br><br>
+
+
+<form class='dialog' method='post' action='<%= submit_dialogs_path %>'>
+  Aneeda Says<br>
+  <input type='hidden' name='intent_id' value='<%= @intent.name %>'>
+  <input name='response' type='text'> ex: "Please log into your account."<br><br>
+
+  <table class='dialog'>
+    <tr>
+      <th>Field</th><th>Condition</th><th>Value</th>
+    </tr>
+    <tr>
+      <td>
+        When the following fields are missing<br><br>
+        <select name='missing'>
+          <% @fields.each do |field| %>
+            <option value='<%= field %>'><%= field %></option>
+          <% end %>
+        </select>
+      </td>
+      <td>
+        <select name='operation'>
+          <option value='is missing'>is missing</option>
+          <option value='has value'>has have</option>
+        </select>
+      </td>
+      <td>
+        <input name='value' type='text'>
+      </td>
+    </tr>
+  </table>
+
+  The user's response is passed to the awaiting field<br>
+  <select name='awaiting_field'>
+    <% @fields.each do |field| %>
+      <option value='<%= field %>'><%= field %></option>
+    <% end %>
+  </select>
+
+  <button>Create Dialog</button>
+</form>
+
+<script>
+var intent = <%= @intent.to_json.html_safe %>;
+
+$(function() {
+  initDialogs();
+});
+</script>

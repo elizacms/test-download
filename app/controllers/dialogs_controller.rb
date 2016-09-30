@@ -1,24 +1,34 @@
 class DialogsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
-  before_action :set_field,  only:[ :index,  :create  ]
-  before_action :set_dialog, only:[ :update, :destroy ]
+  before_action :set_intent
 
-  # before_action ->{ puts request.path; puts field_params.to_h }
-
+  # GET /dialogue_api/all_scenarios?
+  #   intent_id=play_music
   def index
-    dialogs = @field.dialogs.map( &:serialize )
+    dialogs = Dialog.where( intent_id:params[ :intent_id ])
+                    .map( &:serialize )
 
+    ap dialogs
+    
     render json:dialogs.to_json
   end
 
+  # POST /dialogue_api/response?
+  #   intent_id=play_music&
+  #   missing=song_name&
+  #   response=yeah+what+song+tho&
+  #   awaiting_field=song_name
   def create
-    @dialog = @field.dialogs.new( dialog_params )
-    
-    if @dialog.save
-      render json:@dialog.serialize.to_json
+    missing = params.delete( :missing )
+    dialog = Dialog.new( dialog_params.merge( missing:Array( missing )))
+
+    if dialog.save
+      # ap Dialog.all.map &:attributes
+      head :created
     else
-      render json: @dialog.errors, status: :unprocessable_entity
+      ap dialog.errors.full_messages
+      render json:dialog.errors, status: :unprocessable_entity
     end
   end
 
@@ -39,6 +49,10 @@ class DialogsController < ApplicationController
 
   private
 
+  def set_intent
+    @intent = Intent.find_by( name:params[ :intent_id ])
+  end
+
   def set_field
     @field = Field.find( params[ :field_id ])
   end
@@ -48,6 +62,7 @@ class DialogsController < ApplicationController
   end
 
   def dialog_params
-    params.permit( :field_id, :id, :response )
+    params.permit( :intent_id,      :missing  ,
+                   :awaiting_field, :response )
   end
 end

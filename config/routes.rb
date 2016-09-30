@@ -22,11 +22,20 @@ Rails.application.routes.draw do
     resources :intents
   end
   
-  resources :fields do
-    resources :dialogs
-  end
+  resources :fields
+  post '/dialogue_api/response',
+    to:'dialogs#create',
+    as: :submit_dialogs
 
+  get '/dialogue_api/all_scenarios',
+    to:'dialogs#index',
+    as: :get_dialogs
+  
   get '/skills/:skill_id/intents/:id/fields',
     to: 'intents#fields',
-    as: 'fields_page'
+    as: :fields_page
+
+  get '/skills/:skill_id/intents/:id/dialogs',
+    to: 'intents#dialogs',
+    as: :dialogs_page
 end

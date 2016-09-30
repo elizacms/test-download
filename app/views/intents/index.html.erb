@@ -13,18 +13,20 @@
 <table class="table table-hover">
   <thead class="thead-default">
     <tr>
-      <th>Intent Name</th>
-      <th>Intent Description</th>
-      <th>Edit</th>
-      <th>Fields and Dialogs</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
-  <% @intents.each do |i| %>
+  <% @intents.each do |intent| %>
     <tr>
-      <td><%= i.name %></td>
-      <td><%= i.description %></td>
-      <td><%= link_to( "Edit Details", edit_skill_intent_path( @skill.id, i.id )) %></td>
-      <td><%= link_to( "Edit Fields", fields_page_path( @skill.id, i.id )) %></td>
+      <td><%= intent.name %></td>
+      <td><%= intent.description %></td>
+      <td><%= link_to "Edit Details", edit_skill_intent_path( @skill, intent ) %></td>
+      <td><%= link_to "Edit Fields", fields_page_path( @skill, intent ) %></td>
+      <td><%= link_to "Edit Dialogs", dialogs_page_path( @skill, intent ) %></td>
     </tr>
   <% end %>
 </table>
