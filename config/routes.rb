@@ -30,6 +30,10 @@ Rails.application.routes.draw do
   get '/dialogue_api/all_scenarios',
     to:'dialogs#index',
     as: :get_dialogs
+
+  delete '/dialogue_api/response',
+    to:'dialogs#delete',
+    as: :delete_dialogs
   
   get '/skills/:skill_id/intents/:id/fields',
     to: 'intents#fields',

@@ -1,4 +1,4 @@
-feature 'Fields and Dialogs' ,:js ,:focus do
+feature 'Fields and Dialogs' ,:js do
   let(  :developer ){ create :developer }
   let!( :skill     ){ create :skill, user:developer }
   let!( :intent    ){ create :intent, skill:skill }
@@ -23,7 +23,7 @@ feature 'Fields and Dialogs' ,:js ,:focus do
     end
 
     click_button 'Create Dialog'
-    binding.pry
+    # binding.pry
     expect( page ).to have_content 'Dialogs'
   end
 end

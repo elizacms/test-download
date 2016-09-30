@@ -9,8 +9,6 @@ class DialogsController < ApplicationController
     dialogs = Dialog.where( intent_id:params[ :intent_id ])
                     .map( &:serialize )
 
-    ap dialogs
-    
     render json:dialogs.to_json
   end
 
@@ -32,16 +30,8 @@ class DialogsController < ApplicationController
     end
   end
 
-  def update
-    if @dialog.update( dialog_params )
-      render json:@dialog.serialize.to_json
-    else
-      render json:@dialog.errors, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    @dialog.destroy
+  def delete
+    Dialog.find( params[ :response_id ].to_i ).delete
 
     head :no_content
   end

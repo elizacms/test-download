@@ -2,7 +2,8 @@
 var types = [
     { name: 'Boolean'  },
     { name: 'Time'     },
-    { name: 'DateTime' }
+    { name: 'DateTime' },
+    { name: 'Text'     }
 ];
 
 function initFields(){
