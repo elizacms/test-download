@@ -5,12 +5,21 @@
 ) %>
 <br><br>
 
-<div><strong>Skill Name:</strong> <%= @skill.name %></div>
-<div><strong>Intent Name:</strong> <%= @intent.name %></div>
-<div><strong>Web Hook:</strong> <%= @intent.web_hook %></div>
-<br>
+<div class="row">
+  <div class="col-md-3">
+    <strong>Skill:</strong> <%= @skill.name %>
+  </div>
+  <div class="col-md-3">
+    <strong>Intent:</strong> <%= @intent.name %>
+  </div>
+  <div class="col-md-6">
+    <strong>Web Hook:</strong> <%= @intent.web_hook %>
+  </div>
+</div>
+<hr>
 
-Dialogs<br>
+<strong>Dialogs</strong>
+<br>
 
 <table class='dialogs'>
   <tr>
