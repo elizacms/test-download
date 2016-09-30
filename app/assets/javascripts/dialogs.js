@@ -1,5 +1,5 @@
 function initDialogs(){
-  console.log( 'initDialogs' );
+  getDialogs();
   
   $( '.dialog button' ).click(function( event ){
     event.preventDefault();
@@ -13,12 +13,12 @@ function submitDialog( form ){
     url: '/dialogue_api/response?' + form.serialize()
   })
   .done( function( data ){
-    getDialogs( form );
+    getDialogs();
   });
 };
 
-function getDialogs( form ){
-  var intent_id = form.children( 'input[name="intent_id"]' ).val();
+function getDialogs(){
+  var intent_id = $( 'form' ).children( 'input[name="intent_id"]' ).val();
   var data = { intent_id: intent_id };
   
   $.ajax({
@@ -36,29 +36,36 @@ function renderDialogs( data ){
     return rowsForSingle( d );
   });
 
-  flat = [].concat.apply( [], rows );
-
+  var flat = [].concat.apply( [], rows );
   console.log( flat );
 
-  $( 'table.dialogs' ).html( flat );
+  $( 'table.dialogs' ).find("tr:gt(0)").remove();
+  $( 'table.dialogs' ).append( flat );
 };
 
 function rowsForSingle( d ){
+  var del = { 'delete': 'x' };
+  
   return d.responses.map( function( r ){
-    return '<tr>' +
-      td( r, 'id' ) +
-      td( r, 'response' ) +
-      td( d, 'missing', ' is missing' ) +
-      td( r, 'awaiting_field' ) +
-    '</tr>'
+    var tds = [ td( r,  'id' ),
+                td( r,  'response' ),
+                td( d,  'missing', ' is missing' ),
+                td( r,  'awaiting_field' ),
+                td( del, 'delete' )];
+
+    var tr = $( '<tr></tr>' ).append( tds );
+    
+    return tr;
   });
 };
 
 function td( object, field, extraText ){
-  var td = '<td class="' + field + '">' + object[ field ];
-
+  var text = object[ field ];
   if( extraText != undefined )
-    td += extraText;
+    text += extraText;
 
-  return td + "</td>";
+  var td = $( '<td></td>' ).attr( 'class', field )
+                    .text(  text          );
+
+  return td;
 };
