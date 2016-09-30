@@ -19,7 +19,7 @@ class Dialog
                       id: id,
                       response: response }
 
-    { inent_id: intent_id,
+    { intent_id: intent_id,
       missing:  missing,
       responses: [ response_hash ]}
   end

@@ -23,7 +23,7 @@ feature 'Fields and Dialogs' ,:js ,:focus do
     end
 
     click_button 'Create Dialog'
-    sleep 5
+    binding.pry
     expect( page ).to have_content 'Dialogs'
   end
 end
