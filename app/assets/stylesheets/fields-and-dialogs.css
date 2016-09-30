@@ -31,3 +31,22 @@ td.jsgrid-cell {
 table.jsgrid-table {
   margin: 0;
 }
+
+// The below styles override the 'shared-styles'
+select {
+  min-width: 280px !important;
+  margin-top: 10px !important;
+}
+
+.aneeda-says{
+  min-width: 280px !important;
+}
+
+.field-input {
+  min-width: 280px !important;
+  margin-bottom: 5px !important;
+}
+
+.dialogs, .dialog {
+  width: 100%;
+}

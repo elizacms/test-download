@@ -25,17 +25,19 @@ Dialogs<br>
 
 
 <form class='dialog' method='post' action='<%= submit_dialogs_path %>'>
-  Aneeda Says<br>
+  <strong>Aneeda Says:</strong>
+  <br>
   <input type='hidden' name='intent_id' value='<%= @intent.name %>'>
-  <input name='response' type='text'> ex: "Please log into your account."<br><br>
+  <input class='aneeda-says' name='response' type='text'> ex: "Please log into your account."
+  <br><br><br>
 
+  When the following fields are missing:
   <table class='dialog'>
     <tr>
       <th>Field</th><th>Condition</th><th>Value</th>
     </tr>
     <tr>
       <td>
-        When the following fields are missing<br><br>
         <select name='missing'>
           <% @fields.each do |field| %>
             <option value='<%= field %>'><%= field %></option>
@@ -49,19 +51,24 @@ Dialogs<br>
         </select>
       </td>
       <td>
-        <input name='value' type='text'>
+        <input class="field-input" name='value' type='text'>
       </td>
     </tr>
   </table>
 
-  The user's response is passed to the awaiting field<br>
+  The user's response is passed to the awaiting field:
+  <br>
+  <br>
+  <strong>Awaiting Field</strong>
+  <br>
   <select name='awaiting_field'>
     <% @fields.each do |field| %>
       <option value='<%= field %>'><%= field %></option>
     <% end %>
   </select>
 
-  <button>Create Dialog</button>
+  <br>
+  <button class="btn lg ghost">Create Dialog</button>
 </form>
 
 <script>
