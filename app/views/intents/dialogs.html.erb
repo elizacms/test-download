@@ -1,7 +1,7 @@
 <%= link_to(
   "&larr; Intents".html_safe,
   skill_intents_path(@skill),
-  class: "btn sm grey"
+  class: "btn md grey"
 ) %>
 <br><br>
 
@@ -16,10 +16,7 @@
     <strong>Web Hook:</strong> <%= @intent.web_hook %>
   </div>
 </div>
-<hr>
-
-<strong>Dialogs</strong>
-<br>
+<hr class="margin0">
 
 <table class='dialogs'>
   <tr>
@@ -48,20 +45,20 @@
     </tr>
     <tr>
       <td>
-        <select name='missing'>
+        <select class="dialog-select" name='missing'>
           <% @fields.each do |field| %>
             <option value='<%= field %>'><%= field %></option>
           <% end %>
         </select>
       </td>
       <td>
-        <select name='operation'>
+        <select class="dialog-select" name='operation'>
           <option value='is missing'>is missing</option>
           <option value='has value'>has value</option>
         </select>
       </td>
       <td>
-        <input class="field-input" name='value' type='text'>
+        <input class="dialog-input" name='value' type='text'>
       </td>
     </tr>
   </table>
@@ -71,7 +68,7 @@
   <br>
   <strong>Awaiting Field</strong>
   <br>
-  <select name='awaiting_field'>
+  <select class="dialog-select" name='awaiting_field'>
     <% @fields.each do |field| %>
       <option value='<%= field %>'><%= field %></option>
     <% end %>

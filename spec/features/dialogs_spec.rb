@@ -24,6 +24,6 @@ feature 'Fields and Dialogs' ,:js do
 
     click_button 'Create Dialog'
     # binding.pry
-    expect( page ).to have_content 'Dialogs'
+    expect( page ).to have_content 'Aneeda Says'
   end
 end
