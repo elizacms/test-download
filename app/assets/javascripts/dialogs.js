@@ -64,11 +64,6 @@ function initDeleteListeners(){
 
 function rowsForSingle( d ){
   return d.responses.map( function( r ){
-    var link = $( '<a></a>' ).attr( 'class', 'icon-cancel-circled' )
-                             .attr( 'rel',    r.id )
-                             .attr( 'href' , '#' );
-    var del = $( '<td></td>').html( link );
-
     var tds = [ td( r,  'id' ),
                 td( r,  'response' ),
                 td( d,  'missing', ' is missing' ),
@@ -91,3 +86,10 @@ function td( object, field, extraText ){
 
   return td;
 };
+
+function deleteTD( id ){
+  var link = $( '<a></a>' ).attr( 'class', 'icon-cancel-circled' )
+                           .attr( 'rel',    r.id )
+                           .attr( 'href' , '#' );
+  return $( '<td></td>' ).html( link );
+}
