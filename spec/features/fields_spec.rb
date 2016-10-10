@@ -27,7 +27,6 @@ feature 'Fields' ,:js do
 
     expect( page ).to have_content skill.name
     expect( page ).to have_content intent.name
-    expect( page ).to have_content intent.web_hook
   end
 
   describe 'Generates JSON' do

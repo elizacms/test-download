@@ -13,7 +13,7 @@
     <strong>Intent:</strong> <%= @intent.name %>
   </div>
   <div class="col-md-6">
-    <strong>Web Hook:</strong> <%= @intent.web_hook %>
+    <strong>Web Hook:</strong> <%= @skill.web_hook %>
   </div>
 </div>
 <hr class="margin0">
@@ -54,7 +54,7 @@
       <td>
         <select class="dialog-select" name='operation'>
           <option value='is missing'>is missing</option>
-          <option value='has value'>has value</option>
+          <option value='is present'>has value</option>
         </select>
       </td>
       <td>
@@ -63,9 +63,7 @@
     </tr>
   </table>
 
-  The user's response is passed to the awaiting field:
-  <br>
-  <br>
+  
   <strong>Awaiting Field</strong>
   <br>
   <select class="dialog-select" name='awaiting_field'>

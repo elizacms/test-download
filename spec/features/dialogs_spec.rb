@@ -23,7 +23,7 @@ feature 'Fields and Dialogs' ,:js do
     end
 
     click_button 'Create Dialog'
-    # binding.pry
+    
     expect( page ).to have_content 'Aneeda Says'
   end
 end

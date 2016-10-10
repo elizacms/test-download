@@ -56,7 +56,8 @@ feature 'Skills pages' do
   end
 
   describe 'Developer can create a skill' do
-    let( :skill_name        ){ 'Uber' }
+    let( :skill_name ){ 'Uber' }
+    let( :web_hook   ){ 'https://skill-uber.i.am' }
 
     specify do
       visit "/login/success?code=0123abc"
@@ -65,12 +66,14 @@ feature 'Skills pages' do
       click_link 'Create New Skill'
 
       within 'form' do
-        fill_in :skill_name,        with: skill_name
+        fill_in :skill_name,     with: skill_name
+        fill_in :skill_web_hook, with: web_hook
         click_button 'Submit'
       end
 
       expect( page ).to have_content '1 Skill'
       expect( page ).to have_content skill_name
+      expect( page ).to have_content web_hook
     end
   end
 

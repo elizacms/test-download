@@ -61,8 +61,7 @@ feature 'Intents pages' do
   describe 'Developer can create an Intent' do
     let( :intent_name ){ 'get_ride' }
     let( :intent_description ){ 'Get a ride a with Uber.' }
-    let( :intent_web_hook ){ 'https://i.am.uber' }
-
+    
     specify do
       visit "/login/success?code=0123abc"
       click_link 'Intents'
@@ -71,7 +70,6 @@ feature 'Intents pages' do
       within 'form' do
         fill_in :intent_name, with:intent_name
         fill_in :intent_description, with:intent_description
-        fill_in :intent_web_hook, with:intent_web_hook
         click_button 'Submit'
       end
 
@@ -83,8 +81,7 @@ feature 'Intents pages' do
 
   context 'When name is blank fails' do
     let( :intent_description ){ 'Get a ride a with Uber.' }
-    let( :intent_web_hook    ){ 'https://i.am.uber'       }
-
+    
     specify do
       visit "/login/success?code=0123abc"
       click_link 'Intents'
@@ -92,7 +89,6 @@ feature 'Intents pages' do
 
       within 'form' do
         fill_in :intent_description, with:intent_description
-        fill_in :intent_web_hook, with:intent_web_hook
         click_button 'Submit'
       end
 

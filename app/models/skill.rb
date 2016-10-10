@@ -5,7 +5,8 @@ class Skill
   belongs_to :user
   has_many   :intents, dependent: :destroy
 
-  field :name, type:String
+  field :name,     type:String
+  field :web_hook, type:String
 
   validates_presence_of :name
 end

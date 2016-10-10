@@ -1,6 +1,8 @@
 <div class="form-center">
   <%= form_for @skill do | f |%>
-    Name: <%= f.text_field :name %>
+    Name: <%= f.text_field :name %><br><br>
+    Web Hook URL:<%= f.text_field :web_hook %><br><br>
+    
     <%= f.submit 'Submit', :class=>"btn md black" %>
   <% end %>
 

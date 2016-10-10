@@ -7,7 +7,6 @@ class Intent
 
   field :name,        type:String
   field :description, type:String
-  field :web_hook,    type:String
 
   validates_presence_of :name
 end
