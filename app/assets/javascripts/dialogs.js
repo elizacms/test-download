@@ -68,7 +68,7 @@ function rowsForSingle( d ){
                 td( r,  'response' ),
                 td( d,  'missing', ' is missing' ),
                 td( r,  'awaiting_field' ),
-                del ];
+                deleteTD( r )];
 
     var tr = $( '<tr></tr>' ).append( tds );
     
@@ -87,7 +87,7 @@ function td( object, field, extraText ){
   return td;
 };
 
-function deleteTD( id ){
+function deleteTD( r ){
   var link = $( '<a></a>' ).attr( 'class', 'icon-cancel-circled' )
                            .attr( 'rel',    r.id )
                            .attr( 'href' , '#' );
