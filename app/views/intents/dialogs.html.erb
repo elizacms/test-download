@@ -38,23 +38,24 @@
   <input class='aneeda-says' name='response' type='text'> ex: "Please log into your account."
   <br><br><br>
 
-  When the following fields are missing:
+  
   <table class='dialog'>
     <tr>
       <th>Field</th><th>Condition</th><th>Value</th>
     </tr>
     <tr>
       <td>
-        <select class="dialog-select" name='missing'>
+        <select class="dialog-select" name='field'>
           <% @fields.each do |field| %>
             <option value='<%= field %>'><%= field %></option>
           <% end %>
         </select>
       </td>
       <td>
-        <select class="dialog-select" name='operation'>
-          <option value='is missing'>is missing</option>
-          <option value='is present'>has value</option>
+        <select class="dialog-select" name='condition'>
+          <option value='unresolved'>is unresolved</option>
+          <option value='missing'>is missing</option>
+          <option value='present'>is present</option>
         </select>
       </td>
       <td>

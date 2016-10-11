@@ -5,10 +5,10 @@ describe 'Dialogs' do
   let!( :field     ){ create :field, intent:intent  }
 
   let( :params ){{ intent_id:intent.name,
-                   response: 'where would you like to go?',
-                   missing:  field.id,
-                   unresolved: 'unresolved',
-                   present:   [ 'present', 'value' ],
+                   response:  [ 'where would you like to go' ],
+                   missing:   [ field.id ],
+                   unresolved:[ 'unresolved' ],
+                   present:   [[ 'present', 'value' ]],
                    awaiting_field: field.id }}
 
   describe 'Create' do
@@ -48,9 +48,9 @@ describe 'Dialogs' do
       expect( parsed_response[ 0 ][ :intent_id  ]).to eq intent.name
       expect( parsed_response[ 0 ][ :missing    ]).to eq [  field.id    ]
       expect( parsed_response[ 0 ][ :unresolved ]).to eq [ 'unresolved' ]
-      expect( parsed_response[ 0 ][ :present    ]).to eq [ 'present', 'value' ]
+      expect( parsed_response[ 0 ][ :present    ][ 0 ]).to eq [ 'present', 'value' ]
       expect( parsed_response[ 0 ][ :responses  ][ 0 ][ :awaiting_field ]).to eq params[ :awaiting_field ]
-      expect( parsed_response[ 0 ][ :responses  ][ 0 ][ :response       ]).to eq params[ :response ]
+      expect( parsed_response[ 0 ][ :responses  ][ 0 ][ :response       ]).to eq params[ :response ].first
     end
   end
 end

@@ -16,10 +16,10 @@ feature 'Fields and Dialogs' ,:js do
     click_link 'Edit Dialogs'
 
     within 'form' do
-      fill_in :response, with:'what song would you like to hear'
-      select field.id,     from:'missing'
-      select 'is missing', from:'operation'
-      select field.id,     from:'awaiting_field'
+      fill_in :response,    with:'what song would you like to hear'
+      select   field.id,    from:'field'
+      select  'is missing', from:'condition'
+      select   field.id,    from:'awaiting_field'
     end
 
     click_button 'Create Dialog'

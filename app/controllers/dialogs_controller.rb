@@ -18,7 +18,8 @@ class DialogsController < ApplicationController
 
     if dialog.save
       # ap Dialog.all.map &:attributes
-      head :created
+      render json:{}, status: :created
+
     else
       # ap dialog.errors.full_messages
       render json:dialog.errors, status: :unprocessable_entity
@@ -28,7 +29,7 @@ class DialogsController < ApplicationController
   def delete
     Dialog.find( params[ :response_id ].to_i ).delete
 
-    head :no_content
+    render json:{}, status: :ok
   end
 
 
@@ -47,14 +48,12 @@ class DialogsController < ApplicationController
   end
 
   def dialog_params
-    missing    = params.delete( :missing    )
-    unresolved = params.delete( :unresolved )
-    present    = params.delete( :present    )
-    
-    params.permit( :intent_id,      :missing  ,
-                   :awaiting_field, :response )
-          .merge( missing:   Array( missing    ))
-          .merge( unresolved:Array( unresolved ))
-          .merge( present:   Array( present    ))
+    present = params[ :present ]
+
+    params.permit( :intent_id, :awaiting_field, 
+                    response:  [],
+                    missing:   [],
+                    unresolved:[])
+          .merge( present:present )
   end
 end

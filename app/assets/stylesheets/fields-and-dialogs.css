@@ -51,6 +51,11 @@ table.jsgrid-table {
   width: 100%;
 }
 
+table.dialogs{
+  tr:nth-child(odd) {background: #f6f6f6};
+  tr:not(:first-child) {background: #fff};
+}
+
 .margin0{
   margin-top: 10px !important;
   margin-bottom:  0 !important;

@@ -8,11 +8,28 @@ function initDialogs(){
 };
 
 function submitDialog( form ){
+  var data = { unresolved:[], missing:[], present:[] }
+
+  form.find( 'tr:gt(0)' ).map( function( index, tr ){
+    var field = $( tr ).find( 'select[name="field"]' ).val();
+    var condition = $( tr ).find( 'select[name="condition"]' ).val();
+    var value = $( tr ).find( 'select[name="value"]' ).val();
+
+    data[ condition ].push( field );
+  });
+
+  data[ 'intent_id'      ] =   form.find( 'input[name="intent_id"]'       ).val()  ;
+  data[ 'response'       ] = [ form.find( 'input[name="response"]'        ).val() ];
+  data[ 'awaiting_field' ] =   form.find( 'select[name="awaiting_field"]' ).val()  ;
+
   $.ajax({
     type: 'POST',
-    url: '/dialogue_api/response?' + form.serialize()
+    url: '/dialogue_api/response?',
+    dataType:'json',
+    data:data
   })
   .done( function( data ){
+    form.find( 'input.aneeda-says' ).val( '' );
     getDialogs();
   });
 };
@@ -30,20 +47,21 @@ function deleteDialog( id ){
 function getDialogs(){
   var intent_id = $( 'form' ).children( 'input[name="intent_id"]' ).val();
   var data = { intent_id: intent_id };
-  
+
   $.ajax({
     type: 'GET',
     url: '/dialogue_api/all_scenarios',
     data:data
   })
   .done( function( data ){
+    // console.log( data );
     renderDialogs( data );
   });
 };
 
 function renderDialogs( data ){
   var rows = data.map( function( d ){
-    return rowsForSingle( d );
+    return rowsForSingle( d ); 
   });
 
   var flat = [].concat.apply( [], rows );
@@ -64,10 +82,19 @@ function initDeleteListeners(){
 
 function rowsForSingle( d ){
   return d.responses.map( function( r ){
-    var tds = [ td( r,  'id' ),
-                td( r,  'response' ),
-                td( d,  'missing', ' is missing' ),
-                td( r,  'awaiting_field' ),
+    condition = 'error';
+
+    if( d[ 'missing' ] != null )
+      condition = 'missing'
+    else if( d[ 'present' ] != null )
+      condition = 'present'
+    else if( d[ 'unresolved' ] != null )
+      condition = 'unresolved'
+
+    var tds = [ td( r, 'id' ),
+                td( r, 'response' ),
+                td( d,  '', d[ condition ][ 0 ] + ' is ' + condition ),
+                td( r, 'awaiting_field' ),
                 deleteTD( r )];
 
     var tr = $( '<tr></tr>' ).append( tds );
@@ -77,12 +104,16 @@ function rowsForSingle( d ){
 };
 
 function td( object, field, extraText ){
-  var text = object[ field ];
+  var text = '';
+
+  if( object[ field ] != undefined )
+    text = object[ field ];
+
   if( extraText != undefined )
     text += extraText;
 
   var td = $( '<td></td>' ).attr( 'class', field )
-                    .text(  text          );
+                           .text(  text          );
 
   return td;
 };
