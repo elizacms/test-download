@@ -14,14 +14,13 @@ class DialogsController < ApplicationController
 
   # POST /dialogue_api/response
   def create
-    missing = params.delete( :missing )
-    dialog = Dialog.new( dialog_params.merge( missing:Array( missing )))
+    dialog = Dialog.new( dialog_params )
 
     if dialog.save
       # ap Dialog.all.map &:attributes
       head :created
     else
-      ap dialog.errors.full_messages
+      # ap dialog.errors.full_messages
       render json:dialog.errors, status: :unprocessable_entity
     end
   end
@@ -48,7 +47,14 @@ class DialogsController < ApplicationController
   end
 
   def dialog_params
+    missing    = params.delete( :missing    )
+    unresolved = params.delete( :unresolved )
+    present    = params.delete( :present    )
+    
     params.permit( :intent_id,      :missing  ,
                    :awaiting_field, :response )
+          .merge( missing:   Array( missing    ))
+          .merge( unresolved:Array( unresolved ))
+          .merge( present:   Array( present    ))
   end
 end

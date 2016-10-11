@@ -3,6 +3,8 @@ class Dialog
   
   field :intent_id,      type:String
   field :missing,        type:Array
+  field :unresolved,     type:Array
+  field :present,        type:Array
   field :awaiting_field, type:String
   field :response,       type:String
 
@@ -18,8 +20,10 @@ class Dialog
                       id: id,
                       response: response }
 
-    { intent_id: intent_id,
-      missing:  missing,
+    { intent_id:   intent_id,
+      missing:     missing,
+      unresolved:  unresolved,
+      present:     present,
       responses: [ response_hash ]}
   end
 
