@@ -12,11 +12,7 @@ class DialogsController < ApplicationController
     render json:dialogs.to_json
   end
 
-  # POST /dialogue_api/response?
-  #   intent_id=play_music&
-  #   missing=song_name&
-  #   response=yeah+what+song+tho&
-  #   awaiting_field=song_name
+  # POST /dialogue_api/response
   def create
     missing = params.delete( :missing )
     dialog = Dialog.new( dialog_params.merge( missing:Array( missing )))

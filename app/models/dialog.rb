@@ -7,7 +7,6 @@ class Dialog
   field :response,       type:String
 
   validates_presence_of :intent_id
-  validates_presence_of :missing
   validates_presence_of :awaiting_field
   validates_presence_of :response
 

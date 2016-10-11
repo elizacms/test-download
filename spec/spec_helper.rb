@@ -18,6 +18,7 @@ WebMock.disable_net_connect!( allow_localhost:true )
 Capybara.javascript_driver = :selenium
 
 RSpec.configure do |config|
+  config.include Rack::Test::Methods
   config.include Capybara::DSL
   config.include FactoryGirl::Syntax::Methods
 

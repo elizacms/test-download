@@ -23,7 +23,7 @@ feature 'Fields and Dialogs' ,:js do
     end
 
     click_button 'Create Dialog'
-    
-    expect( page ).to have_content 'Aneeda Says'
+
+    expect( page ).to have_content 'destination is missing'
   end
 end
