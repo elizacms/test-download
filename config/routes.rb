@@ -23,6 +23,12 @@ Rails.application.routes.draw do
   end
   
   resources :fields
+
+  scope :api do
+    get '/webhooks',
+      to: 'api#get_webhook'
+  end
+  
   post '/dialogue_api/response',
     to:'dialogs#create',
     as: :submit_dialogs
@@ -43,3 +49,5 @@ Rails.application.routes.draw do
     to: 'intents#dialogs',
     as: :dialogs_page
 end
+
+
