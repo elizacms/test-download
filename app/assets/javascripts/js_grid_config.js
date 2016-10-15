@@ -22,13 +22,15 @@ function initFields(){
                 return ajaxCall( 'GET', '/fields', filter);
             },
             insertItem: function(item){
-                // return ajaxCall( 'POST', '/fields', item);
+                var data = $.extend({ intent_id:intent._id.$oid }, item );
+
+                return ajaxCall( 'POST', '/fields', data);
             },
             updateItem: function(item){
-                // return ajaxCall( 'PUT', '/fields/'+ item.id, item);  
+                return ajaxCall( 'PUT', '/fields/'+ item.id, item);  
             },
             deleteItem:function(item){
-                // return ajaxCall( 'DELETE', '/fields/' + item.id, null);
+                return ajaxCall( 'DELETE', '/fields/' + item.id, null);
             }
         },
 
@@ -37,7 +39,7 @@ function initFields(){
         },
 
         fields: [
-            { name: 'id',          type: 'text',   width:100, validate:'required' },
+            { name: 'id',          type: 'text',   width:100, validate:'required', editing:false },
             { name: 'type',        type: 'select', width:100, validate:'required', items: types, valueField: 'name', textField: 'name' },
             { name: 'mturk_field', type: 'text',   width:100, validate:'required' },
             { type: 'control' }

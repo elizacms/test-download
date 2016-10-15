@@ -1,5 +1,6 @@
 class Field
   include Mongoid::Document
+  include Mongoid::Timestamps
   
   field :type,        type: String
   field :mturk_field, type: String

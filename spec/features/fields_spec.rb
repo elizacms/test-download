@@ -19,6 +19,20 @@ feature 'Fields' ,:js do
     expect( page ).to have_content field.type
   end
 
+  describe 'Saves Fields' do
+    specify do
+      visit "/login/success?code=0123abc"
+
+      click_link 'Intents'
+      click_link 'Edit Fields'
+
+      find( 'input.jsgrid-insert-mode-button' ).click
+
+      expect( page ).to have_content field.id
+      expect( page ).to have_content field.type
+    end
+  end
+
   specify 'Has Skill info' do
     visit "/login/success?code=0123abc"
 

@@ -1,4 +1,4 @@
-feature 'Fields and Dialogs' ,:js do
+feature 'Dialogs' ,:js do
   let(  :developer ){ create :developer }
   let!( :skill     ){ create :skill, user:developer }
   let!( :intent    ){ create :intent, skill:skill }
@@ -9,7 +9,7 @@ feature 'Fields and Dialogs' ,:js do
     stub_identity_account_for developer.email
   end  
 
-  specify 'Dialogs' do
+  specify 'Renders rule' do
     visit "/login/success?code=0123abc"
     click_link 'Intents'
     

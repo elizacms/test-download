@@ -11,7 +11,7 @@ class FieldsController < ApplicationController
 
   def create
     @field = Field.new( field_params )
-    
+
     if @field.save
       render json:@field.serialize.to_json
     else
@@ -41,6 +41,6 @@ class FieldsController < ApplicationController
   end
 
   def field_params
-    params.permit( :id, :name, :type )
+    params.permit( :id, :intent_id, :type, :mturk_field )
   end
 end
