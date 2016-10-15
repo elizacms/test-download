@@ -19,7 +19,7 @@ feature 'Fields' ,:js do
     expect( page ).to have_content field.type
   end
 
-  specify 'Has Skill info' do
+  specify 'Has Skill info' ,:focus do
     visit "/login/success?code=0123abc"
 
     click_link 'Intents'
@@ -27,6 +27,7 @@ feature 'Fields' ,:js do
 
     expect( page ).to have_content skill.name
     expect( page ).to have_content intent.name
+    expect( find( 'input#intent_mturk_response' ).value ).to eq intent.mturk_response
   end
 
   describe 'Generates JSON' do

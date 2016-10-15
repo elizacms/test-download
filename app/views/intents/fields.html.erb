@@ -18,18 +18,28 @@
 
 <div id='jsGrid'></div>
 
+<div id='mturk-response-field'>
+  <%= form_for [ @skill, @intent ] do | f | %>
+    Mechanical Turk response field<br>
+    <%= f.text_field :mturk_response %>
+
+    <%= f.submit 'Submit', :class=>"btn md black" %><span id='submit-result'></span>
+  <% end %>
+</div>
+
 <div class='fields'>
-  <div><strong>Intent Fields:</strong></div>
   <button class="btn lg ghost json">Create JSON</button>
   <br>
   <div class="json"></div>
 </div>
 
 <script>
+var skill  = <%= @skill.to_json.html_safe %>;
 var intent = <%= @intent.to_json.html_safe %>;
 
 $(function() {
     initFields();
     initJSON();
+    initMturkResponse();
 });
 </script>

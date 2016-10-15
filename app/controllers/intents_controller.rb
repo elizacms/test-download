@@ -1,7 +1,7 @@
 class IntentsController < ApplicationController
   before_action :validate_admin_or_developer
   before_action :find_skill
-  before_action :find_intent, only:[ :edit, :update, :destroy, :fields, :dialogs ]
+  before_action :find_intent, only:[ :edit, :update, :destroy, :fields, :dialogs, :submit_mturk_response ]
 
   def index
     @intents = @skill.intents
@@ -59,6 +59,14 @@ class IntentsController < ApplicationController
   def fields
   end
 
+  def submit_mturk_response
+    if @intent.update mturk_response:params[ :mturk_response ]
+      head 200
+    else
+      head 422
+    end
+  end
+
   def dialogs
     @fields = @intent.entities.pluck( :id )
   end
@@ -77,6 +85,6 @@ class IntentsController < ApplicationController
   end
 
   def intent_params
-    params.require( :intent ).permit( :name, :description, :web_hook )
+    params.require( :intent ).permit( :name, :description, :web_hook, :mturk_response )
   end
 end

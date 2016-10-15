@@ -61,15 +61,16 @@ feature 'Intents pages' do
   describe 'Developer can create an Intent' do
     let( :intent_name ){ 'get_ride' }
     let( :intent_description ){ 'Get a ride a with Uber.' }
-    
+
     specify do
       visit "/login/success?code=0123abc"
       click_link 'Intents'
       click_link 'Create new Intent'
 
       within 'form' do
-        fill_in :intent_name, with:intent_name
-        fill_in :intent_description, with:intent_description
+        fill_in :intent_name,           with:intent_name
+        fill_in :intent_description,    with:intent_description
+
         click_button 'Submit'
       end
 

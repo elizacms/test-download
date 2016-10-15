@@ -20,6 +20,8 @@ Rails.application.routes.draw do
   
   resources :skills do
     resources :intents
+
+    put '/intents/:id/mturk_response', to: 'intents#submit_mturk_response'
   end
   
   resources :fields
