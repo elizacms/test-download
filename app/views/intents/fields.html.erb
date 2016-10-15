@@ -20,7 +20,7 @@
 
 <div id='mturk-response-field'>
   <%= form_for [ @skill, @intent ] do | f | %>
-    Mechanical Turk response field<br>
+    Mechanical Turk response fields<br>
     <%= f.text_field :mturk_response %>
 
     <%= f.submit 'Submit', :class=>"btn md black" %><span id='submit-result'></span>

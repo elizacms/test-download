@@ -62,9 +62,13 @@ function ajaxCall( type, url, data ){
 function createJSON(){
   var data = $("#jsGrid").jsGrid("option", "data");
 
-  var top = { id:     intent.name ,
-              fields: data       };
+  var top = { id: intent.name,
+              fields: data,
+              mturk_response_fields: mturkResponseFields() };
 
   return JSON.stringify( top, null, 2 );
 }
 
+function mturkResponseFields(){
+    return $( 'input#intent_mturk_response' ).val();
+}

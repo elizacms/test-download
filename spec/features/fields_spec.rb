@@ -19,7 +19,7 @@ feature 'Fields' ,:js do
     expect( page ).to have_content field.type
   end
 
-  specify 'Has Skill info' ,:focus do
+  specify 'Has Skill info' do
     visit "/login/success?code=0123abc"
 
     click_link 'Intents'
@@ -31,7 +31,7 @@ feature 'Fields' ,:js do
   end
 
   describe 'Generates JSON' do
-    let( :json   ){{ id:intent.name, fields:[ fields ]}.to_json }
+    let( :json   ){{ id:intent.name, mturk_response_fields:intent.mturk_response, fields:[ fields ]}.to_json }
     let( :fields ){{ id:field.id.to_s, type:field.type, mturk_field:field.mturk_field }}
     let( :json_div_content ){ find( 'div.json' ).native.attribute( 'innerHTML' ).gsub /\s/, '' }
 
@@ -42,9 +42,6 @@ feature 'Fields' ,:js do
       click_link 'Edit Fields'
 
       click_button 'JSON'
-
-      # binding.pry
-      # sleep 15
 
       expect( json_div_content ).to eq json
     end

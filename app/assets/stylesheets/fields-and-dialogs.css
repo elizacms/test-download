@@ -66,7 +66,7 @@ table.dialogs{
 }
 
 #mturk-response-field input[type='submit']{
-  margin: -4px 0 0 17px;
+  margin: -4px 0 0 13px;
 }
 
 #mturk-response-field #submit-result {
