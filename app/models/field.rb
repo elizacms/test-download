@@ -7,6 +7,8 @@ class Field
 
   belongs_to :intent
 
+  default_scope  ->{ order( id: :ASC )}
+
   def serialize
     { id:id, type:type, mturk_field:mturk_field }
   end
