@@ -28,17 +28,18 @@
   </tr>
 </table>
 
+<div class="response-message"></div>
 <br><br>
-
 
 <form class='dialog' method='post' action='<%= submit_dialogs_path %>'>
   <strong>Aneeda Says:</strong>
   <br>
   <input type='hidden' name='intent_id' value='<%= @intent.name %>'>
   <input class='aneeda-says' name='response' type='text'> ex: "Please log into your account."
-  <br><br><br>
+  <br>
+  <div class="aneeda-says-error"></div>
+  <br><br>
 
-  
   <table class='dialog'>
     <tr>
       <th>Field</th><th>Condition</th><th>Value</th>
@@ -64,7 +65,6 @@
     </tr>
   </table>
 
-  
   <strong>Awaiting Field</strong>
   <br>
   <select class="dialog-select" name='awaiting_field'>

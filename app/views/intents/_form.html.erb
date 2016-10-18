@@ -2,10 +2,10 @@
   <%= form_for [ @skill, @intent ] do | f |%>
     Name:<br>
     <%= f.text_field :name %><br><br>
-    
+
     Description:<br>
     <%= f.text_area :description %><br><br>
 
-    <%= f.submit 'Submit', :class=>"btn md black" %>
+    <%= f.submit 'Submit', class: "btn md black" %>
   <% end %>
 </div>

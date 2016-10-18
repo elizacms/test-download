@@ -1,6 +1,6 @@
 class Dialog
   include Mongoid::Document
-  
+
   field :intent_id,      type:String
   field :awaiting_field, type:String
   field :missing,        type:Array
@@ -16,15 +16,19 @@ class Dialog
 
 
   def serialize
-    response_hash = { awaiting_field:awaiting_field,
+    response_hash = {
+                      awaiting_field: awaiting_field,
                       id: id,
-                      response: response[ 0 ]}
+                      response: response[ 0 ]
+                    }
 
-    { intent_id:   intent_id,
+    {
+      intent_id:   intent_id,
       missing:     missing,
       present:     present,
       unresolved:  unresolved,
-      responses: [ response_hash ]}
+      responses: [ response_hash ]
+    }
   end
 
 

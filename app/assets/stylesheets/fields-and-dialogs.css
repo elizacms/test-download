@@ -11,6 +11,14 @@
   margin-bottom: 20px;
 }
 
+.response-message {
+  color: red;
+}
+
+.aneeda-says-error {
+  color: red;
+}
+
 td.jsgrid-cell input,
 td.jsgrid-cell select {
   width: 230px;
