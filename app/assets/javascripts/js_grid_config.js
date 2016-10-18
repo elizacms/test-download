@@ -27,10 +27,11 @@ function initFields(){
                 return ajaxCall( 'POST', '/fields', data);
             },
             updateItem: function(item){
-                return ajaxCall( 'PUT', '/fields/'+ item.id, item);  
+                return ajaxCall( 'PUT', '/fields/'+ item.id, item);
             },
-            deleteItem:function(item){
+            deleteItem: function(item){
                 return ajaxCall( 'DELETE', '/fields/' + item.id, null);
+
             }
         },
 

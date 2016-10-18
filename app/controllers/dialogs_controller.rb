@@ -18,31 +18,34 @@ class DialogsController < ApplicationController
 
     if dialog.save
       # ap Dialog.all.map &:attributes
-      render json:{}, status: :created
+      render json: {}, status: :created
 
     else
       # ap dialog.errors.full_messages
-      render json:dialog.errors, status: :unprocessable_entity
+      render json: dialog.errors, status: :unprocessable_entity
     end
   end
 
   def delete
-    Dialog.find( params[ :response_id ].to_i ).delete
+    dialog = Dialog.find( params[ :response_id ].to_i )
 
-    render json:{}, status: :ok
+    aneeda_says = dialog.response[0]
+    dialog.delete
+
+    render plain: "You deleted the Dialog: #{aneeda_says}.", status: :ok
   end
 
 
   private
 
   def set_intent
-    @intent = Intent.find_by( name:params[ :intent_id ])
+    @intent = Intent.find_by( name: params[ :intent_id ] )
   end
 
   def set_field
     @field = Field.find( params[ :field_id ])
   end
-  
+
   def set_dialog
     @dialog = Dialog.find( params[ :id ])
   end
@@ -50,10 +53,12 @@ class DialogsController < ApplicationController
   def dialog_params
     present = params[ :present ]
 
-    params.permit( :intent_id, :awaiting_field, 
-                    response:  [],
-                    missing:   [],
-                    unresolved:[])
-          .merge( present:present )
+    params.permit(
+                  :intent_id,
+                  :awaiting_field,
+                  response:   [],
+                  missing:    [],
+                  unresolved: []
+          ).merge( present:present )
   end
 end

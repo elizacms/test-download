@@ -1,6 +1,6 @@
 function initDialogs(){
   getDialogs();
-  
+
   $( '.dialog button' ).click(function( event ){
     event.preventDefault();
     submitDialog( $( this ).parent( 'form' ));
@@ -22,6 +22,16 @@ function submitDialog( form ){
   data[ 'response'       ] = [ form.find( 'input[name="response"]'        ).val() ];
   data[ 'awaiting_field' ] =   form.find( 'select[name="awaiting_field"]' ).val()  ;
 
+  if ( $('.aneeda-says').val() == '' ){
+    $('.aneeda-says-error').html('This field cannot be blank.');
+
+    setTimeout(function() {
+      $('.aneeda-says-error').html('');
+    }, 3000);
+
+    return false;
+  }
+
   $.ajax({
     type: 'POST',
     url: '/dialogue_api/response?',
@@ -40,7 +50,13 @@ function deleteDialog( id ){
     url: '/dialogue_api/response?response_id=' + id
   })
   .done( function( data ){
+    $('.response-message').html(data);
+
     getDialogs();
+
+    setTimeout(function() {
+      $('.response-message').html("");
+    }, 3000);
   });
 };
 
@@ -61,11 +77,11 @@ function getDialogs(){
 
 function renderDialogs( data ){
   var rows = data.map( function( d ){
-    return rowsForSingle( d ); 
+    return rowsForSingle( d );
   });
 
   var flat = [].concat.apply( [], rows );
-  
+
   $( 'table.dialogs' ).find("tr:gt(0)").remove();
   $( 'table.dialogs' ).append( flat );
 
@@ -98,7 +114,7 @@ function rowsForSingle( d ){
                 deleteTD( r )];
 
     var tr = $( '<tr></tr>' ).append( tds );
-    
+
     return tr;
   });
 };

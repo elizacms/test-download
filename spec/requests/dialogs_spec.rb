@@ -4,12 +4,16 @@ describe 'Dialogs' do
   let!( :intent    ){ create :intent, skill:skill   }
   let!( :field     ){ create :field, intent:intent  }
 
-  let( :params ){{ intent_id:intent.name,
-                   response:  [ 'where would you like to go' ],
-                   missing:   [ field.id ],
-                   unresolved:[ 'unresolved' ],
-                   present:   [[ 'present', 'value' ]],
-                   awaiting_field: field.id }}
+  let( :params ){
+    {
+      intent_id:intent.name,
+      response:  [ 'where would you like to go' ],
+      missing:   [ field.id ],
+      unresolved:[ 'unresolved' ],
+      present:   [[ 'present', 'value' ]],
+      awaiting_field: field.id
+    }
+  }
 
   describe 'Create' do
     specify 'Success' do

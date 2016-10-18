@@ -75,13 +75,13 @@ class IntentsController < ApplicationController
   private
 
   def find_skill
-    @skill = current_user_skills.find_by( id: params[ :skill_id ])
+    @skill = current_user_skills.find_by( id: params[ :skill_id ] )
 
     redirect_to( skills_path ) if @skill.nil?
   end
 
   def find_intent
-    @intent = @skill.intents.find( params[ :id ])
+    @intent = @skill.intents.find( params[ :id ] )
   end
 
   def intent_params
