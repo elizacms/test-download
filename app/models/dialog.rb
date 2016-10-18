@@ -10,7 +10,8 @@ class Dialog
 
   validates_presence_of :intent_id
   validates_presence_of :awaiting_field
-  validates_presence_of :response
+  validates :response, presence: true
+  validate :response_cannot_be_set_of_empties
 
   before_create :set_id
 
@@ -29,6 +30,12 @@ class Dialog
       unresolved:  unresolved,
       responses: [ response_hash ]
     }
+  end
+
+  def response_cannot_be_set_of_empties
+    if response.all?{ |ele| ele.blank? }
+      errors.add(:contents, "are all empty")
+    end
   end
 
 
