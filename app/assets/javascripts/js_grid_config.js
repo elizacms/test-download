@@ -18,7 +18,9 @@ function initFields(){
         autoload:  true,
 
         controller: {
-            loadData: function(filter){
+            loadData: function(){
+                filter = { intent_id: intent._id.$oid };
+                console.log( filter );
                 return ajaxCall( 'GET', '/fields', filter);
             },
             insertItem: function(item){

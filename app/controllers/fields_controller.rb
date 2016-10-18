@@ -4,8 +4,9 @@ class FieldsController < ApplicationController
   before_action :set_field, only: [:update, :destroy]
 
   def index
-    fields = Field.all.map( &:serialize )
-    
+    intent = Intent.find( params[ :intent_id ])
+    fields = intent.entities.map( &:serialize )
+
     render json:fields.to_json
   end
 
