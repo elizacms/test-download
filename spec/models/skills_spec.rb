@@ -12,4 +12,8 @@ describe Skill do
     expect( Skill.count ).to eq 0
     expect( Intent.count ).to eq 0
   end
+
+  specify 'Name should be unique' do
+    expect( FactoryGirl.build( :skill, user: user ) ).to_not be_valid
+  end
 end
