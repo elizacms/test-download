@@ -23,4 +23,3 @@ function initMturkResponse(){
     saveMturkResponse( e );
   });
 }
-

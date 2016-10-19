@@ -85,6 +85,15 @@ class IntentsController < ApplicationController
   end
 
   def intent_params
-    params.require( :intent ).permit( :name, :description, :web_hook, :mturk_response )
+    params.require(
+      :intent
+    ).permit(
+      :name,
+      :description,
+      :web_hook,
+      :mturk_response,
+      :requires_authorization,
+      external_applications: []
+    )
   end
 end

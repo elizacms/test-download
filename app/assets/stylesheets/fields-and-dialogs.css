@@ -19,6 +19,11 @@
   color: red;
 }
 
+.addField {
+  font-size: 12px;
+  margin-left: 5px;
+}
+
 td.jsgrid-cell input,
 td.jsgrid-cell select {
   width: 230px;
@@ -42,16 +47,16 @@ table.jsgrid-table {
 
 // The below styles override the 'shared-styles'
 .dialog-select {
-  min-width: 280px !important;
+  min-width: 260px !important;
   margin-top: 10px !important;
 }
 
 .aneeda-says{
-  min-width: 280px !important;
+  min-width: 260px !important;
 }
 
 .dialog-input {
-  min-width: 280px !important;
+  min-width: 260px !important;
   margin-bottom: 5px !important;
 }
 

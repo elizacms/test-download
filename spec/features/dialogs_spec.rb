@@ -13,6 +13,7 @@ feature 'Dialogs', :js do
     visit "/login/success?code=0123abc"
     click_link 'Intents'
 
+    click_link 'Edit Details'
     click_link 'Edit Dialogs'
 
     within 'form' do
@@ -31,6 +32,7 @@ feature 'Dialogs', :js do
     visit "/login/success?code=0123abc"
     click_link 'Intents'
 
+    click_link 'Edit Details'
     click_link 'Edit Dialogs'
 
     within 'form' do
@@ -49,6 +51,7 @@ feature 'Dialogs', :js do
     visit "/login/success?code=0123abc"
     click_link 'Intents'
 
+    click_link 'Edit Details'
     click_link 'Edit Dialogs'
 
     within 'form' do

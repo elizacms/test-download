@@ -51,6 +51,11 @@
             <option value='<%= field %>'><%= field %></option>
           <% end %>
         </select>
+        <%= link_to(
+          "Add a field",
+          fields_page_path(@skill, @intent),
+          class: 'addField'
+        ) %>
       </td>
       <td>
         <select class="dialog-select" name='condition'>

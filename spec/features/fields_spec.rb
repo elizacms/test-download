@@ -13,6 +13,7 @@ feature 'Fields' ,:js do
     visit "/login/success?code=0123abc"
 
     click_link 'Intents'
+    click_link 'Edit Details'
     click_link 'Edit Fields'
 
     expect( page ).to have_content field.id
@@ -24,6 +25,7 @@ feature 'Fields' ,:js do
       visit "/login/success?code=0123abc"
 
       click_link 'Intents'
+      click_link 'Edit Details'
       click_link 'Edit Fields'
 
       find( 'input.jsgrid-insert-mode-button' ).click
@@ -37,6 +39,7 @@ feature 'Fields' ,:js do
     visit "/login/success?code=0123abc"
 
     click_link 'Intents'
+    click_link 'Edit Details'
     click_link 'Edit Fields'
 
     expect( page ).to have_content skill.name
@@ -45,7 +48,7 @@ feature 'Fields' ,:js do
   end
 
   describe 'Generates JSON' do
-    let( :json   ){{ id:intent.name, 
+    let( :json   ){{ id:intent.name,
                      fields:[ fields ],
                      mturk_response_fields:intent.mturk_response }.to_json }
 
@@ -56,6 +59,7 @@ feature 'Fields' ,:js do
       visit "/login/success?code=0123abc"
 
       click_link 'Intents'
+      click_link 'Edit Details'
       click_link 'Edit Fields'
 
       click_button 'JSON'

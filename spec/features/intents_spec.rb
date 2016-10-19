@@ -82,7 +82,7 @@ feature 'Intents pages' do
 
   context 'When name is blank fails' do
     let( :intent_description ){ 'Get a ride a with Uber.' }
-    
+
     specify do
       visit "/login/success?code=0123abc"
       click_link 'Intents'
@@ -161,6 +161,29 @@ feature 'Intents pages' do
       visit "/skills/#{ skill.id }/intents/#{ intent.id }/edit"
 
       expect( current_path ).to eq '/skills'
+    end
+  end
+
+  describe 'Developer can click "requires_authorization" and '\
+  ' save an external app to the intent', :js do
+    let!( :intent ){ create :intent, skill: skill }
+
+    specify do
+      visit '/login/success?code=0123abc'
+      click_link 'Intents'
+
+      click_link 'Edit Details'
+
+      within 'form' do
+        check :intent_requires_authorization
+        page.evaluate_script("$('.external-apps-list input').first().attr('checked', true)")
+
+        click_button 'Submit'
+      end
+
+      expect( page ).to have_content "Intent get_ride updated."
+      expect( Intent.first.requires_authorization ).to eq true
+      expect( Intent.first.external_applications ).to eq ['uber']
     end
   end
 end
