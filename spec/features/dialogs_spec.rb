@@ -63,7 +63,9 @@ feature 'Dialogs', :js do
 
     click_button 'Create Dialog'
 
-    page.find('.icon-cancel-circled').click
+    accept_alert do
+      page.find('.icon-cancel-circled').click
+    end
 
     expect( page ).to have_content 'You deleted the Dialog: what song would you like to hear.'
   end
