@@ -91,8 +91,10 @@ function renderDialogs( data ){
 function initDeleteListeners(){
   $( 'table.dialogs .icon-cancel-circled' )
       .click( function( event ){
-        event.preventDefault();
-        deleteDialog( event.target.rel );
+        if ( confirm("Are you sure you'd like to delete this dialog?") ){
+          event.preventDefault();
+          deleteDialog( event.target.rel );
+        }
   });
 };
 
