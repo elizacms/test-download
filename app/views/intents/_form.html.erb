@@ -1,31 +1,33 @@
 <%= form_for [ @skill, @intent ] do |f|%>
-<div class="row">
-  <div class="col-xs-12 col-md-6">
-    <%= f.label :name %>
-    <%= f.text_field :name %><br><br>
-
-    <%= f.label :description %>
-    <%= f.text_area :description %><br><br>
-  </div>
-  <% if !@intent.new_record? %>
+  <div class="row">
     <div class="col-xs-12 col-md-6">
-      <br>
-      <%= link_to(
-        "Edit Fields",
-        fields_page_path( @skill, @intent ),
-        class: 'btn lg black'
-      ) %>
-      <%= link_to(
-        "Edit Dialogs",
-        dialogs_page_path( @skill, @intent ),
-        class: 'btn lg black'
-      ) %>
+      <%= f.label :name %>
+      <%= f.text_field :name %><br><br>
+
+      <%= f.label :description %>
+      <%= f.text_area :description %><br><br>
+    </div>
+    <% if !@intent.new_record? %>
+      <div class="col-xs-12 col-md-6">
+        <br>
+        <%= link_to(
+          "Edit Fields",
+          fields_page_path( @skill, @intent ),
+          class: 'btn lg black'
+        ) %>
+        <%= link_to(
+          "Edit Dialogs",
+          dialogs_page_path( @skill, @intent ),
+          class: 'btn lg black'
+        ) %>
+      </div>
+    <% end %>
+    <div class="col-xs-12 col-md-6">
       <br><br>
       <%= f.check_box :requires_authorization %>
       <%= f.label :requires_authorization %>
       <div class="collapse" id="authList">
         <h4>Which applications need an authorization code?</h4>
-
         <% ExternalApplications::LIST.in_groups_of(2) do |group| %>
           <div class='row'>
           <% group.each do |app| %>
@@ -41,14 +43,12 @@
           <% end %>
           </div>
         <% end %>
-
       </div>
     </div>
-  <% end %>
-</div>
-<div class="row">
-  <div class="col-xs-12 col-md-6">
-    <%= f.submit 'Submit', class: "btn md black" %>
   </div>
-</div>
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+      <%= f.submit 'Submit', class: "btn md black" %>
+    </div>
+  </div>
 <% end %>
