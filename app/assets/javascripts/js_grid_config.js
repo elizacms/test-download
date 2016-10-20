@@ -69,7 +69,7 @@ function createJSON(){
 
   var top = { id: intent.name,
               fields: data,
-              mturk_response_fields: mturkResponseFields() };
+              mturk_response_fields:[ mturkResponseFields() ]};
 
   return JSON.stringify( top, null, 2 );
 }

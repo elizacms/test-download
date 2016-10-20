@@ -50,7 +50,7 @@ feature 'Fields' ,:js do
   describe 'Generates JSON' do
     let( :json   ){{ id:intent.name,
                      fields:[ fields ],
-                     mturk_response_fields:intent.mturk_response }.to_json }
+                     mturk_response_fields:[ intent.mturk_response ]}.to_json }
 
     let( :fields ){{ id:field.id.to_s, type:field.type, mturk_field:field.mturk_field }}
     let( :json_div_content ){ find( 'div.json' ).native.attribute( 'innerHTML' ).gsub /\s/, '' }
