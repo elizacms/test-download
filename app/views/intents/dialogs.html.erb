@@ -29,28 +29,27 @@
 </table>
 
 <div class="response-message"></div>
-<br><br>
+<br>
 
 <form class='dialog' method='post' action='<%= submit_dialogs_path %>'>
   <strong>Aneeda Says:</strong>
   <br>
-  <input type='hidden' name='intent_id' value='<%= @intent.name %>'>
+  <input type='hidden' name='intent-id' value='<%= @intent.name %>'>
   <input class='aneeda-says' name='response' type='text'> ex: "Please log into your account."
   <br>
   <div class="aneeda-says-error"></div>
-  <br><br>
+  <br>
 
   <table class='dialog'>
     <tr>
-      <th>Field</th><th>Condition</th><th>Value</th>
+      <th>Field</th><th></th><th></th>
     </tr>
+
     <tr>
       <td>
-        <select class="dialog-select" name='field'>
-          <% @fields.each do |field| %>
-            <option value='<%= field %>'><%= field %></option>
-          <% end %>
-        </select>
+        <%= select_tag 'unresolved-field',
+                        options_for_select( @fields ),
+                        { prompt:'', class:"dialog-select" } %>
         <%= link_to(
           "Add a field",
           fields_page_path(@skill, @intent),
@@ -58,28 +57,59 @@
         ) %>
       </td>
       <td>
-        <select class="dialog-select" name='condition'>
-          <option value='unresolved'>is unresolved</option>
-          <option value='missing'>is missing</option>
-          <option value='present'>is present</option>
-        </select>
+        is unresolved  
       </td>
       <td>
-        <input class="dialog-input" name='value' type='text'>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <%= select_tag 'missing-field',
+                        options_for_select( @fields ),
+                        { prompt:'', class:"dialog-select" } %>
+        <%= link_to(
+          "Add a field",
+          fields_page_path(@skill, @intent),
+          class: 'addField'
+        ) %>
+      </td>
+      <td>
+        is missing  
+      </td>
+      <td>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <%= select_tag 'present-field',
+                        options_for_select( @fields ),
+                        { prompt:'', class:"dialog-select" } %>
+        <%= link_to(
+          "Add a field",
+          fields_page_path(@skill, @intent),
+          class: 'addField'
+        ) %>
+      </td>
+      <td>
+        is present  
+      </td>
+      <td>
+        <input class="dialog-input" name='present-value' type='text'>
       </td>
     </tr>
   </table>
 
   <strong>Awaiting Field</strong>
   <br>
-  <select class="dialog-select" name='awaiting_field'>
-    <% @fields.each do |field| %>
-      <option value='<%= field %>'><%= field %></option>
-    <% end %>
-  </select>
+  <%= select_tag 'awaiting-field',
+        options_for_select( @fields ),
+        { prompt:'', class:"dialog-select" } %>
 
   <br>
-  <button class="btn lg ghost">Create Dialog</button>
+  <button class="btn lg ghost dialog-btn">Create Dialog</button>
+  <button class="btn lg ghost export-csv">Export CSV</button>
 </form>
 
 <script>
@@ -87,5 +117,6 @@ var intent = <%= @intent.to_json.html_safe %>;
 
 $(function() {
   initDialogs();
+  initCSVButton();
 });
 </script>

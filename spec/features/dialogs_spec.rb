@@ -16,30 +16,32 @@ feature 'Dialogs', :js do
     click_link 'Edit Details'
     click_link 'Edit Dialogs'
 
+    # binding.pry
+
     within 'form' do
       fill_in :response,    with: 'what song would you like to hear'
-      select   field.id,    from: 'field'
-      select  'is missing', from: 'condition'
-      select   field.id,    from: 'awaiting_field'
+      select   field.id,    from: 'unresolved-field'
+      select   field.id,    from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'
 
-    expect( page ).to have_content 'destination is missing'
+    expect( page ).to have_content 'destination is unresolved'
   end
 
-  specify 'Failure due to lack of "Aneeda Says"' do
+  specify 'Fails when response is blank' do
     visit "/login/success?code=0123abc"
     click_link 'Intents'
 
     click_link 'Edit Details'
     click_link 'Edit Dialogs'
 
+    # binding.pry
+
     within 'form' do
-      fill_in :response,    with: ''
-      select   field.id,    from: 'field'
-      select  'is missing', from: 'condition'
-      select   field.id,    from: 'awaiting_field'
+      fill_in :response,    with: '   '
+      select   field.id,    from: 'missing-field'
+      select   field.id,    from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'
@@ -47,7 +49,7 @@ feature 'Dialogs', :js do
     expect( page ).to have_content 'This field cannot be blank.'
   end
 
-  specify 'Deleting a dialog gives notice' do
+  specify 'Deleting a dialog shows confirm' do
     visit "/login/success?code=0123abc"
     click_link 'Intents'
 
@@ -56,9 +58,8 @@ feature 'Dialogs', :js do
 
     within 'form' do
       fill_in :response,    with: 'what song would you like to hear'
-      select   field.id,    from: 'field'
-      select  'is missing', from: 'condition'
-      select   field.id,    from: 'awaiting_field'
+      select   field.id,    from: 'missing-field'
+      select   field.id,    from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'

@@ -5,31 +5,31 @@ describe Dialog do
 
   specify 'Array with non-empty string should be valid' do
     expect(
-      FactoryGirl.build( :dialog, response: ["abc"], intent_id: intent )
+      FactoryGirl.build( :dialog, response: ["abc"], intent_id: intent.name )
     ).to be_valid
   end
 
   specify 'Empty array should not be valid' do
     expect(
-      FactoryGirl.build( :dialog, response: [], intent_id: intent )
+      FactoryGirl.build( :dialog, response: [], intent_id: intent.name )
     ).to_not be_valid
   end
 
   specify 'Empty string in array should not be valid' do
     expect(
-      FactoryGirl.build( :dialog, response: [""], intent_id: intent )
+      FactoryGirl.build( :dialog, response: [""], intent_id: intent.name )
     ).to_not be_valid
   end
 
   specify '"nil" in array should not be valid' do
     expect(
-      FactoryGirl.build( :dialog, response: [nil], intent_id: intent )
+      FactoryGirl.build( :dialog, response: [nil], intent_id: intent.name )
     ).to_not be_valid
   end
 
   specify "Set of empty strings and nill's in array should not be valid" do
     expect(
-      FactoryGirl.build( :dialog, response: [nil, '', '', nil, '', ''], intent_id: intent )
+      FactoryGirl.build( :dialog, response: [nil, '', '', nil, '', ''], intent_id: intent.name )
     ).to_not be_valid
   end
 end

@@ -7,9 +7,8 @@ class DialogsController < ApplicationController
   #   intent_id=play_music
   def index
     dialogs = Dialog.where( intent_id:params[ :intent_id ])
-                    .map( &:serialize )
 
-    render json:dialogs.to_json
+    render json:dialogs.map( &:serialize ).to_json
   end
 
   # POST /dialogue_api/response
@@ -17,11 +16,10 @@ class DialogsController < ApplicationController
     dialog = Dialog.new( dialog_params )
 
     if dialog.save
-      # ap Dialog.all.map &:attributes
       render json: {}, status: :created
 
     else
-      # ap dialog.errors.full_messages
+      response.headers[ 'Warning' ] = dialog.errors.full_messages.join "\n"
       render json: dialog.errors, status: :unprocessable_entity
     end
   end
@@ -33,6 +31,16 @@ class DialogsController < ApplicationController
     dialog.delete
 
     render plain: "You deleted the Dialog: #{aneeda_says}.", status: :ok
+  end
+
+  def csv
+    dialogs = Dialog.where( intent_id:params[ :intent_id ])
+    filename = "#{ params[ :intent_id ] }.csv"
+
+    response.headers[ 'Content-Type'        ] = 'text/csv'
+    response.headers[ 'Content-Disposition' ] = %Q/attachment; filename="#{ filename }"/
+    
+    render inline:CSV.for( dialogs )
   end
 
 
@@ -51,14 +59,15 @@ class DialogsController < ApplicationController
   end
 
   def dialog_params
-    present = params[ :present ]
-
-    params.permit(
-                  :intent_id,
-                  :awaiting_field,
-                  response:   [],
-                  missing:    [],
-                  unresolved: []
-          ).merge( present:present )
+    unresolved = [ params[ :unresolved ]]
+    missing    = [ params[ :missing    ]]
+    response   = [ params[ :response   ]]
+  
+    params.permit( :intent_id,
+                   :awaiting_field,
+                    present:[])
+         .merge( unresolved:unresolved )
+         .merge( missing:   missing    )
+         .merge( response:  response   )
   end
 end

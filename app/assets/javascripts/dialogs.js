@@ -1,28 +1,27 @@
 function initDialogs(){
   getDialogs();
 
-  $( '.dialog button' ).click(function( event ){
+  $( '.dialog button.dialog-btn' ).click(function( event ){
     event.preventDefault();
     submitDialog( $( this ).parent( 'form' ));
   });
 };
 
 function submitDialog( form ){
-  var data = { unresolved:[], missing:[], present:[] }
+  var data = {}
 
-  form.find( 'tr:gt(0)' ).map( function( index, tr ){
-    var field = $( tr ).find( 'select[name="field"]' ).val();
-    var condition = $( tr ).find( 'select[name="condition"]' ).val();
-    var value = $( tr ).find( 'select[name="value"]' ).val();
+  data[ 'unresolved' ] = form.find( 'select[name="unresolved-field"]' ).val();
+  data[ 'missing'    ] = form.find( 'select[name="missing-field"]'    ).val();
 
-    data[ condition ].push( field );
-  });
+  var present = [ form.find( 'select[name="present-field"]' ).val() ,
+                  form.find( 'input[name="present-value"]'  ).val() ]
+  data[ 'present' ] = present;
+  
+  data[ 'intent_id'      ] = form.find( 'input[name="intent-id"]'       ).val();
+  data[ 'response'       ] = form.find( 'input[name="response"]'        ).val();
+  data[ 'awaiting_field' ] = form.find( 'select[name="awaiting-field"]' ).val();
 
-  data[ 'intent_id'      ] =   form.find( 'input[name="intent_id"]'       ).val()  ;
-  data[ 'response'       ] = [ form.find( 'input[name="response"]'        ).val() ];
-  data[ 'awaiting_field' ] =   form.find( 'select[name="awaiting_field"]' ).val()  ;
-
-  if ( $('.aneeda-says').val() == '' ){
+  if ( $('.aneeda-says').val().replace( /\s/g, '' ) == '' ){
     $('.aneeda-says-error').html('This field cannot be blank.');
 
     setTimeout(function() {
@@ -39,10 +38,15 @@ function submitDialog( form ){
     data:data
   })
   .done( function( data ){
-    form.find( 'input.aneeda-says' ).val( '' );
+    clearForm( form );
     getDialogs();
   });
 };
+
+function clearForm( form ){
+  form.find( 'input.aneeda-says'   ).val( '' );
+  form.find( 'input.present-value' ).val( '' );
+}
 
 function deleteDialog( id ){
   $.ajax({
@@ -61,7 +65,7 @@ function deleteDialog( id ){
 };
 
 function getDialogs(){
-  var intent_id = $( 'form' ).children( 'input[name="intent_id"]' ).val();
+  var intent_id = $( 'form' ).children( 'input[name="intent-id"]' ).val();
   var data = { intent_id: intent_id };
 
   $.ajax({
@@ -70,7 +74,6 @@ function getDialogs(){
     data:data
   })
   .done( function( data ){
-    // console.log( data );
     renderDialogs( data );
   });
 };
@@ -100,22 +103,24 @@ function initDeleteListeners(){
 
 function rowsForSingle( d ){
   return d.responses.map( function( r ){
-    condition = 'error';
+    conditions = [];
 
-    if( d[ 'missing' ] != null )
-      condition = 'missing'
-    else if( d[ 'present' ] != null )
-      condition = 'present'
-    else if( d[ 'unresolved' ] != null )
-      condition = 'unresolved'
+    console.log(d);
+
+    if( d.unresolved != null )
+      conditions.push( d.unresolved + ' is unresolved' );
+    if( d.missing != null )
+      conditions.push( d.missing + ' is missing' );
+    if( d.present != null )
+      conditions.push( d.present[ 0 ] + ' is present: "' + d.present[ 1 ] + '"' );
 
     var tds = [ td( r, 'id' ),
                 td( r, 'response' ),
-                td( d,  '', d[ condition ][ 0 ] + ' is ' + condition ),
+                td( d, null, conditions.join( '<br>' )),
                 td( r, 'awaiting_field' ),
                 deleteTD( r )];
 
-    var tr = $( '<tr></tr>' ).append( tds );
+    var tr = $( '<tr></tr>' ).addClass( 'dialog-data' ).append( tds );
 
     return tr;
   });
@@ -131,7 +136,7 @@ function td( object, field, extraText ){
     text += extraText;
 
   var td = $( '<td></td>' ).attr( 'class', field )
-                           .text(  text          );
+                           .html(  text          );
 
   return td;
 };
