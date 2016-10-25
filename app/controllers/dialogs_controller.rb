@@ -64,6 +64,7 @@ class DialogsController < ApplicationController
     response   = [ params[ :response   ]]
   
     params.permit( :intent_id,
+                   :priority,
                    :awaiting_field,
                     present:[])
          .merge( unresolved:unresolved )

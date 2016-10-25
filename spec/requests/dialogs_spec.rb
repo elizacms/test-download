@@ -7,6 +7,7 @@ describe 'Dialogs' do
   let( :params ){
     {
       intent_id:  intent.name,
+      priority:   90,
       response:  'where would you like to go',
       missing:    field.id,
       unresolved:'unresolved',
@@ -61,7 +62,7 @@ describe 'Dialogs' do
 
   describe 'CSV export' do
     let( :header_row ){ "intent_id,priority,awaiting_field,unresolved,missing,present\n" }
-    let( :data_row   ){ %Q/#{ intent.name },destination,['unresolved'],['destination'],"[{'present','value'}]"/ }
+    let( :data_row   ){ %Q/#{ intent.name },90,destination,['unresolved'],['destination'],"[{'present','value'}]"/ }
     let( :csv        ){ header_row + data_row }
 
     before do

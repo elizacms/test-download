@@ -10,6 +10,9 @@ function initDialogs(){
 function submitDialog( form ){
   var data = {}
 
+  data[ 'intent_id'  ] = form.find( 'input[name="intent-id"]'         ).val();
+  data[ 'priority'   ] = form.find( 'input[name="priority"]'          ).val();
+  data[ 'response'   ] = form.find( 'input[name="response"]'          ).val();
   data[ 'unresolved' ] = form.find( 'select[name="unresolved-field"]' ).val();
   data[ 'missing'    ] = form.find( 'select[name="missing-field"]'    ).val();
 
@@ -17,8 +20,6 @@ function submitDialog( form ){
                   form.find( 'input[name="present-value"]'  ).val() ]
   data[ 'present' ] = present;
   
-  data[ 'intent_id'      ] = form.find( 'input[name="intent-id"]'       ).val();
-  data[ 'response'       ] = form.find( 'input[name="response"]'        ).val();
   data[ 'awaiting_field' ] = form.find( 'select[name="awaiting-field"]' ).val();
 
   if ( $('.aneeda-says').val().replace( /\s/g, '' ) == '' ){
@@ -115,6 +116,7 @@ function rowsForSingle( d ){
       conditions.push( d.present[ 0 ] + ' is present: "' + d.present[ 1 ] + '"' );
 
     var tds = [ td( r, 'id' ),
+                td( d, 'priority'),
                 td( r, 'response' ),
                 td( d, null, conditions.join( '<br>' )),
                 td( r, 'awaiting_field' ),

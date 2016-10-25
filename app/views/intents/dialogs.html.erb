@@ -21,6 +21,7 @@
 <table class='dialogs'>
   <tr>
     <th>ID</th>
+    <th>Priority</th>
     <th>AneedA Says</th>
     <th>Rules</th>
     <th>Awaiting Field</th>
@@ -28,17 +29,18 @@
   </tr>
 </table>
 
-<div class="response-message"></div>
-<br>
+<div class="response-message"></div><br>
 
 <form class='dialog' method='post' action='<%= submit_dialogs_path %>'>
-  <strong>Aneeda Says:</strong>
-  <br>
   <input type='hidden' name='intent-id' value='<%= @intent.name %>'>
-  <input class='aneeda-says' name='response' type='text'> ex: "Please log into your account."
-  <br>
-  <div class="aneeda-says-error"></div>
-  <br>
+  
+  <strong>Priority</strong><br>
+  <input name='priority' type='number'><br><br>
+
+  <strong>Aneeda Says</strong><br>
+  <input class='aneeda-says' name='response' type='text' placeholder='ex: Please log into your account' ><br>
+  
+  <div class="aneeda-says-error"></div><br>
 
   <table class='dialog'>
     <tr>

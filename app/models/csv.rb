@@ -19,7 +19,8 @@ class CSV
     private
 
     def row_for d
-      [ d.awaiting_field, 
+      [ d.priority,
+        d.awaiting_field,
         format_single( d.unresolved ),
         format_single( d.missing    ),
         format_double( d.present    )]

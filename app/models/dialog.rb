@@ -2,6 +2,7 @@ class Dialog
   include Mongoid::Document
 
   field :intent_id,      type:String
+  field :priority,       type:Integer
   field :awaiting_field, type:String
   field :missing,        type:Array, default:[]
   field :unresolved,     type:Array, default:[]
@@ -22,6 +23,7 @@ class Dialog
                       response: response[ 0 ]}
 
     h = { intent_id:   intent_id     ,
+          priority:    priority      ,
           responses: [ response_hash ]}
     h.merge!( unresolved:unresolved ) if unresolved.any?( &:present? )
     h.merge!( missing:   missing    ) if missing.any?(    &:present? )
