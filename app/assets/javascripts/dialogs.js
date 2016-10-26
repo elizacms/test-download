@@ -41,6 +41,9 @@ function submitDialog( form ){
   .done( function( data ){
     clearForm( form );
     getDialogs();
+  })
+  .fail(function(error){
+    IAM.alert.run('red', error.getResponseHeader('Warning'), 5000);
   });
 };
 
