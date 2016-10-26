@@ -33,7 +33,7 @@ class CSV
     end
 
     def format_double pair
-      return '[]' if pair.first.blank?
+      return '[]' if pair.nil? || pair.first.blank?
 
       %Q/"[{'#{ pair.first }','#{ pair.last }'}]"/
     end
