@@ -51,6 +51,15 @@ table.jsgrid-table {
   margin-top: 10px !important;
 }
 
+.awaiting-dialog-select {
+  min-width: 260px !important;
+  margin-top: 0 !important;
+}
+
+.priority-input{
+  width: 260px !important;
+}
+
 .aneeda-says{
   min-width: 260px !important;
 }
@@ -62,6 +71,24 @@ table.jsgrid-table {
 
 .dialogs, .dialog {
   width: 100%;
+  table-layout: fixed;
+  white-space: nowrap;
+}
+
+.row5{
+  width: 5%;
+}
+.row10{
+  width: 10%;
+}
+.row16{
+  width: 16%;
+}
+.row30{
+  width: 30%;
+}
+.row40{
+  width: 40%;
 }
 
 table.dialogs{
@@ -75,7 +102,11 @@ table.dialogs{
 
 .margin0{
   margin-top: 10px !important;
-  margin-bottom:  0 !important;
+  margin-bottom: 0 !important;
+}
+.margin-15{
+  margin-top:  -15px !important;
+  margin-bottom: 0 !important;
 }
 
 #mturk-response-field {
