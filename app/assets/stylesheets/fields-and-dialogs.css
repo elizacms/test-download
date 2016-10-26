@@ -75,6 +75,10 @@ table.jsgrid-table {
   white-space: nowrap;
 }
 
+.inline{
+  display: inline;
+}
+
 .row5{
   width: 5%;
 }
@@ -107,6 +111,9 @@ table.dialogs{
 .margin-15{
   margin-top:  -15px !important;
   margin-bottom: 0 !important;
+}
+.margin5050{
+  margin: 5px 0 5px 0 !important;
 }
 
 #mturk-response-field {
