@@ -15,7 +15,7 @@ class Dialog
   validate :response_cannot_be_set_of_empties
 
   before_create :set_id
-  
+
 
   def serialize
     response_hash = { awaiting_field: awaiting_field,
@@ -27,7 +27,7 @@ class Dialog
           responses: [ response_hash ]}
     h.merge!( unresolved:unresolved ) if unresolved.any?( &:present? )
     h.merge!( missing:   missing    ) if missing.any?(    &:present? )
-    h.merge!( present:   present    ) if present.any?(    &:present? )
+    h.merge!( present:   present    ) if present.try(:any?){ |p| p.present? }
 
     h
   end

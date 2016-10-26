@@ -8,7 +8,7 @@ class DialogsController < ApplicationController
   def index
     dialogs = Dialog.where( intent_id:params[ :intent_id ])
 
-    render json:dialogs.map( &:serialize ).to_json
+    render json: dialogs.map( &:serialize ).to_json
   end
 
   # POST /dialogue_api/response
@@ -34,13 +34,13 @@ class DialogsController < ApplicationController
   end
 
   def csv
-    dialogs = Dialog.where( intent_id:params[ :intent_id ])
+    dialogs = Dialog.where( intent_id:params[ :intent_id ] )
     filename = "#{ params[ :intent_id ] }.csv"
 
     response.headers[ 'Content-Type'        ] = 'text/csv'
     response.headers[ 'Content-Disposition' ] = %Q/attachment; filename="#{ filename }"/
-    
-    render inline:CSV.for( dialogs )
+
+    render inline: CSV.for( dialogs )
   end
 
 
@@ -51,24 +51,24 @@ class DialogsController < ApplicationController
   end
 
   def set_field
-    @field = Field.find( params[ :field_id ])
+    @field = Field.find( params[ :field_id ] )
   end
 
   def set_dialog
-    @dialog = Dialog.find( params[ :id ])
+    @dialog = Dialog.find( params[ :id ] )
   end
 
   def dialog_params
-    unresolved = [ params[ :unresolved ]]
-    missing    = [ params[ :missing    ]]
-    response   = [ params[ :response   ]]
-  
+    unresolved = [ params[ :unresolved ] ]
+    missing    = [ params[ :missing    ] ]
+    response   = [ params[ :response   ] ]
+
     params.permit( :intent_id,
                    :priority,
                    :awaiting_field,
-                    present:[])
-         .merge( unresolved:unresolved )
-         .merge( missing:   missing    )
-         .merge( response:  response   )
+                    present:[]
+          ).merge( unresolved: unresolved )
+           .merge( missing:    missing    )
+           .merge( response:   response   )
   end
 end
