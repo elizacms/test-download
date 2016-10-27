@@ -8,7 +8,7 @@ class Field
   belongs_to :intent
   validates_uniqueness_of :id
 
-  default_scope  ->{ order( id: :ASC )}
+  default_scope -> { order( id: :ASC ) }
 
   def serialize
     { id:id, type:type, mturk_field:mturk_field }

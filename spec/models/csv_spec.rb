@@ -4,10 +4,12 @@ describe CSV do
   let( :intent  ){ create :intent, skill: skill }
   let!( :dialog ){ create :dialog, intent_id:intent.name }
 
-  let( :expected ){ "intent_id,priority,awaiting_field,unresolved,missing,present\n" +
-                    "#{ intent.name},90,destination,[],[],[]" }
+  let( :expected ){
+    "intent_id,priority,awaiting_field,unresolved,missing,present\n" +
+    "#{ intent.name},90,destination,[],['A missing rule'],[]"
+  }
 
   specify 'Empty values' do
-    expect( CSV.for([ dialog ])).to eq expected
+    expect( CSV.for( [ dialog ] ) ).to eq expected
   end
 end

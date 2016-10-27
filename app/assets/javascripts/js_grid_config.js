@@ -1,4 +1,3 @@
-
 var types = [
     { name: 'Boolean'  },
     { name: 'Time'     },
@@ -49,12 +48,32 @@ function initFields(){
         },
 
         fields: [
-            { name: 'id',          type: 'text',   width:100, validate:'required', editing:false },
-            { name: 'type',        type: 'select', width:100, validate:'required', items: types, valueField: 'name', textField: 'name' },
-            { name: 'mturk_field', type: 'text',   width:100, validate:'required' },
+            {
+                name: 'id',
+                type: 'text',
+                width: 100,
+                validate: 'required',
+                editing: false
+            },
+            {
+                name: 'type',
+                type: 'select',
+                width:100,
+                validate:'required',
+                items: types,
+                valueField: 'name',
+                textField: 'name'
+            },
+            {
+                name: 'mturk_field',
+                type: 'text',
+                width:100,
+                validate:'required'
+            },
             { type: 'control' }
         ]
-})}
+    })
+}
 
 function initJSON(){
     $( 'button.json' ).click(function() {

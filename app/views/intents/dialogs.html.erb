@@ -35,10 +35,11 @@
 
 <div>
   <h4 class="inline">Fields</h4>
-   <%= link_to( "Add a field",
-                fields_page_path(@skill, @intent),
-                class: 'addField btn md grey pull-right'
-              ) %>
+    <%= link_to(
+      "Add a field",
+      fields_page_path(@skill, @intent),
+      class: 'addField btn md grey pull-right'
+    ) %>
 </div>
 
 <form class='dialog' method='post' action='<%= submit_dialogs_path %>'>
@@ -66,9 +67,11 @@
         <strong>is unresolved</strong>
       </td>
       <td class="row40">
-        <%= select_tag 'unresolved-field',
-                        options_for_select( @fields ),
-                        { prompt:'', class:"dialog-select" } %>
+        <%= select_tag(
+          'unresolved-field',
+          options_for_select( @fields ),
+          { prompt:'', class: "dialog-select" }
+        ) %>
       </td>
       <td></td>
     </tr>
@@ -78,9 +81,11 @@
         <strong>is missing</strong>
       </td>
       <td class="row40">
-        <%= select_tag 'missing-field',
-                        options_for_select( @fields ),
-                        { prompt:'', class:"dialog-select" } %>
+        <%= select_tag(
+          'missing-field',
+          options_for_select( @fields ),
+          { prompt:'', class: "dialog-select" }
+        ) %>
       </td>
       <td></td>
     </tr>
@@ -90,9 +95,11 @@
         <strong>is present</strong>
       </td>
       <td class="row40">
-        <%= select_tag 'present-field',
-                        options_for_select( @fields ),
-                        { prompt:'', class:"dialog-select" } %>
+        <%= select_tag(
+          'present-field',
+          options_for_select( @fields ),
+          { prompt:'', class: "dialog-select" }
+        ) %>
       </td>
       <td>
         <input class="dialog-input" name='present-value' type='text' placeholder="present value">
@@ -102,9 +109,11 @@
 
   <div class="row">
     <strong class="two columns margin0">Awaiting Field</strong>
-    <%= select_tag 'awaiting-field',
-          options_for_select( @fields ),
-          { prompt:'', class:"awaiting-dialog-select two columns" } %>
+    <%= select_tag(
+      'awaiting-field',
+      options_for_select( @fields ),
+      { prompt:'', class: "awaiting-dialog-select two columns" }
+    ) %>
   </div>
 
   <button class="btn lg ghost export-csv pull-right">Export CSV</button> &nbsp;
