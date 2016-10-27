@@ -15,11 +15,11 @@
   <div class="col-md-6 text-center">
     <strong>Web Hook:</strong> <%= @skill.web_hook %>
   </div>
-</div>
+</div><br>
 
-<br>
+<button class="btn lg ghost export-csv pull-right">Export CSV</button><br><br>
+
 <hr class="margin0">
-
 <table class='dialogs'>
   <tr>
     <th class="row5">&nbsp;ID</th>
@@ -63,61 +63,60 @@
 
   <table class='dialog'>
     <tr>
-      <td class="row16">
+      <td class='row16'>
         <strong>is unresolved</strong>
       </td>
-      <td class="row40">
+      <td class='row40'>
         <%= select_tag(
           'unresolved-field',
           options_for_select( @fields ),
-          { prompt:'', class: "dialog-select" }
+          { prompt:'', class: 'dialog-select' }
         ) %>
       </td>
       <td></td>
     </tr>
 
     <tr>
-      <td class="row16">
+      <td class='row16'>
         <strong>is missing</strong>
       </td>
-      <td class="row40">
+      <td class='row40'>
         <%= select_tag(
           'missing-field',
           options_for_select( @fields ),
-          { prompt:'', class: "dialog-select" }
+          { prompt:'', class: 'dialog-select' }
         ) %>
       </td>
       <td></td>
     </tr>
 
     <tr>
-      <td class="row16">
+      <td class='row16'>
         <strong>is present</strong>
       </td>
-      <td class="row40">
+      <td class='row40'>
         <%= select_tag(
           'present-field',
           options_for_select( @fields ),
-          { prompt:'', class: "dialog-select" }
+          { prompt:'', class: 'dialog-select' }
         ) %>
       </td>
       <td>
-        <input class="dialog-input" name='present-value' type='text' placeholder="present value">
+        <input class='dialog-input' name='present-value' type='text' placeholder='present value'>
       </td>
     </tr>
   </table>
 
-  <div class="row">
-    <strong class="two columns margin0">Awaiting Field</strong>
+  <div class='row'>
+    <strong class='two columns margin0'>Awaiting Field</strong>
     <%= select_tag(
       'awaiting-field',
       options_for_select( @fields ),
-      { prompt:'', class: "awaiting-dialog-select two columns" }
+      { prompt:'', class: 'awaiting-dialog-select two columns' }
     ) %>
   </div>
 
-  <button class="btn lg ghost export-csv pull-right">Export CSV</button> &nbsp;
-  <button class="btn lg ghost dialog-btn pull-right">Create Dialog</button>
+  <button class='btn lg ghost dialog-btn pull-right'>Create Dialog</button> &nbsp;
 </form>
 
 <script>
