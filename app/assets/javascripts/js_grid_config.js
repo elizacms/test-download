@@ -26,7 +26,14 @@ function initFields(){
             insertItem: function(item){
                 var data = $.extend({ intent_id:intent._id.$oid }, item );
 
-                return ajaxCall( 'POST', '/fields', data);
+                return $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: '/fields',
+                    data: data
+                }).fail(function(r){
+                    IAM.alert.run('red', r.responseText, 3000);
+                });
             },
             updateItem: function(item){
                 return ajaxCall( 'PUT', '/fields/'+ item.id, item);

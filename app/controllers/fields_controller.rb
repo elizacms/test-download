@@ -14,17 +14,17 @@ class FieldsController < ApplicationController
     @field = Field.new( field_params )
 
     if @field.save
-      render json:@field.serialize.to_json
+      render json: @field.serialize.to_json
     else
-      render json: @field.errors, status: :unprocessable_entity
+      render plain: @field.errors.full_messages.join("\n"), status: :unprocessable_entity
     end
   end
 
   def update
     if @field.update( field_params )
-      render json:@field.serialize.to_json
+      render json: @field.serialize.to_json
     else
-      render json:@field.errors, status: :unprocessable_entity
+      render json: @field.errors.full_messages.join("\n"), status: :unprocessable_entity
     end
   end
 
@@ -36,7 +36,7 @@ class FieldsController < ApplicationController
 
 
   private
-  
+
   def set_field
     @field = Field.find( params[ :id ])
   end
