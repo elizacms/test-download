@@ -33,6 +33,7 @@
           <% group.each do |app| %>
             <% next if app.to_s == '' %>
             <div class='col-md-6 external-apps-list'>
+              <%= hidden_field_tag 'intent[external_applications][]', '0' %>
               <%= check_box_tag(
                 'intent[external_applications][]',
                 app.to_s,

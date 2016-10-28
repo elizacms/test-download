@@ -1,7 +1,8 @@
 class IntentsController < ApplicationController
   before_action :validate_admin_or_developer
   before_action :find_skill
-  before_action :find_intent, only:[ :edit, :update, :destroy, :fields, :dialogs, :submit_mturk_response ]
+  before_action :find_intent,
+                only: [ :edit, :update, :destroy, :fields, :dialogs, :submit_mturk_response ]
 
   def index
     @intents = @skill.intents
