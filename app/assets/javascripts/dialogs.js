@@ -19,7 +19,7 @@ function submitDialog( form ){
   var present = [ form.find( 'select[name="present-field"]' ).val() ,
                   form.find( 'input[name="present-value"]'  ).val() ]
   data[ 'present' ] = present;
-  
+
   data[ 'awaiting_field' ] = form.find( 'select[name="awaiting-field"]' ).val();
 
   if ( $('.aneeda-says').val().replace( /\s/g, '' ) == '' ){
@@ -35,8 +35,8 @@ function submitDialog( form ){
   $.ajax({
     type: 'POST',
     url: '/dialogue_api/response?',
-    dataType:'json',
-    data:data
+    dataType: 'json',
+    data: data
   })
   .done( function( data ){
     clearForm( form );
@@ -48,8 +48,13 @@ function submitDialog( form ){
 };
 
 function clearForm( form ){
-  form.find( 'input.aneeda-says'   ).val( '' );
-  form.find( 'input.present-value' ).val( '' );
+  form.find( 'input.aneeda-says'       ).val( '' );
+  form.find( 'input.present-value'     ).val( '' );
+  form.find( 'input.priority-input'    ).val( '' );
+  form.find( 'select#unresolved-field' ).val( '' );
+  form.find( 'select#missing-field'    ).val( '' );
+  form.find( 'select#present-field'    ).val( '' );
+  form.find( 'select#awaiting-field'   ).val( '' );
 }
 
 function deleteDialog( id ){
@@ -148,7 +153,7 @@ function td( object, field, extraText ){
 
 function deleteTD( r ){
   var link = $( '<a></a>' ).attr( 'class', 'icon-cancel-circled' )
-                           .attr( 'rel',    r.id )
+                           .attr( 'rel',   r.id )
                            .attr( 'href' , '#' );
   return $( '<td></td>' ).html( link );
 }
