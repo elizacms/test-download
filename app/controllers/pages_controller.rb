@@ -50,11 +50,11 @@ class PagesController < ApplicationController
   def validate_user_from_identity
     account_response = get_account_from_identity
 
-    email = JSON.parse( account_response.body )[ 'email' ]
+    email = JSON.parse( account_response.body )[ 'email' ].try( :downcase )
     user = User.find_by( email:email )
 
     if user.nil?
-      flash.now[ :alert ] = 'Authorization failed.'
+      flash.now[ :alert ] = "Authorization failed. (#{__LINE__})"
       render :index
       return
     end

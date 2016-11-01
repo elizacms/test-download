@@ -176,14 +176,14 @@ feature 'Intents pages' do
 
       within 'form' do
         check :intent_requires_authorization
-        page.evaluate_script("$('.external-apps-list input').first().attr('checked', true)")
+        page.evaluate_script("$('.external-apps-list input').last().attr('checked', true)")
 
         click_button 'Submit'
       end
 
       expect( page ).to have_content "Intent get_ride updated."
       expect( Intent.first.requires_authorization ).to eq true
-      expect( Intent.first.external_applications ).to eq ['uber']
+      expect( Intent.first.external_applications ).to eq ["0", "0", "0", "0", "0", "itunes"]
     end
   end
 end
