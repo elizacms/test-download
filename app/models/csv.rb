@@ -1,7 +1,7 @@
 class CSV
   class << self
     def for dialogs
-      header = "intent_id,priority,awaiting_field,unresolved,missing,present\n"
+      header = "intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en\n"
 
       csv = dialogs.map do | d |
         first = ''
@@ -19,11 +19,14 @@ class CSV
     private
 
     def row_for d
-      [ d.priority,
+      [
+        d.priority,
         d.awaiting_field,
         format_single( d.unresolved ),
         format_single( d.missing    ),
-        format_double( d.present    )]
+        format_double( d.present    ),
+        format_single( d.response   )
+      ]
     end
 
     def format_single value
