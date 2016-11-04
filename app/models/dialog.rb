@@ -10,7 +10,6 @@ class Dialog
   field :response,       type:Array, default:[]
 
   validates_presence_of :intent_id
-  validates_presence_of :awaiting_field
   validates :response, presence: true
   validate :response_cannot_be_set_of_empties, :must_have_one_rule_field
 
