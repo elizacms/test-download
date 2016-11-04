@@ -49,6 +49,7 @@ function initFields(){
 
         fields: [
             {
+                title: 'id',
                 name: 'name',
                 type: 'text',
                 width: 100,
@@ -72,8 +73,7 @@ function initFields(){
             },
             { type: 'control' }
         ]
-    });
-    $('th').first().html('id');
+    })
 }
 
 function initJSON(){
