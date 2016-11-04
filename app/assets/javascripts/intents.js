@@ -21,9 +21,9 @@ function saveMturkResponse( e ){
   $( '#submit-result' ).html( '' );
 
   $.ajax({
-    type:'put',
-    url: '/skills/' + skill._id.$oid + '/intents/' + intent._id.$oid + '/mturk_response',
-    data:data
+    type: 'put',
+    url:  '/skills/' + skill._id.$oid + '/intents/' + intent._id.$oid + '/mturk_response',
+    data: data
   })
   .done(function() {
     $( '#submit-result' ).html( 'Saved' );

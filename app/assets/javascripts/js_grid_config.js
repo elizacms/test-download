@@ -23,7 +23,7 @@ function initFields(){
                 return ajaxCall( 'GET', '/fields', filter);
             },
             insertItem: function(item){
-                var data = $.extend({ intent_id:intent._id.$oid }, item );
+                var data = $.extend( { intent_id: intent._id.$oid }, item );
 
                 return $.ajax({
                     type: 'POST',
@@ -35,10 +35,10 @@ function initFields(){
                 });
             },
             updateItem: function(item){
-                return ajaxCall( 'PUT', '/fields/'+ item.id, item);
+                return ajaxCall( 'PUT', '/fields/'+ item["_id"]["$oid"], item);
             },
             deleteItem: function(item){
-                return ajaxCall( 'DELETE', '/fields/' + item.id, null);
+                return ajaxCall( 'DELETE', '/fields/' + item["_id"]["$oid"], null);
 
             }
         },
@@ -49,7 +49,8 @@ function initFields(){
 
         fields: [
             {
-                name: 'id',
+                title: 'id',
+                name: 'name',
                 type: 'text',
                 width: 100,
                 validate: 'required',
@@ -58,8 +59,8 @@ function initFields(){
             {
                 name: 'type',
                 type: 'select',
-                width:100,
-                validate:'required',
+                width: 100,
+                validate: 'required',
                 items: types,
                 valueField: 'name',
                 textField: 'name'
@@ -67,8 +68,8 @@ function initFields(){
             {
                 name: 'mturk_field',
                 type: 'text',
-                width:100,
-                validate:'required'
+                width: 100,
+                validate: 'required'
             },
             { type: 'control' }
         ]
@@ -91,11 +92,19 @@ function ajaxCall( type, url, data ){
 }
 
 function createJSON(){
-  var data = $("#jsGrid").jsGrid("option", "data");
+    var data = $("#jsGrid").jsGrid("option", "data");
+    var newData = $.extend(true, [], data);
 
-  var top = { id: intent.name,
-              fields: data,
-              mturk_response_fields:[ mturkResponseFields() ]};
+    $.each(newData, function(index, value){
+        delete value['name'];
+        delete value['_id'];
+    });
+
+    var top = {
+                id: intent.name,
+                fields: newData,
+                mturk_response_fields:[ mturkResponseFields() ]
+    };
 
   return JSON.stringify( top, null, 2 );
 }

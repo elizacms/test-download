@@ -1,8 +1,8 @@
 feature 'Dialogs', :js do
   let(  :developer ){ create :developer }
-  let!( :skill     ){ create :skill, user: developer }
-  let!( :intent    ){ create :intent, skill: skill }
-  let!( :field     ){ create :field, intent: intent  }
+  let!( :skill     ){ create :skill,  user: developer }
+  let!( :intent    ){ create :intent, skill: skill    }
+  let!( :field     ){ create :field,  intent: intent  }
 
   before do
     stub_identity_token
@@ -20,8 +20,8 @@ feature 'Dialogs', :js do
 
     within 'form' do
       fill_in :response,    with: 'what song would you like to hear'
-      select   field.id,    from: 'unresolved-field'
-      select   field.id,    from: 'awaiting-field'
+      select   field.name,    from: 'unresolved-field'
+      select   field.name,    from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'
@@ -40,8 +40,8 @@ feature 'Dialogs', :js do
 
     within 'form' do
       fill_in :response,    with: '   '
-      select   field.id,    from: 'missing-field'
-      select   field.id,    from: 'awaiting-field'
+      select   field.name,    from: 'missing-field'
+      select   field.name,    from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'
@@ -58,8 +58,8 @@ feature 'Dialogs', :js do
 
     within 'form' do
       fill_in :response,    with: 'what song would you like to hear'
-      select   field.id,    from: 'missing-field'
-      select   field.id,    from: 'awaiting-field'
+      select   field.name,    from: 'missing-field'
+      select   field.name,    from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'

@@ -9,10 +9,10 @@ describe 'Dialogs' do
       intent_id:  intent.name,
       priority:   90,
       response:  'where would you like to go',
-      missing:    field.id,
+      missing:    field.name,
       unresolved:'unresolved',
       present:   [ 'present', 'value' ],
-      awaiting_field: field.id
+      awaiting_field: field.name
     }
   }
 
@@ -52,7 +52,7 @@ describe 'Dialogs' do
       expect( last_response.status ).to eq 200
       expect( parsed_response.count ).to eq 1
       expect( parsed_response[ 0 ][ :intent_id  ]).to eq intent.name
-      expect( parsed_response[ 0 ][ :missing    ]).to eq [  field.id    ]
+      expect( parsed_response[ 0 ][ :missing    ]).to eq [  field.name    ]
       expect( parsed_response[ 0 ][ :unresolved ]).to eq [ 'unresolved' ]
       expect( parsed_response[ 0 ][ :present    ]).to eq [ 'present', 'value' ]
       expect( parsed_response[ 0 ][ :responses  ][ 0 ][ :awaiting_field ]).to eq params[ :awaiting_field ]

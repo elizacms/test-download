@@ -1,8 +1,8 @@
-feature 'Fields' ,:js do
-  let(  :developer ){ create :developer }
-  let!( :skill     ){ create :skill, user:developer }
-  let!( :intent    ){ create :intent, skill:skill   }
-  let!( :field     ){ create :field, intent:intent  }
+feature 'Fields', :js do
+  let(  :developer ){ create :developer              }
+  let!( :skill     ){ create :skill, user: developer }
+  let!( :intent    ){ create :intent, skill: skill   }
+  let!( :field     ){ create :field, intent: intent  }
 
   before do
     stub_identity_token
@@ -16,7 +16,7 @@ feature 'Fields' ,:js do
     click_link 'Edit Details'
     click_link 'Edit Fields'
 
-    expect( page ).to have_content field.id
+    expect( page ).to have_content field.name
     expect( page ).to have_content field.type
   end
 
@@ -30,7 +30,7 @@ feature 'Fields' ,:js do
 
       find( 'input.jsgrid-insert-mode-button' ).click
 
-      expect( page ).to have_content field.id
+      expect( page ).to have_content field.name
       expect( page ).to have_content field.type
     end
   end
@@ -48,16 +48,25 @@ feature 'Fields' ,:js do
   end
 
   describe 'Generates JSON' do
-    let( :json   ){
+    let( :json ){
       {
-        id:intent.name,
-        fields:[ fields ],
-        mturk_response_fields:[ intent.mturk_response ]
+        id: intent.name,
+        fields: [ fields ],
+        mturk_response_fields: [ intent.mturk_response ]
       }.to_json
     }
 
-    let( :fields ){{ id:field.id.to_s, type:field.type, mturk_field:field.mturk_field }}
-    let( :json_div_content ){ find( 'div.json' ).native.attribute( 'innerHTML' ).gsub /\s/, '' }
+    let( :fields ){
+      {
+        id: field.name,
+        type: field.type,
+        mturk_field: field.mturk_field
+      }
+    }
+
+    let( :json_div_content ){
+      find( 'div.json' ).native.attribute( 'innerHTML' ).gsub( /\s/, '' )
+    }
 
     specify do
       visit "/login/success?code=0123abc"
