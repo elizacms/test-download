@@ -38,10 +38,10 @@ class FieldsController < ApplicationController
   private
 
   def set_field
-    @field = Field.find( params[ :id ])
+    @field = Field.find_by( id: params[ :id ] )
   end
 
   def field_params
-    params.permit( :id, :intent_id, :type, :mturk_field )
+    params.permit( :intent_id, :type, :mturk_field, :name )
   end
 end

@@ -69,7 +69,7 @@ class IntentsController < ApplicationController
   end
 
   def dialogs
-    @fields = @intent.entities.pluck( :id )
+    @fields = @intent.entities.pluck( :name )
   end
 
 

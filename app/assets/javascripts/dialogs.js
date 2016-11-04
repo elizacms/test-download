@@ -79,8 +79,8 @@ function getDialogs(){
 
   $.ajax({
     type: 'GET',
-    url: '/dialogue_api/all_scenarios',
-    data:data
+    url:  '/dialogue_api/all_scenarios',
+    data: data
   })
   .done( function( data ){
     renderDialogs( data );
@@ -123,12 +123,13 @@ function rowsForSingle( d ){
     if( d.present != null )
       conditions.push( d.present[ 0 ] + ' is present: "' + d.present[ 1 ] + '"' );
 
-    var tds = [ td( r, 'id' ),
+    var tds = [
                 td( d, 'priority'),
                 td( r, 'response' ),
                 td( d, null, conditions.join( '<br>' )),
                 td( r, 'awaiting_field' ),
-                deleteTD( r )];
+                deleteTD( r )
+              ];
 
     var tr = $( '<tr></tr>' ).addClass( 'dialog-data' ).append( tds );
 
