@@ -183,7 +183,7 @@ feature 'Intents pages' do
 
       expect( page ).to have_content "Intent get_ride updated."
       expect( Intent.first.requires_authorization ).to eq true
-      expect( Intent.first.external_applications ).to eq ["0", "0", "0", "0", "0", "itunes"]
+      expect( Intent.first.external_applications ).to eq ["itunes"]
     end
   end
 end
