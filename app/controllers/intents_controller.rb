@@ -3,6 +3,8 @@ class IntentsController < ApplicationController
   before_action :find_skill
   before_action :find_intent,
                 only: [ :edit, :update, :destroy, :fields, :dialogs, :submit_mturk_response ]
+  before_action :clear_empty_external_apps,
+                only: [ :create, :update ]
 
   def index
     @intents = @skill.intents
@@ -83,6 +85,10 @@ class IntentsController < ApplicationController
 
   def find_intent
     @intent = @skill.intents.find( params[ :id ] )
+  end
+
+  def clear_empty_external_apps
+    params[:intent][:external_applications].delete_if(&:blank?)
   end
 
   def intent_params
