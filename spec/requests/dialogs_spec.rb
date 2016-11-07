@@ -47,12 +47,12 @@ describe 'Dialogs' do
 
     specify 'Success' do
       header 'Content-Type', 'application/json'
-      get '/dialogue_api/all_scenarios', { intent_id:intent.name }
+      get '/dialogue_api/all_scenarios', { intent_id: intent.name }
 
       expect( last_response.status ).to eq 200
       expect( parsed_response.count ).to eq 1
       expect( parsed_response[ 0 ][ :intent_id  ]).to eq intent.name
-      expect( parsed_response[ 0 ][ :missing    ]).to eq [  field.name    ]
+      expect( parsed_response[ 0 ][ :missing    ]).to eq [ field.name ]
       expect( parsed_response[ 0 ][ :unresolved ]).to eq [ 'unresolved' ]
       expect( parsed_response[ 0 ][ :present    ]).to eq [ 'present', 'value' ]
       expect( parsed_response[ 0 ][ :responses  ][ 0 ][ :awaiting_field ]).to eq params[ :awaiting_field ]
@@ -63,7 +63,7 @@ describe 'Dialogs' do
   describe 'CSV export' do
     let( :header_row ){ "intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en\n" }
     let( :data_row   ){
-      %Q/#{ intent.name },90,destination,['unresolved'],['destination'],"[{'present','value'}]",['where would you like to go']/
+      %Q/#{ intent.name },90,destination,['unresolved'],['destination'],"[{'present','value'}]",where would you like to go/
     }
     let( :csv        ){ header_row + data_row }
 

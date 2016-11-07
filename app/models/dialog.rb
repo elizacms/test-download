@@ -7,26 +7,31 @@ class Dialog
   field :missing,        type:Array, default:[]
   field :unresolved,     type:Array, default:[]
   field :present,        type:Array, default:[]
-  field :response,       type:Array, default:[]
+  field :response,       type:String
 
   validates_presence_of :intent_id
   validates :response, presence: true
-  validate :response_cannot_be_set_of_empties, :must_have_one_rule_field
+  validate :must_have_one_rule_field
 
   before_create :set_id
 
 
   def serialize
-    response_hash = { awaiting_field: awaiting_field,
-                      id: id,
-                      response: response[ 0 ]}
+    response_hash = {
+      awaiting_field: awaiting_field,
+      id: id,
+      response: response
+    }
 
-    h = { intent_id:   intent_id     ,
-          priority:    priority      ,
-          responses: [ response_hash ]}
-    h.merge!( unresolved:unresolved ) if unresolved.any?( &:present? )
-    h.merge!( missing:   missing    ) if missing.any?(    &:present? )
-    h.merge!( present:   present    ) if present.try(:any?){ |p| p.present? }
+    h = {
+      intent_id: intent_id,
+      priority: priority,
+      responses: [ response_hash ]
+    }
+
+    h.merge!( unresolved: unresolved ) if unresolved.any?( &:present?        )
+    h.merge!( missing:   missing     ) if missing.any?(    &:present?        )
+    h.merge!( present:   present     ) if present.try(:any?){ |p| p.present? }
 
     h
   end

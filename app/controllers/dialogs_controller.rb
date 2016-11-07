@@ -6,7 +6,7 @@ class DialogsController < ApplicationController
   # GET /dialogue_api/all_scenarios?
   #   intent_id=play_music
   def index
-    dialogs = Dialog.where( intent_id:params[ :intent_id ])
+    dialogs = Dialog.where( intent_id:params[ :intent_id ] ).order('priority DESC')
 
     render json: dialogs.map( &:serialize ).to_json
   end
@@ -27,14 +27,14 @@ class DialogsController < ApplicationController
   def delete
     dialog = Dialog.find( params[ :response_id ].to_i )
 
-    aneeda_says = dialog.response[0]
+    aneeda_says = dialog.response
     dialog.delete
 
     render plain: "You deleted the Dialog: #{aneeda_says}.", status: :ok
   end
 
   def csv
-    dialogs = Dialog.where( intent_id:params[ :intent_id ] )
+    dialogs = Dialog.where( intent_id: params[ :intent_id ] ).order('priority DESC')
     filename = "#{ params[ :intent_id ] }.csv"
 
     response.headers[ 'Content-Type'        ] = 'text/csv'
@@ -61,14 +61,15 @@ class DialogsController < ApplicationController
   def dialog_params
     unresolved = [ params[ :unresolved ] ]
     missing    = [ params[ :missing    ] ]
-    response   = [ params[ :response   ] ]
+    response   = params[ :response   ]
 
-    params.permit( :intent_id,
-                   :priority,
-                   :awaiting_field,
-                   present: []
-          ).merge( unresolved: unresolved )
-           .merge( missing:    missing    )
-           .merge( response:   response   )
+    params.permit(
+      :intent_id,
+      :priority,
+      :awaiting_field,
+      present: []
+    ).merge( unresolved: unresolved )
+     .merge( missing:    missing    )
+     .merge( response:   response   )
   end
 end

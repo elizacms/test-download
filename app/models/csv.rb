@@ -25,7 +25,7 @@ class CSV
         format_single( d.unresolved ),
         format_single( d.missing    ),
         format_double( d.present    ),
-        format_single( d.response   )
+        d.response
       ]
     end
 
