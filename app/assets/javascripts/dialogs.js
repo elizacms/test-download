@@ -137,6 +137,14 @@ function rowsForSingle( d ){
   });
 };
 
+function escapeCarets( t ){
+  if(typeof t == 'string'){
+    return t.replace(/</, '&lt;').replace(/>/, '&gt;');
+  } else {
+    return t;
+  }
+};
+
 function td( object, field, extraText ){
   var text = '';
 
@@ -146,8 +154,11 @@ function td( object, field, extraText ){
   if( extraText != undefined )
     text += extraText;
 
+  if( field == 'response' )
+    text = escapeCarets(text);
+
   var td = $( '<td></td>' ).attr( 'class', field )
-                           .html(  text          );
+                           .html( text           );
 
   return td;
 };
