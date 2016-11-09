@@ -1,1 +1,20 @@
-<%= react_component(Dialog, data: 'John') %>
+<%= link_to(
+  '&larr; Intents'.html_safe,
+  edit_skill_intent_path(@skill, @intent),
+  class: 'btn md grey'
+) %>
+<br><br>
+
+<div class='row'>
+  <div class='col-md-3'>
+    <strong>Skill:</strong> <%= @skill.name %>
+  </div>
+  <div class='col-md-3 text-center'>
+    <strong>Intent:</strong> <%= @intent.name %>
+  </div>
+  <div class='col-md-6 text-center'>
+    <strong>Web Hook:</strong> <%= @skill.web_hook %>
+  </div>
+</div><br>
+
+<%= react_component('DialogContainer', { intent_id: @intent.name }, {title: 'Export CSV' }) %>
