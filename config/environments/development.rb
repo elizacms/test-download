@@ -55,4 +55,5 @@ Rails.application.configure do
   config.force_ssl = false
 
   config.react.variant = :development
+  config.react.addons = true
 end

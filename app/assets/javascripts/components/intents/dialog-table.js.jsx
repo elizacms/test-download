@@ -18,7 +18,7 @@ var DialogTable = React.createClass({
             </tr>
             {
               this.props.data.map(function(dialog, index){
-                return <DialogRow deleteRow={this.props.deleteRow} data={dialog} key={ index }>{dialog}</DialogRow>;
+                return <DialogRow deleteRow={this.props.deleteRow} data={dialog} key={index} itemIndex={index}>{dialog}</DialogRow>;
               }.bind(this))
             }
           </tbody>

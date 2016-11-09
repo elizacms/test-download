@@ -20,9 +20,11 @@ var DialogRow = React.createClass({
     return conditions;
   },
 
-  deleteRow(){
+  deleteRow(e){
+    e.preventDefault();
+
     if ( confirm("Are you sure you'd like to delete this dialog?") ){
-      this.props.deleteRow(this.props.data);
+      this.props.deleteRow(this.props.data, this.props.itemIndex);
     }
   },
 

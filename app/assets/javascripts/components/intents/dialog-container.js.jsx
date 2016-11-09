@@ -28,13 +28,23 @@ var DialogContainer = React.createClass({
     }
   },
 
-  deleteRow(data){
+  deleteRow(dialogData, rowIndex){
+    let stateData = this.state.data;
+
+    stateData.splice(rowIndex, 1);
+
+    this.setState({
+      data: stateData
+    });
+
     $.ajax({
       type: 'DELETE',
-      url: '/dialogue_api/response?response_id=' + data.responses[0].id
+      url: '/dialogue_api/response?response_id=' + dialogData.responses[0].id
     })
     .done( function( data ){
-      this.setState({response: data});
+      this.setState({
+        response: data
+      });
     }.bind(this));
   },
 
