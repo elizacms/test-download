@@ -69,59 +69,38 @@ var DialogForm = React.createClass({
 
           <table className='dialog'>
             <tbody>
-            <tr>
-              <td className='row16'>
-                <strong>is unresolved</strong>
-              </td>
-              <td className='row40'>
-                <select className='dialog-select' name='unresolved-field'>
-                  <option></option>
-                  {field_options}
-                </select>
-              </td>
-              <td></td>
-            </tr>
+              <DialogSelectBox
+                fields={this.props.fields}
+                name='unresolved-field'
+                title='is unresolved'
+              ></DialogSelectBox>
 
-            <tr>
-              <td className='row16'>
-                <strong>is missing</strong>
-              </td>
-              <td className='row40'>
-                <select className='dialog-select' name='missing-field'>
-                  <option></option>
-                  {field_options}
-                </select>
-              </td>
-              <td></td>
-            </tr>
+              <DialogSelectBox
+                fields={this.props.fields}
+                name='missing-field'
+                title='is missing'
+              ></DialogSelectBox>
 
-            <tr>
-              <td className='row16'>
-                <strong>is present</strong>
-              </td>
-              <td className='row40'>
-                <select className='dialog-select' name='present-field'>
-                  <option></option>
-                  {field_options}
-                </select>
-              </td>
-              <td>
-                <input className='dialog-input' name='present-value' type='text' placeholder='present value'>
-                </input>
-              </td>
-            </tr>
+              <DialogSelectAndInput
+                title='is present'
+                fields={this.props.fields}
+                name='present-field'
+                inputName='present-value'
+                inputPlaceholder='present value'
+              ></DialogSelectAndInput>
+
+              <DialogSelectBox
+                fields={this.props.fields}
+                name='awaiting-field'
+                title='Awaiting Field'
+              ></DialogSelectBox>
             </tbody>
           </table>
 
-          <div className='row'>
-            <strong className='two columns margin0'>Awaiting Field</strong>
-              <select className='awaiting-dialog-select two columns' name='awaiting-field'>
-                <option></option>
-                {field_options}
-              </select>
-          </div>
-
-          <button onClick={this.createDialog} className='btn lg ghost dialog-btn pull-right'>Create Dialog</button> &nbsp;
+          <button
+            onClick={this.createDialog}
+            className='btn lg ghost dialog-btn pull-right'
+          >Create Dialog</button> &nbsp;
         </form>
       </div>
     );
