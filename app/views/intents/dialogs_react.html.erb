@@ -17,4 +17,12 @@
   </div>
 </div><br>
 
-<%= react_component('DialogContainer', { intent_id: @intent.name }, {title: 'Export CSV' }) %>
+<%= react_component(
+  'DialogContainer',
+  {
+    intent_id: @intent.name,
+    field_path: fields_page_path(@skill, @intent),
+    fields: @fields
+  },
+  { title: 'Export CSV' }
+) %>

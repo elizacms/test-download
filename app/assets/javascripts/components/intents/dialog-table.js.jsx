@@ -6,7 +6,6 @@ var DialogTable = React.createClass({
   render() {
     return (
       <div>
-        <hr className='margin0'></hr>
         <table className='dialogs'>
           <tbody>
             <tr>

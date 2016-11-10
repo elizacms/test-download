@@ -11,9 +11,14 @@ var ExportCSV = React.createClass({
 
   render: function() {
     return (
-      <button onClick={this.getCSV} className='btn lg ghost export-csv pull-right'>
-        {this.props.title}
-      </button>
+      <div>
+        <button onClick={this.getCSV} className='btn lg ghost export-csv pull-right'>
+          {this.props.title}
+        </button>
+
+        <br></br><br></br>
+        <hr className='margin0'></hr>
+      </div>
     );
   }
 });

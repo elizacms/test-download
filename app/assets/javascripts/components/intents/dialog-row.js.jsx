@@ -39,7 +39,7 @@ var DialogRow = React.createClass({
             return(<div key={index}>{condition}</div>);
           })}
         </td>
-        <td className="awaiting_field"></td>
+        <td className="awaiting_field">{data.responses[0].awaiting_field}</td>
         <td><a onClick={this.deleteRow} className="icon-cancel-circled" rel="38" href="#"></a></td>
       </tr>
     );
