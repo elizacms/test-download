@@ -90,6 +90,7 @@ var DialogContainer = React.createClass({
         </DialogTable>
         <DialogMessage message={this.state.message} name='response-message'></DialogMessage>
 
+        <br></br><br></br>
         <DialogForm
           fields={this.props.fields}
           data={this.state.data}
