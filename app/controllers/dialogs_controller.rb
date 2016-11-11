@@ -59,17 +59,14 @@ class DialogsController < ApplicationController
   end
 
   def dialog_params
-    unresolved = [ params[ :unresolved ] ]
-    missing    = [ params[ :missing    ] ]
-    response   = params[ :response   ]
-
     params.permit(
       :intent_id,
       :priority,
-      :awaiting_field,
-      present: []
-    ).merge( unresolved: unresolved )
-     .merge( missing:    missing    )
-     .merge( response:   response   )
+      :response,
+      awaiting_field:[],
+      present: [],
+      unresolved: [],
+      missing: []
+    )
   end
 end

@@ -86,9 +86,14 @@ var DialogContainer = React.createClass({
         <ExportCSV title='Export CSV' intent_id={this.props.intent_id}>
         </ExportCSV>
 
-        <DialogTable deleteRow={this.deleteRow} data={this.state.data}>
-        </DialogTable>
-        <DialogMessage message={this.state.message} name='response-message'></DialogMessage>
+        <DialogTable
+          deleteRow={this.deleteRow}
+          data={this.state.data}
+        ></DialogTable>
+        <DialogMessage
+          message={this.state.message}
+          name='response-message'
+        ></DialogMessage>
 
         <br></br><br></br>
         <DialogForm

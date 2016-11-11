@@ -29,6 +29,25 @@ var DialogForm = React.createClass({
     this.setState(this.state);
   },
 
+  parseFormInput(name, hasExtra){
+    var ary = [];
+
+   $('form').find( 'select[name="' + name + '-field"]' ).each(function(){
+      ary.push($(this).val());
+    });
+
+    if (hasExtra){
+      ary2 = [];
+      $('form').find( 'input[name="' + name + '-value"]' ).each(function(index){
+        ary2.push(ary[index]);
+        ary2.push($(this).val());
+      });
+      return ary2;
+    }
+
+    return ary;
+  },
+
   createDialog(e){
     e.preventDefault();
     var data = {};
@@ -38,18 +57,10 @@ var DialogForm = React.createClass({
     data[ 'priority'   ] = form.find( 'input[name="priority"]'          ).val();
     data[ 'response'   ] = form.find( 'input[name="response"]'          ).val();
 
-
-    data[ 'unresolved' ] = form.find( 'select[name="unresolved-field"]' ).val();
-    data[ 'missing'    ] = form.find( 'select[name="missing-field"]'    ).val();
-
-    var present = [
-      form.find( 'select[name="present-field"]' ).val() ,
-      form.find( 'input[name="present-value"]'  ).val()
-    ]
-
-    data[ 'present' ] = present;
-
-    data[ 'awaiting_field' ] = form.find( 'select[name="awaiting-field"]' ).val();
+    data[ 'unresolved'     ] = this.parseFormInput('unresolved');
+    data[ 'missing'        ] = this.parseFormInput('missing');
+    data[ 'present'        ] = this.parseFormInput('present', true);
+    data[ 'awaiting_field' ] = this.parseFormInput('awaiting');
 
     if ( $('.aneeda-says').val().replace( /\s/g, '' ) == '' ){
       this.props.messageState({'aneeda-says-error': 'This field cannot be blank.'});

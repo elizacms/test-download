@@ -3,18 +3,35 @@ var DialogRow = React.createClass({
     title: React.PropTypes.string
   },
 
+  componentDidMount() {
+
+  },
+
   parseRules(){
     let rule = this.props.data;
     conditions = [];
 
     if( rule.hasOwnProperty('unresolved') ){
-      conditions.push( rule.unresolved + ' is unresolved' );
+      rule.unresolved.forEach(function(value, index){
+        conditions.push( value + ' is unresolved' );
+      })
     }
     if( rule.hasOwnProperty('missing') ){
-      conditions.push( rule.missing + ' is missing' );
+      rule.missing.forEach(function(value, index){
+        conditions.push( value + ' is missing' );
+      })
     }
     if( rule.hasOwnProperty('present') ){
-      conditions.push( rule.present[ 0 ] + ' is present: "' + rule.present[ 1 ] + '"' );
+      var ary  = [];
+      var ary2 = [];
+
+      rule.present.forEach(function(value, index){
+        index % 2 == 0 ? ary.push(value) : ary2.push(value);
+      });
+
+      ary.forEach(function(value, index){
+        conditions.push( value + ' is present: "' + ary2[index] + '"' );
+      });
     }
 
     return conditions;
@@ -39,7 +56,11 @@ var DialogRow = React.createClass({
             return(<div key={index}>{condition}</div>);
           })}
         </td>
-        <td className="awaiting_field">{data.responses[0].awaiting_field}</td>
+        <td className="awaiting_field">
+          {data.responses[0].awaiting_field.map(function(field, index){
+            return(<div key={index}>{field}</div>);
+          })}
+        </td>
         <td><a onClick={this.deleteRow} className="icon-cancel-circled" rel="38" href="#"></a></td>
       </tr>
     );

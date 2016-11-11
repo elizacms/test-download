@@ -3,7 +3,7 @@ class Dialog
 
   field :intent_id,      type:String
   field :priority,       type:Integer
-  field :awaiting_field, type:String
+  field :awaiting_field, type:Array, default:[]
   field :missing,        type:Array, default:[]
   field :unresolved,     type:Array, default:[]
   field :present,        type:Array, default:[]
@@ -30,8 +30,8 @@ class Dialog
     }
 
     h.merge!( unresolved: unresolved ) if unresolved.any?( &:present?        )
-    h.merge!( missing:   missing     ) if missing.any?(    &:present?        )
-    h.merge!( present:   present     ) if present.try(:any?){ |p| p.present? }
+    h.merge!( missing:    missing    ) if missing.any?(    &:present?        )
+    h.merge!( present:    present    ) if present.try(:any?){ |p| p.present? }
 
     h
   end
