@@ -9,16 +9,19 @@ var DialogSelectBox = React.createClass({
     };
   },
 
+  componentDidMount () {
+    this.setState({
+      field1: this.props.value,
+      field2: ''
+    });
+  },
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       field1: nextProps.value,
       field2: ''
     });
   },
-
-  // componentDidUpdate() {
-  //   debugger
-  // },
 
   duplicateRow(e){
     e.preventDefault();

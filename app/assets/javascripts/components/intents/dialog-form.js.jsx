@@ -21,11 +21,16 @@ var DialogForm = React.createClass({
 
   createNewId(rules, nextProps){
       var ary = [];
-      nextProps.data[0][rules].forEach(function(value, index){
-        ary.push({id: index, value: value});
-      });
 
-      return ary;
+      if (nextProps.data[0][rules]) {
+        nextProps.data[0][rules].forEach(function(value, index){
+          ary.push({id: index, value: value});
+        });
+
+        return ary;
+      }
+      // added this because I couldn't save a new record, but it might be invalid. BT
+      return [0];
   },
 
   componentWillReceiveProps(nextProps) {
