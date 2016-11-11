@@ -15,26 +15,28 @@ var DialogForm = React.createClass({
   propTypes: {
   },
 
-  componentDidUpdate(prevProps, prevState) {
-    debugger
-  },
+  // componentDidUpdate(prevProps, prevState) {
+  //   debugger
+  // },
 
   createNewId(rules, nextProps){
-    var ary = [];
-    nextProps.data[0][rules].forEach(function(value, index){
-      ary.push({id: index, value: value});
-    });
+      var ary = [];
+      nextProps.data[0][rules].forEach(function(value, index){
+        ary.push({id: index, value: value});
+      });
 
-    return ary;
+      return ary;
   },
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.data[0]);
-    this.setState({
-      'unresolved-field': this.createNewId('unresolved', nextProps),
-      priority: nextProps.data[0].priority,
-      response: nextProps.data[0].responses[0].response
-    });
+    if(Object.keys(nextProps.data).length > 0) {
+      console.log(nextProps.data[0]);
+      this.setState({
+        'unresolved-field': this.createNewId('unresolved', nextProps),
+        priority: nextProps.data[0].priority,
+        response: nextProps.data[0].responses[0].response
+      });
+    }
   },
 
   checkData(){
@@ -44,11 +46,11 @@ var DialogForm = React.createClass({
   },
 
   priorityHandleChange(event) {
-    this.setState({ data: { priority: event.target.value } });
+    this.setState({ priority: event.target.value });
   },
 
   aneedaSaysHandleChange(event){
-    this.setState({ data: { response: event.target.value } });
+    this.setState({ response: event.target.value });
   },
 
   addRow(key){
