@@ -3,14 +3,52 @@ var DialogForm = React.createClass({
 
   getInitialState() {
     return {
-      'unresolved-field': [{id: 1}],
+      'unresolved-field': [{id: 0, value: ''}],
       'missing-field': [{id: 1}],
       'present-field': [{id: 1}],
-      'awaiting-field': [{id: 1}]
+      'awaiting-field': [{id: 1}],
+      priority: '',
+      response: ''
     };
   },
 
   propTypes: {
+  },
+
+  componentDidUpdate(prevProps, prevState) {
+    debugger
+  },
+
+  createNewId(rules, nextProps){
+    var ary = [];
+    nextProps.data[0][rules].forEach(function(value, index){
+      ary.push({id: index, value: value});
+    });
+
+    return ary;
+  },
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps.data[0]);
+    this.setState({
+      'unresolved-field': this.createNewId('unresolved', nextProps),
+      priority: nextProps.data[0].priority,
+      response: nextProps.data[0].responses[0].response
+    });
+  },
+
+  checkData(){
+    if (this.state.data.hasOwnProperty('responses')){
+      return this.state.data.responses[0].response
+    }
+  },
+
+  priorityHandleChange(event) {
+    this.setState({ data: { priority: event.target.value } });
+  },
+
+  aneedaSaysHandleChange(event){
+    this.setState({ data: { response: event.target.value } });
   },
 
   addRow(key){
@@ -48,6 +86,13 @@ var DialogForm = React.createClass({
     return ary;
   },
 
+  data(){
+    if (this.props.data.length > 0){
+      return this.props.data[0];
+    }
+    return {};
+  },
+
   createDialog(e){
     e.preventDefault();
     var data = {};
@@ -69,9 +114,6 @@ var DialogForm = React.createClass({
     }
 
     this.props.createDialog(data);
-  },
-
-  componentDidUpdate() {
   },
 
   render: function() {
@@ -102,22 +144,30 @@ var DialogForm = React.createClass({
         <h4 className='inline'>Fields</h4>
         <a href={this.props.field_path} className='addField btn md grey pull-right'>Add a field</a>
         <form className='dialog' method='post' action='/dialogue_api/response'>
-          <input type='hidden' name='intent-id' value={this.props.intent_id}>
-          </input>
+          <input type='hidden' name='intent-id' value={this.props.intent_id} />
           <hr className='margin5050'></hr>
 
           <div className='row'>
             <strong className='two columns margin0'>Priority</strong>
-            <input name='priority' type='number' className='three columns priority-input'>
-            </input>
+            <input
+              className='three columns priority-input'
+              name='priority'
+              type='number'
+              value={this.state.priority}
+              onChange={this.priorityHandleChange} />
           </div>
 
           <hr className='margin-15'></hr>
 
           <div className='row'>
             <strong className='two columns margin0'>Aneeda Says</strong>
-            <input className='aneeda-says two columns' name='response' type='text' placeholder='ex: Please log into your account' >
-            </input>
+            <input
+              className='aneeda-says two columns'
+              name='response'
+              type='text'
+              placeholder='ex: Please log into your account'
+              value={this.state.response}
+              onChange={this.aneedaSaysHandleChange} />
           </div>
 
           <DialogMessage message={this.props.response} name='aneeda-says-error'>
@@ -136,6 +186,7 @@ var DialogForm = React.createClass({
                     title='is unresolved'
                     addRow={this.addRow}
                     deleteRow={this.deleteRow.bind(this, input, 'unresolved-field')}
+                    value={this.state['unresolved-field'][input.id].value}
                   ></DialogSelectBox>
                 );
               }.bind(this))}

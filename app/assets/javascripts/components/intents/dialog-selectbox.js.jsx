@@ -2,6 +2,24 @@ var DialogSelectBox = React.createClass({
   propTypes: {
   },
 
+  getInitialState() {
+    return {
+      field1: '',
+      field2: ''
+    };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      field1: nextProps.value,
+      field2: ''
+    });
+  },
+
+  // componentDidUpdate() {
+  //   debugger
+  // },
+
   duplicateRow(e){
     e.preventDefault();
     this.props.addRow(this.props.name);
@@ -54,7 +72,11 @@ var DialogSelectBox = React.createClass({
           <strong>{this.props.title}</strong>
         </td>
         <td className='row40'>
-          <select className='dialog-select' name={this.props.name}>
+          <select
+            className='dialog-select'
+            name={this.props.name}
+            value={this.state.field1}
+          >
             <option></option>
             {field_options}
           </select>

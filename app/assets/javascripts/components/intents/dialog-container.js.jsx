@@ -5,7 +5,7 @@ var DialogContainer = React.createClass({
   },
 
   getInitialState() {
-    return { message: {}, data: [] };
+    return { message: {}, data: [], form: {} };
   },
 
   createDialog(data){
@@ -104,6 +104,7 @@ var DialogContainer = React.createClass({
           response={this.state.message}
           createDialog={this.createDialog}
           messageState={this.messageState}
+          form={this.state.form}
         ></DialogForm>
       </div>
     );
