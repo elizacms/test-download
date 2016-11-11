@@ -1,18 +1,18 @@
 describe 'Dialogs' do
-  let!( :developer ){ create :developer             }
-  let!( :skill     ){ create :skill, user:developer }
-  let!( :intent    ){ create :intent, skill:skill   }
-  let!( :field     ){ create :field, intent:intent  }
+  let!( :developer ){ create :developer                }
+  let!( :skill     ){ create :skill, user:   developer }
+  let!( :intent    ){ create :intent, skill: skill     }
+  let!( :field     ){ create :field, intent: intent    }
 
   let( :params ){
     {
-      intent_id:  intent.name,
-      priority:   90,
-      response:  'where would you like to go',
-      missing:    field.name,
-      unresolved:'unresolved',
-      present:   [ 'present', 'value' ],
-      awaiting_field: field.name
+      priority:       90,
+      response:       'where would you like to go',
+      intent_id:      intent.name,
+      unresolved:     [ 'unresolved' ],
+      missing:        [ field.name ],
+      present:        [ 'present', 'value' ],
+      awaiting_field: [ field.name ]
     }
   }
 
@@ -32,7 +32,7 @@ describe 'Dialogs' do
       post '/dialogue_api/response', params.to_json
 
       expect( last_response.status ).to eq 422
-      expect( last_response.headers[ 'Warning' ]).to eq "Intent can't be blank"
+      expect( last_response.headers[ 'Warning' ] ).to eq "Intent can't be blank"
       expect( Dialog.count ).to eq 0
     end
   end
@@ -75,7 +75,7 @@ describe 'Dialogs' do
     end
 
     specify 'Success' do
-      get '/dialogue_api/csv', { intent_id:intent.name }
+      get '/dialogue_api/csv', { intent_id: intent.name }
 
       expect( last_response.status ).to eq 200
       expect( last_response.headers[ 'Content-Type' ]).to eq 'text/csv'

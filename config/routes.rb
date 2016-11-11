@@ -53,10 +53,6 @@ Rails.application.routes.draw do
   get '/skills/:skill_id/intents/:id/dialogs',
     to: 'intents#dialogs',
     as: :dialogs_page
-
-  get '/skills/:skill_id/intents/:id/dialogs-react',
-    to: 'intents#dialogs_react',
-    as: :dialogs_react_page
 end
 
 
