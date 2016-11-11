@@ -4,9 +4,9 @@ var DialogForm = React.createClass({
   getInitialState() {
     return {
       'unresolved-field': [{id: 0, value: ''}],
-      'missing-field': [{id: 1}],
-      'present-field': [{id: 1}],
-      'awaiting-field': [{id: 1}],
+      'missing-field':    [{id: 0, value: ''}],
+      'present-field':    [{id: 0, value: ''}],
+      'awaiting-field':   [{id: 0, value: ''}],
       priority: '',
       response: ''
     };
@@ -28,7 +28,14 @@ var DialogForm = React.createClass({
         });
 
         return ary;
+      } else {
+        nextProps.data[0].responses[0][rules].forEach(function(value, index){
+          ary.push({id: index, value: value});
+        });
+
+        return ary;
       }
+
       // added this because I couldn't save a new record, but it might be invalid. BT
       return [0];
   },
@@ -38,8 +45,11 @@ var DialogForm = React.createClass({
       console.log(nextProps.data[0]);
       this.setState({
         'unresolved-field': this.createNewId('unresolved', nextProps),
-        priority: nextProps.data[0].priority,
-        response: nextProps.data[0].responses[0].response
+        'missing-field':    this.createNewId('missing', nextProps),
+        'present-field':    this.createNewId('present', nextProps),
+        'awaiting-field':   this.createNewId('awaiting_field', nextProps),
+        priority:           nextProps.data[0].priority,
+        response:           nextProps.data[0].responses[0].response,
       });
     }
   },
@@ -207,6 +217,7 @@ var DialogForm = React.createClass({
                     title='is missing'
                     addRow={this.addRow}
                     deleteRow={this.deleteRow.bind(this, input, 'missing-field')}
+                    value={this.state['missing-field'][input.id].value}
                   ></DialogSelectBox>
                 );
               }.bind(this))}
@@ -223,6 +234,7 @@ var DialogForm = React.createClass({
                     hasInput={true}
                     inputName='present-value'
                     inputPlaceholder='present value'
+                    value={this.state['present-field'][input.id].value}
                   ></DialogSelectBox>
                 );
               }.bind(this))}
@@ -236,6 +248,7 @@ var DialogForm = React.createClass({
                     title='Awaiting field'
                     addRow={this.addRow}
                     deleteRow={this.deleteRow.bind(this, input, 'awaiting-field')}
+                    value={this.state['awaiting-field'][input.id].value}
                   ></DialogSelectBox>
                 );
               }.bind(this))}
