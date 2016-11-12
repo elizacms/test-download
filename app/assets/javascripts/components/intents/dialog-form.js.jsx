@@ -15,29 +15,16 @@ var DialogForm = React.createClass({
   propTypes: {
   },
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   debugger
-  // },
-
   createNewId(rules, nextProps){
-      var ary = [];
+    var ary = [];
 
-      if (nextProps.data[0][rules]) {
-        nextProps.data[0][rules].forEach(function(value, index){
-          ary.push({id: index, value: value});
-        });
+    if (nextProps.data[0][rules]) {
+      nextProps.data[0][rules].forEach(function(value, index){
+        ary.push({id: index, value: value});
+      });
+    }
 
-        return ary;
-      } else {
-        nextProps.data[0].responses[0][rules].forEach(function(value, index){
-          ary.push({id: index, value: value});
-        });
-
-        return ary;
-      }
-
-      // added this because I couldn't save a new record, but it might be invalid. BT
-      return [0];
+    return ary;
   },
 
   componentWillReceiveProps(nextProps) {
@@ -49,14 +36,8 @@ var DialogForm = React.createClass({
         'present-field':    this.createNewId('present', nextProps),
         'awaiting-field':   this.createNewId('awaiting_field', nextProps),
         priority:           nextProps.data[0].priority,
-        response:           nextProps.data[0].responses[0].response,
+        response:           nextProps.data[0].response,
       });
-    }
-  },
-
-  checkData(){
-    if (this.state.data.hasOwnProperty('responses')){
-      return this.state.data.responses[0].response
     }
   },
 
@@ -101,13 +82,6 @@ var DialogForm = React.createClass({
     }
 
     return ary;
-  },
-
-  data(){
-    if (this.props.data.length > 0){
-      return this.props.data[0];
-    }
-    return {};
   },
 
   createDialog(e){

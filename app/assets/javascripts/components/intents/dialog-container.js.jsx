@@ -71,7 +71,7 @@ var DialogContainer = React.createClass({
 
     $.ajax({
       type: 'DELETE',
-      url: '/dialogue_api/response?response_id=' + dialogData.responses[0].id
+      url: '/dialogue_api/response?response_id=' + dialogData.id
     })
     .done( function( data ){
       this.setState({
