@@ -27,13 +27,34 @@ var DialogForm = React.createClass({
     return ary;
   },
 
+  createNewIdForPresent(nextProps) {
+    if (nextProps.data[0].present){
+      var ary  = [];
+      var ary2 = [];
+      var res  = [];
+
+      nextProps.data[0].present.forEach(function(value, index){
+        index % 2 == 0 ? ary.push(value) : ary2.push(value);
+      });
+
+      ary.forEach(function(value, index){
+        var hsh = {};
+        hsh['id'] = index;
+        hsh['value'] = value;
+        hsh['inputValue'] = ary2[index];
+        res.push(hsh);
+      });
+
+      return res;
+    }
+  },
+
   componentWillReceiveProps(nextProps) {
     if(Object.keys(nextProps.data).length > 0) {
-      console.log(nextProps.data[0]);
       this.setState({
         'unresolved-field': this.createNewId('unresolved', nextProps),
         'missing-field':    this.createNewId('missing', nextProps),
-        'present-field':    this.createNewId('present', nextProps),
+        'present-field':    this.createNewIdForPresent(nextProps),
         'awaiting-field':   this.createNewId('awaiting_field', nextProps),
         priority:           nextProps.data[0].priority,
         response:           nextProps.data[0].response,
@@ -208,6 +229,7 @@ var DialogForm = React.createClass({
                     hasInput={true}
                     inputName='present-value'
                     inputPlaceholder='present value'
+                    inputValue={this.state['present-field'][input.id].inputValue}
                     value={this.state['present-field'][input.id].value}
                   ></DialogSelectBox>
                 );

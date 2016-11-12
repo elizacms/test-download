@@ -12,19 +12,23 @@ var DialogSelectBox = React.createClass({
   componentDidMount () {
     this.setState({
       field1: this.props.value,
-      field2: ''
+      field2: this.props.inputValue
     });
   },
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       field1: nextProps.value,
-      field2: ''
+      field2: nextProps.inputValue
     });
   },
 
   selectBoxHandleChange(event){
     this.setState({field1: event.target.value})
+  },
+
+  inputHandleChange(event){
+    this.setState({field2: event.target.value})
   },
 
   duplicateRow(e){
@@ -51,7 +55,9 @@ var DialogSelectBox = React.createClass({
           className='dialog-input'
           name={this.props.inputName}
           type='text'
-          placeholder={this.props.inputPlaceholder}></input>
+          value={this.state.field2}
+          placeholder={this.props.inputPlaceholder}
+          onChange={this.inputHandleChange}></input>
       );
     }
 
