@@ -2,6 +2,10 @@ var DialogForm = React.createClass({
   id: 'dialog-form',
 
   getInitialState() {
+    return this.initialData();
+  },
+
+  initialData(){
     return {
       'unresolved-field': [{id: 0, value: '', inputValue: ''}],
       'missing-field':    [{id: 0, value: '', inputValue: ''}],
@@ -90,6 +94,14 @@ var DialogForm = React.createClass({
     this.setState(this.state);
   },
 
+  resetForm(e){
+    e.preventDefault();
+
+    if (confirm("Are you sure you want to clear the fields?")){
+      this.setState(this.initialData());
+    }
+  },
+
   parseFormInput(name, hasExtra){
     var ary = [];
 
@@ -159,6 +171,7 @@ var DialogForm = React.createClass({
       <div>
         <h4 className='inline'>Fields</h4>
         <a href={this.props.field_path} className='addField btn md grey pull-right'>Add a field</a>
+        <a href='#' onClick={this.resetForm} className='btn md grey pull-right'>Reset fields</a>
         <form className='dialog' method='post' action='/dialogue_api/response'>
           <input type='hidden' name='intent-id' value={this.props.intent_id} />
           <hr className='margin5050'></hr>
