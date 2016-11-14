@@ -5,13 +5,23 @@ var DialogContainer = React.createClass({
   },
 
   getInitialState() {
-    return { message: {}, data: [], form: {}, dialogData: {} };
+    return { message: {}, data: [], form: {}, dialogData: {}, isUpdate: false };
   },
 
-  createDialog(data){
+  resetIsUpdateState(){
+    this.setState({isUpdate: false});
+  },
+
+  createOrUpdateDialog(data){
+    if (this.state.isUpdate) {
+      var url = '/dialogue_api/response?response_id=' + data.id;
+    } else {
+      var url = '/dialogue_api/response?';
+    }
+
     $.ajax({
-      type: 'POST',
-      url: '/dialogue_api/response?',
+      type: this.state.isUpdate ? 'PUT' : 'POST',
+      url: url,
       dataType: 'json',
       data: data
     })
@@ -21,6 +31,7 @@ var DialogContainer = React.createClass({
       form.find( 'select' ).val( '' );
 
       this.getAllScenarios();
+      this.resetIsUpdateState();
     }.bind(this))
     .fail(function(error){
       IAM.alert.run('red', error.getResponseHeader('Warning'), 5000);
@@ -61,7 +72,7 @@ var DialogContainer = React.createClass({
   },
 
   sendData(data){
-    this.setState({dialogData: data});
+    this.setState({dialogData: data, isUpdate: true});
   },
 
   deleteRow(dialogData, rowIndex){
@@ -110,6 +121,7 @@ var DialogContainer = React.createClass({
           createDialog={this.createDialog}
           messageState={this.messageState}
           form={this.state.form}
+          resetIsUpdateState={this.resetIsUpdateState}
         ></DialogForm>
       </div>
     );

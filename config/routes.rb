@@ -35,6 +35,10 @@ Rails.application.routes.draw do
     to:'dialogs#create',
     as: :submit_dialogs
 
+  put '/dialogue_api/response',
+    to: 'dialogs#update',
+    as: :update_dialogs
+
   get '/dialogue_api/all_scenarios',
     to:'dialogs#index',
     as: :get_dialogs

@@ -99,6 +99,7 @@ var DialogForm = React.createClass({
 
     if (confirm("Are you sure you want to clear the fields?")){
       this.setState(this.initialData());
+      this.props.resetIsUpdateState();
     }
   },
 

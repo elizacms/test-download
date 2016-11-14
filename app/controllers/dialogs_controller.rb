@@ -24,6 +24,17 @@ class DialogsController < ApplicationController
     end
   end
 
+  def update
+    dialog = Dialog.find( params[ :response_id ].to_i )
+
+    if dialog.update(dialog_params)
+      render json: {}, status: :ok
+    else
+      response.headers[ 'Warning' ] = dialog.errors.full_messages.join "\n"
+      render json: dialog.errors, status: :unprocessable_entity
+    end
+  end
+
   def delete
     dialog = Dialog.find( params[ :response_id ].to_i )
 

@@ -37,6 +37,33 @@ describe 'Dialogs' do
     end
   end
 
+  describe 'Update' do
+    before do
+      header 'Content-Type', 'application/json'
+      post '/dialogue_api/response', params.to_json
+    end
+
+    specify 'Success' do
+      header 'Content-Type', 'application/json'
+      put '/dialogue_api/response?response_id=1', params.merge!(response: 'Green Godess').to_json
+
+      expect( last_response.status ).to eq 200
+      expect( Dialog.count         ).to eq 1
+      expect( Dialog.last.response ).to eq 'Green Godess'
+    end
+
+    specify 'Failure' do
+      params.merge!( unresolved: [nil], missing: [nil], present: [nil] )
+
+      header 'Content-Type', 'application/json'
+      put '/dialogue_api/response?response_id=1', params.to_json
+
+      expect( last_response.status ).to eq 422
+      expect( last_response.headers[ 'Warning' ] ).to eq "A field must have a rule"
+      expect( Dialog.count ).to eq 1
+    end
+  end
+
   describe 'Read' do
     before do
       header 'Content-Type', 'application/json'
@@ -55,8 +82,8 @@ describe 'Dialogs' do
       expect( parsed_response[ 0 ][ :missing    ]).to eq [ field.name ]
       expect( parsed_response[ 0 ][ :unresolved ]).to eq [ 'unresolved' ]
       expect( parsed_response[ 0 ][ :present    ]).to eq [ 'present', 'value' ]
-      expect( parsed_response[ 0 ][ :responses  ][ 0 ][ :awaiting_field ]).to eq params[ :awaiting_field ]
-      expect( parsed_response[ 0 ][ :responses  ][ 0 ][ :response       ]).to eq params[ :response ]
+      expect( parsed_response[ 0 ][ :awaiting_field ]).to eq params[ :awaiting_field ]
+      expect( parsed_response[ 0 ][ :response       ]).to eq params[ :response ]
     end
   end
 
