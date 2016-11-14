@@ -98,7 +98,7 @@ var DialogContainer = React.createClass({
         <br></br><br></br>
         <DialogForm
           fields={this.props.fields}
-          data={this.state.data}
+          data={this.state.dialogData}
           field_path={this.props.field_path}
           intent_id={this.props.intent_id}
           response={this.state.message}

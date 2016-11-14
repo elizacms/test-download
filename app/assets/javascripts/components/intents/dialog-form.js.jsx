@@ -3,10 +3,10 @@ var DialogForm = React.createClass({
 
   getInitialState() {
     return {
-      'unresolved-field': [{id: 0, value: ''}],
-      'missing-field':    [{id: 0, value: ''}],
-      'present-field':    [{id: 0, value: ''}],
-      'awaiting-field':   [{id: 0, value: ''}],
+      'unresolved-field': [{id: 0, value: '', inputValue: ''}],
+      'missing-field':    [{id: 0, value: '', inputValue: ''}],
+      'present-field':    [{id: 0, value: '', inputValue: ''}],
+      'awaiting-field':   [{id: 0, value: '', inputValue: ''}],
       priority: '',
       response: ''
     };
