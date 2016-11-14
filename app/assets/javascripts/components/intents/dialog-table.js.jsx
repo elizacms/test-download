@@ -14,6 +14,7 @@ var DialogTable = React.createClass({
               <th className='row30'>Rules</th>
               <th className='row10'>Awaiting Field</th>
               <th className='row5'></th>
+              <th className='row5'></th>
             </tr>
             {
               this.props.data.map(function(dialog, index){

@@ -39,7 +39,8 @@ var DialogRow = React.createClass({
     return conditions;
   },
 
-  editRow(){
+  editRow(e){
+    e.preventDefault();
     this.props.sendData(this.props.data);
   },
 
@@ -54,10 +55,7 @@ var DialogRow = React.createClass({
   render: function() {
     let data = this.props.data;
     return (
-      <tr
-        onClick={this.editRow}
-        className="dialog-data"
-      >
+      <tr className="dialog-data">
         <td className="priority">{data.priority}</td>
         <td className="response">{data.response}</td>
         <td>
@@ -70,6 +68,7 @@ var DialogRow = React.createClass({
             return(<div key={index}>{field}</div>);
           })}
         </td>
+        <td><a onClick={this.editRow} className="icon-pencil" href='#'></a></td>
         <td><a onClick={this.deleteRow} className="icon-cancel-circled" rel="38" href="#"></a></td>
       </tr>
     );

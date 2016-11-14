@@ -5,16 +5,29 @@ var DialogContainer = React.createClass({
   },
 
   getInitialState() {
-    return { message: {}, data: [], form: {}, dialogData: {}, isUpdate: false };
+    return {
+      message: {},
+      data: [],
+      form: {},
+      dialogData: {},
+      isUpdate: false,
+      currentDialogId: null
+    };
   },
 
   resetIsUpdateState(){
-    this.setState({isUpdate: false});
+    if (this.state.isUpdate === true){
+      this.setState({isUpdate: false});
+    }
+  },
+
+  resetDialogData(){
+    this.setState({dialogData: {}});
   },
 
   createOrUpdateDialog(data){
     if (this.state.isUpdate) {
-      var url = '/dialogue_api/response?response_id=' + data.id;
+      var url = '/dialogue_api/response?response_id=' + this.state.currentDialogId;
     } else {
       var url = '/dialogue_api/response?';
     }
@@ -30,6 +43,7 @@ var DialogContainer = React.createClass({
       form.find( 'input' ).val( '' );
       form.find( 'select' ).val( '' );
 
+      this.resetDialogData();
       this.getAllScenarios();
       this.resetIsUpdateState();
     }.bind(this))
@@ -72,7 +86,7 @@ var DialogContainer = React.createClass({
   },
 
   sendData(data){
-    this.setState({dialogData: data, isUpdate: true});
+    this.setState({dialogData: data, isUpdate: true, currentDialogId: data.id});
   },
 
   deleteRow(dialogData, rowIndex){
@@ -118,10 +132,11 @@ var DialogContainer = React.createClass({
           field_path={this.props.field_path}
           intent_id={this.props.intent_id}
           response={this.state.message}
-          createDialog={this.createDialog}
+          createOrUpdateDialog={this.createOrUpdateDialog}
           messageState={this.messageState}
           form={this.state.form}
           resetIsUpdateState={this.resetIsUpdateState}
+          resetDialogData={this.resetDialogData}
         ></DialogForm>
       </div>
     );

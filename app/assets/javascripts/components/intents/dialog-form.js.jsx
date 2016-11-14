@@ -63,6 +63,9 @@ var DialogForm = React.createClass({
         priority:           nextProps.data.priority,
         response:           nextProps.data.response,
       });
+    } else {
+      this.setState(this.initialData());
+      this.props.resetIsUpdateState();
     }
   },
 
@@ -98,7 +101,7 @@ var DialogForm = React.createClass({
     e.preventDefault();
 
     if (confirm("Are you sure you want to clear the fields?")){
-      this.setState(this.initialData());
+      this.props.resetDialogData();
       this.props.resetIsUpdateState();
     }
   },
@@ -122,7 +125,7 @@ var DialogForm = React.createClass({
     return ary;
   },
 
-  createDialog(e){
+  createOrUpdateDialog(e){
     e.preventDefault();
     var data = {};
     var form = $('form');
@@ -142,7 +145,7 @@ var DialogForm = React.createClass({
       return false;
     }
 
-    this.props.createDialog(data);
+    this.props.createOrUpdateDialog(data);
   },
 
   render: function() {
@@ -270,7 +273,7 @@ var DialogForm = React.createClass({
           </table>
 
           <button
-            onClick={this.createDialog}
+            onClick={this.createOrUpdateDialog}
             className='btn lg ghost dialog-btn pull-right'
           >Create Dialog</button> &nbsp;
         </form>
