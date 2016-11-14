@@ -39,6 +39,10 @@ var DialogRow = React.createClass({
     return conditions;
   },
 
+  editRow(){
+    this.props.sendData(this.props.data);
+  },
+
   deleteRow(e){
     e.preventDefault();
 
@@ -50,7 +54,10 @@ var DialogRow = React.createClass({
   render: function() {
     let data = this.props.data;
     return (
-      <tr className="dialog-data">
+      <tr
+        onClick={this.editRow}
+        className="dialog-data"
+      >
         <td className="priority">{data.priority}</td>
         <td className="response">{data.response}</td>
         <td>

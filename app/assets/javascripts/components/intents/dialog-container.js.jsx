@@ -5,7 +5,7 @@ var DialogContainer = React.createClass({
   },
 
   getInitialState() {
-    return { message: {}, data: [], form: {} };
+    return { message: {}, data: [], form: {}, dialogData: {} };
   },
 
   createDialog(data){
@@ -60,6 +60,10 @@ var DialogContainer = React.createClass({
     window.clearTimeout(this.timer);
   },
 
+  sendData(data){
+    this.setState({dialogData: data});
+  },
+
   deleteRow(dialogData, rowIndex){
     let stateData = this.state.data;
 
@@ -87,6 +91,7 @@ var DialogContainer = React.createClass({
         </ExportCSV>
 
         <DialogTable
+          sendData={this.sendData}
           deleteRow={this.deleteRow}
           data={this.state.data}
         ></DialogTable>

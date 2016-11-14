@@ -36,9 +36,9 @@ var DialogSelectBox = React.createClass({
     this.props.addRow(this.props.name);
   },
 
-  deleteRow(e){
+  deleteInput(e){
     e.preventDefault();
-    this.props.deleteRow();
+    this.props.deleteInput();
   },
 
   render: function() {
@@ -64,7 +64,7 @@ var DialogSelectBox = React.createClass({
     var hasCancel = '';
     if (this.props.index > 0){
       hasCancel = (
-        <a onClick={this.deleteRow} href='#'>
+        <a onClick={this.deleteInput} href='#'>
           <span className='icon-cancel-circled pull-right'></span>
         </a>
       );
