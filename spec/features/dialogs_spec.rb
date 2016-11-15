@@ -10,16 +10,14 @@ feature 'Dialogs', :js do
   end
 
   specify 'Renders rule' do
-    visit "/login/success?code=0123abc"
+    visit '/login/success?code=0123abc'
     click_link 'Intents'
 
     click_link 'Edit Details'
     click_link 'Edit Dialogs'
 
-    # binding.pry
-
     within 'form' do
-      fill_in :response,    with: 'what song would you like to hear'
+      fill_in  :response,     with: 'what song would you like to hear'
       select   field.name,    from: 'unresolved-field'
       select   field.name,    from: 'awaiting-field'
     end
@@ -30,16 +28,14 @@ feature 'Dialogs', :js do
   end
 
   specify 'Fails when response is blank' do
-    visit "/login/success?code=0123abc"
+    visit '/login/success?code=0123abc'
     click_link 'Intents'
 
     click_link 'Edit Details'
     click_link 'Edit Dialogs'
 
-    # binding.pry
-
     within 'form' do
-      fill_in :response,    with: '   '
+      fill_in  :response,     with: '   '
       select   field.name,    from: 'missing-field'
       select   field.name,    from: 'awaiting-field'
     end
@@ -49,15 +45,41 @@ feature 'Dialogs', :js do
     expect( page ).to have_content 'This field cannot be blank.'
   end
 
-  specify 'Deleting a dialog shows confirm' do
-    visit "/login/success?code=0123abc"
+  specify 'User can update a dialog' do
+    visit '/login/success?code=0123abc'
     click_link 'Intents'
 
     click_link 'Edit Details'
     click_link 'Edit Dialogs'
 
     within 'form' do
-      fill_in :response,    with: 'what song would you like to hear'
+      fill_in  :response,     with: 'what song would you like to hear'
+      select   field.name,    from: 'unresolved-field'
+      select   field.name,    from: 'awaiting-field'
+    end
+
+    click_button 'Create Dialog'
+    expect( Dialog.count ).to eq 1
+
+    find( '.icon-pencil' ).click
+    fill_in :response, with: 'Crazy Fish'
+
+    click_button 'Update Dialog'
+
+    expect( page ).to have_content 'Crazy Fish'
+    expect( Dialog.count         ).to eq 1
+    expect( Dialog.last.response ).to eq 'Crazy Fish'
+  end
+
+  specify 'Deleting a dialog shows confirm' do
+    visit '/login/success?code=0123abc'
+    click_link 'Intents'
+
+    click_link 'Edit Details'
+    click_link 'Edit Dialogs'
+
+    within 'form' do
+      fill_in  :response,     with: 'what song would you like to hear'
       select   field.name,    from: 'missing-field'
       select   field.name,    from: 'awaiting-field'
     end

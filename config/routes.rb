@@ -17,23 +17,27 @@ Rails.application.routes.draw do
     as: :logout
 
   resources :users
-  
+
   resources :skills do
     resources :intents
 
     put '/intents/:id/mturk_response', to: 'intents#submit_mturk_response'
   end
-  
+
   resources :fields
 
   scope :api do
     get '/webhooks',
       to: 'api#get_webhook'
   end
-  
+
   post '/dialogue_api/response',
     to:'dialogs#create',
     as: :submit_dialogs
+
+  put '/dialogue_api/response',
+    to: 'dialogs#update',
+    as: :update_dialogs
 
   get '/dialogue_api/all_scenarios',
     to:'dialogs#index',
@@ -45,7 +49,7 @@ Rails.application.routes.draw do
   delete '/dialogue_api/response',
     to:'dialogs#delete',
     as: :delete_dialogs
-  
+
   get '/skills/:skill_id/intents/:id/fields',
     to: 'intents#fields',
     as: :fields_page

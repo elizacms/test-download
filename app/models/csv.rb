@@ -22,9 +22,9 @@ class CSV
       [
         d.priority,
         d.awaiting_field,
-        format_single( d.unresolved ),
-        format_single( d.missing    ),
-        format_double( d.present    ),
+        format_single( d.unresolved     ),
+        format_single( d.missing        ),
+        format_present_field( d.present ),
         d.response
       ]
     end
@@ -38,7 +38,22 @@ class CSV
     def format_double pair
       return '[]' if pair.nil? || pair.first.blank?
 
-      %Q/"[{'#{ pair.first }','#{ pair.last }'}]"/
+      %Q/"[('#{ pair.first }','#{ pair.last }')]"/
+    end
+
+    def make_pairs( ary )
+      odds  = ary.select.each_with_index { |_, i| i.odd?  }
+      evens = ary.select.each_with_index { |_, i| i.even? }
+      evens.zip(odds)
+    end
+
+    def format_present_field( ary )
+      pairs = make_pairs(ary)
+      return '[]' if pairs.nil? || pairs.all? { |v| v.blank? }
+
+      %Q/"[#{ pairs.map! do |pair|
+        pair[1].blank? ? "'#{pair[0]}'" : "('#{pair[0]}','#{pair[1]}')"
+      end.join(",") }]"/
     end
   end
 end

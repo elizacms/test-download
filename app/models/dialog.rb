@@ -3,7 +3,7 @@ class Dialog
 
   field :intent_id,      type:String
   field :priority,       type:Integer
-  field :awaiting_field, type:String
+  field :awaiting_field, type:Array, default:[]
   field :missing,        type:Array, default:[]
   field :unresolved,     type:Array, default:[]
   field :present,        type:Array, default:[]
@@ -17,23 +17,16 @@ class Dialog
 
 
   def serialize
-    response_hash = {
-      awaiting_field: awaiting_field,
+    {
       id: id,
-      response: response
-    }
-
-    h = {
       intent_id: intent_id,
       priority: priority,
-      responses: [ response_hash ]
+      response: response,
+      unresolved: unresolved,
+      missing: missing,
+      present: present,
+      awaiting_field: awaiting_field
     }
-
-    h.merge!( unresolved: unresolved ) if unresolved.any?( &:present?        )
-    h.merge!( missing:   missing     ) if missing.any?(    &:present?        )
-    h.merge!( present:   present     ) if present.try(:any?){ |p| p.present? }
-
-    h
   end
 
 
