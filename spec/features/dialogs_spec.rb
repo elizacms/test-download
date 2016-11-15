@@ -64,7 +64,7 @@ feature 'Dialogs', :js do
     find( '.icon-pencil' ).click
     fill_in :response, with: 'Crazy Fish'
 
-    click_button 'Create Dialog'
+    click_button 'Update Dialog'
 
     expect( page ).to have_content 'Crazy Fish'
     expect( Dialog.count         ).to eq 1
