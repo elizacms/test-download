@@ -79,6 +79,12 @@ table.jsgrid-table {
   display: inline;
 }
 
+.row3{
+  width: 3%;
+}
+.row4{
+  width: 4%;
+}
 .row5{
   width: 5%;
 }
@@ -87,6 +93,9 @@ table.jsgrid-table {
 }
 .row16{
   width: 16%;
+}
+.row20{
+  width: 20%;
 }
 .row30{
   width: 30%;
