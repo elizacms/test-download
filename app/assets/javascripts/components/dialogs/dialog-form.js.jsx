@@ -275,7 +275,7 @@ var DialogForm = React.createClass({
           <button
             onClick={this.createOrUpdateDialog}
             className='btn lg ghost dialog-btn pull-right'
-          >Create Dialog</button> &nbsp;
+          >{this.props.createOrUpdateBtnText()}</button> &nbsp;
         </form>
       </div>
     );

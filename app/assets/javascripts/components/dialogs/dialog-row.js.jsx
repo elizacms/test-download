@@ -42,6 +42,10 @@ var DialogRow = React.createClass({
   editRow(e){
     e.preventDefault();
     this.props.sendData(this.props.data);
+
+    $('html, body').animate({
+      scrollTop: $("form").offset().top - 50
+    }, 300);
   },
 
   deleteRow(e){

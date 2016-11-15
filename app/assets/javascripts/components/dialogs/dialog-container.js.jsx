@@ -52,6 +52,18 @@ var DialogContainer = React.createClass({
     });
   },
 
+  createOrUpdateBtnText(){
+    var text;
+
+    if (this.state.isUpdate == true){
+      text = 'Update Dialog';
+    } else {
+      text = 'Create Dialog';
+    }
+
+    return text;
+  },
+
   componentDidMount() {
     this.getAllScenarios();
   },
@@ -137,6 +149,7 @@ var DialogContainer = React.createClass({
           form={this.state.form}
           resetIsUpdateState={this.resetIsUpdateState}
           resetDialogData={this.resetDialogData}
+          createOrUpdateBtnText={this.createOrUpdateBtnText}
         ></DialogForm>
       </div>
     );
