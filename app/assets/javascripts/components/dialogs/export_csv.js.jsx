@@ -13,7 +13,7 @@ var ExportCSV = React.createClass({
     return (
       <div>
         <button onClick={this.getCSV} className='btn lg ghost export-csv pull-right'>
-          {this.props.title}
+          Export CSV
         </button>
 
         <br></br><br></br>

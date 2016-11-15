@@ -124,7 +124,7 @@ var DialogContainer = React.createClass({
   render: function() {
     return (
       <div>
-        <ExportCSV title='Export CSV' intent_id={this.props.intent_id}>
+        <ExportCSV intent_id={this.props.intent_id}>
         </ExportCSV>
 
         <DialogTable
