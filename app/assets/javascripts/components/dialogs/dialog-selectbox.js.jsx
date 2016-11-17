@@ -24,14 +24,28 @@ var DialogSelectbox = React.createClass({
   },
 
   selectBoxHandleChange(event){
-    this.setState({field1: event.target.value})
+    this.state.field1 = event.target.value;
+    this.setState({});
+
+    this.props.updateState( this.props.name, {
+      id: this.props.index,
+      value: this.state.field1,
+      inputValue: this.state.field2
+    });
   },
 
   inputHandleChange(event){
-    this.setState({field2: event.target.value})
+    this.state.field2 = event.target.value;
+    this.setState({});
+
+    this.props.updateState( this.props.name, {
+      id: this.props.index,
+      value: this.state.field1,
+      inputValue: this.state.field2
+    });
   },
 
-  duplicateRow(e){
+  addRow(e){
     e.preventDefault();
     this.props.addRow(this.props.name);
   },
@@ -73,7 +87,7 @@ var DialogSelectbox = React.createClass({
     var hasAdd = '';
     if ( this.props.index < 1){
       hasAdd = (
-        <a onClick={this.duplicateRow} href='#'>
+        <a onClick={this.addRow} href='#'>
           <span className='icon-plus pull-right'></span>
         </a>
       );

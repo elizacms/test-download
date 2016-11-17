@@ -90,6 +90,11 @@ var DialogForm = React.createClass({
     this.setState(currentState);
   },
 
+  updateState(name, obj){
+    this.state[name][obj.id] = obj;
+    this.setState({});
+  },
+
   deleteInput(input, key){
     var newState = this.state[key];
     newState.splice(newState.indexOf(input), 1)
@@ -213,13 +218,14 @@ var DialogForm = React.createClass({
                 return(
                   <DialogSelectbox
                     key={input.id}
-                    index={input.id}
+                    index={index}
                     fields={this.props.fields}
                     name='unresolved-field'
                     title='is unresolved'
                     addRow={this.addRow}
                     deleteInput={this.deleteInput.bind(this, input, 'unresolved-field')}
                     value={this.state['unresolved-field'][index].value}
+                    updateState={this.updateState}
                   ></DialogSelectbox>
                 );
               }.bind(this))}
@@ -227,13 +233,14 @@ var DialogForm = React.createClass({
                 return(
                   <DialogSelectbox
                     key={input.id}
-                    index={input.id}
+                    index={index}
                     fields={this.props.fields}
                     name='missing-field'
                     title='is missing'
                     addRow={this.addRow}
                     deleteInput={this.deleteInput.bind(this, input, 'missing-field')}
                     value={this.state['missing-field'][index].value}
+                    updateState={this.updateState}
                   ></DialogSelectbox>
                 );
               }.bind(this))}
@@ -241,7 +248,7 @@ var DialogForm = React.createClass({
                 return(
                   <DialogSelectbox
                     key={input.id}
-                    index={input.id}
+                    index={index}
                     fields={this.props.fields}
                     name='present-field'
                     title='is present'
@@ -252,6 +259,7 @@ var DialogForm = React.createClass({
                     inputPlaceholder='present value'
                     inputValue={this.state['present-field'][index].inputValue}
                     value={this.state['present-field'][index].value}
+                    updateState={this.updateState}
                   ></DialogSelectbox>
                 );
               }.bind(this))}
@@ -259,13 +267,14 @@ var DialogForm = React.createClass({
                 return(
                   <DialogSelectbox
                     key={input.id}
-                    index={input.id}
+                    index={index}
                     fields={this.props.fields}
                     name='awaiting-field'
                     title='Awaiting field'
                     addRow={this.addRow}
                     deleteInput={this.deleteInput.bind(this, input, 'awaiting-field')}
                     value={this.state['awaiting-field'][index].value}
+                    updateState={this.updateState}
                   ></DialogSelectbox>
                 );
               }.bind(this))}

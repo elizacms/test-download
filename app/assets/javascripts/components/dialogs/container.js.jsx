@@ -54,12 +54,7 @@ var Container = React.createClass({
 
   createOrUpdateBtnText(){
     var text;
-
-    if (this.state.isUpdate == true){
-      text = 'Update Dialog';
-    } else {
-      text = 'Create Dialog';
-    }
+    text = this.state.isUpdate == true ? 'Update Dialog' : 'Create Dialog';
 
     return text;
   },
