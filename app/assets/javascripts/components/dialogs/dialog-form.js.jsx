@@ -148,7 +148,7 @@ var DialogForm = React.createClass({
     this.props.createOrUpdateDialog(data);
   },
 
-  render: function() {
+  render() {
     var inputs = [
       {
         name: 'unresolved-field',
@@ -203,15 +203,15 @@ var DialogForm = React.createClass({
               onChange={this.aneedaSaysHandleChange} />
           </div>
 
-          <DialogMessage message={this.props.response} name='aneeda-says-error'>
-          </DialogMessage>
+          <Message message={this.props.response} name='aneeda-says-error'>
+          </Message>
           <hr className='margin0'></hr>
 
           <table className='dialog'>
             <tbody>
               {this.state['unresolved-field'].map(function(input, index){
                 return(
-                  <DialogSelectBox
+                  <DialogSelectbox
                     key={input.id}
                     index={input.id}
                     fields={this.props.fields}
@@ -220,12 +220,12 @@ var DialogForm = React.createClass({
                     addRow={this.addRow}
                     deleteInput={this.deleteInput.bind(this, input, 'unresolved-field')}
                     value={this.state['unresolved-field'][index].value}
-                  ></DialogSelectBox>
+                  ></DialogSelectbox>
                 );
               }.bind(this))}
               {this.state['missing-field'].map(function(input, index){
                 return(
-                  <DialogSelectBox
+                  <DialogSelectbox
                     key={input.id}
                     index={input.id}
                     fields={this.props.fields}
@@ -234,12 +234,12 @@ var DialogForm = React.createClass({
                     addRow={this.addRow}
                     deleteInput={this.deleteInput.bind(this, input, 'missing-field')}
                     value={this.state['missing-field'][index].value}
-                  ></DialogSelectBox>
+                  ></DialogSelectbox>
                 );
               }.bind(this))}
               {this.state['present-field'].map(function(input, index){
                 return(
-                  <DialogSelectBox
+                  <DialogSelectbox
                     key={input.id}
                     index={input.id}
                     fields={this.props.fields}
@@ -252,12 +252,12 @@ var DialogForm = React.createClass({
                     inputPlaceholder='present value'
                     inputValue={this.state['present-field'][index].inputValue}
                     value={this.state['present-field'][index].value}
-                  ></DialogSelectBox>
+                  ></DialogSelectbox>
                 );
               }.bind(this))}
               {this.state['awaiting-field'].map(function(input, index){
                 return(
-                  <DialogSelectBox
+                  <DialogSelectbox
                     key={input.id}
                     index={input.id}
                     fields={this.props.fields}
@@ -266,7 +266,7 @@ var DialogForm = React.createClass({
                     addRow={this.addRow}
                     deleteInput={this.deleteInput.bind(this, input, 'awaiting-field')}
                     value={this.state['awaiting-field'][index].value}
-                  ></DialogSelectBox>
+                  ></DialogSelectbox>
                 );
               }.bind(this))}
             </tbody>

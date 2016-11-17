@@ -1,4 +1,4 @@
-var DialogTable = React.createClass({
+var Table = React.createClass({
   propTypes: {
     title: React.PropTypes.string
   },
@@ -18,13 +18,13 @@ var DialogTable = React.createClass({
             </tr>
             {
               this.props.data.map(function(dialog, index){
-                return <DialogRow
+                return <TableRow
                           sendData={this.props.sendData}
                           deleteRow={this.props.deleteRow}
                           data={dialog}
                           key={index}
                           itemIndex={index}
-                        >{dialog}</DialogRow>;
+                        >{dialog}</TableRow>;
               }.bind(this))
             }
           </tbody>

@@ -1,4 +1,4 @@
-var DialogSelectBox = React.createClass({
+var DialogSelectbox = React.createClass({
   propTypes: {
   },
 
@@ -9,7 +9,7 @@ var DialogSelectBox = React.createClass({
     };
   },
 
-  componentDidMount () {
+  componentDidMount() {
     this.setState({
       field1: this.props.value,
       field2: this.props.inputValue
@@ -41,7 +41,7 @@ var DialogSelectBox = React.createClass({
     this.props.deleteInput();
   },
 
-  render: function() {
+  render() {
     var field_options = (
       this.props.fields.map(function(field, index){
         return <option key={index}>{field}</option>;

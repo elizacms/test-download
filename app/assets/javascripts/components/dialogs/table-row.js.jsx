@@ -1,4 +1,4 @@
-var DialogRow = React.createClass({
+var TableRow = React.createClass({
   propTypes: {
     title: React.PropTypes.string
   },
@@ -56,7 +56,7 @@ var DialogRow = React.createClass({
     }
   },
 
-  render: function() {
+  render() {
     let data = this.props.data;
     return (
       <tr className="dialog-data">

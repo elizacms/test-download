@@ -1,4 +1,4 @@
-var DialogMessage = React.createClass({
+var Message = React.createClass({
   propTypes: {
   },
 
@@ -7,7 +7,9 @@ var DialogMessage = React.createClass({
       this.props.message[this.props.name] : '' ;
   },
 
-  render: function() {
-    return(<div className={this.props.name}>{this.messageText()}</div>);
+  render() {
+    return (
+      <div className={this.props.name}>{this.messageText()}</div>
+    );
   }
 });

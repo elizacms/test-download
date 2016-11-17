@@ -1,4 +1,4 @@
-var DialogContainer = React.createClass({
+var Container = React.createClass({
   id: 'dialog-container',
 
   propTypes: {
@@ -121,21 +121,21 @@ var DialogContainer = React.createClass({
     }.bind(this));
   },
 
-  render: function() {
+  render() {
     return (
       <div>
         <ExportCSV intent_id={this.props.intent_id}>
         </ExportCSV>
 
-        <DialogTable
+        <Table
           sendData={this.sendData}
           deleteRow={this.deleteRow}
           data={this.state.data}
-        ></DialogTable>
-        <DialogMessage
+        ></Table>
+        <Message
           message={this.state.message}
           name='response-message'
-        ></DialogMessage>
+        ></Message>
 
         <br></br><br></br>
         <DialogForm
