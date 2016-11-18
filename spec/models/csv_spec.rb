@@ -11,14 +11,23 @@ describe CSV do
   let!( :dialog2 ){
     create :dialog,
     intent_id: intent.name,
-    missing: ["missing this", "missing that"],
-    unresolved: ["This is unresolved", "That is unresolved too"]
+    missing: ['missing this', 'missing that'],
+    unresolved: ['This is unresolved', 'That is unresolved too']
+  }
+
+  let!( :dialog3 ){
+    create :dialog,
+    intent_id: intent.name,
+    missing: ['missing'],
+    unresolved: [],
+    awaiting_field: [],
+    response: 'I would like an Uber, please.'
   }
 
   let( :expected ){
     "intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en\n"\
-    "#{intent.name},90,\"['destination']\",[],\"['A missing rule']\",\"[('a','b'),('c','d'),'efg']\""\
-    ",Where would you like to go?"
+    "#{intent.name},90,\"['destination']\",[],\"['A missing rule']\","\
+    "\"[('a','b'),('c','d'),'efg']\",Where would you like to go?"
   }
 
   let( :expected2 ){
@@ -27,11 +36,20 @@ describe CSV do
     "\"['missing this','missing that']\",[],Where would you like to go?"
   }
 
+  let( :expected3 ){
+    "intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en\n"\
+    "#{intent.name},90,[],[],\"['missing']\",[],\"I would like an Uber, please.\""
+  }
+
   specify 'Empty values' do
     expect( CSV.for( [ dialog ] ) ).to eq expected
   end
 
   specify 'Multiple Entries for missing/unresolved/awaiting' do
     expect( CSV.for( [ dialog2 ] ) ).to eq expected2
+  end
+
+  specify 'If aneeda_en has a comma in it, it should still be in one field' do
+    expect( CSV.for( [ dialog3 ] ) ).to eq expected3
   end
 end

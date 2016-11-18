@@ -25,7 +25,7 @@ class CSV
         format( d.unresolved     ),
         format( d.missing        ),
         format_present_field( d.present ),
-        d.response
+        format_response( d.response     )
       ]
     end
 
@@ -48,6 +48,10 @@ class CSV
       %Q/"[#{ pairs.map! do |pair|
         pair[1].blank? ? "'#{pair[0]}'" : "('#{pair[0]}','#{pair[1]}')"
       end.join(",") }]"/
+    end
+
+    def format_response( value )
+      value.include?(',') ? %Q/"#{value}"/ : value
     end
   end
 end
