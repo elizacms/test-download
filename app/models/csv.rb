@@ -18,27 +18,21 @@ class CSV
 
     private
 
-    def row_for d
+    def row_for( d )
       [
         d.priority,
-        d.awaiting_field,
-        format_single( d.unresolved     ),
-        format_single( d.missing        ),
+        format( d.awaiting_field ),
+        format( d.unresolved     ),
+        format( d.missing        ),
         format_present_field( d.present ),
         d.response
       ]
     end
 
-    def format_single value
+    def format( value )
       return '[]' if value.all?( &:blank? )
 
-      value.to_a.to_s.gsub( '"', "'" )
-    end
-
-    def format_double pair
-      return '[]' if pair.nil? || pair.first.blank?
-
-      %Q/"[('#{ pair.first }','#{ pair.last }')]"/
+      %Q/"[#{ value.map! { |v| "'#{v}'" }.join(",") }]"/
     end
 
     def make_pairs( ary )

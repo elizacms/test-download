@@ -90,9 +90,10 @@ describe 'Dialogs' do
   describe 'CSV export' do
     let( :header_row ){ "intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en\n" }
     let( :data_row   ){
-      %Q/#{ intent.name },90,destination,['unresolved'],['destination'],"[('present','value')]",where would you like to go/
+      "#{ intent.name },90,\"['destination']\",\"['unresolved']\",\"['destination']\""\
+      ",\"[('present','value')]\",where would you like to go"
     }
-    let( :csv        ){ header_row + data_row }
+    let( :csv ){ header_row + data_row }
 
     before do
       header 'Content-Type', 'application/json'
