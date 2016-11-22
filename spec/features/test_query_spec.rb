@@ -1,5 +1,3 @@
-require 'http_mocks/nlu_mock_spec'
-
 describe 'Test Query' do
   let( :developer ){ create :developer }
 
