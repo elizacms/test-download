@@ -1,3 +1,5 @@
+require 'httparty'
+
 class PagesController < ApplicationController
   before_action :validate_user_from_identity, only:[ :login_success ]
 
@@ -22,6 +24,22 @@ class PagesController < ApplicationController
         notice: "You've been successfully logged out."
       }
     )
+  end
+
+  def test_query
+    @q = params[:test_query]
+
+    if @q
+      encode_q = URI::encode( @q )
+
+      @response =
+        JSON.pretty_generate(
+          HTTParty.get(
+            "http://nlu.iamplus.com:8080/query?"\
+            "text=#{encode_q}&user_id=#{current_user.email}"
+          )
+        )
+    end
   end
 
 
@@ -63,7 +81,7 @@ class PagesController < ApplicationController
   end
 
   def get_account_from_identity
-    # Redirected form Identity with code in URL param.
+    # Redirected from Identity with code in URL param.
     # Now get token from identity
 
     begin

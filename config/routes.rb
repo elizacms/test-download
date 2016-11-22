@@ -8,6 +8,10 @@ Rails.application.routes.draw do
 
   root to:'pages#index'
 
+  get '/test-query',
+    to: 'pages#test_query',
+    as: :test_query
+
   get '/login/success',
     to: 'pages#login_success',
     as: :login_success
