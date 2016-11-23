@@ -1,4 +1,4 @@
-describe 'Test Query' do
+describe 'NLU Query' do
   let( :developer ){ create :developer }
 
   specify 'User should be able to make a request of the NLU' do
@@ -9,9 +9,9 @@ describe 'Test Query' do
     stub_identity_account_for developer.email
     visit '/login/success?code=0123abc'
 
-    visit '/test-query'
+    visit '/nlu-query'
 
-    fill_in :test_query, with: 'Find me Green Day concerts'
+    fill_in :nlu_query, with: 'Find me Green Day concerts'
 
     click_button 'Test'
 

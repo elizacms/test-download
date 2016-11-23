@@ -1,5 +1,3 @@
-require 'httparty'
-
 class PagesController < ApplicationController
   before_action :validate_user_from_identity, only:[ :login_success ]
 
@@ -26,18 +24,16 @@ class PagesController < ApplicationController
     )
   end
 
-  def test_query
-    @q = params[:test_query]
+  def nlu_query
+    @q = params[:nlu_query]
 
     if @q
       encode_q = URI::encode( @q )
+      params = {text: encode_q, user_id: current_user.email}
 
       @response =
         JSON.pretty_generate(
-          HTTParty.get(
-            "http://nlu.iamplus.com:8080/query?"\
-            "text=#{encode_q}&user_id=#{current_user.email}"
-          )
+          HTTParty.get( "http://nlu.iamplus.com:8080/query", query: params )
         )
     end
   end

@@ -1,10 +1,10 @@
-<h2>Test Query</h2>
+<h2>NLU Query</h2>
 
 <%= form_for(
   'nlu.iamplus.com:8080/query',
   method: :get
 ) do %>
-  <%= text_field_tag :test_query, nil, class: 'form-control' %>
+  <%= text_field_tag :nlu_query, nil, class: 'form-control' %>
   <%= submit_tag 'Test', class: 'btn lg black pull-right' %>
   <br>
 <% end %>
