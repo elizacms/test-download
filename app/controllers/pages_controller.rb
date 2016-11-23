@@ -24,6 +24,20 @@ class PagesController < ApplicationController
     )
   end
 
+  def nlu_query
+    @q = params[:nlu_query]
+
+    if @q
+      encode_q = URI::encode( @q )
+      params = {text: encode_q, user_id: current_user.email}
+
+      @response =
+        JSON.pretty_generate(
+          HTTParty.get( "http://nlu.iamplus.com:8080/query", query: params )
+        )
+    end
+  end
+
 
   private
 
@@ -63,7 +77,7 @@ class PagesController < ApplicationController
   end
 
   def get_account_from_identity
-    # Redirected form Identity with code in URL param.
+    # Redirected from Identity with code in URL param.
     # Now get token from identity
 
     begin

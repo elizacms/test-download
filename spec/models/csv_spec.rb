@@ -1,4 +1,4 @@
-describe CSV do
+describe CustomCSV do
   let(  :user    ){ create :user                           }
   let(  :skill   ){ create :skill,  user:  user            }
   let(  :intent  ){ create :intent, skill: skill           }
@@ -42,14 +42,14 @@ describe CSV do
   }
 
   specify 'Empty values' do
-    expect( CSV.for( [ dialog ] ) ).to eq expected
+    expect( CustomCSV.for( [ dialog ] ) ).to eq expected
   end
 
   specify 'Multiple Entries for missing/unresolved/awaiting' do
-    expect( CSV.for( [ dialog2 ] ) ).to eq expected2
+    expect( CustomCSV.for( [ dialog2 ] ) ).to eq expected2
   end
 
   specify 'If aneeda_en has a comma in it, it should still be in one field' do
-    expect( CSV.for( [ dialog3 ] ) ).to eq expected3
+    expect( CustomCSV.for( [ dialog3 ] ) ).to eq expected3
   end
 end

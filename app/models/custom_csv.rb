@@ -1,4 +1,4 @@
-class CSV
+class CustomCSV
   class << self
     def for dialogs
       header = "intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en\n"

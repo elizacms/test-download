@@ -8,6 +8,10 @@ Rails.application.routes.draw do
 
   root to:'pages#index'
 
+  get '/nlu-query',
+    to: 'pages#nlu_query',
+    as: :nlu_query
+
   get '/login/success',
     to: 'pages#login_success',
     as: :login_success

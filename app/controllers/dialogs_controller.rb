@@ -51,7 +51,7 @@ class DialogsController < ApplicationController
     response.headers[ 'Content-Type'        ] = 'text/csv'
     response.headers[ 'Content-Disposition' ] = %Q/attachment; filename="#{ filename }"/
 
-    render inline: CSV.for( dialogs )
+    render inline: CustomCSV.for( dialogs )
   end
 
 
