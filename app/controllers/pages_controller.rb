@@ -29,11 +29,11 @@ class PagesController < ApplicationController
 
     if @q
       encode_q = URI::encode( @q )
-      params = {text: encode_q, user_id: current_user.email}
+      query = {text: encode_q, user_id: current_user.email}
 
       @response =
         JSON.pretty_generate(
-          HTTParty.get( "http://nlu.iamplus.com:8080/query", query: params )
+          HTTParty.get( "http://nlu.iamplus.com:8080/query", query: query )
         )
     end
   end
