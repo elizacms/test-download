@@ -1,9 +1,13 @@
-var types = [
-    { name: 'Boolean'  },
-    { name: 'Time'     },
-    { name: 'DateTime' },
-    { name: 'Text'     }
-];
+function initFieldDataTypes(){
+    types = $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: '/types/field-data-types',
+        data: null
+    }).done(function(){
+        initFields()
+    });
+}
 
 function initFields(){
     $('#jsGrid').jsGrid({
@@ -61,7 +65,7 @@ function initFields(){
                 type: 'select',
                 width: 100,
                 validate: 'required',
-                items: types,
+                items: types.responseJSON,
                 valueField: 'name',
                 textField: 'name'
             },

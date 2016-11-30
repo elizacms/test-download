@@ -35,8 +35,12 @@ Rails.application.routes.draw do
       to: 'api#get_webhook'
   end
 
+  get '/types/field-data-types',
+    to: 'types#field_data_types',
+    as: :field_data_types
+
   post '/dialogue_api/response',
-    to:'dialogs#create',
+    to: 'dialogs#create',
     as: :submit_dialogs
 
   put '/dialogue_api/response',
@@ -44,14 +48,14 @@ Rails.application.routes.draw do
     as: :update_dialogs
 
   get '/dialogue_api/all_scenarios',
-    to:'dialogs#index',
+    to: 'dialogs#index',
     as: :get_dialogs
 
   get '/dialogue_api/csv',
-    to:'dialogs#csv'
+    to: 'dialogs#csv'
 
   delete '/dialogue_api/response',
-    to:'dialogs#delete',
+    to: 'dialogs#delete',
     as: :delete_dialogs
 
   get '/skills/:skill_id/intents/:id/fields',
@@ -62,5 +66,3 @@ Rails.application.routes.draw do
     to: 'intents#dialogs',
     as: :dialogs_page
 end
-
-
