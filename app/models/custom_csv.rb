@@ -30,9 +30,9 @@ class CustomCSV
     end
 
     def format( value )
-      return '[]' if value.all?( &:blank? )
+      return 'None' if value.all?( &:blank? )
 
-      %Q/"[#{ value.map! { |v| "'#{v}'" }.join(",") }]"/
+      %Q/#{ value.map! { |v| v }.join(" && ") }/
     end
 
     def make_pairs( ary )
@@ -43,15 +43,15 @@ class CustomCSV
 
     def format_present_field( ary )
       pairs = make_pairs(ary)
-      return '[]' if pairs.nil? || pairs.all? { |v| v.blank? }
+      return 'None' if pairs.nil? || pairs.flatten.all? { |v| v.blank? }
 
-      %Q/"[#{ pairs.map! do |pair|
-        pair[1].blank? ? "'#{pair[0]}'" : "('#{pair[0]}','#{pair[1]}')"
-      end.join(",") }]"/
+      %Q/#{ pairs.map! do |pair|
+        pair[1].blank? ? "#{pair[0]}" : "#{pair[0]} && #{pair[1]}"
+      end.join(" && ") }/
     end
 
     def format_response( value )
-      value.include?(',') ? %Q/"#{value}"/ : value
+      value.include?(',') ? %Q/#{value}/ : value
     end
   end
 end
