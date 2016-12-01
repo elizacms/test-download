@@ -5,3 +5,8 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+FieldDataType.create( name: 'Boolean'  )
+FieldDataType.create( name: 'Date'     )
+FieldDataType.create( name: 'DateTime' )
+FieldDataType.create( name: 'Text'     )
