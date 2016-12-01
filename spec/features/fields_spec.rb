@@ -1,8 +1,9 @@
 feature 'Fields', :js do
-  let(  :developer ){ create :developer              }
-  let!( :skill     ){ create :skill, user: developer }
-  let!( :intent    ){ create :intent, skill: skill   }
-  let!( :field     ){ create :field, intent: intent  }
+  let(  :developer       ){ create :developer              }
+  let!( :skill           ){ create :skill, user: developer }
+  let!( :intent          ){ create :intent, skill: skill   }
+  let!( :field           ){ create :field, intent: intent  }
+  let!( :field_data_type ){ create :field_data_type        }
 
   before do
     stub_identity_token
