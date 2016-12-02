@@ -105,7 +105,7 @@ var DialogSelectbox = React.createClass({
             value={this.state.field1}
             onChange={this.selectBoxHandleChange}
           >
-            <option></option>
+            <option>None</option>
             {field_options}
           </select>
         </td>
