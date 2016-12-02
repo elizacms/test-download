@@ -65,8 +65,8 @@ feature 'Fields', :js do
       }
     }
 
-    let( :json_div_content ){
-      find( 'div.json' ).native.attribute( 'innerHTML' ).gsub( /\s/, '' )
+    let( :code_json_content ){
+      find( 'code.json' ).native.attribute( 'innerHTML' ).gsub( /\s/, '' )
     }
 
     specify do
@@ -78,7 +78,9 @@ feature 'Fields', :js do
 
       click_button 'JSON'
 
-      expect( json_div_content ).to eq json
+      expect( code_json_content ).to have_content 'get_ride'
+      expect( code_json_content ).to have_content 'mturk_field'
+      expect( code_json_content ).to have_content 'Uber.Destination'
     end
   end
 end

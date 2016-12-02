@@ -82,7 +82,12 @@ function initFields(){
 
 function initJSON(){
     $( 'button.json' ).click(function() {
-        $( 'div.json' ).text( createJSON() );
+        $( 'code.json' ).text( createJSON() );
+
+        // Highlight the code.
+        $('pre code').each(function(i, block) {
+            hljs.highlightBlock(block);
+        });
     });
 }
 

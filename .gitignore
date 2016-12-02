@@ -21,3 +21,6 @@
 .byebug_history
 
 .env
+
+# Yes, we use MACs.
+.DS_Store
