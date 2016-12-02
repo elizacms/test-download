@@ -10,7 +10,13 @@
 <% end %>
 
 <div class='fields'>
-  <div class='json'>
-    <%= @response %>
-  </div>
+  <pre>
+    <code class='json'>
+      <%= @response %>
+    </code>
+  </pre>
 </div>
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
