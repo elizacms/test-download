@@ -3,8 +3,6 @@ class User
   include Mongoid::Timestamps
   include Rollable
 
-  has_many :skills
-
   field :email, type:String
 
   validates_presence_of   :email

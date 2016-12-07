@@ -1,13 +1,37 @@
 describe User do
-  let!( :user ){ create :user }
+  let!( :user  ){ create :user  }
+  let!( :skill ){ create :skill }
 
-  specify 'Find includes roles' do
-    user.set_roles :admin, :developer
+  specify 'Set Admin Role' do
+    user.set_role :admin
 
-    # Mongoid.logger.level = Logger::DEBUG
+    expect( User.find( user ).roles.pluck( :name )).to eq [ 'admin' ]
+  end
 
-    # User.find( user ).roles.each do |r|
-    #   ap r.name
-    # end
+  specify 'Set Skill Owner Role' do
+    user.set_role :owner, skill.name
+
+    expect( user.get_roles ).to eq [{ name:'owner', skill:skill.name }]
+  end
+
+  specify 'Set Skill Developer Role' do
+    user.set_role :developer, skill.name
+
+    expect( user.get_roles ).to eq [{ name:'developer', skill:skill.name }]
+  end
+
+  specify '#has_role' do
+    user.set_role :developer, skill.name
+
+    expect( user.has_role?( :developer, skill.name )).to eq true
+    expect( user.has_role?( :owner,     skill.name )).to eq false
+  end
+
+  specify '#remove_role' do
+    user.set_role :developer, skill.name
+    expect( user.has_role?( :developer, skill.name )).to eq true
+
+    user.remove_role :developer, skill.name
+    expect( user.has_role?( :developer, skill.name )).to eq false
   end
 end
