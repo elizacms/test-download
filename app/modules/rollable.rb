@@ -18,10 +18,14 @@ module Rollable
   end
 
   def get_roles
-    roles.map{| r |{ name:r.name, skill:r.skill.name }}
+    roles.map do | r |
+      { name:r.name }.tap do | h |
+        h.merge!( skill:r.skill.name ) if r.skill
+      end
+    end
   end
 
-  def has_role? role, skill_name
+  def has_role? role, skill_name=nil
     skill = Skill.find_by( name:skill_name )
 
     !! roles.find_by( name:role, skill:skill )
