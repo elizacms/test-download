@@ -10,6 +10,12 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
+  def owners
+    @skills = current_user.skills_owned
+
+    @users = User.all
+  end
+
   def create
     @user = User.create( user_params )
 
@@ -71,7 +77,7 @@ class UsersController < ApplicationController
   private
 
   def validate_admin
-    if current_user.nil? || !current_user.admin?
+    if current_user.nil? || !current_user.has_role?( 'admin', nil )
       redirect_to(
         root_path,
         flash: {

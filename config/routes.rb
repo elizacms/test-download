@@ -18,6 +18,12 @@ Rails.application.routes.draw do
 
   resources :users
 
+  resources :roles
+
+  get '/owners/:skill_id',
+    to: 'users#owners',
+    as: :owners
+
   resources :skills do
     resources :intents
 

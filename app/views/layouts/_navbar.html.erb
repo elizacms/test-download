@@ -7,7 +7,7 @@
 
     <div id="desktop-menu" class="nav navbar-nav pull-right">
       <% if @current_user %>
-        <% if @current_user.admin? %>
+        <% if @current_user.has_role?( 'admin', nil ) %>
           <%= link_to 'Users', users_path %>
         <% end %>
 

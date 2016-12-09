@@ -8,15 +8,13 @@
     <tr>
       <th>Email</th>
       <th>Admin</th>
-      <th>Developer</th>
       <th></th>
     </tr>
   </thead>
 <% @users.each do |u| %>
   <tr>
     <td><%= u.email %></td>
-    <td class='<%= u.admin? ? "icon-check" : "icon-cross" %>'></td>
-    <td class='<%= u.developer? ? "icon-check" : "icon-cross" %>'></td>
+    <td class='<%= u.has_role?('admin', nil) ? "icon-check" : "icon-cross" %>'></td>
     <td><%= link_to( "Edit", edit_user_path(u.id), class: "btn sm black" ) %></td>
   </tr>
 <% end %>

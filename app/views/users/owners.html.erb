@@ -1,0 +1,60 @@
+<h2>
+  <div class="pull-left">Total Users: <%= @users.count %></div>
+  <a class="btn black lg pull-right" href='/users/new'>Invite new User</a>
+</h2>
+
+<br><br>
+
+<div class="row">
+  <div class="col-md-offset-4 col-md-4">
+    <%= form_tag do %>
+      Skill:
+      <%= select_tag(
+        'skill',
+        options_for_select( @skills.map{ |s| [s.name, s.id] }, params[:skill_id] ),
+        onchange: "updateSkill()"
+      ) %>
+    <% end %>
+  </div>
+</div>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Role</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |u| %>
+      <tr>
+        <%= form_for( Role.new ) do |f| %>
+          <%= f.hidden_field :user_id, value: u.id %>
+          <%= f.hidden_field :skill_id,value: @skills.first.id %>
+          <td><%= u.email %> <%= '(self)' if u == @current_user %></td>
+          <td>
+            <%= f.select(
+              'name',
+              options_for_select(
+                [['None', ''], ['Developer', 'developer']],
+                ( 'developer' if is_dev_for_skill?( params[:skill_id], u ) )
+              )
+            ) %>
+          </td>
+          <td>
+            <%= f.submit 'Submit', class: 'btn lg black' %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  function updateSkill(){
+    var skill_id = $('#skill').val();
+    console.log(skill_id);
+    location.href = '/owners/' + skill_id;
+  }
+</script>
