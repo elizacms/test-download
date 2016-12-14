@@ -14,30 +14,32 @@ feature 'Owners', :focus do
     visit '/login/success?code=0123abc'
   end
 
-  specify 'can visit /owners' do
-    visit '/owners'
-  end
-
-  specify 'visiting a false url sends the user to the first skill' do
-    visit '/owners/dingo-brains'
-
-    within '.role-0' do
-      select 'Developer', from: 'users[0]name'
+  describe 'can visit url and change skills' do
+    specify 'can visit /owners' do
+      visit '/owners'
     end
 
-    click_button 'Save All'
-    expect( admin.has_role?('developer', skill1.name) ).to eq true
-  end
+    specify 'visiting a false url sends the user to the first skill' do
+      visit '/owners/dingo-brains'
 
-  describe 'ajax -- one at a time', :js do
-    specify 'can select skill' do
+      within '.role-0' do
+        select 'Developer', from: 'users[0]name'
+      end
+
+      click_button 'Save All'
+      expect( admin.has_role?('developer', skill1.name) ).to eq true
+    end
+
+    specify 'can select skill', :js do
       visit "/owners/#{skill1.id}"
 
       select 'SUPER', from: 'skill'
 
       expect( current_path ).to eq "/owners/#{skill2.id}"
     end
+  end
 
+  describe 'ajax -- one at a time', :js do
     specify 'can set user to a developer' do
       visit "/owners/#{skill1.id}"
 
