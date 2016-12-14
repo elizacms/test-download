@@ -18,7 +18,18 @@ Rails.application.routes.draw do
 
   resources :users
 
-  resources :roles
+  match '/roles',
+    to: 'roles#ajax_set_or_unset_role',
+    as: :ajax_set_or_unset_role,
+    via: ['POST', 'PATCH']
+
+  post '/all-roles',
+    to: 'roles#set_all_roles',
+    as: :set_all_roles
+
+  get '/owners',
+    to: 'users#owners',
+    as: :users_owners
 
   get '/owners/:skill_id',
     to: 'users#owners',

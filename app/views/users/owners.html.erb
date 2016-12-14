@@ -11,50 +11,83 @@
       Skill:
       <%= select_tag(
         'skill',
-        options_for_select( @skills.map{ |s| [s.name, s.id] }, params[:skill_id] ),
+        options_for_select(
+          @skills.map{ |s| [s.name, s.id] },
+          params[:skill_id]
+        ),
         onchange: "updateSkill()"
       ) %>
     <% end %>
   </div>
 </div>
 
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>Email</th>
-      <th>Role</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @users.each do |u| %>
+<%= form_tag(
+  { controller: "roles", action: "set_all_roles" },
+  { method: "POST" }
+) do %>
+  <%= hidden_field_tag "skill_id", params[:skill_id] %>
+  <table class="table table-hover">
+    <thead>
       <tr>
-        <%= form_for( Role.new ) do |f| %>
-          <%= f.hidden_field :user_id, value: u.id %>
-          <%= f.hidden_field :skill_id,value: @skills.first.id %>
+        <th>Email</th>
+        <th>Role</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each_with_index do |u, i| %>
+        <tr class="role-form role-<%= i %>">
+          <%= hidden_field_tag "users[#{i}]user_id", u.id %>
+          <%= hidden_field_tag(
+            "users[#{i}]role_id",
+            u.roles.find_by(name:'developer', skill:params[:skill_id]).try(:id),
+            { class: 'role-id' }
+          ) %>
           <td><%= u.email %> <%= '(self)' if u == @current_user %></td>
           <td>
-            <%= f.select(
-              'name',
+            <%= select_tag(
+              "users[#{i}]name",
               options_for_select(
                 [['None', ''], ['Developer', 'developer']],
-                ( 'developer' if is_dev_for_skill?( params[:skill_id], u ) )
+                ( 'developer' if is_dev_for_skill?( params[:skill_id], u ) ),
               )
             ) %>
           </td>
           <td>
-            <%= f.submit 'Submit', class: 'btn lg black' %>
+            <button class='btn lg black individualSubmit'>Submit</button>
           </td>
-        <% end %>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <button id='save-all' class='btn lg black pull-right'>Save All</button>
+<% end %>
 
 <script>
   function updateSkill(){
     var skill_id = $('#skill').val();
-    console.log(skill_id);
     location.href = '/owners/' + skill_id;
   }
+
+  $('.individualSubmit').click(function(e){
+    e.preventDefault();
+    var tr = $(this).closest('tr');
+    var data = tr.find('input').serialize();
+    data += "&name=" + tr.find('select').val();
+    data += "&skill_id=" + $(this).closest('form').find('#skill_id').val();
+
+    $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      url: '/roles',
+      data: data
+    }).done(function(r){
+      IAM.alert.run('yellow', r['notice'], 3000);
+      if (r['role_id'].$oid === undefined ){
+        this.closest('tr').find('input.role-id').attr('value', '');
+      } else {
+        this.closest('tr').find('input.role-id').attr('value', r['role_id'].$oid);
+      }
+    }.bind($(this)));
+  });
 </script>

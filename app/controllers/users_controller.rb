@@ -13,6 +13,10 @@ class UsersController < ApplicationController
   def owners
     @skills = current_user.skills_owned
 
+    if !Skill.find_by(id: params[:skill_id] )
+      params[:skill_id] = @skills.first.id
+    end
+
     @users = User.all
   end
 

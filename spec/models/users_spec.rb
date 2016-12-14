@@ -1,4 +1,4 @@
-describe User ,:focus do
+describe User do
   let!( :user  ){ create :user  }
   let!( :skill ){ create :skill }
 
