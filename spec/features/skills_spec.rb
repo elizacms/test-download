@@ -1,7 +1,9 @@
-feature 'Skills pages' do
-  let( :developer ){ create :developer }
+feature 'Skills pages', :focus do
+  let!( :developer ){ create :user  }
+  let!( :skill     ){ create :skill }
 
   before do
+    developer.set_role( 'developer', skill.name )
     stub_identity_token
     stub_identity_account_for developer.email
   end
@@ -10,14 +12,15 @@ feature 'Skills pages' do
     visit "/login/success?code=0123abc"
     visit '/skills'
 
-    expect( page ).to have_content '0 Skills'
+    expect( page ).to have_content '1 Skill'
   end
 
   describe 'Admin can see all Skills' do
-    let(  :admin ){ create :admin }
-    let!( :skill ){ create :skill, user:developer }
+    let!( :admin  ){ create :user, email: 'admin@iamplus.com' }
+    let!( :skill2 ){ create :skill, name: 'Easy Skill', web_hook: 'http://ea.sy'}
 
     before do
+      admin.set_role( 'admin', nil )
       stub_identity_account_for admin.email
     end
 
@@ -25,9 +28,8 @@ feature 'Skills pages' do
       visit "/login/success?code=0123abc"
       visit '/skills'
 
-      expect( page ).to have_content '1 Skill'
-      expect( page ).to have_content skill.name
-      expect( page ).to have_content skill.user.email
+      expect( page ).to have_content '2 Skills'
+      expect( page ).to have_content skill2 .name
     end
   end
 
@@ -39,24 +41,26 @@ feature 'Skills pages' do
     end
   end
 
-  context 'When not developer or admin cannot see skills' do
-    let( :user ){ create :user }
+  describe 'When not developer or admin cannot see skills' do
+    context do
+      let!( :non_dev ){ create :user, email: 'non_dev@iamplus.com' }
 
-    before do
-      stub_identity_account_for user.email
-    end
+      before do
+        stub_identity_account_for non_dev.email
+      end
 
-    specify do
-      visit "/login/success?code=0123abc"
-      visit '/skills'
+      specify do
+        visit "/login/success?code=0123abc"
+        visit '/skills'
 
-      expect( page ).to have_content 'Login'
-      expect( current_path ).to eq root_path
+        expect( page ).to have_content 'non_dev@iamplus.com'
+        expect( page ).to have_content '0 Skills'
+      end
     end
   end
 
   describe 'Developer can create a skill' do
-    let( :skill_name ){ 'Uber' }
+    let( :skill_name ){ 'Super Uber' }
     let( :web_hook   ){ 'https://skill-uber.i.am' }
 
     specify do
@@ -95,7 +99,14 @@ feature 'Skills pages' do
   end
 
   describe 'Developer can visit the edit page' do
-    let!( :skill ){ create :skill, user:developer }
+    let!( :skill ){ create :skill }
+    let!( :dev   ){ create :user, email: 'dev@iamplus.com'}
+
+    before do
+      dev.set_role( 'developer', skill.name )
+      stub_identity_token
+      stub_identity_account_for dev.email
+    end
 
     specify do
       visit '/login/success?code=0123abc'
@@ -109,7 +120,7 @@ feature 'Skills pages' do
   end
 
   describe "Developer can update the Skill's name" do
-    let!( :skill ){ create :skill, user:developer }
+    let!( :skill ){ create :skill }
     let( :updated_name ){ "Best Riding App" }
 
     specify do
@@ -129,7 +140,7 @@ feature 'Skills pages' do
   end
 
   describe 'Developer can delete a skill' do
-    let!( :skill ){ create :skill, user:developer }
+    let!( :skill ){ create :skill }
 
     specify do
       visit '/login/success?code=0123abc'
@@ -144,10 +155,11 @@ feature 'Skills pages' do
   end
 
   describe 'A developer cannot visit another developers skills' do
-    let!( :skill ){ create :skill, user:developer }
-    let!( :developer_2 ){ create :developer, email: "dev2@iamplus.com" }
+    let!( :skill ){ create :skill }
+    let!( :developer_2 ){ create :user, email: 'developer-2@iamplus.com' }
 
     before do
+      developer_2.set_role( 'developer', skill.name )
       stub_identity_token
       stub_identity_account_for developer_2.email
     end

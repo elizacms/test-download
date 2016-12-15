@@ -1,7 +1,8 @@
 feature 'Users pages' do
-  let!( :admin ){ create :admin }
+  let!( :admin  ){ create :user  }
 
   before do
+    admin.set_role( 'admin', nil )
     stub_identity_token
     stub_identity_account_for admin.email
   end
@@ -22,10 +23,10 @@ feature 'Users pages' do
   end
 
   context 'When not admin cannot see users' do
-    let( :user ){ create :user }
+    let( :non_admin ){ create :user, email: 'non-admin@iamplus.com' }
 
     before do
-      stub_identity_account_for user.email
+      stub_identity_account_for non_admin.email
     end
 
     specify do
@@ -48,16 +49,12 @@ feature 'Users pages' do
 
       within 'form' do
         fill_in :user_email, with: new_email
-        check :user_role_admin
-        check :user_role_developer
         click_button 'Submit'
       end
 
       expect( page ).to have_content 'Total Users: 2'
       expect( page ).to have_content new_email
       expect( page ).to have_content "User #{ new_email } created."
-      expect( page ).to have_css "td[class='icon-check']"
-      expect( page ).to have_css "td[class='icon-check']"
     end
   end
 
@@ -70,8 +67,6 @@ feature 'Users pages' do
 
       within 'form' do
         fill_in :user_email, with: "cash_is_hungry@iamplus.com"
-        check :user_role_admin
-        check :user_role_developer
         click_button "Submit"
       end
 
@@ -151,25 +146,29 @@ feature 'Users pages' do
   end
 
   describe "Admin can update the user's role to admin" do
-    let!( :user ){ create :user, email: "a_new_admin@iamplus.com" }
+    let!( :user2 ){ create :user, email: "a_new_admin@iamplus.com" }
     specify do
       visit '/login/success?code=0123abc'
       visit '/users'
 
-      visit "/users/#{user.id}/edit"
+      visit "/users/#{user2.id}/edit"
 
       within 'form' do
-        check :user_role_admin
+        # check :user_role_admin
         click_button 'Submit'
       end
 
-      expect( page ).to have_content "User #{user.email} updated."
-      expect( User.find( user ).admin? ).to eq true
+      expect( page ).to have_content "User #{user2.email} updated."
+      expect( User.find( user2 ).has_role?( 'admin', nil ) ).to eq true
     end
   end
 
   describe "Admin can take away a user's admin role" do
-    let( :admin2 ){ create :admin, email: "another_admin@iamplus.com" }
+    let( :admin2 ){ create :user, email: "another_admin@iamplus.com" }
+    before do
+      admin2.set_role( 'admin', nil )
+    end
+
     specify do
       visit '/login/success?code=0123abc'
       visit '/users'
@@ -177,17 +176,20 @@ feature 'Users pages' do
       visit "/users/#{admin2.id}/edit"
 
       within 'form' do
-        uncheck :user_role_admin
+        # uncheck :user_role_admin
         click_button 'Submit'
       end
 
       expect( page ).to have_content "User #{admin2.email} updated."
-      expect( User.find( admin2 ).admin? ).to eq false
+      expect( User.find( admin2 ).has_role?( 'admin', nil ) ).to eq false
     end
   end
 
   describe 'Admin can delete a user' do
-    let( :admin2 ){ create :admin, email:'admin2@iamplus.com' }
+    let( :admin2 ){ create :user, email:'admin2@iamplus.com' }
+    before do
+      admin2.set_role( 'admin', nil )
+    end
 
     specify do
       visit '/login/success?code=0123abc'

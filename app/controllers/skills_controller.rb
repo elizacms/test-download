@@ -1,5 +1,5 @@
 class SkillsController < ApplicationController
-  before_action :validate_admin_or_developer
+  before_action :validate_permissions_for_skill, only: [ :edit, :update, :destroy ]
   before_action :find_skill, only: [ :edit, :update, :destroy ]
 
   def index
@@ -11,7 +11,7 @@ class SkillsController < ApplicationController
   end
 
   def create
-    @skill = current_user.skills.create( skill_params )
+    @skill = Skill.create( skill_params )
 
     if @skill.persisted?
       redirect_to(
@@ -59,11 +59,11 @@ class SkillsController < ApplicationController
   private
 
   def skill_params
-    params.require( :skill ).permit( :name, :description, :web_hook )
+    params.require( :skill ).permit( :name, :description, :web_hook, :user_id )
   end
 
   def find_skill
-    @skill = current_user_skills.find_by( id: params[ :id ] )
+    @skill = current_user_skills.select { |s| s.id.to_s == params[:id] }.first
 
     redirect_to( skills_path ) if @skill.nil?
   end
