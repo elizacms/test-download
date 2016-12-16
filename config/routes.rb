@@ -8,9 +8,16 @@ Rails.application.routes.draw do
 
   root to:'pages#index'
 
-  get '/nlu-query',
+  match '/nlu-query',
     to: 'pages#nlu_query',
-    as: :nlu_query
+    as: :nlu_query,
+    via: [:get, :post]
+
+  post '/skills/news-skill-format',
+    to: 'pages#news_skill_format'
+
+  post '/skills/news-skill-retrieve',
+    to: 'pages#news_skill_retrieve'
 
   get '/login/success',
     to: 'pages#login_success',

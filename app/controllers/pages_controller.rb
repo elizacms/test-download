@@ -25,17 +25,29 @@ class PagesController < ApplicationController
   end
 
   def nlu_query
-    @q = params[:nlu_query]
+    if params[:nlu_query]
+      query = {text: URI::encode( params[:nlu_query] ), user_id: current_user.email}
 
-    if @q
-      encode_q = URI::encode( @q )
-      query = {text: encode_q, user_id: current_user.email}
-
-      @response =
-        JSON.pretty_generate(
-          HTTParty.get( "http://nlu.iamplus.com:8080/query", query: query )
-        )
+      @response = Courier.get_request( "http://nlu.iamplus.com:8080/query", query )
     end
+  end
+
+  def news_skill_format
+    render json: {
+      response: Courier.post_request(
+        'https://iamplus-skills-news.herokuapp.com/format',
+        params[:news_skill_format]
+      )
+    }, status: 200
+  end
+
+  def news_skill_retrieve
+    render json: {
+      response: Courier.post_request(
+        'https://iamplus-skills-news.herokuapp.com/retrieve',
+        params[:news_skill_retrieve]
+      )
+    }, status: 200
   end
 
 
