@@ -1,0 +1,110 @@
+<div class='wrapper-query'>
+  <h4>Wrapper Query</h4>
+
+  <%= form_for( '/test-queries', method: :post ) do %>
+    <%= hidden_field_tag :end_point, '/wrapper-query' %>
+    <%= text_field_tag :wrapper_query, nil, class: 'form-control text-input' %>
+    <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
+    <br>
+  <% end %>
+
+  <div class='fields'>
+    <div class='notes collapse'>
+      Response Time: <span class='time'></span>ms
+    </div>
+    <pre><code class='json'></code></pre>
+  </div>
+</div>
+
+<div class='nlu-query'>
+  <h4>NLU Query</h4>
+
+  <%= form_for( '/test-queries', method: :post ) do %>
+    <%= hidden_field_tag :end_point, '/nlu-query' %>
+    <%= text_field_tag :nlu_query, nil, class: 'form-control text-input' %>
+    <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
+    <br>
+  <% end %>
+
+  <div class='fields'>
+    <div class='notes collapse'>
+      Response Time: <span class='time'></span>ms
+    </div>
+    <pre><code class='json'></code></pre>
+  </div>
+</div>
+
+<div class='news-retrieve'>
+  <h4>News Skill (Retrieve)</h4>
+
+  <%= form_for( '/test-queries', method: :post ) do %>
+    <%= hidden_field_tag :end_point, '/skills/news-skill-retrieve' %>
+    <%= text_area_tag(
+      :news_skill_retrieve,
+      File.read("app/views/test_data/news_skill_retrieve.json"),
+      class: 'form-control text-input'
+    ) %>
+    <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
+    <br>
+  <% end %>
+
+  <div class='fields'>
+    <div class='notes collapse'>
+      Response Time: <span class='time'></span>ms
+    </div>
+    <pre><code class='json'></code></pre>
+  </div>
+</div>
+
+<div class='news-format'>
+  <h4>News Skill (Format)</h4>
+
+  <%= form_for( '/test-queries', method: :post ) do %>
+    <%= hidden_field_tag :end_point, '/skills/news-skill-format' %>
+    <%= text_area_tag(
+      :news_skill_format,
+      File.read("app/views/test_data/news_skill_format.json"),
+      class: 'form-control text-input'
+    ) %>
+    <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
+    <br>
+  <% end %>
+
+  <div class='fields'>
+    <div class='notes collapse'>
+      Response Time: <span class='time'></span>ms
+    </div>
+    <pre><code class='json'></code></pre>
+  </div>
+</div>
+
+<script>
+hljs.initHighlightingOnLoad();
+
+$('.test-btn').click(function(e){
+    e.preventDefault();
+    var startTime = new Date().getTime();
+
+    $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url:  $(this).siblings('input#end_point').val(),
+        data: $(this).siblings('.text-input').serialize()
+    }).done(function(r){
+        var timeTaken = (new Date().getTime() - startTime);
+        var this_div = $(this).closest('div');
+        var title = this_div.find('h4').html();
+
+        this_div.find('.time').html(timeTaken);
+        this_div.find('.title').html(title);
+        this_div.find('.notes').addClass('in');
+
+        this_div.find('.json').html(r['response']);
+
+        // Highlight the code.
+        $('pre code').each(function(i, block) {
+            hljs.highlightBlock(block);
+        });
+    }.bind(this));
+});
+</script>

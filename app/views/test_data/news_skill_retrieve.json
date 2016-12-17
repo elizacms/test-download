@@ -1,0 +1,18 @@
+{
+  "nlu_response": {
+    "intent": "news_search",
+    "mentions": [
+      {
+        "field_id": "topic",
+        "type": "text",
+        "value": "trump"
+      }
+    ],
+    "query_status": "success",
+    "response": "Looking for it",
+    "response_code": "0",
+    "response_language": "en",
+    "rule_hashes": [],
+    "version": "v1.2-130-g7ccd883"
+  }
+}
