@@ -1,5 +1,5 @@
 class ApiController < ApplicationController
-  skip_before_action :verify_authenticity_token
+  skip_before_action :verify_authenticity_token, only: [ :get_webhook ]
   before_action :validate_api_auth, only: [ :get_webhook ]
 
   def get_webhook

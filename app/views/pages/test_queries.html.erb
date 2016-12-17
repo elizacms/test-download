@@ -88,6 +88,9 @@ $('.test-btn').click(function(e){
     $.ajax({
         type: 'POST',
         dataType: 'json',
+        headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
         url:  $(this).siblings('input#end_point').val(),
         data: $(this).siblings('.text-input').serialize()
     }).done(function(r){
