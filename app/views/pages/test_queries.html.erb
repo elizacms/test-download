@@ -4,9 +4,8 @@
   <%= form_tag '/wrapper-query' do %>
     <%= text_field_tag :wrapper_query, nil, class: 'form-control text-input' %>
     <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
-    <br>
   <% end %>
-
+  <br>
   <%= render partial: 'query_response' %>
 </div>
 
@@ -16,9 +15,8 @@
   <%= form_tag '/nlu-query' do %>
     <%= text_field_tag :nlu_query, nil, class: 'form-control text-input' %>
     <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
-    <br>
   <% end %>
-
+  <br>
   <%= render partial: 'query_response' %>
 </div>
 
@@ -32,9 +30,8 @@
       class: 'form-control text-input'
     ) %>
     <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
-    <br>
   <% end %>
-
+  <br>
   <%= render partial: 'query_response' %>
 </div>
 
@@ -48,9 +45,8 @@
       class: 'form-control text-input'
     ) %>
     <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
-    <br>
   <% end %>
-
+  <br>
   <%= render partial: 'query_response' %>
 </div>
 
@@ -64,9 +60,8 @@
       class: 'form-control text-input'
     ) %>
     <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
-    <br>
   <% end %>
-
+  <br>
   <%= render partial: 'query_response' %>
 </div>
 
@@ -80,16 +75,19 @@
       class: 'form-control text-input'
     ) %>
     <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
-    <br>
   <% end %>
-
+  <br>
   <%= render partial: 'query_response' %>
 </div>
 
 <script>
 $('.test-btn').click(function(e){
     e.preventDefault();
-    var startTime = new Date().getTime();
+
+    IAM.loading.start({
+        type:'logo',
+        duration: false
+    });
 
     $.ajax({
         type: 'POST',
@@ -100,6 +98,10 @@ $('.test-btn').click(function(e){
         url:  $(this).closest('form').attr('action'),
         data: $(this).siblings('.text-input').serialize()
     }).done(function(r){
+       $('.iam-loading').each(function(){
+            var loader_id = $(this).attr('rel');
+            IAM.loading.stop({id:loader_id});
+        });
         var this_div = $(this).closest('div');
         var title = this_div.find('h4').html();
 

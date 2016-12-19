@@ -1,4 +1,4 @@
-describe 'Test Queries', :js, :focus do
+describe 'Test Queries', :js do
   let( :developer ){ create :developer }
 
   before do
