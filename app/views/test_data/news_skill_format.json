@@ -1,0 +1,83 @@
+{
+  "nlu_response": {
+    "mentions": [
+      {
+        "field_id": "topic",
+        "type": "text",
+        "value": "kim kardashian"
+      },
+      {
+        "type": "list<newsItem>",
+        "entity": {
+          "value": [
+            {
+              "entity": {
+                "name": "Kim Kardashian West Wants to \"Explore Surrogacy\" for Baby No. 3",
+                "image": {
+                  "thumbnail": {
+                    "contentUrl": "http://cdn-img.instyle.com/sites/default/files/styles/622x350/public/images/2016/11/110716-kim-k-lead.jpg?itok=0YRdpOoQ"
+                  }
+                },
+                "description": "November 7, 2016 @ 2:45 PM                                                                                                                Get ready world, Kim Kardashian and Kanye West might be gearing up for baby No. 3. In a new teaser for the Nov. 13 episode of Keeping Up with the Kardashians’ current season, the 36-year-old is seen making a game-changing admission, telling her mom, Kris Jenner, “I’ve come to the conclusion that I just want to explore surrogacy.” There’s only one thing that compares to the joy of welcoming a new Kardashian into the world, and that’s tracking the pregnancy—maternity look by maternity look. Sadly, if Kardashian West does go through with the surrogacy option, we’ll miss out on the gift that is the social media star’s maternity style—but maybe the surrogate will claim her place …? RELATED: How to Shop North West's Best Fashionista Looks for YourselfStay tuned, America!",
+                "source": "InStyle",
+                "link_to_article": "http://www.instyle.com/news/kim-kardashian-west-considers-surrogacy-kuwtk-teaser"
+              }
+            },
+            {
+              "entity": {
+                "name": "Kourtney Kardashian says she has more fun with sister Khloe than Kim",
+                "image": {
+                  "thumbnail": {
+                    "contentUrl": "http://i.dailymail.co.uk/i/pix/2016/11/07/18/3A27C3B800000578-0-image-a-32_1478542773005.jpg"
+                  }
+                },
+                "description": "In the short video, Kourtney is seen riding shotgun while Khloe plays chauffeur. 'Spending the day with Bae,' Kourtney said as she pointed at her blonde sis in the driver's seat who then screamed along with excitement. Then Khloe turned serious and asked her sister, 'Do you have this much fun when you're with Kim?' While Kourtney and Kim are only about a year and a half apart in age, Khloe is five years younger than Kourtney. The Kardashian kids' ages are as follows: Kourtney, 37, Kim, 36, Khloe, 32, Rob, 29, Kendall Jenner, 21, and Kylie Jenner, 19.",
+                "source": "Daily Mail UK",
+                "link_to_article": "http://www.dailymail.co.uk/tvshowbiz/article-3914124/Kourtney-Kardashian-tells-Khloe-fun-does-Kim-Instagram-clip.html?ITO=1490&ns_mchannel=rss&ns_campaign=1490"
+              }
+            },
+            {
+              "entity": {
+                "name": "Khloe Kardashian Jets Off To Cleveland To Meet Up With Her Boyfriend Tristan Thompson Again - X17 Online",
+                "image": {
+                  "thumbnail": {
+                    "contentUrl": "http://www.x17online.com/media/images//2016/11/khloe-kardashian-110716.jpg"
+                  }
+                },
+                "description": "Posted on Mon Nov 7th, 2016 11:30am PDT       By X17 Staff\t\t\t\tAfter spending the weekend with Kris Jenner for her birthday, Khloe Kardashian jetted off to Cleveland, Ohio on Sunday to see her main man, Tristan Thompson, who plays for the Cavaliers. Looks like Khloe's been bitten with the love bug! It's clear things are going well for Khloe and Tristan since the reality star, who was definitely still sporting that diamond sparkler on her ring finger, was geared up to go see her man after a weekend with the fam. On Saturday, Khloe and her sisters attended their mom's birthday party. The family rented out the Westlake Village Cinepolis (as they had previously, for Kim's birthday) for a private showing, and then migrated over the The Grill for a casual dinner.",
+                "source": "X17 Online",
+                "link_to_article": "http://www.x17online.com/2016/11/khloe_kardashian_jets_off_cleveland_tristan_thompson_photos_110716"
+              }
+            },
+            {
+              "entity": {
+                "name": "The Most Extravagant Kardashian-Jenner Parties",
+                "image": {
+                  "thumbnail": {
+                    "contentUrl": "http://media.vanityfair.com/photos/5820af03827d57cf27da6ecf/16:9/w_1200,h_630,c_limit/kardashian-jenner-parties-celebrity-family.jpg"
+                  }
+                },
+                "description": "Kendall Jenner’s 21st BirthdayBefore the forgotten Rolls-Royce surprise, Jenner started the night off in a crocodile jumpsuit, which she wore to have dinner at the seafood restaurant Catch with her family and friends including Kim Kardashian West and Hailey Baldwin.She then made her way over to new Hollywood hotspot Delilah, switching into a custom $9,000 LaBourjoisie mesh dress directly inspired by Paris Hilton’s look from her own 21st birthday in 2002. Of course, the family came similarly dressed for the occasion, with Kylie Jenner wearing an $18,000 Yousef Al-Jasmi gown beaded with over 400,000 Swarovski crystals and  Khloé Kardashian in a $16,500 Yousef Al-Jasmi gown. From Getty Images.THE NUDE JETSETTERLike Kourtney, Caitlyn has yet to experiment much with the family’s general affections for the nude palette . . . though her first appearance on Vanity Fair’s July 2015 cover may indicate otherwise! From Getty Images.THE MET GALA NUDE Exclusive Report: Kendall Jenner Admits to Being Born a Mermaid.From Getty Images.THE SUBTLE NUDENo words will suffice for this one.From Getty Images.THE BLUE WIG NUDESometimes you have to give your new neon blue wig the respect it deserves. From Getty Images.THE NUDE FAMILY PORTRAITThe Kardashian clan dissolved into the beige wall after the Yeezy season 3 presentation . . . never to be seen again.",
+                "source": "Vanity Fair",
+                "link_to_article": "http://www.vanityfair.com/style/2016/11/kardashian-jenner-parties"
+              }
+            },
+            {
+              "entity": {
+                "name": "Kim Campbell says she’s ‘proud’ of Hillary Clinton | National Newswatch",
+                "image": {
+                  "thumbnail": {
+                    "contentUrl": "http://cdn.newslook.com/0b/0b8276555d0d41aeba7b545835fef2e7/images/frame_ext.jpg"
+                  }
+                },
+                "description": "Former prime minister Kim Campbell says she first met Hillary Clinton at the 1993 G7 meeting in Tokyo, when Clinton's husband Bill was U.S. president. Campbell says Clinton has shown a lot of stamina during her campaign for president.",
+                "source": "National Newswatch",
+                "link_to_article": "http://www.nationalnewswatch.com/2016/11/07/kim-campbell-says-shes-proud-of-hillary-clinton/"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

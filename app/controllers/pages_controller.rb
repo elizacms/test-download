@@ -24,20 +24,8 @@ class PagesController < ApplicationController
     )
   end
 
-  def nlu_query
-    @q = params[:nlu_query]
-
-    if @q
-      encode_q = URI::encode( @q )
-      query = {text: encode_q, user_id: current_user.email}
-
-      @response =
-        JSON.pretty_generate(
-          HTTParty.get( "http://nlu.iamplus.com:8080/query", query: query )
-        )
-    end
+  def test_queries
   end
-
 
   private
 

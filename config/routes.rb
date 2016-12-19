@@ -8,10 +8,6 @@ Rails.application.routes.draw do
 
   root to:'pages#index'
 
-  get '/nlu-query',
-    to: 'pages#nlu_query',
-    as: :nlu_query
-
   get '/login/success',
     to: 'pages#login_success',
     as: :login_success
@@ -65,4 +61,27 @@ Rails.application.routes.draw do
   get '/skills/:skill_id/intents/:id/dialogs',
     to: 'intents#dialogs',
     as: :dialogs_page
+
+  # Below are for the Test Queries
+  get '/test-queries',
+    to: 'pages#test_queries',
+    as: :test_queries
+
+  post '/wrapper-query',
+    to: 'api#wrapper_query'
+
+  post '/nlu-query',
+    to: 'api#nlu_query'
+
+  post '/skills/news-skill-format',
+    to: 'api#news_skill_format'
+
+  post '/skills/news-skill-retrieve',
+    to: 'api#news_skill_retrieve'
+
+  post '/skills/music-skill-format',
+    to: 'api#music_skill_format'
+
+  post '/skills/music-skill-retrieve',
+    to: 'api#music_skill_retrieve'
 end
