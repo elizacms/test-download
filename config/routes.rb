@@ -78,4 +78,10 @@ Rails.application.routes.draw do
 
   post '/skills/news-skill-retrieve',
     to: 'api#news_skill_retrieve'
+
+  post '/skills/music-skill-format',
+    to: 'api#music_skill_format'
+
+  post '/skills/music-skill-retrieve',
+    to: 'api#music_skill_retrieve'
 end

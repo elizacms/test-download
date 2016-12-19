@@ -1,4 +1,4 @@
-describe 'Test Queries', :js do
+describe 'Test Queries', :js, :focus do
   let( :developer ){ create :developer }
 
   before do
@@ -9,7 +9,9 @@ describe 'Test Queries', :js do
   end
 
   specify 'User should be able to make a request wrapper' do
-    expect(Courier).to receive(:get_request).and_return('{intent: music}')
+    expect(Courier)
+      .to receive(:get_request)
+      .and_return({response: '{intent: music}', time: 0.05})
 
     fill_in :wrapper_query, with: 'Play me some Green Day'
 
@@ -23,7 +25,9 @@ describe 'Test Queries', :js do
   end
 
   specify 'User should be able to make a request of the NLU' do
-    expect(Courier).to receive(:get_request).and_return('{intent: music}')
+    expect(Courier)
+      .to receive(:get_request)
+      .and_return({response: '{intent: music}', time: 0.05})
 
     fill_in :nlu_query, with: 'Play me some Green Day'
 
@@ -37,7 +41,9 @@ describe 'Test Queries', :js do
   end
 
   specify 'User should be able to make a request of news skill retrieve' do
-    expect(Courier).to receive(:post_request).and_return('{intent: fake_news}')
+    expect(Courier)
+      .to receive(:post_request)
+      .and_return({response: '{intent: fake_news}', time: 0.05})
 
     fill_in :news_skill_retrieve, with: 'Find me the news!'
 
@@ -51,7 +57,9 @@ describe 'Test Queries', :js do
   end
 
   specify 'User should be able to make a request news skill format' do
-    expect(Courier).to receive(:post_request).and_return('{intent: fake_news}')
+    expect(Courier)
+      .to receive(:post_request)
+      .and_return({response: '{intent: fake_news}', time: 0.05})
 
     fill_in :news_skill_format, with: 'Find me the news!'
 
@@ -60,6 +68,38 @@ describe 'Test Queries', :js do
 
       within '.json' do
         expect( page ).to have_content '{intent: fake_news}'
+      end
+    end
+  end
+
+  specify 'User should be able to make a request of music skill retrieve' do
+    expect(Courier)
+      .to receive(:post_request)
+      .and_return({response: '{intent: fake_music}', time: 0.05})
+
+    fill_in :music_skill_retrieve, with: 'Find me the music!'
+
+    within '.music-retrieve' do
+      click_button 'Test'
+
+      within '.json' do
+        expect( page ).to have_content '{intent: fake_music}'
+      end
+    end
+  end
+
+  specify 'User should be able to make a request music skill format' do
+    expect(Courier)
+      .to receive(:post_request)
+      .and_return({response: '{intent: fake_music}', time: 0.05})
+
+    fill_in :music_skill_format, with: 'Find me the music!'
+
+    within '.music-format' do
+      click_button 'Test'
+
+      within '.json' do
+        expect( page ).to have_content '{intent: fake_music}'
       end
     end
   end

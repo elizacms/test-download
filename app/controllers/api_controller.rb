@@ -14,38 +14,74 @@ class ApiController < ApplicationController
   end
 
   def wrapper_query
+    courier = Courier.get_request(
+      'http://aneeda.sensiya.com/api/ai/say',
+      {input: params[:wrapper_query], user_id: current_user.email}
+    )
+
     render json: {
-      response: Courier.get_request(
-        'http://aneeda.sensiya.com/api/ai/say',
-        {input: params[:wrapper_query], user_id: current_user.email}
-      )
+      response: courier[:response],
+      time: courier[:time]
     }, status: 200
   end
 
   def nlu_query
+    courier = Courier.get_request(
+      "http://nlu.iamplus.com:8080/query",
+      {text: params[:nlu_query], user_id: current_user.email}
+    )
+
     render json: {
-      response: Courier.get_request(
-        "http://nlu.iamplus.com:8080/query",
-        {text: params[:nlu_query], user_id: current_user.email}
-      )
+      response: courier[:response],
+      time: courier[:time]
     }, status: 200
   end
 
   def news_skill_retrieve
+    courier = Courier.post_request(
+      'https://iamplus-skills-news.herokuapp.com/retrieve',
+      params[:news_skill_retrieve]
+    )
+
     render json: {
-      response: Courier.post_request(
-        'https://iamplus-skills-news.herokuapp.com/retrieve',
-        params[:news_skill_retrieve]
-      )
+      response: courier[:response],
+      time: courier[:time]
     }, status: 200
   end
 
   def news_skill_format
+    courier = Courier.post_request(
+      'https://iamplus-skills-news.herokuapp.com/format',
+      params[:news_skill_format]
+    )
+
     render json: {
-      response: Courier.post_request(
-        'https://iamplus-skills-news.herokuapp.com/format',
-        params[:news_skill_format]
-      )
+      response: courier[:response],
+      time: courier[:time]
+    }, status: 200
+  end
+
+  def music_skill_retrieve
+    courier = Courier.post_request(
+      'https://iamplus-skills-music.herokuapp.com/retrieve',
+      params[:music_skill_retrieve]
+    )
+
+    render json: {
+      response: courier[:response],
+      time: courier[:time]
+    }, status: 200
+  end
+
+  def music_skill_format
+    courier = Courier.post_request(
+      'https://iamplus-skills-music.herokuapp.com/format',
+      params[:music_skill_format]
+    )
+
+    render json: {
+      response: courier[:response],
+      time: courier[:time]
     }, status: 200
   end
 
