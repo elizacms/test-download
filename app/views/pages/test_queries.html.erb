@@ -1,3 +1,19 @@
+<%= form_tag do %>
+  <h4>Choose an Intent</h4>
+  <%= select_tag(
+    'intents',
+    options_for_select(
+      [
+        ['', ''],
+        ['play_music', 'Play Hello by Adele.'],
+        ['news_search', "What's the news on Trump?"]
+      ],
+      'play_music'
+    ),
+    onchange: 'fillWrapperQuery()'
+  ) %>
+<% end %>
+
 <div class='wrapper-query'>
   <h4>Wrapper Query</h4>
 
@@ -84,10 +100,11 @@
 $('.test-btn').click(function(e){
     e.preventDefault();
 
-    IAM.loading.start({
-        type:'logo',
-        duration: false
-    });
+    IAM.loading.start({ type:'logo', duration: false });
+
+    var intent = $('#wrapper_query').val();
+    $('#nlu_query').val(intent);
+    var action = $(this).closest('form').attr('action');
 
     $.ajax({
         type: 'POST',
@@ -95,18 +112,16 @@ $('.test-btn').click(function(e){
         headers: {
             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
         },
-        url:  $(this).closest('form').attr('action'),
+        url:  action,
         data: $(this).siblings('.text-input').serialize()
     }).done(function(r){
        $('.iam-loading').each(function(){
-            var loader_id = $(this).attr('rel');
-            IAM.loading.stop({id:loader_id});
+            IAM.loading.stop({id: $(this).attr('rel')});
         });
         var this_div = $(this).closest('div');
-        var title = this_div.find('h4').html();
 
         this_div.find('.server-time').html( r['time'] );
-        this_div.find('.title').html(title);
+        this_div.find('.title').html(this_div.find('h4').html());
         this_div.find('.notes').addClass('in');
         this_div.find('.json').html(r['response']);
 

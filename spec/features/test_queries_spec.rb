@@ -8,7 +8,7 @@ describe 'Test Queries', :js do
     visit '/test-queries'
   end
 
-  specify 'User should be able to make a request wrapper' do
+  specify 'user should be able to make a request wrapper' do
     expect(Courier)
       .to receive(:get_request)
       .and_return({response: '{intent: music}', time: 0.05})
@@ -24,7 +24,7 @@ describe 'Test Queries', :js do
     end
   end
 
-  specify 'User should be able to make a request of the NLU' do
+  specify 'user should be able to make a request of the NLU' do
     expect(Courier)
       .to receive(:get_request)
       .and_return({response: '{intent: music}', time: 0.05})
@@ -40,7 +40,7 @@ describe 'Test Queries', :js do
     end
   end
 
-  specify 'User should be able to make a request of news skill retrieve' do
+  specify 'user should be able to make a request of news skill retrieve' do
     expect(Courier)
       .to receive(:post_request)
       .and_return({response: '{intent: fake_news}', time: 0.05})
@@ -56,7 +56,7 @@ describe 'Test Queries', :js do
     end
   end
 
-  specify 'User should be able to make a request news skill format' do
+  specify 'user should be able to make a request news skill format' do
     expect(Courier)
       .to receive(:post_request)
       .and_return({response: '{intent: fake_news}', time: 0.05})
@@ -72,7 +72,7 @@ describe 'Test Queries', :js do
     end
   end
 
-  specify 'User should be able to make a request of music skill retrieve' do
+  specify 'user should be able to make a request of music skill retrieve' do
     expect(Courier)
       .to receive(:post_request)
       .and_return({response: '{intent: fake_music}', time: 0.05})
@@ -88,7 +88,7 @@ describe 'Test Queries', :js do
     end
   end
 
-  specify 'User should be able to make a request music skill format' do
+  specify 'user should be able to make a request music skill format' do
     expect(Courier)
       .to receive(:post_request)
       .and_return({response: '{intent: fake_music}', time: 0.05})
