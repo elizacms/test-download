@@ -14,79 +14,68 @@ class ApiController < ApplicationController
   end
 
   def wrapper_query
-    courier = Courier.get_request(
+    @courier = Courier.get_request(
       'http://aneeda.sensiya.com/api/ai/say',
       {input: params[:wrapper_query], user_id: current_user.email}
     )
 
-    render json: {
-      response: courier[:response],
-      time: courier[:time]
-    }, status: 200
+    render_json{ return }
   end
 
   def nlu_query
-    courier = Courier.get_request(
+    @courier = Courier.get_request(
       "http://nlu.iamplus.com:8080/query",
       {text: params[:nlu_query], user_id: current_user.email}
     )
 
-    render json: {
-      response: courier[:response],
-      time: courier[:time]
-    }, status: 200
+    render_json{ return }
   end
 
   def news_skill_retrieve
-    courier = Courier.post_request(
+    @courier = Courier.post_request(
       'https://iamplus-skills-news.herokuapp.com/retrieve',
       params[:news_skill_retrieve]
     )
 
-    render json: {
-      response: courier[:response],
-      time: courier[:time]
-    }, status: 200
+    render_json{ return }
   end
 
   def news_skill_format
-    courier = Courier.post_request(
+    @courier = Courier.post_request(
       'https://iamplus-skills-news.herokuapp.com/format',
       params[:news_skill_format]
     )
 
-    render json: {
-      response: courier[:response],
-      time: courier[:time]
-    }, status: 200
+    render_json{ return }
   end
 
   def music_skill_retrieve
-    courier = Courier.post_request(
+    @courier = Courier.post_request(
       'https://iamplus-skills-music.herokuapp.com/retrieve',
       params[:music_skill_retrieve]
     )
 
-    render json: {
-      response: courier[:response],
-      time: courier[:time]
-    }, status: 200
+    render_json{ return }
   end
 
   def music_skill_format
-    courier = Courier.post_request(
+    @courier = Courier.post_request(
       'https://iamplus-skills-music.herokuapp.com/format',
       params[:music_skill_format]
     )
 
-    render json: {
-      response: courier[:response],
-      time: courier[:time]
-    }, status: 200
+    render_json{ return }
   end
 
 
   private
+
+  def render_json
+    render json: {
+      response: @courier[:response],
+      time: sprintf("%.0f", @courier[:time] * 1000)
+    }, status: 200
+  end
 
   def validate_api_auth
     if request.headers[ 'X-Api-Authorization' ] != ENV[ 'API_AUTHORIZATION' ]

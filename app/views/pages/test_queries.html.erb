@@ -105,7 +105,7 @@ $('.test-btn').click(function(e){
         var this_div = $(this).closest('div');
         var title = this_div.find('h4').html();
 
-        this_div.find('.server-time').html( r['time'] * 1000 );
+        this_div.find('.server-time').html( r['time'] );
         this_div.find('.title').html(title);
         this_div.find('.notes').addClass('in');
         this_div.find('.json').html(r['response']);
