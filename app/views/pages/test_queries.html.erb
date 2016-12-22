@@ -36,7 +36,7 @@
   <%= render partial: 'query_response' %>
 </div>
 
-<div class='collapse skills-test'>
+<div class='collapse skills-fields'>
   <div class='skill-retrieve'>
     <h4>Skill (Retrieve)</h4>
 
@@ -80,12 +80,13 @@ $('.test-btn').click(function(e){
     $('#nlu_query').val(intent);
 
     var action = $(this).closest('form').attr('action');
+    var inputText = $(this).siblings('.text-input');
 
-    if ($(this).parents('.skills-test').length > 0) {
-      var data = $(this).siblings('.text-input').val();
+    if ($(this).parents('.skills-fields').length > 0) {
+      var data = inputText.val();
     } else {
       var data = {};
-      data[$(this).siblings('.text-input').attr('name')] = $(this).siblings('.text-input').val();
+      data[inputText.attr('name')] = inputText.val();
       data = JSON.stringify( data );
     }
 
@@ -116,7 +117,7 @@ $('.test-btn').click(function(e){
         });
 
         if ( action === '/nlu-query' || action === '/skill-retrieve'){
-            $('.skills-test').addClass('in');
+            $('.skills-fields').addClass('in');
             getIntentList(r['response'], action);
         }
     }.bind(this)).fail(function(){
@@ -149,7 +150,7 @@ function getIntentList(response, action){
             $('#skill_retrieve').val( JSON.stringify( retrieveJSON, null, 2 ) );
             $('#skill_retrieve_url').val( skillUrl + '.com/retrieve');
             $('#skill_format_url').val( skillUrl + '.com/format');
-        } else if ( action === '/skill-retrieve' ) {
+        } else if ( action === '/skill-retrieve' ){
             var formatJSON = {};
             formatJSON['nlu_response'] = {};
             formatJSON['nlu_response']['intent'] = intent;
