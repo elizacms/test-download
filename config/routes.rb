@@ -8,6 +8,9 @@ Rails.application.routes.draw do
 
   root to:'pages#index'
 
+  get '/.well-known/acme-challenge/tyNU4a7E8d-EYIKn4-1_cmkifcNeZtLh3rM9ZZaM0kE',
+    to: 'pages#proof'
+
   get '/login/success',
     to: 'pages#login_success',
     as: :login_success

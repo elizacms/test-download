@@ -5,6 +5,10 @@ class PagesController < ApplicationController
     @identity_login_page = oauth_client.auth_code.authorize_url( redirect_uri:redirect_uri )
   end
 
+  def proof
+    render( 'pages/proof.txt', layout: false )
+  end
+
   def login_success
     if current_user.admin?
       redirect_to users_path
