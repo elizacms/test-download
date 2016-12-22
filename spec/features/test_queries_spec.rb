@@ -13,7 +13,7 @@ describe 'Test Queries', :js do
       .to receive(:get_request)
       .and_return({response: '{intent: music}', time: 0.05})
 
-    fill_in :wrapper_query, with: 'Play me some Green Day'
+    select 'play_music', from: 'intents'
 
     within '.wrapper-query' do
       click_button 'Test'
@@ -26,10 +26,14 @@ describe 'Test Queries', :js do
 
   specify 'user should be able to make a request of the NLU' do
     expect(Courier)
-      .to receive(:get_request)
+      .to receive(:get_request).twice
       .and_return({response: '{intent: music}', time: 0.05})
 
-    fill_in :nlu_query, with: 'Play me some Green Day'
+    select 'play_music', from: 'intents'
+
+    within '.wrapper-query' do
+      click_button 'Test'
+    end
 
     within '.nlu-query' do
       click_button 'Test'
@@ -42,12 +46,23 @@ describe 'Test Queries', :js do
 
   specify 'user should be able to make a request of news skill retrieve' do
     expect(Courier)
+      .to receive(:get_request).twice
+      .and_return({response: '{intent: fake_news}', time: 0.05})
+    expect(Courier)
       .to receive(:post_request)
       .and_return({response: '{intent: fake_news}', time: 0.05})
 
-    fill_in :news_skill_retrieve, with: 'Find me the news!'
+    select 'news_search', from: 'intents'
 
-    within '.news-retrieve' do
+    within '.wrapper-query' do
+      click_button 'Test'
+    end
+
+    within '.nlu-query' do
+      click_button 'Test'
+    end
+
+    within '.skill-retrieve' do
       click_button 'Test'
 
       within '.json' do
@@ -58,48 +73,31 @@ describe 'Test Queries', :js do
 
   specify 'user should be able to make a request news skill format' do
     expect(Courier)
-      .to receive(:post_request)
+      .to receive(:get_request).twice
+      .and_return({response: '{intent: fake_news}', time: 0.05})
+    expect(Courier)
+      .to receive(:post_request).twice
       .and_return({response: '{intent: fake_news}', time: 0.05})
 
-    fill_in :news_skill_format, with: 'Find me the news!'
+    select 'news_search', from: 'intents'
 
-    within '.news-format' do
+    within '.wrapper-query' do
+      click_button 'Test'
+    end
+
+    within '.nlu-query' do
+      click_button 'Test'
+    end
+
+    within '.skill-retrieve' do
+      click_button 'Test'
+    end
+
+    within '.skill-format' do
       click_button 'Test'
 
       within '.json' do
         expect( page ).to have_content '{intent: fake_news}'
-      end
-    end
-  end
-
-  specify 'user should be able to make a request of music skill retrieve' do
-    expect(Courier)
-      .to receive(:post_request)
-      .and_return({response: '{intent: fake_music}', time: 0.05})
-
-    fill_in :music_skill_retrieve, with: 'Find me the music!'
-
-    within '.music-retrieve' do
-      click_button 'Test'
-
-      within '.json' do
-        expect( page ).to have_content '{intent: fake_music}'
-      end
-    end
-  end
-
-  specify 'user should be able to make a request music skill format' do
-    expect(Courier)
-      .to receive(:post_request)
-      .and_return({response: '{intent: fake_music}', time: 0.05})
-
-    fill_in :music_skill_format, with: 'Find me the music!'
-
-    within '.music-format' do
-      click_button 'Test'
-
-      within '.json' do
-        expect( page ).to have_content '{intent: fake_music}'
       end
     end
   end

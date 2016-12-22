@@ -41,25 +41,26 @@ class ApiController < ApplicationController
   end
 
   def skill_retrieve
-    @courier = Courier.post_request(
-      request.headers[ 'X-Skill-Url' ],
-      params.to_json
-    )
+    send_courier_post
 
     render_json{ return }
   end
 
   def skill_format
-    @courier = Courier.post_request(
-      request.headers[ 'X-Skill-Url' ],
-      params.to_json
-    )
+    send_courier_post
 
     render_json{ return }
   end
 
 
   private
+
+  def send_courier_post
+    @courier = Courier.post_request(
+      request.headers[ 'X-Skill-Url' ],
+      params.to_json
+    )
+  end
 
   def render_json
     render json: {
