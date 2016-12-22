@@ -67,21 +67,18 @@ Rails.application.routes.draw do
     to: 'pages#test_queries',
     as: :test_queries
 
+  post '/intents-list',
+    to: 'api#intents_list'
+
   post '/wrapper-query',
     to: 'api#wrapper_query'
 
   post '/nlu-query',
     to: 'api#nlu_query'
 
-  post '/skills/news-skill-format',
-    to: 'api#news_skill_format'
+  post '/skill-format',
+    to: 'api#skill_format'
 
-  post '/skills/news-skill-retrieve',
-    to: 'api#news_skill_retrieve'
-
-  post '/skills/music-skill-format',
-    to: 'api#music_skill_format'
-
-  post '/skills/music-skill-retrieve',
-    to: 'api#music_skill_retrieve'
+  post '/skill-retrieve',
+    to: 'api#skill_retrieve'
 end

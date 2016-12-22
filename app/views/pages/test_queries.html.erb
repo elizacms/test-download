@@ -36,84 +36,70 @@
   <%= render partial: 'query_response' %>
 </div>
 
-<div class='news-retrieve'>
-  <h4>News Skill (Retrieve)</h4>
+<div class='collapse skills-test'>
+  <div class='skill-retrieve'>
+    <h4>Skill (Retrieve)</h4>
 
-  <%= form_tag '/skills/news-skill-retrieve' do %>
-    <%= text_area_tag(
-      :news_skill_retrieve,
-      File.read('app/views/test_data/news_skill_retrieve.json'),
-      class: 'form-control text-input'
-    ) %>
-    <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
-  <% end %>
-  <br>
-  <%= render partial: 'query_response' %>
+    <%= form_tag '/skill-retrieve' do %>
+      <%= hidden_field_tag :skill_retrieve_url, nil, class: 'skill-url' %>
+      <%= text_area_tag(
+        :skill_retrieve,
+        nil,
+        class: 'form-control text-input'
+      ) %>
+      <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
+    <% end %>
+    <br>
+    <%= render partial: 'query_response' %>
+  </div>
+
+  <div class='skill-format'>
+    <h4>Skill (Format)</h4>
+
+    <%= form_tag '/skill-format' do %>
+    <%= hidden_field_tag :skill_format_url, nil, class: 'skill-url' %>
+      <%= text_area_tag(
+        :skill_format,
+        nil,
+        class: 'form-control text-input'
+      ) %>
+      <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
+    <% end %>
+    <br>
+    <%= render partial: 'query_response' %>
+  </div>
 </div>
 
-<div class='news-format'>
-  <h4>News Skill (Format)</h4>
-
-  <%= form_tag '/skills/news-skill-format' do %>
-    <%= text_area_tag(
-      :news_skill_format,
-      File.read('app/views/test_data/news_skill_format.json'),
-      class: 'form-control text-input'
-    ) %>
-    <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
-  <% end %>
-  <br>
-  <%= render partial: 'query_response' %>
-</div>
-
-<div class='music-retrieve'>
-  <h4>Music Skill (Retrieve)</h4>
-
-  <%= form_tag '/skills/music-skill-retrieve' do %>
-    <%= text_area_tag(
-      :music_skill_retrieve,
-      File.read('app/views/test_data/music_skill_retrieve.json'),
-      class: 'form-control text-input'
-    ) %>
-    <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
-  <% end %>
-  <br>
-  <%= render partial: 'query_response' %>
-</div>
-
-<div class='music-format'>
-  <h4>Music Skill (Format)</h4>
-
-  <%= form_tag '/skills/music-skill-format' do %>
-    <%= text_area_tag(
-      :music_skill_format,
-      File.read('app/views/test_data/music_skill_format.json'),
-      class: 'form-control text-input'
-    ) %>
-    <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
-  <% end %>
-  <br>
-  <%= render partial: 'query_response' %>
-</div>
 
 <script>
 $('.test-btn').click(function(e){
     e.preventDefault();
-
     IAM.loading.start({ type:'logo', duration: false });
 
     var intent = $('#wrapper_query').val();
     $('#nlu_query').val(intent);
+
     var action = $(this).closest('form').attr('action');
+
+    if ($(this).parents('.skills-test').length > 0) {
+      var data = $(this).siblings('.text-input').val();
+    } else {
+      var data = {};
+      data[$(this).siblings('.text-input').attr('name')] = $(this).siblings('.text-input').val();
+      data = JSON.stringify( data );
+    }
+    console.log(data);
 
     $.ajax({
         type: 'POST',
         dataType: 'json',
         headers: {
-            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content'),
+            'Content-Type': 'application/json',
+            'X-Skill-Url':  $(this).siblings('.skill-url').val()
         },
         url:  action,
-        data: $(this).siblings('.text-input').serialize()
+        data: data
     }).done(function(r){
        $('.iam-loading').each(function(){
             IAM.loading.stop({id: $(this).attr('rel')});
@@ -129,6 +115,40 @@ $('.test-btn').click(function(e){
         $('pre code').each(function(i, block) {
             hljs.highlightBlock(block);
         });
-    }.bind(this));
+
+        if ( action === '/nlu-query'){
+            $('.skills-test').addClass('in');
+            getIntentList(r['response']);
+        }
+    }.bind(this)).fail(function(){
+       $('.iam-loading').each(function(){
+            IAM.loading.stop({id: $(this).attr('rel')});
+        });
+    });
 });
+
+function getIntentList(response){
+    $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: '/intents-list',
+        data: null
+    }).done(response, function(intents){
+        var retrieveJSON = new Object();
+        var intent = JSON.parse( response )['intent'];
+        var mentions = JSON.parse( response )['mentions'];
+        var skillUrl = JSON.parse( intents['response'] )[intent].split('.com')[0];
+
+        retrieveJSON['nlu_response'] = {};
+        retrieveJSON['nlu_response']['intent']   = intent;
+        retrieveJSON['nlu_response']['mentions'] = mentions;
+
+        $('#skill_retrieve').val( JSON.stringify( retrieveJSON, null, 2 ) );
+        $('#skill_retrieve_url').val( skillUrl + '.com/retrieve');
+        $('#skill_format_url').val( skillUrl + '.com/format');
+    });
+}
 </script>

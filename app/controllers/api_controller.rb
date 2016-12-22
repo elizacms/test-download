@@ -10,7 +10,16 @@ class ApiController < ApplicationController
       return
     end
 
-    render json:{ webhook:skill.web_hook }.to_json
+    render json: { webhook: skill.web_hook }.to_json
+  end
+
+  def intents_list
+    response = HTTParty.get( 'http://intent-webhook-map.aneeda.ai/production.json', format: :plain )
+    encoding_options = { undef: :replace, replace: '' }
+
+    response = response.encode(Encoding.find('ASCII'), encoding_options)
+
+    render json: { response: response }, status: 200
   end
 
   def wrapper_query
@@ -31,37 +40,21 @@ class ApiController < ApplicationController
     render_json{ return }
   end
 
-  def news_skill_retrieve
+  def skill_retrieve
+    ap request.headers[ 'X-Skill-Url' ]
+
     @courier = Courier.post_request(
-      'https://iamplus-skills-news.herokuapp.com/retrieve',
-      params[:news_skill_retrieve]
+      request.headers[ 'X-Skill-Url' ],
+      params.to_json
     )
 
     render_json{ return }
   end
 
-  def news_skill_format
+  def skill_format
     @courier = Courier.post_request(
-      'https://iamplus-skills-news.herokuapp.com/format',
-      params[:news_skill_format]
-    )
-
-    render_json{ return }
-  end
-
-  def music_skill_retrieve
-    @courier = Courier.post_request(
-      'https://iamplus-skills-music.herokuapp.com/retrieve',
-      params[:music_skill_retrieve]
-    )
-
-    render_json{ return }
-  end
-
-  def music_skill_format
-    @courier = Courier.post_request(
-      'https://iamplus-skills-music.herokuapp.com/format',
-      params[:music_skill_format]
+      request.headers[ 'X-Skill-Url' ],
+      params.to_json
     )
 
     render_json{ return }
