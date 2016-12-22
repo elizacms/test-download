@@ -41,8 +41,6 @@ class ApiController < ApplicationController
   end
 
   def skill_retrieve
-    ap request.headers[ 'X-Skill-Url' ]
-
     @courier = Courier.post_request(
       request.headers[ 'X-Skill-Url' ],
       params.to_json
