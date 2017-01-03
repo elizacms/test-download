@@ -14,7 +14,11 @@ class ApiController < ApplicationController
   end
 
   def intents_list
-    response = HTTParty.get( 'http://intent-webhook-map.aneeda.ai/production.json', format: :plain )
+    response = HTTParty.get(
+      "http://intent-webhook-map.aneeda.ai/#{params[:intent_list_url]}.json",
+      format: :plain
+    )
+
     encoding_options = { undef: :replace, replace: '' }
 
     response = response.encode(Encoding.find('ASCII'), encoding_options)
@@ -23,8 +27,11 @@ class ApiController < ApplicationController
   end
 
   def wrapper_query
+    ap request.headers[ 'X-Test-Env' ]
     @courier = Courier.get_request(
-      'http://aneeda.sensiya.com/api/ai/say',
+      request.headers[ 'X-Test-Env' ] == 'production' ?
+        'http://aneeda.sensiya.com/api/ai/say' :
+        'http://us-staging-aneeda.sensiya.com/api/ai/say',
       {input: params[:wrapper_query], user_id: current_user.email}
     )
 
@@ -33,7 +40,9 @@ class ApiController < ApplicationController
 
   def nlu_query
     @courier = Courier.get_request(
-      "http://nlu.iamplus.com:8080/query",
+      request.headers[ 'X-Test-Env' ] == 'production' ?
+        'http://nlu.iamplus.com:8080/query' :
+        'http://nlu-staging.aneeda.ai:8080/query',
       {text: params[:nlu_query], user_id: current_user.email}
     )
 
@@ -65,7 +74,8 @@ class ApiController < ApplicationController
   def render_json
     render json: {
       response: @courier[:response],
-      time: sprintf("%.0f", @courier[:time] * 1000)
+      url: @courier[:url],
+      time: ActiveSupport::NumberHelper.number_to_delimited( (@courier[:time] * 1000).to_i )
     }, status: 200
   end
 

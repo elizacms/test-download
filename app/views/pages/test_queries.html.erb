@@ -1,4 +1,15 @@
 <%= form_tag do %>
+  <h4>Choose an Environment</h4>
+  <%= select_tag(
+    'intent_list_url',
+    options_for_select([
+      ['production', 'production'],
+      ['staging', 'staging']
+    ])
+  ) %>
+<% end %>
+
+<%= form_tag do %>
   <h4>Choose an Intent</h4>
   <%= select_tag(
     'intents',
@@ -7,8 +18,7 @@
         ['', ''],
         ['play_music', 'Play Hello by Adele.'],
         ['news_search', "What's the news on Trump?"]
-      ],
-      'play_music'
+      ]
     ),
     onchange: 'fillWrapperQuery()'
   ) %>
@@ -96,7 +106,8 @@ $('.test-btn').click(function(e){
         headers: {
             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content'),
             'Content-Type': 'application/json',
-            'X-Skill-Url':  $(this).siblings('.skill-url').val()
+            'X-Skill-Url':  $(this).siblings('.skill-url').val(),
+            'X-Test-Env': $('#intent_list_url').val()
         },
         url:  action,
         data: data
@@ -107,6 +118,7 @@ $('.test-btn').click(function(e){
         var this_div = $(this).closest('div');
 
         this_div.find('.server-time').html( r['time'] );
+        this_div.find('.url-used').html( r['url'] );
         this_div.find('.title').html(this_div.find('h4').html());
         this_div.find('.notes').addClass('in');
         this_div.find('.json').html(r['response']);
@@ -135,7 +147,7 @@ function getIntentList(response, action){
             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
         },
         url: '/intents-list',
-        data: null
+        data: $('#intent_list_url').serialize()
     }).done(response, action, function(intents){
         if ( action === '/nlu-query'){
             window.intent = JSON.parse( response )['intent'];

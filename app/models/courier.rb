@@ -8,11 +8,13 @@ class Courier
       rescue JSON::GeneratorError
         {
           response: 'Something is wrong with the JSON that you entered.',
+          url: url,
           time: 0
         }
       else
         {
           response: response,
+          url: url,
           time: end_time - start_time
         }
       end
@@ -28,11 +30,13 @@ class Courier
       rescue JSON::GeneratorError
         {
           response: 'Something is wrong with the JSON that you entered.',
+          url: url,
           time: 0
         }
       else
         {
           response: response,
+          url: url,
           time: end_time - start_time
         }
       end
