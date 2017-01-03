@@ -27,11 +27,14 @@ class ApiController < ApplicationController
   end
 
   def wrapper_query
-    ap request.headers[ 'X-Test-Env' ]
+    if request.headers[ 'X-Test-Env' ] == 'production'
+      @url = 'http://aneeda.sensiya.com/api/ai/say'
+    else
+      @url = 'http://us-staging-aneeda.sensiya.com/api/ai/say'
+    end
+
     @courier = Courier.get_request(
-      request.headers[ 'X-Test-Env' ] == 'production' ?
-        'http://aneeda.sensiya.com/api/ai/say' :
-        'http://us-staging-aneeda.sensiya.com/api/ai/say',
+      @url,
       {input: params[:wrapper_query], user_id: current_user.email}
     )
 
@@ -39,10 +42,14 @@ class ApiController < ApplicationController
   end
 
   def nlu_query
+    if request.headers[ 'X-Test-Env' ] == 'production'
+      @url = 'http://nlu.iamplus.com:8080/query'
+    else
+      @url = 'http://nlu-staging.aneeda.ai:8080/query'
+    end
+
     @courier = Courier.get_request(
-      request.headers[ 'X-Test-Env' ] == 'production' ?
-        'http://nlu.iamplus.com:8080/query' :
-        'http://nlu-staging.aneeda.ai:8080/query',
+      @url,
       {text: params[:nlu_query], user_id: current_user.email}
     )
 
@@ -50,13 +57,17 @@ class ApiController < ApplicationController
   end
 
   def skill_retrieve
-    send_courier_post
+    @url = request.headers[ 'X-Skill-Url' ]
+
+    send_courier_post( @url )
 
     render_json{ return }
   end
 
   def skill_format
-    send_courier_post
+    @url = request.headers[ 'X-Skill-Url' ]
+
+    send_courier_post( @url )
 
     render_json{ return }
   end
@@ -64,17 +75,14 @@ class ApiController < ApplicationController
 
   private
 
-  def send_courier_post
-    @courier = Courier.post_request(
-      request.headers[ 'X-Skill-Url' ],
-      params.to_json
-    )
+  def send_courier_post( url )
+    @courier = Courier.post_request( url, params.to_json )
   end
 
   def render_json
     render json: {
       response: @courier[:response],
-      url: @courier[:url],
+      url: @url,
       time: ActiveSupport::NumberHelper.number_to_delimited( (@courier[:time] * 1000).to_i )
     }, status: 200
   end
