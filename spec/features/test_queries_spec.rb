@@ -13,7 +13,7 @@ describe 'Test Queries', :js do
       .to receive(:get_request)
       .and_return({response: '{intent: music}', time: 0.05})
 
-    select 'play_music', from: 'intents'
+    select 'Music', from: 'intents'
 
     within '.wrapper-query' do
       click_button 'Test'
@@ -26,10 +26,13 @@ describe 'Test Queries', :js do
 
   specify 'user should be able to make a request of the NLU' do
     expect(Courier)
-      .to receive(:get_request).twice
+      .to receive(:get_request)
+      .and_return({response: '{intent: music}', time: 0.05})
+    expect(Courier)
+      .to receive(:post_request)
       .and_return({response: '{intent: music}', time: 0.05})
 
-    select 'play_music', from: 'intents'
+    select 'Music', from: 'intents'
 
     within '.wrapper-query' do
       click_button 'Test'
@@ -46,13 +49,13 @@ describe 'Test Queries', :js do
 
   specify 'user should be able to make a request of news skill retrieve' do
     expect(Courier)
-      .to receive(:get_request).twice
+      .to receive(:get_request)
       .and_return({response: '{intent: fake_news}', time: 0.05})
     expect(Courier)
-      .to receive(:post_request)
+      .to receive(:post_request).twice
       .and_return({response: '{intent: fake_news}', time: 0.05})
 
-    select 'news_search', from: 'intents'
+    select 'News', from: 'intents'
 
     within '.wrapper-query' do
       click_button 'Test'
@@ -73,13 +76,13 @@ describe 'Test Queries', :js do
 
   specify 'user should be able to make a request news skill format' do
     expect(Courier)
-      .to receive(:get_request).twice
+      .to receive(:get_request)
       .and_return({response: '{intent: fake_news}', time: 0.05})
     expect(Courier)
-      .to receive(:post_request).twice
+      .to receive(:post_request).exactly(3).times
       .and_return({response: '{intent: fake_news}', time: 0.05})
 
-    select 'news_search', from: 'intents'
+    select 'News', from: 'intents'
 
     within '.wrapper-query' do
       click_button 'Test'
