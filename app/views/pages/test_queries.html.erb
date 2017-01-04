@@ -5,7 +5,8 @@
     options_for_select([
       ['production', 'production'],
       ['staging', 'staging']
-    ])
+    ]),
+    onchange: 'clearForms()'
   ) %>
 <% end %>
 
@@ -13,13 +14,11 @@
   <h4>Choose a Skill</h4>
   <%= select_tag(
     'intents',
-    options_for_select(
-      [
-        ['', ''],
-        ['Music', 'Play Hello by Adele.'],
-        ['News', "What's the news on Trump?"]
-      ]
-    ),
+    options_for_select([
+      ['', ''],
+      ['Music', 'Play Hello by Adele.'],
+      ['News', "What's the news on Trump?"]
+    ]),
     onchange: 'fillWrapperQueryAndClearPrevious()'
   ) %>
 <% end %>

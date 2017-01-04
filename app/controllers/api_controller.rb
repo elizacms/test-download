@@ -48,10 +48,13 @@ class ApiController < ApplicationController
       @url = 'http://nlu-staging.aneeda.ai:8080/query'
     end
 
-    @courier = Courier.get_request(
-      @url,
-      {text: params[:nlu_query], user_id: current_user.email}
-    )
+    json = {
+      "iAmPlusId" => current_user.email,
+      "input"     => params[:nlu_query],
+      "appData"   => { "id": "com.iamplus.aneedacall" }
+    }
+
+    send_courier_post( @url, json.to_json )
 
     render_json{ return }
   end
@@ -59,7 +62,7 @@ class ApiController < ApplicationController
   def skill_retrieve
     @url = request.headers[ 'X-Skill-Url' ]
 
-    send_courier_post( @url )
+    send_courier_post( @url, params.to_json )
 
     render_json{ return }
   end
@@ -67,7 +70,7 @@ class ApiController < ApplicationController
   def skill_format
     @url = request.headers[ 'X-Skill-Url' ]
 
-    send_courier_post( @url )
+    send_courier_post( @url, params.to_json )
 
     render_json{ return }
   end
@@ -75,8 +78,8 @@ class ApiController < ApplicationController
 
   private
 
-  def send_courier_post( url )
-    @courier = Courier.post_request( url, params.to_json )
+  def send_courier_post( url, body )
+    @courier = Courier.post_request( url, body )
   end
 
   def render_json
