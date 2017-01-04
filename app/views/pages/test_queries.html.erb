@@ -10,17 +10,17 @@
 <% end %>
 
 <%= form_tag do %>
-  <h4>Choose an Intent</h4>
+  <h4>Choose a Skill</h4>
   <%= select_tag(
     'intents',
     options_for_select(
       [
         ['', ''],
-        ['play_music', 'Play Hello by Adele.'],
-        ['news_search', "What's the news on Trump?"]
+        ['Music', 'Play Hello by Adele.'],
+        ['News', "What's the news on Trump?"]
       ]
     ),
-    onchange: 'fillWrapperQuery()'
+    onchange: 'fillWrapperQueryAndClearPrevious()'
   ) %>
 <% end %>
 
@@ -86,18 +86,38 @@ $('.test-btn').click(function(e){
     e.preventDefault();
     IAM.loading.start({ type:'logo', duration: false });
 
-    var intent = $('#wrapper_query').val();
-    $('#nlu_query').val(intent);
-
     var action = $(this).closest('form').attr('action');
     var inputText = $(this).siblings('.text-input');
 
+    if (action === '/wrapper-query' || action === '/nlu-query'){
+        if ( window.lastQuery !== undefined && window.lastQuery !== inputText.val() ){
+            $(this).closest('div').nextAll('div').each(function(i, block){
+                $(this).find('.notes').removeClass('in');
+                $(this).find('.json').html( '' );
+                $(this).find('.text-input').val( '' );
+
+                window.lastQuery = inputText.val();
+            });
+
+            if ( action === '/wrapper-query' ){
+                $('#nlu_query').val(window.lastQuery);
+            } else {
+                $('#wrapper_query').val( window.lastQuery );
+                $('#wrapper_query').closest('div').find('.notes').removeClass('in');
+                $('#wrapper_query').closest('div').find('.json').html( '' );
+            }
+        } else {
+            window.lastQuery = $('#wrapper_query').val();
+            $('#nlu_query').val(window.lastQuery);
+        }
+    }
+
     if ($(this).parents('.skills-fields').length > 0) {
-      var data = inputText.val();
+        var data = inputText.val();
     } else {
-      var data = {};
-      data[inputText.attr('name')] = inputText.val();
-      data = JSON.stringify( data );
+        var data = {};
+        data[inputText.attr('name')] = inputText.val();
+        data = JSON.stringify( data );
     }
 
     $.ajax({
@@ -119,7 +139,6 @@ $('.test-btn').click(function(e){
 
         this_div.find('.server-time').html( r['time'] );
         this_div.find('.url-used').html( r['url'] );
-        this_div.find('.title').html(this_div.find('h4').html());
         this_div.find('.notes').addClass('in');
         this_div.find('.json').html(r['response']);
 
