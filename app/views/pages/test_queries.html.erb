@@ -4,7 +4,8 @@
     'intent_list_url',
     options_for_select([
       ['production', 'production'],
-      ['staging', 'staging']
+      ['staging', 'staging'],
+      ['development', 'development']
     ]),
     onchange: 'clearForms()'
   ) %>
@@ -131,15 +132,8 @@ $('.test-btn').click(function(e){
         url:  action,
         data: data
     }).done(function(r){
-       $('.iam-loading').each(function(){
-            IAM.loading.stop({id: $(this).attr('rel')});
-        });
         var this_div = $(this).closest('div');
-
-        this_div.find('.server-time').html( r['time'] );
-        this_div.find('.url-used').html( r['url'] );
-        this_div.find('.notes').addClass('in');
-        this_div.find('.json').html(r['response']);
+        stopLoadingAndReportNotes(r, this_div);
 
         // Highlight the code.
         $('pre code').each(function(i, block) {
@@ -150,10 +144,9 @@ $('.test-btn').click(function(e){
             $('.skills-fields').addClass('in');
             getIntentList(r['response'], action);
         }
-    }.bind(this)).fail(function(){
-       $('.iam-loading').each(function(){
-            IAM.loading.stop({id: $(this).attr('rel')});
-        });
+    }.bind(this)).fail(function(r){
+        var this_div = $(this).closest('div');
+        stopLoadingAndReportNotes(r, this_div);
     });
 });
 
@@ -189,5 +182,16 @@ function getIntentList(response, action){
             $('#skill_format').val( JSON.stringify( formatJSON, null, 2 ) );
         }
     });
+}
+
+function stopLoadingAndReportNotes(r, this_div){
+    $('.iam-loading').each(function(){
+        IAM.loading.stop({id: $(this).attr('rel')});
+    });
+
+    this_div.find('.json').html(r['response']);
+    this_div.find('.server-time').html( r['time'] );
+    this_div.find('.url-used').html( r['url'] );
+    this_div.find('.notes').addClass('in');
 }
 </script>

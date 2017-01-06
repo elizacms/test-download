@@ -27,10 +27,13 @@ class ApiController < ApplicationController
   end
 
   def wrapper_query
-    if request.headers[ 'X-Test-Env' ] == 'production'
-      @url = 'http://aneeda.sensiya.com/api/ai/say'
-    else
-      @url = 'http://us-staging-aneeda.sensiya.com/api/ai/say'
+    @url = case request.headers[ 'X-Test-Env' ]
+    when 'production'
+      'http://aneeda.sensiya.com/api/ai/say'
+    when 'staging'
+      'http://us-staging-aneeda.sensiya.com/api/ai/say'
+    when 'development'
+      'http://us-dev-aneeda.sensiya.com/api/ai/say'
     end
 
     @courier = Courier.get_request(
@@ -42,10 +45,13 @@ class ApiController < ApplicationController
   end
 
   def nlu_query
-    if request.headers[ 'X-Test-Env' ] == 'production'
-      @url = 'http://nlu.iamplus.com:8080/query'
-    else
-      @url = 'http://nlu-staging.aneeda.ai:8080/query'
+    @url = case request.headers[ 'X-Test-Env' ]
+    when 'production'
+      'http://nlu.aneeda.ai:8080/query'
+    when 'staging'
+      'http://nlu-staging.aneeda.ai:8080/query'
+    when 'development'
+      'http://nlu-dev.aneeda.ai:8080/query'
     end
 
     json = {
