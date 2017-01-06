@@ -92,9 +92,7 @@ class UsersController < ApplicationController
   end
 
   def validate_owner
-    if current_user.nil? ||
-    !current_user.is_a_skill_owner? ||
-    !current_user.has_role?( 'admin', nil )
+    if current_user.nil? || !current_user.is_a_skill_owner?
       redirect_to skills_path, flash: { notice: 'You must be an owner to have access.' }
     end
   end

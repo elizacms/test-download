@@ -11,6 +11,7 @@
       <th>Web Hook</th>
       <th>Edit Skill</th>
       <th>Intents</th>
+      <th>Your Role</th>
     </tr>
   </thead>
   <% @skills.each do |s| %>
@@ -20,6 +21,7 @@
         <td><%= s.web_hook %></td>
         <td><%= link_to( "Edit", edit_skill_path( s.id )) %></td>
         <td><%= link_to( "Intents", skill_intents_path( s.id )) %></td>
+        <td><%= Role.find_by( user_id: @current_user.id, skill_id: s.id ).try :name %></td>
       </tr>
     </tbody>
   <% end %>
