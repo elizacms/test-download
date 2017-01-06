@@ -1,9 +1,9 @@
 feature 'Skills pages' do
   let!( :developer ){ create :user  }
   let!( :skill     ){ create :skill }
+  let!( :role      ){ create :role, skill: skill, user: developer }
 
   before do
-    developer.set_role( 'developer', skill.name )
     stub_identity_token
     stub_identity_account_for developer.email
   end
@@ -16,11 +16,11 @@ feature 'Skills pages' do
   end
 
   describe 'Admin can see all Skills' do
-    let!( :admin  ){ create :user, email: 'admin@iamplus.com' }
-    let!( :skill2 ){ create :skill, name: 'Easy Skill', web_hook: 'http://ea.sy'}
+    let!( :admin  ){ create :user, email: 'admin@iamplus.com'                    }
+    let!( :skill2 ){ create :skill, name: 'Easy Skill', web_hook: 'http://ea.sy' }
+    let!( :role   ){ create :role, name: 'admin', skill: nil, user: admin        }
 
     before do
-      admin.set_role( 'admin', nil )
       stub_identity_account_for admin.email
     end
 
@@ -60,7 +60,7 @@ feature 'Skills pages' do
   end
 
   describe 'Developer can create a skill' do
-    let( :skill_name ){ 'Super Uber' }
+    let( :skill_name ){ 'Super Uber'              }
     let( :web_hook   ){ 'https://skill-uber.i.am' }
 
     specify do
@@ -99,11 +99,11 @@ feature 'Skills pages' do
   end
 
   describe 'Developer can visit the edit page' do
-    let!( :skill ){ create :skill }
+    let!( :skill ){ create :skill                         }
     let!( :dev   ){ create :user, email: 'dev@iamplus.com'}
+    let!( :role  ){ create :role, skill: skill, user: dev }
 
     before do
-      dev.set_role( 'developer', skill.name )
       stub_identity_token
       stub_identity_account_for dev.email
     end
@@ -120,7 +120,7 @@ feature 'Skills pages' do
   end
 
   describe "Developer can update the Skill's name" do
-    let!( :skill ){ create :skill }
+    let!( :skill ){ create :skill           }
     let( :updated_name ){ "Best Riding App" }
 
     specify do
@@ -139,8 +139,15 @@ feature 'Skills pages' do
     end
   end
 
-  describe 'Developer can delete a skill' do
-    let!( :skill ){ create :skill }
+  describe 'Owner can delete a skill' do
+    let!( :owner   ){ create :user, email: 'owner@iamplus.com'               }
+    let!( :skill   ){ create :skill                                          }
+    let!( :role    ){ create :role, name: 'owner', user: owner, skill: skill }
+
+    before do
+      stub_identity_token
+      stub_identity_account_for owner.email
+    end
 
     specify do
       visit '/login/success?code=0123abc'
@@ -148,6 +155,7 @@ feature 'Skills pages' do
 
       click_link 'Edit'
       click_link 'Delete this skill'
+      sleep 4
 
       expect( Skill.count ).to eq 0
       expect( page ).to have_content "Destroyed skill with name: #{ skill.name }"
@@ -155,11 +163,10 @@ feature 'Skills pages' do
   end
 
   describe 'A developer cannot visit another developers skills' do
-    let!( :skill ){ create :skill }
+    let!( :skill       ){ create :skill                                  }
     let!( :developer_2 ){ create :user, email: 'developer-2@iamplus.com' }
 
     before do
-      developer_2.set_role( 'developer', skill.name )
       stub_identity_token
       stub_identity_account_for developer_2.email
     end

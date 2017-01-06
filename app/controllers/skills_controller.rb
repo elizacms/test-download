@@ -45,14 +45,9 @@ class SkillsController < ApplicationController
 
   def destroy
     name = @skill.name
-    @skill.destroy
+    @skill.delete
 
-    redirect_to(
-      skills_path,
-      flash: {
-        alert: "Destroyed skill with name: #{name}."
-      }
-    )
+    redirect_to( skills_path, flash: { alert: "Destroyed skill with name: #{name}." } )
   end
 
 

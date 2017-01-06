@@ -1,6 +1,5 @@
 describe Dialog do
-  let( :user   ){ create :user                 }
-  let( :skill  ){ create :skill, user: user    }
+  let( :skill  ){ create :skill                }
   let( :intent ){ create :intent, skill: skill }
 
   describe 'Missing' do

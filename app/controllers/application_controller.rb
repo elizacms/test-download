@@ -30,7 +30,13 @@ class ApplicationController < ActionController::Base
     if current_user.has_role?( 'admin', nil )
       Skill.all
     else
-      current_user.roles.map { |r| Skill.find_by( id: r.skill_id ) }.uniq
+      current_user.user_skills
+    end
+  end
+
+  def validate_current_user
+    unless current_user
+      redirect_to root_path, notice: 'You do not have permissions. Please login.'
     end
   end
 end

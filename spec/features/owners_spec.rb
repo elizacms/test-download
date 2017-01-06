@@ -1,5 +1,5 @@
 feature 'Owners' do
-  let!( :admin  ){ create :admin                                                }
+  let!( :admin  ){ create :user, email: 'admin@iamplus.com'                     }
   let!( :user   ){ create :user                                                 }
   let!( :user2  ){ create :user, email: 'other-user@iamplus.com'                }
   let!( :skill1 ){ create :skill                                                }
@@ -15,12 +15,12 @@ feature 'Owners' do
   end
 
   describe 'can visit url and change skills' do
-    specify 'can visit /owners' do
-      visit '/owners'
+    specify 'can visit /developers' do
+      visit '/developers'
     end
 
     specify 'visiting a false url sends the user to the first skill' do
-      visit '/owners/dingo-brains'
+      visit '/developers/dingo-brains'
 
       within '.role-0' do
         select 'Developer', from: 'users[0]name'
@@ -31,17 +31,17 @@ feature 'Owners' do
     end
 
     specify 'can select skill', :js do
-      visit "/owners/#{skill1.id}"
+      visit "/developers/#{skill1.id}"
 
       select 'SUPER', from: 'skill'
 
-      expect( current_path ).to eq "/owners/#{skill2.id}"
+      expect( current_path ).to eq "/developers/#{skill2.id}"
     end
   end
 
   describe 'ajax -- one at a time', :js do
     specify 'can set user to a developer' do
-      visit "/owners/#{skill1.id}"
+      visit "/developers/#{skill1.id}"
 
       within '.role-1' do
         select 'Developer', from: 'users[1]name'
@@ -59,7 +59,7 @@ feature 'Owners' do
     end
 
     specify 'can unset user role from developer to none' do
-      visit "/owners/#{skill1.id}"
+      visit "/developers/#{skill1.id}"
 
       within '.role-2' do
         select 'None', from: 'users[2]name'
@@ -72,7 +72,7 @@ feature 'Owners' do
 
   describe 'Save All' do
     specify 'Set some and unset others' do
-      visit "/owners/#{skill1.id}"
+      visit "/developers/#{skill1.id}"
 
       within '.role-0' do
         select 'Developer', from: 'users[0]name'
@@ -91,7 +91,7 @@ feature 'Owners' do
     end
 
     specify 'Set all to dev and then all to none' do
-      visit "/owners/#{skill1.id}"
+      visit "/developers/#{skill1.id}"
 
       within '.role-0' do
         select 'Developer', from: 'users[0]name'
@@ -129,7 +129,7 @@ feature 'Owners' do
       expect( admin.has_role?('developer', skill1.name) ).to eq false
       expect(  user.has_role?('developer', skill1.name) ).to eq false
       expect( user2.has_role?('developer', skill1.name) ).to eq true
-      visit "/owners/#{skill1.id}"
+      visit "/developers/#{skill1.id}"
 
       within '.role-2' do
         select 'None', from: 'users[2]name'

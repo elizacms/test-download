@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   before_action :validate_user_from_identity, only: [ :login_success ]
-  before_action :validate_permissions_for_skill, only: [ :test_queries  ]
+  before_action :validate_current_user, only: [ :test_queries  ]
 
   def index
     @identity_login_page = oauth_client.auth_code.authorize_url( redirect_uri:redirect_uri )

@@ -18,12 +18,7 @@ class IntentsController < ApplicationController
     @intent = @skill.intents.create( intent_params )
 
     if @intent.persisted?
-      redirect_to(
-        skill_intents_path,
-        flash: {
-          success: "Intent #{ @intent.name } created."
-        }
-      )
+      redirect_to( skill_intents_path, flash: { success: "Intent #{ @intent.name } created." } )
     else
       flash.now[ :alert ] = @intent.errors.full_messages.join( "\n" )
       render :new

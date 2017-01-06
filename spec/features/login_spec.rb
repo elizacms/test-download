@@ -1,7 +1,12 @@
 feature 'Login and logout' do
-  let!( :admin ){ create :admin }
+  let!( :admin ){ create :user }
+  let!( :role  ){ create :role, user: admin, skill: nil, name: 'admin' }
 
-  let( :identity_login_path ){ 'https://test.identity.com/oauth/authorize?client_id=CLIENT_ID&redirect_uri=http%3A%2F%2Fwww.example.com%2Flogin%2Fsuccess&response_type=code' }
+  let( :identity_login_path ){
+    'https://test.identity.com/oauth/authorize'\
+    '?client_id=CLIENT_ID&redirect_uri='\
+    'http%3A%2F%2Fwww.example.com%2Flogin%2Fsuccess&response_type=code'
+  }
 
   before do
     stub_identity_token
@@ -17,8 +22,9 @@ feature 'Login and logout' do
 
   context 'When code is present get token from Identity and redirect to Users page' do
     specify do
-      visit "/login/success?code=0123abc"
+      visit '/login/success?code=0123abc'
 
+      expect( current_path ).to eq '/users'
       expect( page ).to have_content 'Total Users: 1'
     end
   end
@@ -29,7 +35,7 @@ feature 'Login and logout' do
     end
 
     specify do
-      visit "/login/success?code=0123abc"
+      visit '/login/success?code=0123abc'
 
       expect( page ).to have_content 'Login'
       expect( page ).to have_content 'Authorization failed.'
@@ -42,7 +48,7 @@ feature 'Login and logout' do
     end
 
     specify do
-      visit "/login/success?code=0123abc"
+      visit '/login/success?code=0123abc'
 
       expect( page ).to have_content 'Login'
     end
@@ -50,7 +56,7 @@ feature 'Login and logout' do
 
   context 'When user is logged in, he or she can logout' do
     specify do
-      visit "/login/success?code=0123abc"
+      visit '/login/success?code=0123abc'
 
       click_link 'Logout'
       expect( current_path ).to eq root_path
@@ -58,7 +64,7 @@ feature 'Login and logout' do
       # Try to visit admin-only page.
       visit '/users'
       expect( current_path ).to eq root_path
-      expect( page ).to have_content "You do not have access."
+      expect( page ).to have_content 'You do not have access.'
     end
   end
 end

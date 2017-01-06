@@ -14,6 +14,12 @@ class User
     self.roles.select{ |r| r.name == 'owner' }.map { |r| Skill.find_by( id: r.skill_id ) }
   end
 
+  def user_skills
+    self.roles
+        .select{ |r| r.name == 'owner' || r.name == 'developer' }
+        .map { |r| Skill.find_by( id: r.skill_id ) }
+  end
+
   def is_a_skill_owner?
     skills_owned.count > 0
   end

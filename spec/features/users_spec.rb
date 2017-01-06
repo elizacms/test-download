@@ -1,8 +1,8 @@
 feature 'Users pages' do
-  let!( :admin  ){ create :user  }
+  let!( :admin ){ create :user }
+  let!( :role  ){ create :role, name: 'admin', skill: nil, user: admin }
 
   before do
-    admin.set_role( 'admin', nil )
     stub_identity_token
     stub_identity_account_for admin.email
   end
@@ -154,7 +154,7 @@ feature 'Users pages' do
       visit "/users/#{user2.id}/edit"
 
       within 'form' do
-        # check :user_role_admin
+        check :admin
         click_button 'Submit'
       end
 
@@ -176,7 +176,7 @@ feature 'Users pages' do
       visit "/users/#{admin2.id}/edit"
 
       within 'form' do
-        # uncheck :user_role_admin
+        uncheck :admin
         click_button 'Submit'
       end
 

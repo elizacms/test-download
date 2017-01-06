@@ -1,9 +1,11 @@
 describe 'Test Queries', :js do
-  let( :developer ){ create :developer }
+  let!( :dev   ){ create :user  }
+  let!( :skill ){ create :skill }
+  let!( :role  ){ create :role, user: dev, skill: skill }
 
   before do
     stub_identity_token
-    stub_identity_account_for developer.email
+    stub_identity_account_for dev.email
     visit '/login/success?code=0123abc'
     visit '/test-queries'
   end
