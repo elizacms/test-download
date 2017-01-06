@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  before_action :validate_admin
+  before_action :validate_admin, except: [ :developers ]
+  before_action :validate_owner, only: [ :developers ]
   before_action :find_user, only: [ :edit, :update, :destroy ]
 
   def index
@@ -87,6 +88,14 @@ class UsersController < ApplicationController
   def validate_admin
     if current_user.nil? || !current_user.has_role?( 'admin', nil )
       redirect_to root_path, flash: { notice: "You do not have access." }
+    end
+  end
+
+  def validate_owner
+    if current_user.nil? ||
+    !current_user.is_a_skill_owner? ||
+    !current_user.has_role?( 'admin', nil )
+      redirect_to skills_path, flash: { notice: 'You must be an owner to have access.' }
     end
   end
 
