@@ -1,4 +1,4 @@
-feature 'Skills pages', :focus do
+feature 'Skills pages' do
   let!( :developer ){ create :user  }
   let!( :skill     ){ create :skill }
 

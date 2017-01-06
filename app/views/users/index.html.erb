@@ -8,6 +8,7 @@
     <tr>
       <th>Email</th>
       <th>Admin</th>
+      <th>Owner</th>
       <th></th>
     </tr>
   </thead>
@@ -15,6 +16,7 @@
   <tr>
     <td><%= u.email %></td>
     <td class='<%= u.has_role?('admin', nil) ? "icon-check" : "icon-cross" %>'></td>
+    <td class='<%= u.is_a_skill_owner? ? "icon-check" : "icon-cross" %>'></td>
     <td><%= link_to( "Edit", edit_user_path(u.id), class: "btn sm black" ) %></td>
   </tr>
 <% end %>

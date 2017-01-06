@@ -1,0 +1,93 @@
+<h2>
+  <div class="pull-left">Total Users: <%= @users.count %></div>
+  <a class="btn black lg pull-right" href='/users/new'>Invite new User</a>
+</h2>
+
+<br><br>
+
+<div class="row">
+  <div class="col-md-offset-4 col-md-4">
+    <%= form_tag do %>
+      Skills you own:
+      <%= select_tag(
+        'skill',
+        options_for_select(
+          @skills.map{ |s| [s.name, s.id] },
+          params[:skill_id]
+        ),
+        onchange: "updateSkill()"
+      ) %>
+    <% end %>
+  </div>
+</div>
+
+<%= form_tag(
+  { controller: "roles", action: "set_all_developer_roles" },
+  { method: "POST" }
+) do %>
+  <%= hidden_field_tag "skill_id", params[:skill_id] %>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Role</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each_with_index do |u, i| %>
+        <tr class="role-form role-<%= i %>">
+          <%= hidden_field_tag "users[#{i}]user_id", u.id %>
+          <%= hidden_field_tag(
+            "users[#{i}]role_id",
+            u.roles.find_by(name:'developer', skill:params[:skill_id]).try(:id),
+            { class: 'role-id' }
+          ) %>
+          <td><%= u.email %> <%= '(self)' if u == @current_user %></td>
+          <td>
+            <%= select_tag(
+              "users[#{i}]name",
+              options_for_select(
+                [['None', ''], ['Developer', 'developer']],
+                ( 'developer' if is_dev_for_skill?( params[:skill_id], u ) ),
+              )
+            ) %>
+          </td>
+          <td>
+            <button class='btn lg black individualSubmit'>Submit</button>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <button id='save-all' class='btn lg black pull-right'>Save All</button>
+<% end %>
+
+<script>
+  function updateSkill(){
+    var skill_id = $('#skill').val();
+    location.href = '/developers/' + skill_id;
+  }
+
+  $('.individualSubmit').click(function(e){
+    e.preventDefault();
+    var tr = $(this).closest('tr');
+    var data = tr.find('input').serialize();
+    data += "&name=" + tr.find('select').val();
+    data += "&skill_id=" + $(this).closest('form').find('#skill_id').val();
+
+    $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      url: '/ajax-developers',
+      data: data
+    }).done(function(r){
+      IAM.alert.run('yellow', r['notice'], 3000);
+      if (r['role_id'].$oid === undefined ){
+        this.closest('tr').find('input.role-id').attr('value', '');
+      } else {
+        this.closest('tr').find('input.role-id').attr('value', r['role_id'].$oid);
+      }
+    }.bind($(this)));
+  });
+</script>

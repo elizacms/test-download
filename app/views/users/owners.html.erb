@@ -1,60 +1,38 @@
-<h2>
-  <div class="pull-left">Total Users: <%= @users.count %></div>
-  <a class="btn black lg pull-right" href='/users/new'>Invite new User</a>
-</h2>
-
-<br><br>
-
-<div class="row">
-  <div class="col-md-offset-4 col-md-4">
-    <%= form_tag do %>
-      Skill:
-      <%= select_tag(
-        'skill',
-        options_for_select(
-          @skills.map{ |s| [s.name, s.id] },
-          params[:skill_id]
-        ),
-        onchange: "updateSkill()"
-      ) %>
-    <% end %>
-  </div>
-</div>
+<h2>Owners</h2>
 
 <%= form_tag(
-  { controller: "roles", action: "set_all_roles" },
+  { controller: "roles", action: "set_all_owner_roles" },
   { method: "POST" }
 ) do %>
-  <%= hidden_field_tag "skill_id", params[:skill_id] %>
   <table class="table table-hover">
     <thead>
       <tr>
-        <th>Email</th>
-        <th>Role</th>
+        <th>Name</th>
+        <th>Owner</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      <% @users.each_with_index do |u, i| %>
-        <tr class="role-form role-<%= i %>">
-          <%= hidden_field_tag "users[#{i}]user_id", u.id %>
+      <% @skills.each_with_index do |s, i| %>
+        <tr>
+          <%= hidden_field_tag "skills[#{i}]skill_name", s.name %>
           <%= hidden_field_tag(
-            "users[#{i}]role_id",
-            u.roles.find_by(name:'developer', skill:params[:skill_id]).try(:id),
-            { class: 'role-id' }
+            "skills[#{i}]role_id",
+            Role.find_by(name: 'owner', skill_id: s.id).try(:id)
           ) %>
-          <td><%= u.email %> <%= '(self)' if u == @current_user %></td>
+          <td><%= s.name %></td>
           <td>
             <%= select_tag(
-              "users[#{i}]name",
+              "skills[#{i}]owner_id",
               options_for_select(
-                [['None', ''], ['Developer', 'developer']],
-                ( 'developer' if is_dev_for_skill?( params[:skill_id], u ) ),
-              )
+                [''] + User.all.map {|u| [u.email, u.id]},
+                Role.find_by(name: 'owner', skill_id: s.id).try(:user_id)
+              ),
+              { class: 'owner-id' }
             ) %>
           </td>
           <td>
-            <button class='btn lg black individualSubmit'>Submit</button>
+            <button class='btn lg black individualOwnerSubmit'>Submit</button>
           </td>
         </tr>
       <% end %>
@@ -64,30 +42,25 @@
 <% end %>
 
 <script>
-  function updateSkill(){
-    var skill_id = $('#skill').val();
-    location.href = '/owners/' + skill_id;
-  }
-
-  $('.individualSubmit').click(function(e){
+  $('.individualOwnerSubmit').click(function(e){
     e.preventDefault();
     var tr = $(this).closest('tr');
     var data = tr.find('input').serialize();
-    data += "&name=" + tr.find('select').val();
-    data += "&skill_id=" + $(this).closest('form').find('#skill_id').val();
+    data += "&owner_id=" + $(this).closest('tr').find('.owner-id').val();
+    console.log(data);
 
     $.ajax({
       type: 'POST',
       dataType: 'json',
-      url: '/roles',
+      url: '/ajax-owners',
       data: data
     }).done(function(r){
       IAM.alert.run('yellow', r['notice'], 3000);
-      if (r['role_id'].$oid === undefined ){
-        this.closest('tr').find('input.role-id').attr('value', '');
-      } else {
-        this.closest('tr').find('input.role-id').attr('value', r['role_id'].$oid);
-      }
+      // if (r['role_id'].$oid === undefined ){
+      //   this.closest('tr').find('input.role-id').attr('value', '');
+      // } else {
+      //   this.closest('tr').find('input.role-id').attr('value', r['role_id'].$oid);
+      // }
     }.bind($(this)));
   });
 </script>
