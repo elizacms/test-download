@@ -18,3 +18,7 @@ pre code.json {
   max-height: 400px;
   overflow: auto;
 }
+
+code.json div {
+  background-color: inherit !important;
+}
