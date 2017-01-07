@@ -151,7 +151,6 @@ feature 'Skills pages' do
 
     specify do
       visit '/login/success?code=0123abc'
-      visit '/skills'
 
       click_link 'Edit'
       click_link 'Delete this skill'

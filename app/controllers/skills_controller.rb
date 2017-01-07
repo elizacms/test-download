@@ -45,7 +45,8 @@ class SkillsController < ApplicationController
 
   def destroy
     name = @skill.name
-    @skill.delete
+    Role.where(skill_id: @skill.id).delete_all
+    @skill.destroy
 
     redirect_to( skills_path, flash: { alert: "Destroyed skill with name: #{name}." } )
   end
