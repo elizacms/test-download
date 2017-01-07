@@ -155,7 +155,6 @@ feature 'Skills pages' do
 
       click_link 'Edit'
       click_link 'Delete this skill'
-      sleep 4
 
       expect( Skill.count ).to eq 0
       expect( page ).to have_content "Destroyed skill with name: #{ skill.name }"

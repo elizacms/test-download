@@ -10,18 +10,20 @@ class User
   validates_presence_of   :email
   validates_uniqueness_of :email
 
+  def user_roles type
+    self.roles.select{ |r| r.name == type }
+  end
+
   def skills_owned
-    self.roles.select{ |r| r.name == 'owner' }.map { |r| Skill.find_by( id: r.skill_id ) }
+    user_roles( 'owner' ).map { |role| Skill.find_by( id: role.skill_id ) }
   end
 
   def user_skills
-    self.roles
-        .select{ |r| r.name == 'owner' || r.name == 'developer' }
-        .map { |r| Skill.find_by( id: r.skill_id ) }
+    (user_roles( 'owner' ) + user_roles( 'developer' )).map { |r| Skill.find_by( id: r.skill_id ) }
   end
 
   def is_a_skill_owner?
-    skills_owned.count > 0
+    user_roles( 'owner' ).count > 0
   end
 
   before_save -> { self.email.strip!; self.email.downcase! }
