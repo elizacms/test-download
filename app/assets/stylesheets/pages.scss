@@ -19,6 +19,12 @@ pre code.json {
   overflow: auto;
 }
 
-code.json div {
-  background-color: inherit !important;
+code.json{
+  div {
+    background-color: inherit !important;
+  }
+
+  p {
+    font-size: 1em !important;
+  }
 }
