@@ -16,6 +16,7 @@ class UsersController < ApplicationController
 
     if params[:admin] == 'true'
       Role.create( name: 'admin', user_id: @user.id )
+      @user.set_role( 'admin' )
     end
 
     if @user.persisted?
@@ -38,7 +39,7 @@ class UsersController < ApplicationController
       role = Role.find_by(name: 'admin', user_id: @user.id )
 
       if role.nil? && params[:admin] == 'true'
-        Role.create( name: 'admin', user_id: @user.id )
+        @user.set_role( 'admin' )
       elsif role && params[:admin] == 'false'
         @user.remove_role( 'admin', nil )
       end
@@ -86,7 +87,7 @@ class UsersController < ApplicationController
   private
 
   def validate_admin
-    if current_user.nil? || !current_user.has_role?( 'admin', nil )
+    if current_user.nil? || !current_user.has_role?( 'admin' )
       redirect_to root_path, flash: { notice: "You do not have access." }
     end
   end

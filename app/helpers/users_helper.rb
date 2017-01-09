@@ -8,4 +8,8 @@ module UsersHelper
         .order( name: 'DESC' )
         .map { |r| r.name }
   end
+
+  def user_owns_skill_or_is_admin?( user, skill )
+    user.has_role?('owner', skill.name) || user.has_role?( 'admin' )
+  end
 end

@@ -44,11 +44,15 @@ class SkillsController < ApplicationController
   end
 
   def destroy
-    name = @skill.name
-    Role.where(skill_id: @skill.id).delete_all
-    @skill.destroy
+    if user_owns_skill_or_is_admin?( current_user, @skill )
+      name = @skill.name
+      Role.where(skill_id: @skill.id).delete_all
+      @skill.destroy
 
-    redirect_to( skills_path, flash: { alert: "Destroyed skill with name: #{name}." } )
+      redirect_to( skills_path, flash: { alert: "Destroyed skill with name: #{name}." } )
+    else
+      redirect_to( skills_path, flash: { alert: 'Only an owner or admin can delete a skill.' } )
+    end
   end
 
 

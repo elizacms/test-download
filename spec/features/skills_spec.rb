@@ -160,6 +160,25 @@ feature 'Skills pages' do
     end
   end
 
+  describe 'Developer does not see the delete skill button' do
+    let!( :dev     ){ create :user, email: 'dev@iamplus.com' }
+    let!( :skill   ){ create :skill                          }
+    let!( :role    ){ create :role, user: dev, skill: skill  }
+
+    before do
+      stub_identity_token
+      stub_identity_account_for dev.email
+    end
+
+    specify do
+      visit '/login/success?code=0123abc'
+
+      click_link 'Edit'
+
+      expect( page ).to_not have_content "Delete this skill"
+    end
+  end
+
   describe 'A developer cannot visit another developers skills' do
     let!( :skill       ){ create :skill                                  }
     let!( :developer_2 ){ create :user, email: 'developer-2@iamplus.com' }

@@ -7,7 +7,7 @@ class PagesController < ApplicationController
   end
 
   def login_success
-    if current_user.has_role?( 'admin', nil )
+    if current_user.has_role?( 'admin' )
       redirect_to users_path
     else
       redirect_to skills_path

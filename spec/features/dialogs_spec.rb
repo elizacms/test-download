@@ -61,6 +61,8 @@ feature 'Dialogs', :js do
     end
 
     click_button 'Create Dialog'
+
+    sleep 0.5
     expect( Dialog.count ).to eq 1
 
     find( '.icon-pencil' ).click

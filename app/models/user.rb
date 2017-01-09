@@ -10,12 +10,14 @@ class User
   validates_presence_of   :email
   validates_uniqueness_of :email
 
+  before_save -> { self.email.strip!; self.email.downcase! }
+
   def user_roles type
     self.roles.select{ |r| r.name == type }
   end
 
   def skills_owned
-    user_roles( 'owner' ).map { |role| Skill.find_by( id: role.skill_id ) }
+    user_roles( 'owner' ).map { |r| Skill.find_by( id: r.skill_id ) }
   end
 
   def user_skills
@@ -25,6 +27,4 @@ class User
   def is_a_skill_owner?
     user_roles( 'owner' ).count > 0
   end
-
-  before_save -> { self.email.strip!; self.email.downcase! }
 end

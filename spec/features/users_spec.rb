@@ -159,14 +159,14 @@ feature 'Users pages' do
       end
 
       expect( page ).to have_content "User #{user2.email} updated."
-      expect( User.find( user2 ).has_role?( 'admin', nil ) ).to eq true
+      expect( User.find( user2 ).has_role?( 'admin' ) ).to eq true
     end
   end
 
   describe "Admin can take away a user's admin role" do
     let( :admin2 ){ create :user, email: "another_admin@iamplus.com" }
     before do
-      admin2.set_role( 'admin', nil )
+      admin2.set_role( 'admin' )
     end
 
     specify do
@@ -181,14 +181,14 @@ feature 'Users pages' do
       end
 
       expect( page ).to have_content "User #{admin2.email} updated."
-      expect( User.find( admin2 ).has_role?( 'admin', nil ) ).to eq false
+      expect( User.find( admin2 ).has_role?( 'admin' ) ).to eq false
     end
   end
 
   describe 'Admin can delete a user' do
     let( :admin2 ){ create :user, email:'admin2@iamplus.com' }
     before do
-      admin2.set_role( 'admin', nil )
+      admin2.set_role( 'admin' )
     end
 
     specify do

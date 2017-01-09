@@ -48,12 +48,16 @@ feature 'Owners' do
         click_button 'Submit'
       end
 
+      sleep 0.5
+
       expect( user.has_role?('developer', skill1.name) ).to eq true
 
       within '.role-0' do
         select 'Developer', from: 'users[0]name'
         click_button 'Submit'
       end
+
+      sleep 0.5
 
       expect( admin.has_role?('developer', skill1.name) ).to eq true
     end
@@ -65,6 +69,8 @@ feature 'Owners' do
         select 'None', from: 'users[2]name'
         click_button 'Submit'
       end
+
+      sleep 0.5
 
       expect( user2.has_role?('developer', skill1.name) ).to eq false
     end
