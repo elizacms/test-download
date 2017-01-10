@@ -1,13 +1,14 @@
 feature 'Dialogs', :js do
-  let(  :developer       ){ create :developer               }
-  let!( :skill           ){ create :skill,  user: developer }
-  let!( :intent          ){ create :intent, skill: skill    }
-  let!( :field           ){ create :field,  intent: intent  }
-  let!( :field_data_type ){ create :field_data_type         }
+  let!( :user            ){ create :user                           }
+  let!( :skill           ){ create :skill                          }
+  let!( :role            ){ create :role, name: 'developer', user: user, skill: skill }
+  let!( :intent          ){ create :intent, skill: skill           }
+  let!( :field           ){ create :field,  intent: intent         }
+  let!( :field_data_type ){ create :field_data_type                }
 
   before do
     stub_identity_token
-    stub_identity_account_for developer.email
+    stub_identity_account_for user.email
   end
 
   specify 'Renders rule' do
@@ -60,6 +61,8 @@ feature 'Dialogs', :js do
     end
 
     click_button 'Create Dialog'
+
+    sleep 0.5
     expect( Dialog.count ).to eq 1
 
     find( '.icon-pencil' ).click

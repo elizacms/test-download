@@ -2,9 +2,10 @@ class Role
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  ROLES = [ :admin, :developer ]
+  ROLES = [ :admin, :owner, :developer ]
 
   belongs_to :user
+  belongs_to :skill, optional:true
 
   field :name, type:String
 

@@ -4,15 +4,17 @@
   class: "btn md grey"
 ) %>
 
-<%= link_to(
-  "Delete this skill",
-  skill_path(@skill),
-  method: :delete,
-  data: {
-    confirm: "Are you sure you want to delete this skill?"
-  },
-  class: "btn sm red pull-right"
-) %>
+<% if user_owns_skill_or_is_admin?( @current_user, @skill ) %>
+  <%= link_to(
+    "Delete this skill",
+    skill_path(@skill),
+    method: :delete,
+    data: {
+      confirm: "Are you sure you want to delete this skill?"
+    },
+    class: "btn sm red pull-right"
+  ) %>
+<% end %>
 
 <h1>Edit <%= @skill.name %></h1>
 

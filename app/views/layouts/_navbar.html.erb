@@ -7,13 +7,18 @@
 
     <div id="desktop-menu" class="nav navbar-nav pull-right">
       <% if @current_user %>
-        <% if @current_user.admin? %>
-          <%= link_to 'Users', users_path %>
+        <% if @current_user.has_role?( 'admin' ) %>
+          <%= link_to 'Admin', users_path %>
+          <%= link_to 'Owners', owners_path %>
         <% end %>
 
-        <%= link_to 'Test Queries', test_queries_path %>
+        <% if @current_user.is_a_skill_owner? %>
+          <%= link_to 'Developers', users_developers_path %>
+        <% end %>
 
         <%= link_to 'Skills', skills_path %>
+
+        <%= link_to 'Test Queries', test_queries_path %>
 
         <div id="regularLogout" class="dropdown pull-right">
           <a id="userMenu" class="navlink dropdown-toggle" href="javascript:void(0);" data-toggle="dropdown">

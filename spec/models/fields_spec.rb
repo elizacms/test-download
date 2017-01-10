@@ -1,6 +1,5 @@
 describe Field do
-  let!( :user   ){ create :user }
-  let!( :skill  ){ create :skill, user: user }
+  let!( :skill  ){ create :skill }
   let!( :intent ){ create :intent, skill: skill }
 
   specify 'id should be unique' do

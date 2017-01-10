@@ -8,6 +8,7 @@
     <tr>
       <th>Email</th>
       <th>Admin</th>
+      <th>Owner</th>
       <th>Developer</th>
       <th></th>
     </tr>
@@ -15,8 +16,17 @@
 <% @users.each do |u| %>
   <tr>
     <td><%= u.email %></td>
-    <td class='<%= u.admin? ? "icon-check" : "icon-cross" %>'></td>
-    <td class='<%= u.developer? ? "icon-check" : "icon-cross" %>'></td>
+    <td class='<%= u.has_role?('admin') ? "icon-check" : "icon-cross" %>'></td>
+    <td>
+      <% u.skills_for( 'owner' ).each do |s| %>
+        <code><%= s.name %></code>
+      <% end %>
+    </td>
+    <td>
+      <% u.skills_for( 'developer' ).each do |s| %>
+        <code><%= s.name %></code>
+      <% end %>
+    </td>
     <td><%= link_to( "Edit", edit_user_path(u.id), class: "btn sm black" ) %></td>
   </tr>
 <% end %>

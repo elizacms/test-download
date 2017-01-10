@@ -1,6 +1,7 @@
 feature 'Intents pages' do
-  let(  :developer ){ create :developer }
-  let!( :skill     ){ create :skill, user:developer }
+  let(  :developer ){ create :user  }
+  let!( :skill     ){ create :skill }
+  let!( :role      ){ create :role, user: developer, skill: skill }
 
   before do
     stub_identity_token
@@ -17,8 +18,9 @@ feature 'Intents pages' do
   end
 
   describe "Admin can see Intents even when they don't own the skill" do
-    let( :admin   ){ create :admin  }
-    let!( :intent ){ create :intent, skill:skill }
+    let(  :admin   ){ create :user, email: 'admin@iamplus.com' }
+    let!( :intent  ){ create :intent, skill: skill             }
+    let!( :role    ){ create :role, user: admin, skill: skill  }
 
     before do
       stub_identity_account_for admin.email
@@ -43,7 +45,7 @@ feature 'Intents pages' do
   end
 
   context 'When not developer or admin cannot see Intents' do
-    let( :user ){ create :user }
+    let( :user ){ create :user, email: 'normal_user@iamplus.com' }
 
     before do
       stub_identity_account_for user.email
@@ -148,8 +150,8 @@ feature 'Intents pages' do
   end
 
   describe 'Developer cannot see another developers intents' do
-    let!( :intent ){ create :intent, skill:skill }
-    let!( :developer_2 ){ create :developer, email: "dev2@iamplus.com" }
+    let!( :intent      ){ create :intent, skill: skill                  }
+    let!( :developer_2 ){ create :user, email: "dev2@iamplus.com"       }
 
     before do
       stub_identity_token
@@ -160,7 +162,7 @@ feature 'Intents pages' do
       visit '/login/success?code=0123abc'
       visit "/skills/#{ skill.id }/intents/#{ intent.id }/edit"
 
-      expect( current_path ).to eq '/skills'
+      expect( current_path ).to eq '/'
     end
   end
 

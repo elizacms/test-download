@@ -3,17 +3,18 @@
     <%= form_for @user do |f|%>
       <label>Email</label>
       <%= f.email_field :email %>
-      <br>
+      <br><br>
 
       <label>Admin</label>
-      <%= f.check_box :role_admin %>
-      <br>
+      <%= hidden_field_tag 'admin', false %>
+      <%= check_box_tag(
+        'admin',
+        true,
+        Role.find_by(name: 'admin', user_id: @user.id).present?
+      ) %>
 
-      <label>Developer</label>
-      <%= f.check_box :role_developer %>
       <br>
-
-      <%= f.submit 'Submit', class: "btn lg black pull-right" %>
+      <%= f.submit 'Submit', class: "btn lg black pull-right user-form-submit" %>
     <% end %>
   </div>
 </div>

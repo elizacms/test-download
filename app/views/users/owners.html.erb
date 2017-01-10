@@ -1,0 +1,73 @@
+<h2>
+  <div class='pull-left'>Set Owners</div>
+  <% if @current_user.has_role?( 'admin' ) %>
+    <a class='btn black lg pull-right users-btn' href='/users/new'>
+      Invite new User
+    </a>
+  <% end %>
+</h2>
+
+<%= form_tag(
+  { controller: "roles", action: "set_all_owner_roles" },
+  { method: "POST" }
+) do %>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Owner</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @skills.each_with_index do |s, i| %>
+        <tr class="skill-<%= i %>">
+          <%= hidden_field_tag "skills[#{i}]skill_name", s.name %>
+          <%= hidden_field_tag(
+            "skills[#{i}]role_id",
+            Role.find_by(name: 'owner', skill_id: s.id).try(:id)
+          ) %>
+          <td><%= s.name %></td>
+          <td>
+            <%= select_tag(
+              "skills[#{i}]owner_id",
+              options_for_select(
+                [''] + User.all.map {|u| [u.email, u.id]},
+                Role.find_by(name: 'owner', skill_id: s.id).try(:user_id)
+              ),
+              { class: 'owner-id' }
+            ) %>
+          </td>
+          <td class='btn-submit'>
+            <button class='btn lg black individualOwnerSubmit pull-right users-btn'>Submit</button>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <button id='save-all' class='btn lg black pull-right users-btn'>Save All</button>
+<% end %>
+
+<script>
+  $('.individualOwnerSubmit').click(function(e){
+    e.preventDefault();
+    var tr = $(this).closest('tr');
+    var data = tr.find('input').serialize();
+    data += "&owner_id=" + $(this).closest('tr').find('.owner-id').val();
+    console.log(data);
+
+    $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      url: '/ajax-owners',
+      data: data
+    }).done(function(r){
+      IAM.alert.run('yellow', r['notice'], 3000);
+      // if (r['role_id'].$oid === undefined ){
+      //   this.closest('tr').find('input.role-id').attr('value', '');
+      // } else {
+      //   this.closest('tr').find('input.role-id').attr('value', r['role_id'].$oid);
+      // }
+    }.bind($(this)));
+  });
+</script>

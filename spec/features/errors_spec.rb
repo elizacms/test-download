@@ -1,6 +1,11 @@
 describe 'Error Spec' do
-  let!( :admin ){ create :admin, email: 'admin@iamplus.com' }
-  let( :identity_login_path ){ 'https://test.identity.com/oauth/authorize?client_id=CLIENT_ID&redirect_uri=http%3A%2F%2Fwww.example.com%2Flogin%2Fsuccess&response_type=code' }
+  let!( :admin ){ create :user, email: 'admin@iamplus.com' }
+  let!( :role  ){ create :role, name: 'admin', user: admin, skill: nil }
+  let(  :identity_login_path ){
+    'https://test.identity.com/oauth/authorize?'\
+    'client_id=CLIENT_ID&redirect_uri='\
+    'http%3A%2F%2Fwww.example.com%2Flogin%2Fsuccess&response_type=code'
+  }
 
   specify 'Should authorize and take to /users even when Identity email has uppercase letters' do
     stub_identity_token

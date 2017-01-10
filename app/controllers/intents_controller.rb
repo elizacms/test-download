@@ -1,5 +1,6 @@
 class IntentsController < ApplicationController
-  before_action :validate_admin_or_developer
+  before_action :validate_current_user
+  before_action :validate_permissions_for_skill
   before_action :find_skill
   before_action :find_intent,
                 only: [ :edit, :update, :destroy, :fields, :dialogs, :submit_mturk_response ]
@@ -18,12 +19,7 @@ class IntentsController < ApplicationController
     @intent = @skill.intents.create( intent_params )
 
     if @intent.persisted?
-      redirect_to(
-        skill_intents_path,
-        flash: {
-          success: "Intent #{ @intent.name } created."
-        }
-      )
+      redirect_to( skill_intents_path, flash: { success: "Intent #{ @intent.name } created." } )
     else
       flash.now[ :alert ] = @intent.errors.full_messages.join( "\n" )
       render :new
@@ -78,7 +74,7 @@ class IntentsController < ApplicationController
   private
 
   def find_skill
-    @skill = current_user_skills.find_by( id: params[ :skill_id ] )
+    @skill = Skill.find_by( id: params[ :skill_id ] )
 
     redirect_to( skills_path ) if @skill.nil?
   end

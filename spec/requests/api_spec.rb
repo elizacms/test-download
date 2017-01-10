@@ -1,7 +1,8 @@
 describe 'API' do
-  let!( :developer ){ create :developer             }
-  let!( :skill     ){ create :skill, user:developer }
-  let!( :intent    ){ create :intent, skill:skill   }
+  let!( :developer ){ create :user                 }
+  let!( :skill     ){ create :skill                }
+  let!( :intent    ){ create :intent, skill: skill }
+  let!( :role      ){ create :role, user: developer, skill: skill }
 
   let( :params ){{ intent:intent.name }}
 

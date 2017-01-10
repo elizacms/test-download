@@ -18,6 +18,36 @@ Rails.application.routes.draw do
 
   resources :users
 
+  match '/ajax-developers',
+    to: 'roles#ajax_set_or_unset_developers',
+    as: :ajax_set_or_unset_developers,
+    via: ['POST', 'PATCH']
+
+  post '/set-all-developer-roles',
+    to: 'roles#set_all_developer_roles',
+    as: :set_all_developer_roles
+
+  match '/ajax-owners',
+    to: 'roles#ajax_set_or_unset_owners',
+    as: :ajax_set_or_unset_owners,
+    via: ['POST', 'PATCH']
+
+  post '/set-all-owner-roles',
+    to: 'roles#set_all_owner_roles',
+    as: :set_all_owner_roles
+
+  get '/owners',
+    to: 'users#owners',
+    as: :owners
+
+  get '/developers',
+    to: 'users#developers',
+    as: :users_developers
+
+  get '/developers/:skill_id',
+    to: 'users#developers',
+    as: :developers
+
   resources :skills do
     resources :intents
 

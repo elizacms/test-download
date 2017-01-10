@@ -1,13 +1,13 @@
 class PagesController < ApplicationController
   before_action :validate_user_from_identity, only: [ :login_success ]
-  before_action :validate_admin_or_developer, only: [ :test_queries  ]
+  before_action :validate_current_user, only: [ :test_queries  ]
 
   def index
     @identity_login_page = oauth_client.auth_code.authorize_url( redirect_uri:redirect_uri )
   end
 
   def login_success
-    if current_user.admin?
+    if current_user.has_role?( 'admin' )
       redirect_to users_path
     else
       redirect_to skills_path

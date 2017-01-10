@@ -4,54 +4,36 @@ module Rollable
       has_many :roles
 
       after_create ->{ roles.map &:save }
-
-      Role::ROLES.each do | role |
-        define_method "#{ role }?" do
-          !! roles.find_by( name:role )
-        end
-
-        alias_method "role_#{ role }", "#{ role }?"
-
-        define_method "role_#{ role }=" do | val |
-          if val.to_s == '1'
-            set_role( role )
-          else
-            remove_role( role )
-          end
-        end
-      end
     end
   end
 
-  def has_role role
-    Role.validate_role_for role
+  def set_role role, skill_name=nil
+    skill = Skill.find_by( name:skill_name )
 
-    !! roles.find_by( name:role )
-  end
-
-  def set_roles *roles
-    Array( roles.flatten ).each{| r | set_role r }
-  end
-
-  def set_role role
     if persisted?
-      roles.create name:role
+      roles.create!( name:role, skill:skill )
     else
-      roles.build name:role
+      roles.build!( name:role, skill:skill )
     end
   end
 
   def get_roles
-    roles.pluck( :name )
+    roles.map do | r |
+      { name:r.name }.tap do | h |
+        h.merge!( skill:r.skill.name ) if r.skill
+      end
+    end
   end
 
-  def remove_roles *roles
-    Array( roles.flatten ).each{| r | remove_role r }
+  def has_role? role, skill_name=nil
+    skill = Skill.find_by( name:skill_name )
+
+    !! roles.find_by( name:role, skill:skill )
   end
 
-  def remove_role role
-    Role.validate_role_for role
+  def remove_role role, skill_name=nil
+    skill = Skill.find_by( name:skill_name )
 
-    roles.find_by( name:role ).try :delete
+    roles.find_by( name:role, skill:skill ).try :delete
   end
 end

@@ -1,8 +1,9 @@
 describe 'Dialogs' do
-  let!( :developer ){ create :developer                }
-  let!( :skill     ){ create :skill, user:   developer }
+  let!( :developer ){ create :user                     }
+  let!( :skill     ){ create :skill                    }
   let!( :intent    ){ create :intent, skill: skill     }
   let!( :field     ){ create :field, intent: intent    }
+  let!( :role      ){ create :role, skill: skill, user: developer }
 
   let( :params ){
     {
