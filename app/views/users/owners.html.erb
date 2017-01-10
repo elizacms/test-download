@@ -21,7 +21,7 @@
     </thead>
     <tbody>
       <% @skills.each_with_index do |s, i| %>
-        <tr>
+        <tr class="skill-<%= i %>">
           <%= hidden_field_tag "skills[#{i}]skill_name", s.name %>
           <%= hidden_field_tag(
             "skills[#{i}]role_id",

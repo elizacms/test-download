@@ -47,7 +47,7 @@ class RolesController < ApplicationController
 
     redirect_to(
       "/developers/#{dev_params[:skill_id]}",
-      notice: "All developer roles for this skill saved."
+      notice: 'All developer roles for this skill saved.'
     )
   end
 
@@ -56,17 +56,17 @@ class RolesController < ApplicationController
       role = Role.find_by(id: v[:role_id])
       user = User.find_by(id: v[:owner_id])
 
-      if v[:owner_id].present? && v[:role_id].present? && role.try( :user_id ) != user.id
+      if user && role && role.try( :user_id ) != user.id
         role.delete
         user.set_role('owner', v[:skill_name])
-      elsif v[:owner_id].present? && v[:role_id].blank?
+      elsif user && !role
         user.set_role('owner', v[:skill_name])
-      elsif v[:owner_id].blank? && v[:role_id].present?
+      elsif !user && role
         role.delete
       end
     end
 
-    redirect_to "/owners", notice: "All owners roles have been set."
+    redirect_to '/owners', notice: 'All owners roles have been set.'
   end
 
   def ajax_set_or_unset_owners
