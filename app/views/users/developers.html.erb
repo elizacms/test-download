@@ -1,6 +1,10 @@
 <h2>
   <div class='pull-left'>Set Developers</div>
-  <a class='btn black lg pull-right users-btn' href='/users/new'>Invite new User</a>
+  <% if @current_user.has_role?( 'admin' ) %>
+    <a class='btn black lg pull-right users-btn' href='/users/new'>
+      Invite new User
+    </a>
+  <% end %>
 </h2>
 
 <br><br>
