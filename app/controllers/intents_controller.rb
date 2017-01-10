@@ -1,4 +1,5 @@
 class IntentsController < ApplicationController
+  before_action :validate_current_user
   before_action :validate_permissions_for_skill
   before_action :find_skill
   before_action :find_intent,

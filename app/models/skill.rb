@@ -2,7 +2,7 @@ class Skill
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  has_one  :role
+  has_many :roles, dependent: :destroy
   has_many :intents, dependent: :destroy
 
   field :name,     type:String

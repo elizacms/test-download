@@ -1,4 +1,4 @@
-feature 'Owners' do
+feature 'Developers' do
   let!( :admin  ){ create :user, email: 'admin@iamplus.com'                     }
   let!( :user   ){ create :user                                                 }
   let!( :user2  ){ create :user, email: 'other-user@iamplus.com'                }

@@ -179,6 +179,29 @@ feature 'Skills pages' do
     end
   end
 
+  describe 'Make sure roles are delete after skill detele' do
+    let!( :owner   ){ create :user, email: 'owner@iamplus.com'               }
+    let!( :skill   ){ create :skill                                          }
+    let!( :role    ){ create :role, name: 'owner', user: owner, skill: skill }
+    let!( :role2   ){ create :role, user: developer, skill: skill            }
+
+    before do
+      stub_identity_token
+      stub_identity_account_for owner.email
+    end
+
+    specify do
+      expect( Role.count ).to eq 2
+
+      visit '/login/success?code=0123abc'
+
+      click_link 'Edit'
+      click_link 'Delete this skill'
+
+      expect( Role.count ).to eq 0
+    end
+  end
+
   describe 'A developer cannot visit another developers skills' do
     let!( :skill       ){ create :skill                                  }
     let!( :developer_2 ){ create :user, email: 'developer-2@iamplus.com' }

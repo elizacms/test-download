@@ -12,19 +12,22 @@ class User
 
   before_save -> { self.email.strip!; self.email.downcase! }
 
-  def user_roles type
-    self.roles.select{ |r| r.name == type }
-  end
-
-  def skills_owned
-    user_roles( 'owner' ).map { |r| Skill.find_by( id: r.skill_id ) }
+  def skills_for( role )
+    user_roles( role ).map { |r| Skill.find_by( id: r.skill_id ) }
   end
 
   def user_skills
-    (user_roles( 'owner' ) + user_roles( 'developer' )).map { |r| Skill.find_by( id: r.skill_id ) }
+    skills_for( 'owner' ) + skills_for( 'developer' )
   end
 
   def is_a_skill_owner?
-    user_roles( 'owner' ).count > 0
+    user_roles( 'owner' ).any?
+  end
+
+
+  private
+
+  def user_roles type
+    self.roles.select{ |r| r.name == type }
   end
 end

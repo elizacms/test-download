@@ -15,7 +15,6 @@ class UsersController < ApplicationController
     @user = User.create( user_params )
 
     if params[:admin] == 'true'
-      Role.create( name: 'admin', user_id: @user.id )
       @user.set_role( 'admin' )
     end
 
@@ -41,7 +40,7 @@ class UsersController < ApplicationController
       if role.nil? && params[:admin] == 'true'
         @user.set_role( 'admin' )
       elsif role && params[:admin] == 'false'
-        @user.remove_role( 'admin', nil )
+        @user.remove_role( 'admin' )
       end
 
       redirect_to(
@@ -71,7 +70,7 @@ class UsersController < ApplicationController
       redirect_to skills_path, flash: { notice: "You don't have access." }
     end
 
-    @skills = current_user.skills_owned
+    @skills = current_user.skills_for( 'owner' )
 
     if !Skill.find_by(id: params[:skill_id] )
       params[:skill_id] = @skills.first.id

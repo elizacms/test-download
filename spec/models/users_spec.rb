@@ -57,23 +57,14 @@ describe User do
     expect( user.has_role?( :admin )).to eq false
   end
 
-  specify '#user_roles gets the roles of the type requested' do
-    user.set_role :developer, skill.name
-    user.set_role :owner, skill.name
-    user.set_role :developer, skill2.name
-
-    expect( user.user_roles( 'owner'     ).count ).to eq 1
-    expect( user.user_roles( 'developer' ).count ).to eq 2
-  end
-
-  specify '#skills_owned should return array of owned skills' do
+  specify '#skills_for("owner") should return array of owned skills' do
     user.set_role :owner, skill.name
     user.set_role :owner, skill2.name
 
-    expect( user.skills_owned ).to eq [skill, skill2]
+    expect( user.skills_for( 'owner' ) ).to eq [skill, skill2]
   end
 
-  specify '#user_skills should return all skill that user is dev or owner of' do
+  specify '#skill_for("owner") should return all skill that user is dev or owner of' do
     user.set_role :owner, skill2.name
     user.set_role :developer, skill.name
 

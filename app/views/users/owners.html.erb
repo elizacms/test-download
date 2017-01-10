@@ -1,4 +1,7 @@
-<h2>Owners</h2>
+<h2>
+  <div class='pull-left'>Set Owners</div>
+  <a class='btn black lg pull-right users-btn' href='/users/new'>Invite new User</a>
+</h2>
 
 <%= form_tag(
   { controller: "roles", action: "set_all_owner_roles" },
@@ -31,14 +34,14 @@
               { class: 'owner-id' }
             ) %>
           </td>
-          <td>
-            <button class='btn lg black individualOwnerSubmit'>Submit</button>
+          <td class='btn-submit'>
+            <button class='btn lg black individualOwnerSubmit pull-right users-btn'>Submit</button>
           </td>
         </tr>
       <% end %>
     </tbody>
   </table>
-  <button id='save-all' class='btn lg black pull-right'>Save All</button>
+  <button id='save-all' class='btn lg black pull-right users-btn'>Save All</button>
 <% end %>
 
 <script>

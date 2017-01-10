@@ -18,13 +18,13 @@
     <td><%= u.email %></td>
     <td class='<%= u.has_role?('admin') ? "icon-check" : "icon-cross" %>'></td>
     <td>
-      <% u.user_roles( 'owner' ).each do |r| %>
-        <code><%= Skill.find_by(id: r.skill_id).name %></code>
+      <% u.skills_for( 'owner' ).each do |s| %>
+        <code><%= s.name %></code>
       <% end %>
     </td>
     <td>
-      <% u.user_roles( 'developer' ).each do |r| %>
-        <code><%= Skill.find_by(id: r.skill_id).name %></code>
+      <% u.skills_for( 'developer' ).each do |s| %>
+        <code><%= s.name %></code>
       <% end %>
     </td>
     <td><%= link_to( "Edit", edit_user_path(u.id), class: "btn sm black" ) %></td>

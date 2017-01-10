@@ -1,4 +1,5 @@
 class SkillsController < ApplicationController
+  before_action :validate_current_user
   before_action :validate_permissions_for_skill, only: [ :edit, :update, :destroy ]
   before_action :find_skill, only: [ :edit, :update, :destroy ]
 
@@ -46,7 +47,6 @@ class SkillsController < ApplicationController
   def destroy
     if user_owns_skill_or_is_admin?( current_user, @skill )
       name = @skill.name
-      Role.where(skill_id: @skill.id).delete_all
       @skill.destroy
 
       redirect_to( skills_path, flash: { alert: "Destroyed skill with name: #{name}." } )
