@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :validate_admin, except: [ :developers ]
-  before_action :validate_owner, only: [ :developers ]
+  before_action :validate_admin, except: [ :developers, :invite_developer, :create ]
+  before_action :validate_admin_or_owner, only: [ :developers, :invite_developer, :create ]
   before_action :find_user, only: [ :edit, :update, :destroy ]
 
   def index
@@ -18,10 +18,23 @@ class UsersController < ApplicationController
       @user.set_role( 'admin' )
     end
 
+    if params[:skill_id].present?
+      skill_name = Skill.find_by(id: params[:skill_id])
+      @user.set_role( 'developer', skill_name )
+    end
+
     if @user.persisted?
-      redirect_to(
-        users_path, flash: { success: "User #{ @user.email } created." }
-      )
+      if params[:skill_id].present?
+
+        redirect_to(
+          users_developers_path(skill_id: params[:skill_id] ),
+          flash: { success: "User #{ @user.email } created." }
+        )
+      else
+        redirect_to(
+          users_path, flash: { success: "User #{ @user.email } created." }
+        )
+      end
 
       UserMailer.invite_user( @user.email ).deliver_now
     else
@@ -66,10 +79,6 @@ class UsersController < ApplicationController
   end
 
   def developers
-    unless current_user.is_a_skill_owner?
-      redirect_to skills_path, flash: { notice: "You don't have access." }
-    end
-
     @skills = current_user.skills_for( 'owner' )
 
     if !Skill.find_by(id: params[:skill_id] )
@@ -77,6 +86,10 @@ class UsersController < ApplicationController
     end
 
     @users = User.all
+  end
+
+  def invite_developer
+    @skill = Skill.find_by(id: params[:skill_id])
   end
 
   def owners
@@ -91,8 +104,8 @@ class UsersController < ApplicationController
     end
   end
 
-  def validate_owner
-    if current_user.nil? || !current_user.is_a_skill_owner?
+  def validate_admin_or_owner
+    if current_user.nil? || !current_user.is_a_skill_owner? && !current_user.has_role?('admin')
       redirect_to skills_path, flash: { notice: 'You must be an owner to have access.' }
     end
   end

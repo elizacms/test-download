@@ -1,16 +1,16 @@
 feature 'Developers' do
-  let!( :admin  ){ create :user, email: 'admin@iamplus.com'                     }
+  let!( :owner  ){ create :user, email: 'owner@iamplus.com'                     }
   let!( :user   ){ create :user                                                 }
   let!( :user2  ){ create :user, email: 'other-user@iamplus.com'                }
   let!( :skill1 ){ create :skill                                                }
   let!( :skill2 ){ create :skill, name: 'SUPER', web_hook: 'http://ea.sy'       }
-  let!( :role1  ){ create :role,  name: 'owner', skill: skill1, user: admin     }
-  let!( :role2  ){ create :role,  name: 'owner', skill: skill2, user: admin     }
+  let!( :role1  ){ create :role,  name: 'owner', skill: skill1, user: owner     }
+  let!( :role2  ){ create :role,  name: 'owner', skill: skill2, user: owner     }
   let!( :role3  ){ create :role,  name: 'developer', skill: skill1, user: user2 }
 
   before do
     stub_identity_token
-    stub_identity_account_for admin.email
+    stub_identity_account_for owner.email
     visit '/login/success?code=0123abc'
   end
 
@@ -27,7 +27,7 @@ feature 'Developers' do
       end
 
       click_button 'Save All'
-      expect( admin.has_role?('developer', skill1.name) ).to eq true
+      expect( owner.has_role?('developer', skill1.name) ).to eq true
     end
 
     specify 'can select skill', :js do
@@ -59,7 +59,7 @@ feature 'Developers' do
 
       sleep 0.5
 
-      expect( admin.has_role?('developer', skill1.name) ).to eq true
+      expect( owner.has_role?('developer', skill1.name) ).to eq true
     end
 
     specify 'can unset user role from developer to none' do
@@ -91,7 +91,7 @@ feature 'Developers' do
       end
       click_button 'Save All'
 
-      expect( admin.has_role?('developer', skill1.name) ).to eq true
+      expect( owner.has_role?('developer', skill1.name) ).to eq true
       expect(  user.has_role?('developer', skill1.name) ).to eq true
       expect( user2.has_role?('developer', skill1.name) ).to eq false
     end
@@ -108,7 +108,7 @@ feature 'Developers' do
 
       click_button 'Save All'
 
-      expect( admin.has_role?('developer', skill1.name) ).to eq true
+      expect( owner.has_role?('developer', skill1.name) ).to eq true
       expect(  user.has_role?('developer', skill1.name) ).to eq true
       expect( user2.has_role?('developer', skill1.name) ).to eq true
 
@@ -124,7 +124,7 @@ feature 'Developers' do
 
       click_button 'Save All'
 
-      expect( admin.has_role?('developer', skill1.name) ).to eq false
+      expect( owner.has_role?('developer', skill1.name) ).to eq false
       expect(  user.has_role?('developer', skill1.name) ).to eq false
       expect( user2.has_role?('developer', skill1.name) ).to eq false
     end
@@ -132,7 +132,7 @@ feature 'Developers' do
 
   describe 'Mix functionality', :js do
     specify 'Set a developer to none then try to do a "Save All"' do
-      expect( admin.has_role?('developer', skill1.name) ).to eq false
+      expect( owner.has_role?('developer', skill1.name) ).to eq false
       expect(  user.has_role?('developer', skill1.name) ).to eq false
       expect( user2.has_role?('developer', skill1.name) ).to eq true
       visit "/developers/#{skill1.id}"
@@ -149,6 +149,40 @@ feature 'Developers' do
       click_button 'Save All'
 
       expect( user2.has_role?('developer', skill1.name) ).to eq true
+    end
+  end
+
+  describe 'Owner can invite a new developer' do
+    specify 'New user should recieve an email' do
+      visit "/login/success?code=0123abc"
+      visit '/developers'
+
+      click_link 'Invite new Developer'
+
+      within 'form' do
+        fill_in :user_email, with: "cash_is_hungry@iamplus.com"
+        click_button 'Submit'
+      end
+
+      expect( last_email.from ).to eq ['mailer@iamplus.com']
+      expect( last_email.to ).to eq ['cash_is_hungry@iamplus.com']
+      expect( last_email.subject ).to eq "You've been given access to the Skills Manager"
+    end
+
+    specify 'Owner can invite a developer' do
+      visit '/login/success?code=0123abc'
+      visit '/developers'
+
+      click_link 'Invite new Developer'
+
+      within 'form' do
+        fill_in :user_email, with: 'new_dev@iamplus.com'
+        click_button 'Submit'
+      end
+
+      expect( page ).to have_content 'new_dev@iamplus.com'
+      expect( User.count ).to eq 4
+      expect( User.last.email ).to eq 'new_dev@iamplus.com'
     end
   end
 end

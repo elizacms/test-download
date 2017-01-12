@@ -1,10 +1,8 @@
 <h2>
   <div class='pull-left'>Set Owners</div>
-  <% if @current_user.has_role?( 'admin' ) %>
-    <a class='btn black lg pull-right users-btn' href='/users/new'>
-      Invite new User
-    </a>
-  <% end %>
+  <a class='btn black lg pull-right users-btn' href='/users/new'>
+    Invite new User
+  </a>
 </h2>
 
 <%= form_tag(

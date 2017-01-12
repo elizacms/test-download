@@ -48,6 +48,10 @@ Rails.application.routes.draw do
     to: 'users#developers',
     as: :developers
 
+  get '/developers/:skill_id/invite',
+    to: 'users#invite_developer',
+    as: :invite_dev
+
   resources :skills do
     resources :intents
 

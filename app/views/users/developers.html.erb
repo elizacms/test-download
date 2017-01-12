@@ -1,10 +1,10 @@
 <h2>
   <div class='pull-left'>Set Developers</div>
-  <% if @current_user.has_role?( 'admin' ) %>
-    <a class='btn black lg pull-right users-btn' href='/users/new'>
-      Invite new User
-    </a>
-  <% end %>
+  <%= link_to(
+    'Invite new Developer',
+    invite_dev_path( params[:skill_id] ),
+    class: 'btn black lg pull-right users-btn'
+  ) %>
 </h2>
 
 <br><br>

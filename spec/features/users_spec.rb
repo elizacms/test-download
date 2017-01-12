@@ -1,6 +1,6 @@
 feature 'Users pages' do
   let!( :admin ){ create :user }
-  let!( :role  ){ create :role, name: 'admin', skill: nil, user: admin }
+  let!( :role  ){ create :role, user: admin, name: 'admin', skill: nil }
 
   before do
     stub_identity_token
