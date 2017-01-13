@@ -40,7 +40,7 @@
   <div class='col-xs-12'>
     <h4>Wrapper Query</h4>
 
-    <%= form_tag '/wrapper-query' do %>
+    <%= form_tag '/api/wrapper-query' do %>
       <%= text_field_tag :wrapper_query, nil, class: 'form-control pull-left text-input' %>
       <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
     <% end %>
@@ -53,7 +53,7 @@
   <div class='col-xs-12'>
     <h4>NLU Query (includes skill retrieve call)</h4>
 
-    <%= form_tag '/nlu-query' do %>
+    <%= form_tag '/api/nlu-query' do %>
       <%= text_field_tag :nlu_query, nil, class: 'form-control pull-left text-input' %>
       <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
     <% end %>
@@ -65,7 +65,7 @@
 <div class='skill-retrieve skill collapse section'>
   <h4>Skill (Retrieve)</h4>
   <div class='row'>
-    <%= form_tag '/skill-retrieve' do %>
+    <%= form_tag '/api/skill-retrieve' do %>
       <div class='col-md-9'>
         <%= hidden_field_tag :skill_retrieve_url, nil, class: 'skill-url' %>
         <%= text_area_tag(
@@ -89,7 +89,7 @@
 <div class='skill-format skill collapse section'>
   <h4>Skill (Format)</h4>
   <div class='row'>
-    <%= form_tag '/skill-format' do %>
+    <%= form_tag '/api/skill-format' do %>
       <div class='col-md-9'>
         <%= hidden_field_tag :skill_format_url, nil, class: 'skill-url' %>
         <%= text_area_tag(
@@ -119,7 +119,7 @@ $('.test-btn').click(function(e){
     var action = $(this).closest('form').attr('action');
     var inputText = $(this).closest('.row').find('.text-input');
 
-    if (action === '/wrapper-query' || action === '/nlu-query'){
+    if (action === '/api/wrapper-query' || action === '/api/nlu-query'){
         if ( window.lastQuery !== undefined && window.lastQuery !== inputText.val() ){
             $(this).closest('.section').nextAll('.section').each(function(i, block){
                 $(this).find('.notes').removeClass('in');
@@ -129,7 +129,7 @@ $('.test-btn').click(function(e){
                 window.lastQuery = inputText.val();
             });
 
-            if ( action === '/wrapper-query' ){
+            if ( action === '/api/wrapper-query' ){
                 $('#nlu_query').val(window.lastQuery);
             } else {
                 $('#wrapper_query').val( window.lastQuery );
@@ -170,7 +170,7 @@ $('.test-btn').click(function(e){
             hljs.highlightBlock(block);
         });
 
-        if ( action === '/nlu-query' || action === '/skill-retrieve'){
+        if ( action === '/api/nlu-query' || action === '/api/skill-retrieve'){
             $('.skill').addClass('in');
             getIntentList(r['response'], action);
         }
@@ -187,10 +187,10 @@ function getIntentList(response, action){
         headers: {
             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
         },
-        url: '/intents-list',
+        url: '/api/intents-list',
         data: $('#intent_list_url').serialize()
     }).done(response, action, function(intents){
-        if ( action === '/nlu-query'){
+        if ( action === '/api/nlu-query'){
             window.intent = JSON.parse( response )['intent'];
             window.mentions = JSON.parse( response )['mentions'];
             var skillUrl = JSON.parse( intents['response'] )[intent].split('.com')[0];
@@ -203,7 +203,7 @@ function getIntentList(response, action){
             $('#skill_retrieve').val( JSON.stringify( retrieveJSON, null, 2 ) );
             $('#skill_retrieve_url').val( skillUrl + '.com/retrieve');
             $('#skill_format_url').val( skillUrl + '.com/format');
-        } else if ( action === '/skill-retrieve' ){
+        } else if ( action === '/api/skill-retrieve' ){
             var formatJSON = {};
             formatJSON['nlu_response'] = {};
             formatJSON['nlu_response']['intent'] = intent;

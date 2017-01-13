@@ -55,7 +55,10 @@ Rails.application.routes.draw do
   resources :skills do
     resources :intents
 
-    put '/intents/:id/mturk_response', to: 'intents#submit_mturk_response'
+    put '/intents/:id/mturk_response',
+      to: 'intents#submit_mturk_response'
+
+
   end
 
   resources :fields
@@ -63,6 +66,24 @@ Rails.application.routes.draw do
   scope :api do
     get '/webhooks',
       to: 'api#get_webhook'
+
+    post '/intents-list',
+      to: 'api#intents_list'
+
+    post '/wrapper-query',
+      to: 'api#wrapper_query'
+
+    post '/nlu-query',
+      to: 'api#nlu_query'
+
+    post '/skill-format',
+      to: 'api#skill_format'
+
+    post '/skill-retrieve',
+      to: 'api#skill_retrieve'
+
+    post '/process_intent_upload',
+      to: 'api#process_intent_upload'
   end
 
   get '/types/field-data-types',
@@ -96,23 +117,7 @@ Rails.application.routes.draw do
     to: 'intents#dialogs',
     as: :dialogs_page
 
-  # Below are for the Test Queries
   get '/test-queries',
     to: 'pages#test_queries',
     as: :test_queries
-
-  post '/intents-list',
-    to: 'api#intents_list'
-
-  post '/wrapper-query',
-    to: 'api#wrapper_query'
-
-  post '/nlu-query',
-    to: 'api#nlu_query'
-
-  post '/skill-format',
-    to: 'api#skill_format'
-
-  post '/skill-retrieve',
-    to: 'api#skill_retrieve'
 end

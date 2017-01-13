@@ -1,0 +1,23 @@
+{
+  "id": "something",
+  "fields": [
+    {
+      "id": "goodbye",
+      "type": "Boolean",
+      "mturk_field": "true"
+    },
+    {
+      "id": "hello",
+      "type": "Boolean",
+      "mturk_field": "true"
+    },
+    {
+      "id": "yesterday",
+      "type": "Boolean",
+      "mturk_field": "false"
+    }
+  ],
+  "mturk_response_fields": [
+    "crazy_town"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "zoo",
+  "fields": [
+    {
+      "id": "polar_bear",
+      "type": "Text",
+      "mturk_field": "needs_habitat"
+    },
+    {
+      "id": "snow_leopard",
+      "type": "Text",
+      "mturk_field": "limited_numbers"
+    }
+  ],
+  "mturk_response_fields": [
+    "animal_jail"
+  ]
+}

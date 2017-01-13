@@ -1,3 +1,24 @@
 .external-apps-list label {
   display: inline !important;
 }
+
+#files {
+  display: none;
+}
+
+.btn-file {
+  min-width: 130px !important;
+}
+
+.result-table {
+  width: 100%;
+}
+
+.upload-table {
+  width: 100%;
+  margin-top: -10px;
+
+  th {
+    padding-top: 0px;
+  }
+}

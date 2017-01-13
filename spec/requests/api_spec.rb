@@ -43,4 +43,16 @@ describe 'API' do
       end
     end
   end
+
+  describe 'Post to process_intent_upload' do
+    specify 'Success' do
+      header 'ContentType', 'application/json'
+      post '/api/process_intent_upload', intent_data( skill.id )
+
+      expect( last_response.status ).to eq 200
+      expect( Field.count  ).to eq 3
+      expect( Intent.count ).to eq 2
+      expect( parsed_response[:response] ).to eq "Intent \'something\' has been uploaded."
+    end
+  end
 end

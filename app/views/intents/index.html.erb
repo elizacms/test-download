@@ -1,14 +1,22 @@
 <%= link_to(
   "&larr; Skills".html_safe,
   skills_path,
-  class: "btn md grey"
+  class: 'btn md grey pull-left'
 ) %>
+
+<%= link_to(
+  'Create new Intent',
+  new_skill_intent_path( @skill.id ),
+  class: 'btn md black pull-right'
+) %>
+
+<br><br>
 <h2>
+  Skill: <%= @skill.name %>
+  <br>
   <%= pluralize @intents.count, 'Intent' %>
-  <a href='<%= new_skill_intent_path @skill.id %>'
-     class="btn md black pull-right">Create new Intent</a>
 </h2>
-<br>
+
 
 <table class="table table-hover">
   <thead class="thead-default">
@@ -40,3 +48,98 @@
     </tr>
   <% end %>
 </table>
+<br>
+
+<div class='upload-intents row'>
+  <div class='col-xs-2'>
+    <h4>Upload Intents</h4>
+    <%= form_tag({}, id: 'uploader') do %>
+      <input type='hidden' id='skill_id' value='<%= params[:skill_id] %>' />
+      <label class='btn btn-default btn-file'>
+        Choose Files
+        <input type='file' id='files' name='files[]' multiple />
+      </label>
+      <br>
+      <br>
+      <button class='lg btn black save-intents'>Upload</button>
+      <br>
+    <% end %>
+  </div>
+  <div class='col-xs-2 upload-files collapse'>
+    <h4>Files to Upload</h4>
+    <table class='table table-default upload-table'>
+      <thead><th></th></thead>
+      <tbody class='upload-table-data'></tbody>
+    </table>
+  </div>
+  <div class='col-xs-8 result-section collapse'>
+    <h4>Upload Results</h4>
+    <table class='table table-default result-table'>
+      <thead>
+        <th>File</th>
+        <th>Result</th>
+      </thead>
+      <tbody class='result-table-data'>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  if (localStorage.length > 0) {
+    $('.result-section').addClass('in');
+    $.each(localStorage, function(key, value){
+      $('.result-table-data').append(
+        '<tr class="text-' +
+        (value.match('uploaded') ? 'success' : 'danger')
+        + '"><td>' + key + '</td><td>' + value + '</td></tr>'
+      );
+
+      localStorage.removeItem( key );
+    });
+  }
+
+  $('#files').on('change', function(){
+    $('.upload-files').addClass('in');
+
+    if ($('.result-section').length > 0){
+      $('.result-section').removeClass('in');
+    }
+
+    $.each(this.files, function(index, file){
+      $('.upload-table-data').append( '<tr><td>' + escape(file.name) + '</td></tr>' );
+    });
+  });
+
+  $('.save-intents').click(function(e){
+    e.preventDefault();
+    var files = $('#files')[0].files;
+
+    $.each(files, function(index, file){
+      var reader = new FileReader();
+      reader.readAsText(file);
+
+      reader.onloadend = (function(file) {
+        return (function(e) {
+          var data = JSON.parse(this.result);
+          data['skill_id'] = $('#skill_id').val();
+          var fileName = file['name'];
+
+          $.ajax({
+            type: 'POST',
+            url: '/api/process_intent_upload',
+            data: data
+          }).done(function(r){
+            var text = r['response'];
+            localStorage.setItem( fileName, text );
+          }).fail(function(r){
+            var text = JSON.parse( r.responseText )['response'];
+            localStorage.setItem( fileName, text );
+          });
+        });
+      })(file);
+    });
+
+    location.reload();
+  });
+</script>
