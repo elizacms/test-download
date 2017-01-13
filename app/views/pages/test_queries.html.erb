@@ -1,83 +1,105 @@
-<%= form_tag do %>
-  <h4>Choose an Environment</h4>
-  <%= select_tag(
-    'intent_list_url',
-    options_for_select([
-      ['production', 'production'],
-      ['staging', 'staging'],
-      ['development', 'development']
-    ]),
-    onchange: 'clearForms()'
-  ) %>
-<% end %>
-
-<%= form_tag do %>
-  <h4>Choose a Skill</h4>
-  <%= select_tag(
-    'intents',
-    options_for_select([
-      ['', ''],
-      ['Music', 'Play Hello by Adele.'],
-      ['News', "What's the news on Trump?"],
-      ['Concerts', "When is Adele's next concert?"]
-    ]),
-    onchange: 'fillWrapperQueryAndClearPrevious()'
-  ) %>
-<% end %>
-
-<div class='wrapper-query'>
-  <h4>Wrapper Query</h4>
-
-  <%= form_tag '/wrapper-query' do %>
-    <%= text_field_tag :wrapper_query, nil, class: 'form-control text-input' %>
-    <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
+<div class='section'>
+  <%= form_tag do %>
+    <h4>Choose an Environment</h4>
+    <%= select_tag(
+      'intent_list_url',
+      options_for_select([
+        ['production', 'production'],
+        ['staging', 'staging'],
+        ['development', 'development']
+      ]),
+      onchange: 'clearForms()'
+    ) %>
   <% end %>
-  <br>
-  <%= render partial: 'query_response' %>
 </div>
 
-<div class='nlu-query'>
-  <h4>NLU Query (includes skill retrieve call)</h4>
-
-  <%= form_tag '/nlu-query' do %>
-    <%= text_field_tag :nlu_query, nil, class: 'form-control text-input' %>
-    <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
+<div class='section'>
+  <%= form_tag do %>
+    <h4>Choose a Skill</h4>
+    <%= select_tag(
+      'intents',
+      options_for_select([
+        ['', ''],
+        ['Music', 'Play Hello by Adele.'],
+        ['News', "What's the news on Trump?"],
+        ['Concerts', "When is Adele's next concert?"]
+      ]),
+      onchange: 'fillWrapperQueryAndClearPrevious()'
+    ) %>
   <% end %>
-  <br>
-  <%= render partial: 'query_response' %>
 </div>
 
-<div class='collapse skills-fields'>
-  <div class='skill-retrieve'>
-    <h4>Skill (Retrieve)</h4>
+<div class='wrapper-query row section'>
+  <div class='col-xs-12'>
+    <h4>Wrapper Query</h4>
 
-    <%= form_tag '/skill-retrieve' do %>
-      <%= hidden_field_tag :skill_retrieve_url, nil, class: 'skill-url' %>
-      <%= text_area_tag(
-        :skill_retrieve,
-        nil,
-        class: 'form-control text-input'
-      ) %>
+    <%= form_tag '/wrapper-query' do %>
+      <%= text_field_tag :wrapper_query, nil, class: 'form-control pull-left text-input' %>
       <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
     <% end %>
     <br>
     <%= render partial: 'query_response' %>
   </div>
+</div>
 
-  <div class='skill-format'>
-    <h4>Skill (Format)</h4>
+<div class='nlu-query row section'>
+  <div class='col-xs-12'>
+    <h4>NLU Query (includes skill retrieve call)</h4>
 
-    <%= form_tag '/skill-format' do %>
-    <%= hidden_field_tag :skill_format_url, nil, class: 'skill-url' %>
-      <%= text_area_tag(
-        :skill_format,
-        nil,
-        class: 'form-control text-input'
-      ) %>
+    <%= form_tag '/nlu-query' do %>
+      <%= text_field_tag :nlu_query, nil, class: 'form-control pull-left text-input' %>
       <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
     <% end %>
     <br>
     <%= render partial: 'query_response' %>
+  </div>
+</div>
+
+<div class='skill-retrieve skill collapse section'>
+  <h4>Skill (Retrieve)</h4>
+  <div class='row'>
+    <%= form_tag '/skill-retrieve' do %>
+      <div class='col-md-9'>
+        <%= hidden_field_tag :skill_retrieve_url, nil, class: 'skill-url' %>
+        <%= text_area_tag(
+          :skill_retrieve,
+          nil,
+          class: 'form-control text-input'
+        ) %>
+      </div>
+      <div class='col-md-3'>
+        <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
+      </div>
+    <% end %>
+  </div>
+  <div class='row'>
+    <div class='col-md-12'>
+      <%= render partial: 'query_response' %>
+    </div>
+  </div>
+</div>
+
+<div class='skill-format skill collapse section'>
+  <h4>Skill (Format)</h4>
+  <div class='row'>
+    <%= form_tag '/skill-format' do %>
+      <div class='col-md-9'>
+        <%= hidden_field_tag :skill_format_url, nil, class: 'skill-url' %>
+        <%= text_area_tag(
+          :skill_format,
+          nil,
+          class: 'form-control text-input'
+        ) %>
+      </div>
+      <div class='col-md-3'>
+        <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
+      </div>
+    <% end %>
+  </div>
+  <div class='row'>
+    <div class='col-md-12'>
+      <%= render partial: 'query_response' %>
+    </div>
   </div>
 </div>
 
@@ -88,11 +110,11 @@ $('.test-btn').click(function(e){
     IAM.loading.start({ type:'logo', duration: false });
 
     var action = $(this).closest('form').attr('action');
-    var inputText = $(this).siblings('.text-input');
+    var inputText = $(this).closest('.row').find('.text-input');
 
     if (action === '/wrapper-query' || action === '/nlu-query'){
         if ( window.lastQuery !== undefined && window.lastQuery !== inputText.val() ){
-            $(this).closest('div').nextAll('div').each(function(i, block){
+            $(this).closest('.section').nextAll('.section').each(function(i, block){
                 $(this).find('.notes').removeClass('in');
                 $(this).find('.json').html( '' );
                 $(this).find('.text-input').val( '' );
@@ -113,7 +135,7 @@ $('.test-btn').click(function(e){
         }
     }
 
-    if ($(this).parents('.skills-fields').length > 0) {
+    if ($(this).parents('.skill').length > 0) {
         var data = inputText.val();
     } else {
         var data = {};
@@ -127,14 +149,14 @@ $('.test-btn').click(function(e){
         headers: {
             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content'),
             'Content-Type': 'application/json',
-            'X-Skill-Url':  $(this).siblings('.skill-url').val(),
-            'X-Test-Env': $('#intent_list_url').val()
+            'X-Skill-Url':  $(this).parents('.row').find('.skill-url').val(),
+            'X-Test-Env':   $('#intent_list_url').val()
         },
         url:  action,
         data: data
     }).done(function(r){
-        var this_div = $(this).closest('div');
-        stopLoadingAndReportNotes(r, this_div);
+        var thisSection = $(this).closest('.section');
+        stopLoadingAndReportNotes(r, thisSection);
 
         // Highlight the code.
         $('pre code').each(function(i, block) {
@@ -142,12 +164,12 @@ $('.test-btn').click(function(e){
         });
 
         if ( action === '/nlu-query' || action === '/skill-retrieve'){
-            $('.skills-fields').addClass('in');
+            $('.skill').addClass('in');
             getIntentList(r['response'], action);
         }
     }.bind(this)).fail(function(r){
-        var this_div = $(this).closest('div');
-        stopLoadingAndReportNotes(r, this_div);
+        var thisSection = $(this).closest('.section');
+        stopLoadingAndReportNotes(r, thisSection);
     });
 });
 
@@ -185,14 +207,14 @@ function getIntentList(response, action){
     });
 }
 
-function stopLoadingAndReportNotes(r, this_div){
+function stopLoadingAndReportNotes(r, section){
     $('.iam-loading').each(function(){
         IAM.loading.stop({id: $(this).attr('rel')});
     });
 
-    this_div.find('.json').html(r['response']);
-    this_div.find('.server-time').html( r['time'] );
-    this_div.find('.url-used').html( r['url'] );
-    this_div.find('.notes').addClass('in');
+    section.find('.json').html(r['response']);
+    section.find('.server-time').html( r['time'] );
+    section.find('.url-used').html( r['url'] );
+    section.find('.notes').addClass('in');
 }
 </script>

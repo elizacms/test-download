@@ -4,6 +4,10 @@ textarea {
   min-height: 250px !important;
 }
 
+form {
+  margin-bottom: 0px !important;
+}
+
 .fields {
   font-family: monospace;
 }
@@ -14,12 +18,20 @@ textarea {
   font-family: monospace !important;
 }
 
+.skill {
+  .test-btn {
+    margin-top: 210px;
+  }
+}
+
+h4 {
+  margin-bottom: 0px !important;
+}
+
 pre code.json {
   max-height: 400px;
   overflow: auto;
-}
 
-code.json{
   div {
     background-color: inherit !important;
   }
@@ -28,3 +40,12 @@ code.json{
     font-size: 1em !important;
   }
 }
+
+.notes {
+  font-size: 14px !important;
+}
+
+.top-div {
+  margin-bottom: 15px;
+}
+
