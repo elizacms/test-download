@@ -244,4 +244,21 @@ feature 'Users pages' do
       expect( current_path ).to eq root_path
     end
   end
+
+  describe 'When a user is created with uppercase letters, it is saved as downcase' do
+    specify do
+      visit '/login/success?code=0123abc'
+      visit '/users'
+
+      click_link 'Invite new User'
+
+      within 'form' do
+        fill_in :user_email, with: 'NEW@iamplus.com'
+        click_button 'Submit'
+      end
+
+      expect( page ).to have_content 'new@iamplus.com'
+      expect( User.last.email ).to eq 'new@iamplus.com'
+    end
+  end
 end

@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
+  before_action :email_lower_case_and_remove_trailing_space
+
   include UsersHelper
 
   def current_user
@@ -27,6 +29,13 @@ class ApplicationController < ActionController::Base
   def validate_current_user
     if current_user.nil?
       redirect_to root_path, notice: 'You do not have permission to access that area.'
+    end
+  end
+
+  def email_lower_case_and_remove_trailing_space
+    if params[:email].present?
+      params[:email].strip!
+      params[:email].downcase!
     end
   end
 end
