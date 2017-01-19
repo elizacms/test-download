@@ -22,7 +22,14 @@
         ['', ''],
         ['Music', 'Play Hello by Adele.'],
         ['News', "What's the news on Trump?"],
-        ['Concerts', "When is Adele's next concert?"]
+        ['Concerts', "When is Adele's next concert?"],
+        ['Weather', "What's the weather in Los Angeles?"],
+        ['Tansport', 'Get me an Uber to LAX.'],
+        ['Movies', 'Who stars in The Force Awakens?'],
+        ['TV', 'Tell me about The Big Bang Theory.'],
+        ['Yelp', 'Find sushi restaurants in Los Angeles.' ],
+        ['Sports', 'What was The Broncos record in 2015?'],
+        ['Calendar', 'Schedule me for a haircut at 1PM tomorrow.' ]
       ]),
       onchange: 'fillWrapperQueryAndClearPrevious()'
     ) %>
@@ -212,9 +219,9 @@ function stopLoadingAndReportNotes(r, section){
         IAM.loading.stop({id: $(this).attr('rel')});
     });
 
-    section.find('.json').html(r['response']);
-    section.find('.server-time').html( r['time'] );
-    section.find('.url-used').html( r['url'] );
+    section.find('.json').text(r['response']);
+    section.find('.server-time').text( r['time'] );
+    section.find('.url-used').text( r['url'] );
     section.find('.notes').addClass('in');
 }
 </script>
