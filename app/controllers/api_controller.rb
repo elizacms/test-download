@@ -81,8 +81,24 @@ class ApiController < ApplicationController
     render_json{ return }
   end
 
+  def process_intent_upload
+    parser_response = IntentParser.parse_and_create( intent_upload_params )
+    render json: {
+      response: parser_response[:notice]
+    }, status: parser_response[:status]
+  end
+
 
   private
+
+  def intent_upload_params
+    params.permit(
+      :id,
+      :skill_id,
+      { fields: [ :id, :type, :mturk_field ] },
+      { mturk_response_fields: [] }
+    )
+  end
 
   def send_courier_post( url, body )
     @courier = Courier.post_request( url, body )

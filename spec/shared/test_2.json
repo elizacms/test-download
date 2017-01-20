@@ -1,0 +1,28 @@
+{
+  "id": "la_passageways",
+  "fields": [
+    {
+      "id": "1000_oaks",
+      "type": "Date",
+      "mturk_field": "in_the_past"
+    },
+    {
+      "id": "virgil",
+      "type": "Text",
+      "mturk_field": "new_turks"
+    },
+    {
+      "id": "hyperion",
+      "type": "Boolean",
+      "mturk_field": "true"
+    },
+    {
+      "id": "heliotrope",
+      "type": "Text",
+      "mturk_field": "bloodstone"
+    }
+  ],
+  "mturk_response_fields": [
+    "exposition"
+  ]
+}

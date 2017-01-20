@@ -11,7 +11,8 @@ class Intent
   field :external_applications,  type:Array, default: []
   field :requires_authorization, type:Mongoid::Boolean
 
-  validates_presence_of :name
+  validates_presence_of   :name
+  validates_uniqueness_of :name, scope: :skill_id
 
   def external_applications
     self.requires_authorization == false ? [] : self[:external_applications]

@@ -9,7 +9,7 @@ feature 'Intents pages' do
   end
 
   specify 'Developer can see Intents' do
-    visit "/login/success?code=0123abc"
+    visit '/login/success?code=0123abc'
     visit '/skills'
 
     click_link 'Intents'
@@ -27,7 +27,7 @@ feature 'Intents pages' do
     end
 
     specify do
-      visit "/login/success?code=0123abc"
+      visit '/login/success?code=0123abc'
       visit '/skills'
 
       click_link 'Intents'
@@ -52,7 +52,7 @@ feature 'Intents pages' do
     end
 
     specify do
-      visit "/login/success?code=0123abc"
+      visit '/login/success?code=0123abc'
       visit "/skills/#{ skill.id }/intents"
 
       expect( page ).to have_content 'Login'
@@ -65,7 +65,7 @@ feature 'Intents pages' do
     let( :intent_description ){ 'Get a ride a with Uber.' }
 
     specify do
-      visit "/login/success?code=0123abc"
+      visit '/login/success?code=0123abc'
       click_link 'Intents'
       click_link 'Create new Intent'
 
@@ -86,7 +86,7 @@ feature 'Intents pages' do
     let( :intent_description ){ 'Get a ride a with Uber.' }
 
     specify do
-      visit "/login/success?code=0123abc"
+      visit '/login/success?code=0123abc'
       click_link 'Intents'
       click_link 'Create new Intent'
 
@@ -104,7 +104,7 @@ feature 'Intents pages' do
     let!( :intent ){ create :intent, skill:skill }
 
     specify do
-      visit "/login/success?code=0123abc"
+      visit '/login/success?code=0123abc'
       click_link 'Intents'
 
       click_link 'Edit Details'
