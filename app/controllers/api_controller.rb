@@ -43,7 +43,7 @@ class ApiController < ApplicationController
 
     @courier = Courier.get_request(
       @url,
-      {input: params[:wrapper_query], user_id: current_user.email}
+      {input: params[:wrapper_query], user_id: current_user.email, access_token:session[ :access_token ]}
     )
 
     render_json{ return }

@@ -26,6 +26,45 @@ describe 'Test Queries', :js do
     end
   end
 
+  describe 'request to wrapper ' ,:focus do
+    let( :url ){ 'http://aneeda.sensiya.com/api/ai/say' }
+    let( :expected_params ){{ input:'Play Hello by Adele.', 
+                              user_id:'user@iamplus.com',
+                              access_token:'access_token'}}
+
+    before do
+      allow(Courier)
+        .to receive(:get_request)
+        .and_return({response: '{intent: music}', time: 0.05})
+      allow(Courier)
+      .to receive(:post_request)
+      .and_return({response: '{intent: fake_news, mentions:[]}', time: 0.011})
+
+      select 'Music', from: 'intents'
+
+      within '.wrapper-query' do
+        click_button 'Test'
+      end
+    end
+
+    specify 'includes identity token and other params' do
+      within '.wrapper-query .json' do
+        expect( page ).to have_content '{intent: music}'
+      end
+
+      expect(Courier).to have_received(:get_request)
+                     .with( url, expected_params )
+    end
+
+    specify 'updates skill retrieve textarea' do
+      within '.nlu-query' do
+        click_button 'Test'
+      end
+
+      expect(find('#skill_retrieve')).to have_content 'access_token: "access_token"'
+    end
+  end
+
   specify 'user should be able to make a request of the NLU' do
     expect(Courier)
       .to receive(:get_request)

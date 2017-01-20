@@ -72,11 +72,10 @@ class PagesController < ApplicationController
   end
 
   def get_account_from_identity
-    # Redirected from Identity with code in URL param.
-    # Now get token from identity
-
     begin
       token = oauth_client.auth_code.get_token( params[ :code ], redirect_uri:redirect_uri )
+      session[ :access_token ] = token.token
+
       token.get( identity_account_path, headers:{ 'Accept':'application/json' })
 
     rescue OAuth2::Error => e
