@@ -82,10 +82,24 @@ class ApiController < ApplicationController
   end
 
   def process_intent_upload
-    parser_response = IntentParser.parse_and_create( intent_upload_params )
-    render json: {
-      response: parser_response[:notice]
-    }, status: parser_response[:status]
+    response = IntentUploader.parse_and_create( intent_upload_params )
+
+    if response[:notice] =~ /uploaded/
+      render json: { response: response[:notice] }, status: 200
+    else
+      render json: { response: response[:notice] }, status: 422
+    end
+  end
+
+  def process_dialog_upload
+    csv = CSV.parse( request.body.read, headers:true ).map{ |r| r.to_hash }
+    response = DialogUploader.create_for( csv )
+
+    if response
+      render json: { response: 'Dialog created.' }, status: 200
+    else
+      render json: { response: 'Cannot create dialog without intent_id.' }, status: 422
+    end
   end
 
 

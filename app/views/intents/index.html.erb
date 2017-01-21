@@ -53,7 +53,7 @@
 <div class='upload-intents row'>
   <div class='col-xs-2'>
     <h4>Upload Intents</h4>
-    <%= form_tag({}, id: 'uploader') do %>
+    <%= form_tag do %>
       <input type='hidden' id='skill_id' value='<%= params[:skill_id] %>' />
       <label class='btn btn-default btn-file'>
         Choose Files

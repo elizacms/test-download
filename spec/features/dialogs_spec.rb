@@ -18,7 +18,7 @@ feature 'Dialogs', :js do
     click_link 'Edit Details'
     click_link 'Edit Dialogs'
 
-    within 'form' do
+    within 'form.dialog' do
       fill_in  :response,     with: 'what song would you like to hear'
       select   field.name,    from: 'unresolved-field'
       select   field.name,    from: 'awaiting-field'
@@ -36,7 +36,7 @@ feature 'Dialogs', :js do
     click_link 'Edit Details'
     click_link 'Edit Dialogs'
 
-    within 'form' do
+    within 'form.dialog' do
       fill_in  :response,     with: '   '
       select   field.name,    from: 'missing-field'
       select   field.name,    from: 'awaiting-field'
@@ -54,7 +54,7 @@ feature 'Dialogs', :js do
     click_link 'Edit Details'
     click_link 'Edit Dialogs'
 
-    within 'form' do
+    within 'form.dialog' do
       fill_in  :response,     with: 'what song would you like to hear'
       select   field.name,    from: 'unresolved-field'
       select   field.name,    from: 'awaiting-field'
@@ -82,7 +82,7 @@ feature 'Dialogs', :js do
     click_link 'Edit Details'
     click_link 'Edit Dialogs'
 
-    within 'form' do
+    within 'form.dialog' do
       fill_in  :response,     with: 'what song would you like to hear'
       select   field.name,    from: 'missing-field'
       select   field.name,    from: 'awaiting-field'

@@ -1,16 +1,16 @@
-class IntentParser
+class IntentUploader
   class <<self
     def parse_and_create( data )
       if data['id'].blank?
-        return { notice: 'Cannot create an Intent without an ID.', status: 422 }
+        return { notice: 'Cannot create an Intent without an ID.' }
       end
 
       if data['skill_id'].blank? || !Skill.find_by(id: data['skill_id'])
-        return { notice: 'Cannot create an Intent without a skill.', status: 422 }
+        return { notice: 'Cannot create an Intent without a skill.' }
       end
 
       if Intent.find_by(name: data['id'])
-        return { notice: 'Intent already exists.', status: 422 }
+        return { notice: 'Intent already exists.' }
       end
 
       intent = Intent.create(
@@ -28,7 +28,7 @@ class IntentParser
         )
       end
 
-      return { notice: "Intent '#{data["id"]}' has been uploaded.", status: 200 }
+      return { notice: "Intent '#{intent.name}' has been uploaded." }
     end
   end
 end

@@ -40,13 +40,6 @@ RSpec.configure do |config|
     /gems/
   ]
 
-  config.before(:all) do
-    # Fix issue with browser hanging on first spec
-    visit '/'
-    # sleep 1
-    execute_script( 'window.reload();' ) if Capybara.current_driver == Capybara.javascript_driver
-  end
-
   config.before(:each) do
     Mongoid.purge!
     ActionMailer::Base.deliveries = []

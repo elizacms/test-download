@@ -1,0 +1,2 @@
+intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en
+something,100,hello,goodbye && hello,goodbye,goodbye && yo yo,Hello world
