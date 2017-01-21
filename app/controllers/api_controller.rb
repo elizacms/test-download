@@ -122,6 +122,7 @@ class ApiController < ApplicationController
   def render_json
     render json: {
       response: @courier[:response],
+      access_token: session[:access_token],
       url: @url,
       time: ActiveSupport::NumberHelper.number_to_delimited( (@courier[:time] * 1000).to_i )
     }, status: 200
