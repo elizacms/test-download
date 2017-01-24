@@ -55,4 +55,16 @@ describe 'API' do
       expect( parsed_response[:response] ).to eq "Intent \'something\' has been uploaded."
     end
   end
+
+  describe 'Post to process_dialog_upload' do
+    specify 'Success' do
+      header 'Content-Type', 'text/csv; charset=utf-8'
+      header 'Accept', 'text/csv; charset=utf-8'
+      post '/api/process_dialog_upload', File.read( 'spec/shared/test.csv' )
+
+      expect( last_response.status ).to eq 200
+      expect( Dialog.count ).to eq 1
+      expect( parsed_response[:response] ).to eq "Dialog created."
+    end
+  end
 end

@@ -19,3 +19,7 @@ def intent_data( skill_id, file='spec/shared/test.json' )
   hsh = JSON.parse(File.read( file ))
   hsh.merge!( 'fields' => hsh['fields'].each_with_index.to_h.invert, 'skill_id' => skill_id )
 end
+
+def dialog_data(file='spec/shared/test.csv')
+  CSV.parse( File.read( file ), headers:true ).map{ |r| r.to_hash }
+end

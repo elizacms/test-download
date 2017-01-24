@@ -1,8 +1,8 @@
-describe IntentParser do
+describe IntentUploader do
   let!(:skill){ create :skill }
 
   specify 'should create proper intents and fields with the suitable data' do
-    parse = IntentParser.parse_and_create( intent_data( skill.id ) )
+    parse = IntentUploader.parse_and_create( intent_data( skill.id ) )
 
     expect( parse[:notice]              ).to eq "Intent 'something' has been uploaded."
     expect( Field.first.name            ).to eq 'goodbye'
@@ -13,7 +13,7 @@ describe IntentParser do
   end
 
   specify 'should return the proper notice when the intent does not have an ID' do
-    parse = IntentParser.parse_and_create( intent_data( skill.id ).merge!( 'id' => '' ) )
+    parse = IntentUploader.parse_and_create( intent_data( skill.id ).merge!( 'id' => '' ) )
 
     expect( Field.count    ).to eq 0
     expect( Intent.count   ).to eq 0
@@ -23,7 +23,7 @@ describe IntentParser do
   specify 'should exit and inform user when intent already exists' do
     FactoryGirl.create( :intent, skill: skill )
 
-    parse = IntentParser.parse_and_create( intent_data( skill.id ).merge!( 'id' => 'get_ride' ) )
+    parse = IntentUploader.parse_and_create( intent_data( skill.id ).merge!( 'id' => 'get_ride' ) )
 
     expect( Field.count     ).to eq 0
     expect( Intent.count    ).to eq 1
@@ -31,7 +31,7 @@ describe IntentParser do
   end
 
   specify 'if fields are blank, should create intent and exit successfully' do
-    parse = IntentParser.parse_and_create( intent_data( skill.id ).merge!( 'fields' => {} ) )
+    parse = IntentUploader.parse_and_create( intent_data( skill.id ).merge!( 'fields' => {} ) )
 
     expect( Field.count    ).to eq 0
     expect( Intent.count   ).to eq 1
@@ -39,7 +39,7 @@ describe IntentParser do
   end
 
   specify 'if skill_id is not present, should exit and inform user' do
-    parse = IntentParser.parse_and_create( intent_data( skill.id ).merge!( 'skill_id' => '' ) )
+    parse = IntentUploader.parse_and_create( intent_data( skill.id ).merge!( 'skill_id' => '' ) )
 
     expect( Field.count    ).to eq 0
     expect( Intent.count   ).to eq 0
@@ -47,7 +47,7 @@ describe IntentParser do
   end
 
   specify 'if skill is not found, should exit and inform user' do
-    parse = IntentParser.parse_and_create( intent_data( skill.id ).merge!( 'skill_id' => 'blah' ) )
+    parse = IntentUploader.parse_and_create( intent_data( skill.id ).merge!( 'skill_id' => 'blah' ) )
 
     expect( Field.count    ).to eq 0
     expect( Intent.count   ).to eq 0
@@ -56,9 +56,9 @@ describe IntentParser do
 
   specify 'should be able to handle multiple requests at a time' do
     Thread.new do
-      IntentParser.parse_and_create( intent_data( skill.id )   )
-      IntentParser.parse_and_create( intent_data( skill.id, 'spec/shared/test_2.json' ) )
-      IntentParser.parse_and_create( intent_data( skill.id, 'spec/shared/test_3.json' ) )
+      IntentUploader.parse_and_create( intent_data( skill.id )   )
+      IntentUploader.parse_and_create( intent_data( skill.id, 'spec/shared/test_2.json' ) )
+      IntentUploader.parse_and_create( intent_data( skill.id, 'spec/shared/test_3.json' ) )
     end.join
 
     expect( Intent.count ).to eq 3

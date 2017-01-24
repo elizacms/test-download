@@ -84,6 +84,9 @@ Rails.application.routes.draw do
 
     post '/process_intent_upload',
       to: 'api#process_intent_upload'
+
+    post '/process_dialog_upload',
+      to: 'api#process_dialog_upload'
   end
 
   get '/types/field-data-types',
