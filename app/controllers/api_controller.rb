@@ -32,9 +32,9 @@ class ApiController < ApplicationController
   def wrapper_query
     @url = case request.headers[ 'X-Test-Env' ]
     when 'production'
-      'http://aneeda.sensiya.com/api/ai/say'
+      'https://us-aneeda.sensiya.com/api/ai/say'
     when 'de-production'
-      'http://de-aneeda.sensiya.com/api/ai/say'
+      'https://de-aneeda.sensiya.com/api/ai/say'
     when 'staging'
       'http://us-staging-aneeda.sensiya.com/api/ai/say'
     when 'development'
