@@ -1,14 +1,14 @@
 feature 'Dialogs', :js do
-  let!( :user            ){ create :user                           }
-  let!( :skill           ){ create :skill                          }
-  let!( :role            ){ create :role, name: 'developer', user: user, skill: skill }
-  let!( :intent          ){ create :intent, skill: skill           }
-  let!( :field           ){ create :field,  intent: intent         }
-  let!( :field_data_type ){ create :field_data_type                }
+  let!( :dev             ){ create :user                          }
+  let!( :skill           ){ create :skill                         }
+  let!( :role            ){ create :role, user: dev, skill: skill }
+  let!( :intent          ){ create :intent, skill: skill          }
+  let!( :field           ){ create :field,  intent: intent        }
+  let!( :field_data_type ){ create :field_data_type               }
 
   before do
     stub_identity_token
-    stub_identity_account_for user.email
+    stub_identity_account_for dev.email
   end
 
   specify 'Renders rule' do

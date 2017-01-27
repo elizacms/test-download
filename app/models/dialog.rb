@@ -13,9 +13,6 @@ class Dialog
   validates :response, presence: true
   validate :must_have_one_rule_field
 
-  before_create :set_id
-
-
   def serialize
     {
       id: id,
@@ -31,12 +28,6 @@ class Dialog
 
 
   private
-
-  def set_id
-    last = Dialog.order( id: :DESC ).first.try( :id ).to_i
-
-    self.id = last + 1
-  end
 
   def response_cannot_be_set_of_empties
     if set_of_empties?(response)

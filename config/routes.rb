@@ -120,6 +120,10 @@ Rails.application.routes.draw do
     to: 'intents#dialogs',
     as: :dialogs_page
 
+  get '/dialogs-upload',
+    to: 'pages#dialogs_upload',
+    as: :dialogs_upload
+
   get '/test-queries',
     to: 'pages#test_queries',
     as: :test_queries

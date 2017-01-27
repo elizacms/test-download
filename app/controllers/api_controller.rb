@@ -87,7 +87,7 @@ class ApiController < ApplicationController
   end
 
   def process_intent_upload
-    response = IntentUploader.parse_and_create( intent_upload_params )
+    response = IntentUploader.parse_and_create( intent_upload_params, current_user )
 
     if response[:notice] =~ /uploaded/
       render json: { response: response[:notice] }, status: 200
@@ -97,14 +97,10 @@ class ApiController < ApplicationController
   end
 
   def process_dialog_upload
-    csv = CSV.parse( request.body.read, headers:true ).map{ |r| r.to_hash }
-    response = DialogUploader.create_for( csv )
+    csv = CSV.parse( request.body.read, { headers: true } ).map{ |r| r.to_hash }
+    response = DialogUploader.create_for( csv, current_user )
 
-    if response
-      render json: { response: 'Dialog created.' }, status: 200
-    else
-      render json: { response: 'Cannot create dialog without intent_id.' }, status: 422
-    end
+    render json: { response: response }, status: 200
   end
 
 
@@ -133,7 +129,7 @@ class ApiController < ApplicationController
 
   def validate_api_auth
     if request.headers[ 'X-Api-Authorization' ] != ENV[ 'API_AUTHORIZATION' ]
-      render status:401, json:{}.to_json
+      render status: 401, json: {}.to_json
     end
   end
 end

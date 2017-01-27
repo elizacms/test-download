@@ -30,3 +30,13 @@
     </tbody>
   <% end %>
 </table>
+
+<br>
+
+<% if @current_user.has_role?('admin') %>
+  <%= link_to(
+    "Upload Dialogs",
+    dialogs_upload_path,
+    class: 'btn lg black pull-right'
+  ) %>
+<% end %>
