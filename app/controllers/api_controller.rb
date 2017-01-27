@@ -14,8 +14,11 @@ class ApiController < ApplicationController
   end
 
   def intents_list
+    env = params[:intent_list_url]
+    env = 'production' if env == 'de-production'
+
     response = HTTParty.get(
-      "http://intent-webhook-map.aneeda.ai/#{params[:intent_list_url]}.json",
+      "http://intent-webhook-map.aneeda.ai/#{env}.json",
       format: :plain
     )
 
@@ -30,6 +33,8 @@ class ApiController < ApplicationController
     @url = case request.headers[ 'X-Test-Env' ]
     when 'production'
       'http://aneeda.sensiya.com/api/ai/say'
+    when 'de-production'
+      'http://de-aneeda.sensiya.com/api/ai/say'
     when 'staging'
       'http://us-staging-aneeda.sensiya.com/api/ai/say'
     when 'development'
@@ -46,7 +51,7 @@ class ApiController < ApplicationController
 
   def nlu_query
     @url = case request.headers[ 'X-Test-Env' ]
-    when 'production'
+    when 'production', 'de-production'
       'http://nlu.aneeda.ai:8080/query'
     when 'staging'
       'http://nlu-staging.aneeda.ai:8080/query'
