@@ -41,10 +41,18 @@ class ApiController < ApplicationController
       'http://us-dev-aneeda.sensiya.com/api/ai/say'
     end
 
-    @courier = Courier.get_request(
-      @url,
-      {input: params[:wrapper_query], user_id: current_user.email, access_token:session[ :access_token ]}
-    )
+    json = {
+      'assistant'     => 'aneeda',
+      'iAmPlusId'     => current_user.email,
+      'input'         => params[:wrapper_query],
+      'oauthIdentity' => {
+        'oauthToken'        => session[:access_token],
+        'oauthExpiry'       => session[:access_token_expiry],
+        'oauthRefreshToken' => session[:refresh_token]
+      }
+    }
+
+    send_courier_post( @url, json.to_json )
 
     render_json{ return }
   end
@@ -60,9 +68,9 @@ class ApiController < ApplicationController
     end
 
     json = {
-      "iAmPlusId" => current_user.email,
-      "input"     => params[:nlu_query],
-      "appData"   => { "id": "com.iamplus.aneedacall" }
+      'iAmPlusId' => current_user.email,
+      'input'     => params[:nlu_query],
+      'appData'   => { 'id' => 'com.iamplus.aneedacall' }
     }
 
     send_courier_post( @url, json.to_json )

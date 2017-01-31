@@ -12,8 +12,8 @@ describe 'Test Queries', :js do
 
   specify 'user should be able to make a request wrapper' do
     expect(Courier)
-      .to receive(:get_request)
-      .and_return({response: '{intent: music}', time: 0.05})
+      .to receive(:post_request)
+      .and_return({response: "{\"intent\": \"music\"}", time: 0.05})
 
     select 'Music', from: 'intents'
 
@@ -21,24 +21,28 @@ describe 'Test Queries', :js do
       click_button 'Test'
 
       within '.json' do
-        expect( page ).to have_content '{intent: music}'
+        expect( page ).to have_content "{\"intent\": \"music\"}"
       end
     end
   end
 
-  describe 'request to wrapper ' ,:focus do
-    let( :url ){ 'http://aneeda.sensiya.com/api/ai/say' }
-    let( :expected_params ){{ input:'Play Hello by Adele.', 
-                              user_id:'user@iamplus.com',
-                              access_token:'access_token'}}
+  describe 'request to wrapper' do
+    let( :url ){ 'https://us-aneeda.sensiya.com/api/ai/say' }
+    let( :expected_params ){{
+      'assistant' => 'aneeda',
+      'iAmPlusId' => 'user@iamplus.com',
+      'input'     => 'Play Hello by Adele.',
+      'oauthIdentity' => {
+        'oauthToken'        => 'access_token',
+        'oauthExpiry'       => nil,
+        'oauthRefreshToken' => nil
+      }
+    }.to_json }
 
     before do
       allow(Courier)
-        .to receive(:get_request)
-        .and_return({response: '{intent: music}', time: 0.05})
-      allow(Courier)
-      .to receive(:post_request)
-      .and_return({response: '{intent: fake_news, mentions:[]}', time: 0.011})
+        .to receive(:post_request).twice
+        .and_return({response: "{\"intent\":\"fake_news\",\"mentions\":[]}", time: 0.011})
 
       select 'Music', from: 'intents'
 
@@ -49,29 +53,17 @@ describe 'Test Queries', :js do
 
     specify 'includes identity token and other params' do
       within '.wrapper-query .json' do
-        expect( page ).to have_content '{intent: music}'
+        expect( page ).to have_content "{\"intent\":\"fake_news\",\"mentions\":[]}"
       end
 
-      expect(Courier).to have_received(:get_request)
-                     .with( url, expected_params )
-    end
-
-    specify 'updates skill retrieve textarea' do
-      within '.nlu-query' do
-        click_button 'Test'
-      end
-
-      expect(find('#skill_retrieve')).to have_content 'access_token: "access_token"'
+      expect(Courier).to have_received(:post_request).with( url, expected_params )
     end
   end
 
   specify 'user should be able to make a request of the NLU' do
     expect(Courier)
-      .to receive(:get_request)
-      .and_return({response: '{intent: music}', time: 0.05})
-    expect(Courier)
-      .to receive(:post_request)
-      .and_return({response: '{intent: music}', time: 0.05})
+      .to receive(:post_request).twice
+      .and_return({response: "{\"intent\": \"music\"}", time: 0.05})
 
     select 'Music', from: 'intents'
 
@@ -83,18 +75,15 @@ describe 'Test Queries', :js do
       click_button 'Test'
 
       within '.json' do
-        expect( page ).to have_content '{intent: music}'
+        expect( page ).to have_content "{\"intent\": \"music\"}"
       end
     end
   end
 
   specify 'user should be able to make a request of news skill retrieve' do
     expect(Courier)
-      .to receive(:get_request)
-      .and_return({response: '{intent: fake_news}', time: 0.05})
-    expect(Courier)
-      .to receive(:post_request).twice
-      .and_return({response: '{intent: fake_news}', time: 0.05})
+      .to receive(:post_request).exactly(3).times
+      .and_return({response: "{\"intent\": \"fake_news\"}", time: 0.05})
 
     select 'News', from: 'intents'
 
@@ -110,18 +99,15 @@ describe 'Test Queries', :js do
       click_button 'Test'
 
       within '.json' do
-        expect( page ).to have_content '{intent: fake_news}'
+        expect( page ).to have_content "{\"intent\": \"fake_news\"}"
       end
     end
   end
 
   specify 'user should be able to make a request news skill format' do
     expect(Courier)
-      .to receive(:get_request)
-      .and_return({response: '{intent: fake_news}', time: 0.05})
-    expect(Courier)
-      .to receive(:post_request).exactly(3).times
-      .and_return({response: '{intent: fake_news}', time: 0.05})
+      .to receive(:post_request).exactly(4).times
+      .and_return({response: "{\"intent\": \"fake_news\"}", time: 0.05})
 
     select 'News', from: 'intents'
 
@@ -141,7 +127,7 @@ describe 'Test Queries', :js do
       click_button 'Test'
 
       within '.json' do
-        expect( page ).to have_content '{intent: fake_news}'
+        expect( page ).to have_content "{\"intent\": \"fake_news\"}"
       end
     end
   end
