@@ -43,28 +43,4 @@ describe 'API' do
       end
     end
   end
-
-  describe 'Post to process_intent_upload' do
-    specify 'Success' do
-      header 'ContentType', 'application/json'
-      post '/api/process_intent_upload', intent_data( skill.id )
-
-      expect( last_response.status ).to eq 200
-      expect( Field.count  ).to eq 3
-      expect( Intent.count ).to eq 2
-      expect( parsed_response[:response] ).to eq "Intent \'something\' has been uploaded."
-    end
-  end
-
-  describe 'Post to process_dialog_upload' do
-    specify 'Success' do
-      header 'Content-Type', 'text/csv; charset=utf-8'
-      header 'Accept', 'text/csv; charset=utf-8'
-      post '/api/process_dialog_upload', File.read( 'spec/shared/test.csv' )
-
-      expect( last_response.status ).to eq 200
-      expect( Dialog.count ).to eq 1
-      expect( parsed_response[:response] ).to eq "Dialog created."
-    end
-  end
 end

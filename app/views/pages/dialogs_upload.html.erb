@@ -1,67 +1,22 @@
 <%= link_to(
-  "&larr; Skills".html_safe,
-  skills_path,
+  '&larr; Skills'.html_safe,
+  skills_path(@skill),
   class: 'btn md grey pull-left'
-) %>
+)%>
+<br><br><br>
 
-<%= link_to(
-  'Create new Intent',
-  new_skill_intent_path( @skill.id ),
-  class: 'btn md black pull-right'
-) %>
-
-<br><br>
-<h2>
-  Skill: <%= @skill.name %>
-  <br>
-  <%= pluralize @intents.count, 'Intent' %>
-</h2>
-
-
-<table class="table table-hover">
-  <thead class="thead-default">
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Requires Auth</th>
-      <th>Apps</th>
-      <th></th>
-    </tr>
-  </thead>
-  <% @intents.each do |intent| %>
-    <tr>
-      <td><%= intent.name %></td>
-      <td><%= intent.description %></td>
-      <td class="<%= intent.requires_authorization? ? "icon-check" : "icon-cross" %>"></td>
-      <td>
-        <% intent.external_applications.each do |app| %>
-          <code><%= app %></code>
-        <% end %>
-      </td>
-      <td>
-        <%= link_to(
-          "Edit Details",
-          edit_skill_intent_path( @skill, intent ),
-          class: 'btn sm black'
-        )%>
-      </td>
-    </tr>
-  <% end %>
-</table>
-<br>
-
-<div class='upload-intents row'>
+<div class='upload-dialogs row'>
   <div class='col-xs-2'>
-    <h4>Upload Intents</h4>
-    <%= form_tag do %>
-      <input type='hidden' id='skill_id' value='<%= params[:skill_id] %>' />
+    <h4>Upload Dialogs</h4>
+    <%= form_tag({ controller: 'api', action: 'process_dialog_upload' }) do %>
+      <input type='hidden' id='intent_id' value='<%= params[:id] %>' />
       <label class='btn btn-default btn-file'>
         Choose Files
         <input type='file' id='files' name='files[]' multiple />
       </label>
       <br>
       <br>
-      <button class='lg btn black save-intents'>Upload</button>
+      <button class='lg btn black save-dialogs'>Upload</button>
       <br>
     <% end %>
   </div>
@@ -89,9 +44,11 @@
   if (localStorage.length > 0) {
     $('.result-section').addClass('in');
     $.each(localStorage, function(key, value){
+      console.log(key);
+      console.log(value);
       $('.result-table-data').append(
         '<tr class="text-' +
-        (value.match('uploaded') ? 'success' : 'danger')
+        (value.includes('0 dialog(s) failed') && (!value.includes('skipped')) ? 'success' : 'danger')
         + '"><td>' + key + '</td><td>' + value + '</td></tr>'
       );
 
@@ -111,7 +68,7 @@
     });
   });
 
-  $('.save-intents').click(function(e){
+  $('.save-dialogs').click(function(e){
     e.preventDefault();
     var files = $('#files')[0].files;
 
@@ -121,14 +78,16 @@
 
       reader.onloadend = (function(file) {
         return (function(e) {
-          var data = JSON.parse(this.result);
-          data['skill_id'] = $('#skill_id').val();
           var fileName = file['name'];
 
           $.ajax({
             type: 'POST',
-            url: '/api/process_intent_upload',
-            data: data
+            url: '/api/process_dialog_upload',
+            headers: {
+                'Accept' : 'text/csv; charset=utf-8',
+                'Content-Type': 'text/csv; charset=utf-8'
+            },
+            data: this.result
           }).done(function(r){
             var text = r['response'];
             localStorage.setItem( fileName, text );

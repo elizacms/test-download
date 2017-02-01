@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   before_action :validate_user_from_identity, only: [ :login_success ]
-  before_action :validate_current_user, only: [ :test_queries  ]
+  before_action :validate_current_user, only: [ :test_queries, :dialogs_upload ]
 
   def index
     @identity_login_page = oauth_client.auth_code.authorize_url( redirect_uri:redirect_uri )
@@ -26,6 +26,12 @@ class PagesController < ApplicationController
   end
 
   def test_queries
+  end
+
+  def dialogs_upload
+    if !current_user.has_role?( 'admin' )
+      redirect_to skills_path, notice: 'You do not have access.'
+    end
   end
 
   private

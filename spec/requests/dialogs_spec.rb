@@ -46,7 +46,7 @@ describe 'Dialogs' do
 
     specify 'Success' do
       header 'Content-Type', 'application/json'
-      put '/dialogue_api/response?response_id=1', params.merge!(response: 'Green Godess').to_json
+      put "/dialogue_api/response?response_id=#{Dialog.last.id}", params.merge!(response: 'Green Godess').to_json
 
       expect( last_response.status ).to eq 200
       expect( Dialog.count         ).to eq 1
@@ -57,7 +57,7 @@ describe 'Dialogs' do
       params.merge!( unresolved: [nil], missing: [nil], present: [nil] )
 
       header 'Content-Type', 'application/json'
-      put '/dialogue_api/response?response_id=1', params.to_json
+      put "/dialogue_api/response?response_id=#{Dialog.last.id}", params.to_json
 
       expect( last_response.status ).to eq 422
       expect( last_response.headers[ 'Warning' ] ).to eq "A field must have a rule"

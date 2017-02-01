@@ -25,7 +25,7 @@ class DialogsController < ApplicationController
   end
 
   def update
-    dialog = Dialog.find( params[ :response_id ].to_i )
+    dialog = Dialog.find( params[ :response_id ] )
 
     if dialog.update(dialog_params)
       render json: {}, status: :ok
@@ -36,7 +36,7 @@ class DialogsController < ApplicationController
   end
 
   def delete
-    dialog = Dialog.find( params[ :response_id ].to_i )
+    dialog = Dialog.find( params[ :response_id ] )
 
     aneeda_says = dialog.response
     dialog.delete

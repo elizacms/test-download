@@ -1,12 +1,18 @@
 class IntentUploader
   class <<self
-    def parse_and_create( data )
+    include UsersHelper
+
+    def parse_and_create( data, user )
       if data['id'].blank?
         return { notice: 'Cannot create an Intent without an ID.' }
       end
 
       if data['skill_id'].blank? || !Skill.find_by(id: data['skill_id'])
         return { notice: 'Cannot create an Intent without a skill.' }
+      end
+
+      unless user.has_role?('admin')
+        return { notice: 'You do not have permission to upload intents for that skill.' }
       end
 
       if Intent.find_by(name: data['id'])

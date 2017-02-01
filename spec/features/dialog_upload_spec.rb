@@ -1,17 +1,24 @@
 describe 'Dialog Upload' do
-  let!( :admin  ){ create :user, email: 'admin@iamplus.com'        }
-  let!( :skill  ){ create :skill                                   }
-  let!( :role   ){ create :role, name: 'developer', skill_id: skill.id, user: admin }
-  let!( :intent ){ create :intent, skill: skill                    }
+  let!( :admin   ){ create :user, email: 'admin@iamplus.com'             }
+  let!( :skill   ){ create :skill                                        }
+  let!( :intent  ){ create :intent, skill: skill, name: 'something'      }
+  let!( :intent2 ){ create :intent, skill: skill, name: 'la_passageways' }
+  let!( :role    ){ create :role, skill: nil, user: admin, name: 'admin' }
+  let!( :field   ){ create :field, name: 'hello', intent: intent         }
+  let!( :field2  ){ create :field, name: 'goodbye', intent: intent       }
+  let!( :field3  ){ create :field, name: 'virgil', intent: intent2       }
+  let!( :field4  ){ create :field, name: 'heliotrope', intent: intent2   }
+  let!( :field5  ){ create :field, name: '1000_oaks', intent: intent2    }
+  let!( :field6  ){ create :field, name: 'sdfsd', intent: intent2        }
 
   before do
     stub_identity_token
     stub_identity_account_for admin.email
+    visit '/login/success?code=0123abc'
   end
 
   specify 'User can upload multiple intent files and the objects save in the DB.', :js do
-    visit '/login/success?code=0123abc'
-    visit "/skills/#{skill.id}/intents/#{intent.id}/dialogs"
+    visit '/dialogs-upload'
 
     execute_script("$('#files').show();")
 
@@ -19,7 +26,11 @@ describe 'Dialog Upload' do
 
     click_button 'Upload'
 
+    Capybara.execute_script "localStorage.clear()"
+
     sleep 1
+
+    visit '/dialogs-upload'
 
     execute_script("$('#files').show();")
 
@@ -44,7 +55,7 @@ describe 'Dialog Upload' do
     expect( sl.intent_id      ).to eq 'la_passageways'
     expect( sl.priority       ).to eq 100
     expect( sl.awaiting_field ).to eq ['virgil']
-    expect( sl.unresolved     ).to eq []
+    expect( sl.unresolved     ).to eq ['sdfsd']
     expect( sl.missing        ).to eq ['1000_oaks']
     expect( sl.present        ).to eq ['heliotrope', '23']
   end

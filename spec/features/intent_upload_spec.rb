@@ -1,8 +1,8 @@
-describe 'Intent Upload' do
-  let!( :admin  ){ create :user, email: 'admin@iamplus.com'        }
-  let!( :skill  ){ create :skill                                   }
-  let!( :role   ){ create :role, name: 'developer', skill_id: skill.id, user: admin }
-  let!( :intent ){ create :intent, skill: skill                    }
+describe 'Intent Upload', :focus do
+  let!( :admin  ){ create :user, email: 'admin@iamplus.com'             }
+  let!( :skill  ){ create :skill                                        }
+  let!( :role   ){ create :role, skill: nil, name: 'admin', user: admin }
+  let!( :intent ){ create :intent, skill: skill                         }
 
   before do
     stub_identity_token
@@ -19,7 +19,7 @@ describe 'Intent Upload' do
 
     click_button 'Upload'
 
-    sleep 1
+    Capybara.execute_script "localStorage.clear()"
 
     execute_script("$('#files').show();")
 
