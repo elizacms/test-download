@@ -9,7 +9,7 @@ feature 'Skills pages' do
   end
 
   specify 'Developer can see Skills' do
-    visit "/login/success?code=0123abc"
+    visit '/login/success?code=0123abc'
     visit '/skills'
 
     expect( page ).to have_content '1 Skill'
@@ -25,7 +25,7 @@ feature 'Skills pages' do
     end
 
     specify do
-      visit "/login/success?code=0123abc"
+      visit '/login/success?code=0123abc'
       visit '/skills'
 
       expect( page ).to have_content '2 Skills'
@@ -50,7 +50,7 @@ feature 'Skills pages' do
       end
 
       specify do
-        visit "/login/success?code=0123abc"
+        visit '/login/success?code=0123abc'
         visit '/skills'
 
         expect( page ).to have_content 'non_dev@iamplus.com'
@@ -59,14 +59,20 @@ feature 'Skills pages' do
     end
   end
 
-  describe 'Developer can create a skill' do
-    let( :skill_name ){ 'Super Uber'              }
-    let( :web_hook   ){ 'https://skill-uber.i.am' }
+  describe 'Admin can create a skill' do
+    let!( :admin      ){ create :user, email: 'admin@iamplus.com'             }
+    let!( :role       ){ create :role, name: 'admin', skill: nil, user: admin }
+    let(  :skill_name ){ 'Super Uber'                                         }
+    let(  :web_hook   ){ 'https://skill-uber.i.am'                            }
+
+    before do
+      stub_identity_token
+      stub_identity_account_for admin.email
+      visit '/login/success?code=0123abc'
+      visit '/skills'
+    end
 
     specify do
-      visit "/login/success?code=0123abc"
-      visit '/skills'
-
       click_link 'Create New Skill'
 
       within 'form' do
@@ -75,26 +81,46 @@ feature 'Skills pages' do
         click_button 'Submit'
       end
 
-      expect( page ).to have_content '1 Skill'
+      expect( page ).to have_content '2 Skill'
       expect( page ).to have_content skill_name
       expect( page ).to have_content web_hook
     end
+
+    context 'When name is blank fails' do
+      specify do
+        click_link 'Create New Skill'
+
+        within 'form' do
+          fill_in :skill_name, with: ''
+          click_button 'Submit'
+        end
+
+        expect( page ).to have_content 'Create Skill'
+        expect( page ).to have_content "Name can't be blank"
+      end
+    end
   end
 
-  context 'When name is blank fails' do
+  describe 'Developer cannot see the "Create a skill" button' do
     specify do
-      visit "/login/success?code=0123abc"
+      visit '/login/success?code=0123abc'
       visit '/skills'
 
-      click_link 'Create New Skill'
+      expect( page ).to_not have_content 'Create a skill'
+    end
+  end
 
-      within 'form' do
-        fill_in :skill_name, with: ''
-        click_button 'Submit'
-      end
+  describe 'Owner cannot see the "Create a skill" button' do
+    let!( :owner ){ create :user, email: 'owner@iamplus.com'               }
+    let!( :role  ){ create :role, name: 'owner', skill: skill, user: owner }
 
-      expect( page ).to have_content 'Create Skill'
-      expect( page ).to have_content "Name can't be blank"
+    specify do
+      stub_identity_token
+      stub_identity_account_for owner.email
+      visit '/login/success?code=0123abc'
+      visit '/skills'
+
+      expect( page ).to_not have_content 'Create a skill'
     end
   end
 
@@ -213,7 +239,7 @@ feature 'Skills pages' do
 
     specify 'index page' do
       visit '/login/success?code=0123abc'
-      visit "/skills"
+      visit '/skills'
 
       expect( page ).to_not have_content skill.name
     end

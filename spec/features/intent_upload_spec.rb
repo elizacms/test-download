@@ -1,4 +1,4 @@
-describe 'Intent Upload', :focus do
+describe 'Intent Upload' do
   let!( :admin  ){ create :user, email: 'admin@iamplus.com'             }
   let!( :skill  ){ create :skill                                        }
   let!( :role   ){ create :role, skill: nil, name: 'admin', user: admin }
