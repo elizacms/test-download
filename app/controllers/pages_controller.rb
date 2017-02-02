@@ -17,12 +17,7 @@ class PagesController < ApplicationController
   def current_user_session_destroy
     session[:user_id] = nil
 
-    redirect_to(
-      root_path,
-      flash: {
-        notice: "You've been successfully logged out."
-      }
-    )
+    redirect_to root_path, notice: "You've been successfully logged out."
   end
 
   def test_queries
@@ -72,11 +67,12 @@ class PagesController < ApplicationController
   end
 
   def get_account_from_identity
-    # Redirected from Identity with code in URL param.
-    # Now get token from identity
-
     begin
       token = oauth_client.auth_code.get_token( params[ :code ], redirect_uri:redirect_uri )
+      session[ :access_token ] = token.token
+      session[ :refresh_token ] = token.refresh_token
+      session[ :access_token_expiry ] = token.expires_at
+
       token.get( identity_account_path, headers:{ 'Accept':'application/json' })
 
     rescue OAuth2::Error => e
