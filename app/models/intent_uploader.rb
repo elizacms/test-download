@@ -4,19 +4,19 @@ class IntentUploader
 
     def parse_and_create( data, user )
       if data['id'].blank?
-        return { notice: 'Cannot create an Intent without an ID.' }
+        return 'Cannot create an Intent without an ID.'
       end
 
       if data['skill_id'].blank? || !Skill.find_by(id: data['skill_id'])
-        return { notice: 'Cannot create an Intent without a skill.' }
+        return 'Cannot create an Intent without a skill.'
       end
 
       unless user.has_role?('admin')
-        return { notice: 'You do not have permission to upload intents for that skill.' }
+        return 'You do not have permission to upload intents for that skill.'
       end
 
       if Intent.find_by(name: data['id'])
-        return { notice: 'Intent already exists.' }
+        return 'Intent already exists.'
       end
 
       intent = Intent.create(
@@ -34,7 +34,7 @@ class IntentUploader
         )
       end
 
-      return { notice: "Intent '#{intent.name}' has been uploaded." }
+      return "Intent '#{intent.name}' has been uploaded."
     end
   end
 end

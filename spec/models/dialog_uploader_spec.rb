@@ -22,7 +22,8 @@ describe DialogUploader do
   specify 'should return proper notice when dialog does not have an intent_id' do
     uploader = DialogUploader.create_for( [dialog_data[0].merge!('intent_id' => '')], admin )
 
-    expect( uploader ).to eq "0 dialog(s) created. 1 dialog(s) failed to create."
+    expect( uploader ).to eq '0 dialog(s) created. 1 dialog(s) failed to create'\
+                             ' because intent_id was blank.'
     expect( Dialog.count   ).to eq 0
   end
 
@@ -36,8 +37,8 @@ describe DialogUploader do
   specify 'should return proper notice when user does not have permissions for an intent' do
     uploader = DialogUploader.create_for( dialog_data, user )
 
-    expect( uploader ).to eq "0 dialog(s) created. 0 dialog(s) failed to create. "\
-                             "1 dialog(s) skipped because you do not have permissions."
+    expect( uploader ).to eq '0 dialog(s) created. 1 dialog(s) failed to create'\
+                             ' because you do not have permissions.'
     expect( Dialog.count ).to eq 0
   end
 
@@ -45,16 +46,16 @@ describe DialogUploader do
     field.update(name: 'later') # rename field so it fails.
     uploader = DialogUploader.create_for( dialog_data, admin )
 
-    expect( uploader ).to eq "0 dialog(s) created. 0 dialog(s) failed to create."\
-                             " 1 dialog(s) skipped because unassociated field values "\
-                             "were present. Please make sure to upload needed intents."
+    expect( uploader ).to eq '0 dialog(s) created. 1 dialog(s) failed to create'\
+                             ' because unassociated field values were present.'\
+                             ' Please make sure to upload needed intents.'
     expect( Dialog.count ).to eq 0
   end
 
   specify 'should use previous intent_id if it is blank' do
     uploader = DialogUploader.create_for( dialog_data('spec/shared/test_2.csv'), admin )
 
-    expect( uploader ).to eq "2 dialog(s) created. 0 dialog(s) failed to create."
+    expect( uploader ).to eq '2 dialog(s) created.'
     expect( Dialog.count ).to eq 2
   end
 end

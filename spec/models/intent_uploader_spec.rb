@@ -5,9 +5,9 @@ describe IntentUploader do
   let!( :role  ){ create :role, name: 'admin', skill: nil, user: admin }
 
   specify 'should create proper intents and fields with the suitable data' do
-    parse = IntentUploader.parse_and_create( intent_data( skill.id ), admin )
+    res = IntentUploader.parse_and_create( intent_data( skill.id ), admin )
 
-    expect( parse[:notice]              ).to eq "Intent 'something' has been uploaded."
+    expect( res                         ).to eq "Intent 'something' has been uploaded."
     expect( Field.first.name            ).to eq 'goodbye'
     expect( Intent.first.name           ).to eq 'something'
     expect( Intent.first.mturk_response ).to eq "[\"crazy_town\"]"
@@ -16,53 +16,53 @@ describe IntentUploader do
   end
 
   specify 'should return the proper notice when the intent does not have an ID' do
-    parse = IntentUploader.parse_and_create( intent_data( skill.id ).merge!( 'id' => '' ), admin )
+    res = IntentUploader.parse_and_create( intent_data( skill.id ).merge!( 'id' => '' ), admin )
 
-    expect( Field.count    ).to eq 0
-    expect( Intent.count   ).to eq 0
-    expect( parse[:notice] ).to eq 'Cannot create an Intent without an ID.'
+    expect( Field.count  ).to eq 0
+    expect( Intent.count ).to eq 0
+    expect( res          ).to eq 'Cannot create an Intent without an ID.'
   end
 
   specify 'should exit and inform user when intent already exists' do
     FactoryGirl.create( :intent, skill: skill )
 
-    parse = IntentUploader.parse_and_create( intent_data( skill.id ).merge!( 'id' => 'get_ride' ), admin )
+    res = IntentUploader.parse_and_create( intent_data( skill.id ).merge!( 'id' => 'get_ride' ), admin )
 
-    expect( Field.count     ).to eq 0
-    expect( Intent.count    ).to eq 1
-    expect( parse[:notice]  ).to eq 'Intent already exists.'
+    expect( Field.count  ).to eq 0
+    expect( Intent.count ).to eq 1
+    expect( res          ).to eq 'Intent already exists.'
   end
 
   specify 'if fields are blank, should create intent and exit successfully' do
-    parse = IntentUploader.parse_and_create( intent_data( skill.id ).merge!( 'fields' => {} ), admin )
+    res = IntentUploader.parse_and_create( intent_data( skill.id ).merge!( 'fields' => {} ), admin )
 
-    expect( Field.count    ).to eq 0
-    expect( Intent.count   ).to eq 1
-    expect( parse[:notice] ).to eq "Intent 'something' has been uploaded."
+    expect( Field.count  ).to eq 0
+    expect( Intent.count ).to eq 1
+    expect( res          ).to eq "Intent 'something' has been uploaded."
   end
 
   specify 'if skill_id is not present, should exit and inform user' do
-    parse = IntentUploader.parse_and_create( intent_data( skill.id ).merge!( 'skill_id' => '' ), admin )
+    res = IntentUploader.parse_and_create( intent_data( skill.id ).merge!( 'skill_id' => '' ), admin )
 
-    expect( Field.count    ).to eq 0
-    expect( Intent.count   ).to eq 0
-    expect( parse[:notice] ).to eq 'Cannot create an Intent without a skill.'
+    expect( Field.count  ).to eq 0
+    expect( Intent.count ).to eq 0
+    expect( res          ).to eq 'Cannot create an Intent without a skill.'
   end
 
   specify 'if skill is not found, should exit and inform user' do
-    parse = IntentUploader.parse_and_create( intent_data( 'not_an_id' ), admin )
+    res = IntentUploader.parse_and_create( intent_data( 'not_an_id' ), admin )
 
-    expect( Field.count    ).to eq 0
-    expect( Intent.count   ).to eq 0
-    expect( parse[:notice] ).to eq 'Cannot create an Intent without a skill.'
+    expect( Field.count  ).to eq 0
+    expect( Intent.count ).to eq 0
+    expect( res          ).to eq 'Cannot create an Intent without a skill.'
   end
 
   specify 'if user does not have permissions, should exit and inform' do
-    parse = IntentUploader.parse_and_create( intent_data( skill.id ), user )
+    res = IntentUploader.parse_and_create( intent_data( skill.id ), user )
 
-    expect( Field.count    ).to eq 0
-    expect( Intent.count   ).to eq 0
-    expect( parse[:notice] ).to eq 'You do not have permission to upload intents for that skill.'
+    expect( Field.count  ).to eq 0
+    expect( Intent.count ).to eq 0
+    expect( res          ).to eq 'You do not have permission to upload intents for that skill.'
   end
 
   specify 'should be able to handle multiple requests at a time' do

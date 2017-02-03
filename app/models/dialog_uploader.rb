@@ -7,6 +7,7 @@ class DialogUploader
       last_intent_id = ''
       no_field = 0
       no_permissions = 0
+      not_valid = 0
       success = 0
 
       data.each do |d|
@@ -33,31 +34,44 @@ class DialogUploader
           next
         end
 
-        Dialog.create(
-          intent_id: d['intent_id'],
-          priority: d['priority'].to_i,
-          awaiting_field: value_for(d, 'awaiting_field'),
-          missing: value_for(d, 'missing'),
-          unresolved: value_for(d, 'unresolved'),
-          present: value_for(d, 'present'),
-          response: d['aneeda_en']
-        )
-
-        success += 1
+        begin
+          Dialog.create!(
+            intent_id: d['intent_id'],
+            priority: d['priority'].to_i,
+            awaiting_field: value_for(d, 'awaiting_field'),
+            missing: value_for(d, 'missing'),
+            unresolved: value_for(d, 'unresolved'),
+            present: value_for(d, 'present'),
+            response: d['aneeda_en']
+          )
+        rescue Mongoid::Errors::Validations
+          not_valid += 1
+        else
+          success += 1
+        end
       end
 
-      return_message = "#{success} dialog(s) created."\
-                       " #{blank_intent_id} dialog(s) failed to create."
+      return_message = "#{success} dialog(s) created."
+
+      if blank_intent_id > 0
+        return_message += " #{blank_intent_id} dialog(s) failed to create "\
+                         "because intent_id was blank."
+      end
 
       if no_permissions > 0
-        return_message += " #{no_permissions} dialog(s) "\
-                          "skipped because you do not have permissions."
+        return_message += " #{no_permissions} dialog(s) failed to create "\
+                          "because you do not have permissions."
       end
 
       if no_field > 0
-        return_message += " #{no_field} dialog(s) "\
-                          "skipped because unassociated field values were present. "\
+        return_message += " #{no_field} dialog(s) failed to create "\
+                          "because unassociated field values were present. "\
                           "Please make sure to upload needed intents."
+      end
+
+      if not_valid > 0
+        return_message += " #{not_valid} dialog(s) failed to create "\
+                          "because the validations did not pass."
       end
 
       return_message

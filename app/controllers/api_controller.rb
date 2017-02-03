@@ -95,20 +95,20 @@ class ApiController < ApplicationController
   end
 
   def process_intent_upload
-    response = IntentUploader.parse_and_create( intent_upload_params, current_user )
+    info = IntentUploader.parse_and_create( intent_upload_params, current_user )
 
-    if response[:notice] =~ /uploaded/
-      render json: { response: response[:notice] }, status: 200
+    if info =~ /uploaded/
+      render json: { response: info }, status: 200
     else
-      render json: { response: response[:notice] }, status: 422
+      render json: { response: info }, status: 422
     end
   end
 
   def process_dialog_upload
     csv = CSV.parse( request.body.read, { headers: true } ).map{ |r| r.to_hash }
-    response = DialogUploader.create_for( csv, current_user )
+    info = DialogUploader.create_for( csv, current_user )
 
-    render json: { response: response }, status: 200
+    render json: { response: info }, status: 200
   end
 
 
