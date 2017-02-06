@@ -13,50 +13,6 @@ describe Dialog do
         )
       ).to be_valid
     end
-
-    specify 'Empty array should not be valid' do
-      expect(
-        FactoryGirl.build(
-          :dialog,
-          response: 'abc',
-          missing: [],
-          intent_id: intent.name
-        )
-      ).to_not be_valid
-    end
-
-    specify 'Empty string in array should not be valid' do
-      expect(
-        FactoryGirl.build(
-          :dialog,
-          response: 'abc',
-          missing: [""],
-          intent_id: intent.name
-        )
-      ).to_not be_valid
-    end
-
-    specify '"nil" in array should not be valid' do
-      expect(
-        FactoryGirl.build(
-          :dialog,
-          response: 'abc',
-          missing: [nil],
-          intent_id: intent.name
-        )
-      ).to_not be_valid
-    end
-
-    specify "Set of empty strings and nil's in array should not be valid" do
-      expect(
-        FactoryGirl.build(
-          :dialog,
-          response: 'abc',
-          missing: [nil, '', '', nil, '', ''],
-          intent_id: intent.name
-        )
-      ).to_not be_valid
-    end
   end
 
   describe 'Must have one rule field' do
@@ -87,30 +43,6 @@ describe Dialog do
           present: ['Something here.']
         )
       ).to be_valid
-    end
-
-    specify 'Failure' do
-      expect(
-        FactoryGirl.build(
-          :dialog,
-          intent_id: intent.name,
-          present: [""],
-          missing: [""],
-          unresolved: [""]
-        )
-      ).to_not be_valid
-    end
-
-    specify 'Failure from any set of multi empties' do
-      expect(
-        FactoryGirl.build(
-          :dialog,
-          intent_id: intent.name,
-          present: ["", nil],
-          missing: ["", "", nil],
-          unresolved: [nil, "", nil]
-        )
-      ).to_not be_valid
     end
   end
 end

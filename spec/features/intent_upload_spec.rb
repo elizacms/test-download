@@ -19,26 +19,15 @@ describe 'Intent Upload' do
 
     click_button 'Upload'
 
-    Capybara.execute_script "localStorage.clear()"
+    sleep 2
 
-    execute_script("$('#files').show();")
-
-    attach_file( 'files', File.absolute_path('spec/shared/test_2.json') )
-
-    click_button 'Upload'
-
-    sleep 1
-
-    expect( Field.count  ).to eq 7
-    expect( Intent.count ).to eq 3
+    expect( Field.count  ).to eq 3
+    expect( Intent.count ).to eq 2
 
     some = Intent.find_by(name: 'something')
-    pass = Intent.find_by(name: 'la_passageways')
 
     expect( Field.where(intent_id: some.id ).count ).to eq 3
-    expect( Field.where(intent_id: pass.id ).count ).to eq 4
 
     expect( some.mturk_response ).to eq "[\"crazy_town\"]"
-    expect( pass.mturk_response ).to eq "[\"exposition\"]"
   end
 end

@@ -4,11 +4,17 @@ class DialogUploader
 
     def create_for( data, user )
       blank_intent_id = 0
-      last_intent_id = ''
       no_field = 0
       no_permissions = 0
       not_valid = 0
       success = 0
+
+      last_intent_id = ''
+      last_priority = ''
+      last_awaiting_field = ''
+      last_missing = ''
+      last_unresolved = ''
+      last_present = ''
 
       data.each do |d|
         if d['intent_id'].blank?
@@ -27,11 +33,40 @@ class DialogUploader
           next
         end
 
+        if d['priority'].blank?
+          d['priority'] = last_priority
+        end
+
+        last_priority = d['priority']
+
+        if d['awaiting_field'].blank?
+          d['awaiting_field'] = last_awaiting_field
+        end
+
+        last_awaiting_field = d['awaiting_field']
+
+        if d['missing'].blank?
+          d['missing'] = last_missing
+        end
+
+        last_missing = d['missing']
+
+        if d['unresolved'].blank?
+          d['unresolved'] = last_unresolved
+        end
+
+        last_unresolved = d['unresolved']
+
+        if d['present'].blank?
+          d['present'] = last_present
+        end
+
+        last_present = d['present']
+
         if !field_value_for_dialog_exists?( d['intent_id'], value_for(d, 'awaiting_field') ) ||
         !field_value_for_dialog_exists?( d['intent_id'], value_for(d, 'missing') ) ||
         !field_value_for_dialog_exists?( d['intent_id'], value_for(d, 'unresolved') )
           no_field += 1
-          next
         end
 
         begin
@@ -64,8 +99,8 @@ class DialogUploader
       end
 
       if no_field > 0
-        return_message += " #{no_field} dialog(s) failed to create "\
-                          "because unassociated field values were present. "\
+        return_message += " #{no_field} dialog(s) created "\
+                          "that contained unassociated field values. "\
                           "Please make sure to upload needed intents."
       end
 

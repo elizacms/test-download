@@ -10,8 +10,6 @@ class Dialog
   field :response,       type:String
 
   validates_presence_of :intent_id
-  validates :response, presence: true
-  validate :must_have_one_rule_field
 
   def serialize
     {
@@ -24,24 +22,5 @@ class Dialog
       present: present,
       awaiting_field: awaiting_field
     }
-  end
-
-
-  private
-
-  def response_cannot_be_set_of_empties
-    if set_of_empties?(response)
-      errors.add(:contents, "are all empty")
-    end
-  end
-
-  def must_have_one_rule_field
-    if set_of_empties?(missing) && set_of_empties?(unresolved) && set_of_empties?(present)
-      errors.add(:a_field, "must have a rule")
-    end
-  end
-
-  def set_of_empties?(set)
-    set.all?{ |ele| ele.blank? }
   end
 end

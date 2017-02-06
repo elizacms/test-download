@@ -41,7 +41,7 @@
 </div>
 
 <script>
-  $('#files').on('change', function(){
+  $('#files').change(function(){
     $('.upload-files').addClass('in');
 
     if ($('.result-section').length > 0){
@@ -55,10 +55,16 @@
 
   $('.save-dialogs').click(function(e){
     e.preventDefault();
+    IAM.loading.start({ type:'logo', duration: false });
+
     $('.upload-files').removeClass('in');
 
     var files = $('#files')[0].files;
     uploadFiles(files);
+
+    $('.iam-loading').each(function(){
+        IAM.loading.stop({id: $(this).attr('rel')});
+    });
 
     var uploaderInput = $('#files');
     uploaderInput.wrap('<form>').closest('form')[0].reset();

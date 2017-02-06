@@ -46,10 +46,10 @@ describe DialogUploader do
     field.update(name: 'later') # rename field so it fails.
     uploader = DialogUploader.create_for( dialog_data, admin )
 
-    expect( uploader ).to eq '0 dialog(s) created. 1 dialog(s) failed to create'\
-                             ' because unassociated field values were present.'\
-                             ' Please make sure to upload needed intents.'
-    expect( Dialog.count ).to eq 0
+    expect( uploader ).to eq '1 dialog(s) created. 1 dialog(s) created that '\
+                             'contained unassociated field values. '\
+                             'Please make sure to upload needed intents.'
+    expect( Dialog.count ).to eq 1
   end
 
   specify 'should use previous intent_id if it is blank' do
@@ -57,5 +57,12 @@ describe DialogUploader do
 
     expect( uploader ).to eq '2 dialog(s) created.'
     expect( Dialog.count ).to eq 2
+  end
+
+  specify 'should upload csv with many blank fields referring to previous values' do
+    uploader = DialogUploader.create_for( dialog_data('spec/shared/test_4.csv'), admin )
+
+    expect( uploader ).to eq '19 dialog(s) created.'
+    expect( Dialog.count ).to eq 19
   end
 end

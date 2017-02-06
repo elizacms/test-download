@@ -1,9 +1,9 @@
 describe 'Dialogs' do
-  let!( :developer ){ create :user                     }
-  let!( :skill     ){ create :skill                    }
-  let!( :intent    ){ create :intent, skill: skill     }
-  let!( :field     ){ create :field, intent: intent    }
-  let!( :role      ){ create :role, skill: skill, user: developer }
+  let!( :dev    ){ create :user                          }
+  let!( :skill  ){ create :skill                         }
+  let!( :intent ){ create :intent, skill: skill          }
+  let!( :field  ){ create :field, intent: intent         }
+  let!( :role   ){ create :role, skill: skill, user: dev }
 
   let( :params ){
     {
@@ -54,13 +54,13 @@ describe 'Dialogs' do
     end
 
     specify 'Failure' do
-      params.merge!( unresolved: [nil], missing: [nil], present: [nil] )
+      params.merge!( intent_id: nil )
 
       header 'Content-Type', 'application/json'
       put "/dialogue_api/response?response_id=#{Dialog.last.id}", params.to_json
 
       expect( last_response.status ).to eq 422
-      expect( last_response.headers[ 'Warning' ] ).to eq "A field must have a rule"
+      expect( last_response.headers[ 'Warning' ] ).to eq "Intent can't be blank"
       expect( Dialog.count ).to eq 1
     end
   end
