@@ -41,6 +41,28 @@ pre code.json {
   }
 }
 
+pre {
+  margin-bottom: 0 !important;
+}
+
+.copy-btn {
+  margin-right: 2px !important;
+}
+
+.foldCaret {
+  float: left;
+}
+
+.foldCaret:hover {
+  cursor: pointer !important;
+}
+
+.copyConfirm {
+  font-size: 12px !important;
+  color: green !important;
+  margin-top: 2px !important;
+}
+
 .notes {
   font-size: 14px !important;
 }
