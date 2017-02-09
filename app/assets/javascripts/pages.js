@@ -28,9 +28,9 @@ $(document).on('turbolinks:load', function(){
   });
 
   function copyToClipboard(element) {
-    var $temp = $('<input>');
+    var $temp = $('<textarea>');
     $('body').append($temp);
-    $temp.val(JSON.stringify( $(element).text(), null, 2 )).select();
+    $temp.text($(element).text()).select();
     document.execCommand('copy');
     $temp.remove();
   }
