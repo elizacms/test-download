@@ -7,9 +7,10 @@ function fillWrapperQueryAndClearPrevious(){
 
 function clearForms(){
     $('.notes').removeClass('in');
-    $('.foldCaret').removeClass('in');
     $('.copy-btn').removeClass('in');
-    $('code.json').html('');
+    $('.codeArea').text('');
+    $('.CodeMirror').remove();
+
     $('#wrapper_query').closest('div').nextAll('div').each(function(){
       $(this).find('.text-input').val('')
     });
@@ -17,7 +18,7 @@ function clearForms(){
 
 $(document).ready(function(){
   $('.copy-btn').click(function(){
-    copyToClipboard($(this).siblings().find('.json'));
+    copyToClipboard($(this).siblings('.codeArea'));
     var copyConfirm = $(this).siblings('.copyConfirm');
     copyConfirm.addClass('in');
 
@@ -34,21 +35,6 @@ $(document).ready(function(){
     $temp.remove();
   }
 
-  $('.foldCaret').click(function(){
-    if ($(this).hasClass('icon-down-dir')){
-      $(this).addClass('icon-right-dir').removeClass('icon-down-dir');
-      $(this).siblings('pre').find('code.json').removeClass('in');
-      $(this).siblings('pre').append('<code class="fake json hljs"></code>');
-      $(this).siblings('.copy-btn').removeClass('in');
-    }
-    else {
-      $(this).addClass('icon-down-dir').removeClass('icon-right-dir');
-      $(this).siblings('pre').find('code.json').addClass('in');
-      $('code.fake').remove();
-      $(this).siblings('.copy-btn').addClass('in');
-    }
-  });
-
   $('.test-btn').click(function(e){
       e.preventDefault();
       IAM.loading.start({ type:'logo', duration: false });
@@ -61,9 +47,9 @@ $(document).ready(function(){
               $(this).closest('.section').nextAll('.section').each(function(i, block){
                   $(this).find('.notes').removeClass('in');
                   $(this).find('.copy-btn').removeClass('in');
-                  $(this).find('.foldCaret').removeClass('in');
-                  $(this).find('.json').html( '' );
-                  $(this).find('.text-input').val( '' );
+                  $(this).find('.codeArea').text('');
+                  $(this).find('.CodeMirror').remove();
+                  $(this).find('.text-input').val('');
 
                   window.lastQuery = inputText.val();
               });
@@ -74,8 +60,8 @@ $(document).ready(function(){
                   $('#wrapper_query').val( window.lastQuery );
                   $('#wrapper_query').closest('div').find('.notes').removeClass('in');
                   $('#wrapper_query').closest('div').find('.copy-btn').removeClass('in');
-                  $('#wrapper_query').closest('div').find('.foldCaret').removeClass('in');
-                  $('#wrapper_query').closest('div').find('.json').html( '' );
+                  $('#wrapper_query').closest('div').find('.codeArea').text('');
+                  $('#wrapper_query').closest('div').find('.CodeMirror').remove();
               }
           } else {
               window.lastQuery = $('#wrapper_query').val();
@@ -104,12 +90,8 @@ $(document).ready(function(){
           data: data
       }).done(function(r){
           var thisSection = $(this).closest('.section');
-          stopLoadingAndReportNotes(r, thisSection);
 
-          // Highlight the code.
-          $('pre code').each(function(i, block) {
-              hljs.highlightBlock(block);
-          });
+          stopLoadingAndReport(r, thisSection);
 
           if ( action === '/api/nlu-query' || action === '/api/skill-retrieve'){
               $('.skill').addClass('in');
@@ -117,7 +99,8 @@ $(document).ready(function(){
           }
       }.bind(this)).fail(function(r){
           var thisSection = $(this).closest('.section');
-          stopLoadingAndReportNotes(r, thisSection);
+
+          stopLoadingAndReport(r, thisSection);
       });
   });
 
@@ -160,17 +143,27 @@ $(document).ready(function(){
       });
   }
 
-  function stopLoadingAndReportNotes(r, section){
+  function stopLoadingAndReport(r, section){
       $('.iam-loading').each(function(){
           IAM.loading.stop({id: $(this).attr('rel')});
       });
 
-      section.find('.json').text(r['response']);
+      var codeArea  = section.find('.codeArea')[0];
+      var cm = CodeMirror.fromTextArea( codeArea, {
+          lineNumbers: true,
+          foldGutter: true,
+          readOnly: true,
+          gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
+      });
+
+      cm.setSize(null, 420);
+
+      section.find('.codeArea').text(r['response']);
+      cm.setValue(r['response']);
+
       section.find('.server-time').text( r['time'] );
       section.find('.url-used').text( r['url'] );
       section.find('.notes').addClass('in');
       section.find('.copy-btn').addClass('in');
-      section.find('.foldCaret').addClass('in');
   }
-
 });

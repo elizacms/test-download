@@ -12,6 +12,11 @@
  *
  */
 
+ /*
+*= require codemirror
+*= require codemirror/addons/fold/foldgutter
+*/
+
 @import "bootstrap";
 @import "main";
 @import "jsgrid";

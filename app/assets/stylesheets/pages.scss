@@ -28,33 +28,8 @@ h4 {
   margin-bottom: 0px !important;
 }
 
-pre code.json {
-  max-height: 400px;
-  overflow: auto;
-
-  div {
-    background-color: inherit !important;
-  }
-
-  p {
-    font-size: 1em !important;
-  }
-}
-
-pre {
-  margin-bottom: 0 !important;
-}
-
 .copy-btn {
   margin-right: 2px !important;
-}
-
-.foldCaret {
-  float: left;
-}
-
-.foldCaret:hover {
-  cursor: pointer !important;
 }
 
 .copyConfirm {
