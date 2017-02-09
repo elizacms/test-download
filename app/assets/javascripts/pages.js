@@ -12,11 +12,11 @@ function clearForms(){
     $('.CodeMirror').remove();
 
     $('#wrapper_query').closest('div').nextAll('div').each(function(){
-      $(this).find('.text-input').val('')
+      $(this).find('.text-input').val('');
     });
 }
 
-$(document).ready(function(){
+$(document).on('turbolinks:load', function(){
   $('.copy-btn').click(function(){
     copyToClipboard($(this).siblings('.codeArea'));
     var copyConfirm = $(this).siblings('.copyConfirm');
