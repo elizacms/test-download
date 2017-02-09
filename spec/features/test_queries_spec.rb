@@ -1,4 +1,4 @@
-describe 'Test Queries', :js do
+describe 'Test Queries', :js, :focus do
   let!( :dev   ){ create :user  }
   let!( :skill ){ create :skill }
   let!( :role  ){ create :role, user: dev, skill: skill }
@@ -20,7 +20,7 @@ describe 'Test Queries', :js do
     within '.wrapper-query' do
       click_button 'Test'
 
-      within '.json' do
+      within '.CodeMirror' do
         expect( page ).to have_content "{\"intent\": \"music\"}"
       end
     end
@@ -52,7 +52,7 @@ describe 'Test Queries', :js do
     end
 
     specify 'includes identity token and other params' do
-      within '.wrapper-query .json' do
+      within '.wrapper-query .CodeMirror' do
         expect( page ).to have_content "{\"intent\":\"fake_news\",\"mentions\":[]}"
       end
 
@@ -74,7 +74,7 @@ describe 'Test Queries', :js do
     within '.nlu-query' do
       click_button 'Test'
 
-      within '.json' do
+      within '.CodeMirror' do
         expect( page ).to have_content "{\"intent\": \"music\"}"
       end
     end
@@ -98,7 +98,7 @@ describe 'Test Queries', :js do
     within '.skill-retrieve' do
       click_button 'Test'
 
-      within '.json' do
+      within '.CodeMirror' do
         expect( page ).to have_content "{\"intent\": \"fake_news\"}"
       end
     end
@@ -126,7 +126,7 @@ describe 'Test Queries', :js do
     within '.skill-format' do
       click_button 'Test'
 
-      within '.json' do
+      within '.CodeMirror' do
         expect( page ).to have_content "{\"intent\": \"fake_news\"}"
       end
     end
