@@ -30,7 +30,7 @@ class ApiController < ApplicationController
   end
 
   def wrapper_query
-    @url = case request.headers[ 'X-Test-Env' ]
+    url = case request.headers[ 'X-Test-Env' ]
     when 'production'
       'https://us-aneeda.sensiya.com/api/ai/say'
     when 'de-production'
@@ -52,13 +52,11 @@ class ApiController < ApplicationController
       }
     }
 
-    send_courier_post( @url, json.to_json )
-
-    render_json{ return }
+    send_courier_and_render_json( url, json.to_json ){ return }
   end
 
   def nlu_query
-    @url = case request.headers[ 'X-Test-Env' ]
+    url = case request.headers[ 'X-Test-Env' ]
     when 'production', 'de-production'
       'http://nlu.aneeda.ai:8080/query'
     when 'staging'
@@ -73,25 +71,19 @@ class ApiController < ApplicationController
       'appData'   => { 'id' => 'com.iamplus.aneedacall' }
     }
 
-    send_courier_post( @url, json.to_json )
-
-    render_json{ return }
+    send_courier_and_render_json( url, json.to_json ){ return }
   end
 
   def skill_retrieve
-    @url = request.headers[ 'X-Skill-Url' ]
+    url = request.headers[ 'X-Skill-Url' ]
 
-    send_courier_post( @url, params.to_json )
-
-    render_json{ return }
+    send_courier_and_render_json( url, params.to_json ){ return }
   end
 
   def skill_format
-    @url = request.headers[ 'X-Skill-Url' ]
+    url = request.headers[ 'X-Skill-Url' ]
 
-    send_courier_post( @url, params.to_json )
-
-    render_json{ return }
+    send_courier_and_render_json( url, params.to_json ){ return }
   end
 
   def process_intent_upload
@@ -123,16 +115,15 @@ class ApiController < ApplicationController
     )
   end
 
-  def send_courier_post( url, body )
-    @courier = Courier.post_request( url, body )
-  end
+  def send_courier_and_render_json( url, body )
+    courier = Courier.post_request( url, body )
 
-  def render_json
     render json: {
-      response: @courier[:response],
+      response: courier[:response],
       access_token: session[:access_token],
-      url: @url,
-      time: ActiveSupport::NumberHelper.number_to_delimited( (@courier[:time] * 1000).to_i )
+      url: url,
+      details: body,
+      time: ActiveSupport::NumberHelper.number_to_delimited( (courier[:time] * 1000).to_i )
     }, status: 200
   end
 

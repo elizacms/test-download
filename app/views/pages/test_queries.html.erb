@@ -46,7 +46,7 @@
       <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
     <% end %>
     <br>
-    <%= render partial: 'query_response' %>
+    <%= render partial: 'query_response', locals: { name: 'wrapper-query' } %>
   </div>
 </div>
 
@@ -59,7 +59,7 @@
       <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
     <% end %>
     <br>
-    <%= render partial: 'query_response' %>
+    <%= render partial: 'query_response', locals: { name: 'nlu-query' } %>
   </div>
 </div>
 
@@ -82,7 +82,7 @@
   </div>
   <div class='row'>
     <div class='col-md-12'>
-      <%= render partial: 'query_response' %>
+      <%= render partial: 'query_response', locals: { name: 'skill-retrieve' } %>
     </div>
   </div>
 </div>
@@ -106,7 +106,7 @@
   </div>
   <div class='row'>
     <div class='col-md-12'>
-      <%= render partial: 'query_response' %>
+      <%= render partial: 'query_response', locals: { name: 'skill-format' } %>
     </div>
   </div>
 </div>

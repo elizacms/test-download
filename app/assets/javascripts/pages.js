@@ -7,7 +7,7 @@ function fillWrapperQueryAndClearPrevious(){
 
 function clearForms(){
     $('.notes').removeClass('in');
-    $('.copy-btn').removeClass('in');
+    $('.copyBtnMain').removeClass('in');
     $('.codeArea').text('');
     $('.CodeMirror').remove();
 
@@ -17,22 +17,27 @@ function clearForms(){
 }
 
 $(document).on('turbolinks:load', function(){
-  $('.copy-btn').click(function(){
-    copyToClipboard($(this).siblings('.codeArea'));
-    var copyConfirm = $(this).siblings('.copyConfirm');
-    copyConfirm.addClass('in');
-
-    setTimeout(function(){
-      copyConfirm.removeClass('in');
-    }, 1000);
+  $('.copyBtnMain').click(function(){
+    copyToClipboard($(this).siblings('.codeArea'), $(this).siblings('.copyConfirm'));
   });
 
-  function copyToClipboard(element) {
+  // $('.copyBtnCurl').click(function(){
+  //   copyToClipboard($(this).closest('.modal-body').find('.modalCode'), $(this).siblings('.copyConfirm') );
+  // });
+
+  function copyToClipboard(element, confirmElement) {
     var $temp = $('<textarea>');
     $('body').append($temp);
-    $temp.text($(element).text()).select();
+
+    $temp.text(element.text()).select();
     document.execCommand('copy');
     $temp.remove();
+
+    confirmElement.addClass('in');
+
+    setTimeout(function(){
+      confirmElement.removeClass('in');
+    }, 1000);
   }
 
   $('.test-btn').click(function(e){
@@ -42,14 +47,19 @@ $(document).on('turbolinks:load', function(){
       var action = $(this).closest('form').attr('action');
       var inputText = $(this).closest('.row').find('.text-input');
 
+      if ($(this).closest('.section').find('.CodeMirror').length > 0){
+          $(this).closest('.section').find('.CodeMirror').remove();
+      }
+
       if (action === '/api/wrapper-query' || action === '/api/nlu-query'){
           if ( window.lastQuery !== undefined && window.lastQuery !== inputText.val() ){
               $(this).closest('.section').nextAll('.section').each(function(i, block){
                   $(this).find('.notes').removeClass('in');
-                  $(this).find('.copy-btn').removeClass('in');
+                  $(this).find('.copyBtnMain').removeClass('in');
                   $(this).find('.codeArea').text('');
                   $(this).find('.CodeMirror').remove();
                   $(this).find('.text-input').val('');
+                  $(this).find('.modalCode').text('');
 
                   window.lastQuery = inputText.val();
               });
@@ -59,9 +69,10 @@ $(document).on('turbolinks:load', function(){
               } else {
                   $('#wrapper_query').val( window.lastQuery );
                   $('#wrapper_query').closest('div').find('.notes').removeClass('in');
-                  $('#wrapper_query').closest('div').find('.copy-btn').removeClass('in');
+                  $('#wrapper_query').closest('div').find('.copyBtnMain').removeClass('in');
                   $('#wrapper_query').closest('div').find('.codeArea').text('');
                   $('#wrapper_query').closest('div').find('.CodeMirror').remove();
+                  $('#wrapper_query').closest('div').find('.modalCode').text('');
               }
           } else {
               window.lastQuery = $('#wrapper_query').val();
@@ -148,7 +159,26 @@ $(document).on('turbolinks:load', function(){
           IAM.loading.stop({id: $(this).attr('rel')});
       });
 
-      var codeArea  = section.find('.codeArea')[0];
+      createAndPopulateCodeMirror(r, section);
+      populateCurlCommandModal(r, section);
+
+      section.find('.codeArea').text(r['response']);
+      section.find('.server-time').text( r['time'] );
+      section.find('.url-used').text( r['url'] );
+      section.find('.notes').addClass('in');
+      section.find('.copyBtnMain').addClass('in');
+  }
+
+  function populateCurlCommandModal(r, section){
+      var curlCommand = 'curl -X POST -H "Content-Type: application/json" -d ' + "'" +
+      r['details'].replace(/,/g, ',<br>' ).replace(/{/g, '{<br>').replace(/}}/g, '}<br>}')
+      + "'" + ' "' + r['url'] + '"';
+
+      section.find('.modalCode').html(curlCommand);
+  }
+
+  function createAndPopulateCodeMirror(r, section){
+      var codeArea = section.find('.codeArea')[0];
       var cm = CodeMirror.fromTextArea( codeArea, {
           lineNumbers: true,
           foldGutter: true,
@@ -157,13 +187,6 @@ $(document).on('turbolinks:load', function(){
       });
 
       cm.setSize(null, 420);
-
-      section.find('.codeArea').text(r['response']);
       cm.setValue(r['response']);
-
-      section.find('.server-time').text( r['time'] );
-      section.find('.url-used').text( r['url'] );
-      section.find('.notes').addClass('in');
-      section.find('.copy-btn').addClass('in');
   }
 });
