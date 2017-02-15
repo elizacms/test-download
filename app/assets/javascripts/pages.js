@@ -21,20 +21,25 @@ $(document).on('turbolinks:load', function(){
     copyToClipboard($(this).siblings('.codeArea'), $(this).siblings('.copyConfirm'));
   });
 
-  // $('.copyBtnCurl').click(function(){
-  //   copyToClipboard($(this).closest('.modal-body').find('.modalCode'), $(this).siblings('.copyConfirm') );
-  // });
+  $('.copyBtnCurl').click(function(){
+    copyToClipboard($(this).parents('.modal-body').find('.modalCode'), $(this).siblings('.copyConfirm') );
+  });
 
   function copyToClipboard(element, confirmElement) {
     var $temp = $('<textarea>');
-    $('body').append($temp);
+
+    if (element.parents('.modal').length > 0){
+      element.parents('.modal-body').append($temp);
+    }
+    else {
+      $('body').append($temp);
+    }
 
     $temp.text(element.text()).select();
     document.execCommand('copy');
     $temp.remove();
 
     confirmElement.addClass('in');
-
     setTimeout(function(){
       confirmElement.removeClass('in');
     }, 1000);
@@ -75,8 +80,14 @@ $(document).on('turbolinks:load', function(){
                   $('#wrapper_query').closest('div').find('.modalCode').text('');
               }
           } else {
-              window.lastQuery = $('#wrapper_query').val();
-              $('#nlu_query').val(window.lastQuery);
+              if ($('#wrapper_query').val() === ''){
+                  window.lastQuery = $('#nlu_query').val();
+                  $('#wrapper_query').val(window.lastQuery);
+              }
+              else {
+                  window.lastQuery = $('#wrapper_query').val();
+                  $('#nlu_query').val(window.lastQuery);
+              }
           }
       }
 
