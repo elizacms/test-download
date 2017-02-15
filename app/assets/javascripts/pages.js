@@ -104,7 +104,7 @@ $(document).on('turbolinks:load', function(){
 
           stopLoadingAndReport(r, thisSection);
 
-          if ( action === '/api/nlu-query' || action === '/api/skill-retrieve'){
+          if ( action === '/api/nlu-query' || action === '/api/skill'){
               $('.skill').addClass('in');
               intentList(r['response'], r['access_token'], action);
           }
@@ -142,7 +142,7 @@ $(document).on('turbolinks:load', function(){
               $('#skill_retrieve').val( JSON.stringify( retrieveJSON, null, 2 ) );
               $('#skill_retrieve_url').val( skillUrl + '.com/retrieve');
               $('#skill_format_url').val( skillUrl + '.com/format');
-          } else if ( action === '/api/skill-retrieve' ){
+          } else if ( action === '/api/skill' ){
               var formatJSON = {};
               var nlu = formatJSON['nlu_response'] = {};
 

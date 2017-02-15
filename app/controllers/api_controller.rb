@@ -74,13 +74,7 @@ class ApiController < ApplicationController
     send_courier_and_render_json( url, json.to_json ){ return }
   end
 
-  def skill_retrieve
-    url = request.headers[ 'X-Skill-Url' ]
-
-    send_courier_and_render_json( url, params.to_json ){ return }
-  end
-
-  def skill_format
+  def skill
     url = request.headers[ 'X-Skill-Url' ]
 
     send_courier_and_render_json( url, params.to_json ){ return }

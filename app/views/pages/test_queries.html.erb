@@ -66,7 +66,7 @@
 <div class='skill-retrieve skill collapse section'>
   <h4>Skill (Retrieve)</h4>
   <div class='row'>
-    <%= form_tag '/api/skill-retrieve' do %>
+    <%= form_tag '/api/skill' do %>
       <div class='col-md-9'>
         <%= hidden_field_tag :skill_retrieve_url, nil, class: 'skill-url' %>
         <%= text_area_tag(
@@ -90,7 +90,7 @@
 <div class='skill-format skill collapse section'>
   <h4>Skill (Format)</h4>
   <div class='row'>
-    <%= form_tag '/api/skill-format' do %>
+    <%= form_tag '/api/skill' do %>
       <div class='col-md-9'>
         <%= hidden_field_tag :skill_format_url, nil, class: 'skill-url' %>
         <%= text_area_tag(

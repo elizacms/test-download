@@ -76,11 +76,8 @@ Rails.application.routes.draw do
     post '/nlu-query',
       to: 'api#nlu_query'
 
-    post '/skill-format',
-      to: 'api#skill_format'
-
-    post '/skill-retrieve',
-      to: 'api#skill_retrieve'
+    post '/skill',
+      to: 'api#skill'
 
     post '/process_intent_upload',
       to: 'api#process_intent_upload'
