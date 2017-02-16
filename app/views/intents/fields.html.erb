@@ -37,7 +37,7 @@
 var skill  = <%= @skill.to_json.html_safe %>;
 var intent = <%= @intent.to_json.html_safe %>;
 
-$(function() {
+$(document).on('turbolinks:load', function() {
     initFieldDataTypes();
     initJSON();
     initMturkResponse();

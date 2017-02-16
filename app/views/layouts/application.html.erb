@@ -9,6 +9,23 @@
     <link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/iamplus-shared-assets/css/production/styles.css">
 
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <% if params[:action] == 'dialogs' && params[:controller] == 'intents' %>
+      <%= javascript_include_tag 'dialogs/manifest', 'data-turbolinks-track': 'reload' %>
+    <% end %>
+
+    <% if params[:action] == 'fields' && params[:controller] == 'intents' %>
+      <%= javascript_include_tag 'fields/manifest', 'data-turbolinks-track': 'reload' %>
+    <% end %>
+
+    <% if params[:action] == 'test_queries' && params[:controller] == 'pages' %>
+      <%= javascript_include_tag 'test_queries/manifest', 'data-turbolinks-track': 'reload' %>
+    <% end %>
+
+    <% if params[:action] == 'new' || params[:action] == 'edit' && params[:controller] == 'intents' %>
+      <%= javascript_include_tag 'intents/manifest', 'data-turbolinks-track': 'reload' %>
+    <% end %>
+
     <%= javascript_include_tag "https://s3.amazonaws.com/iamplus-shared-assets/js/production/alert.js" %>
     <script src="https://s3.amazonaws.com/iamplus-shared-assets/js/production/loading.js"></script>
   </head>

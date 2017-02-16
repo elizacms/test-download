@@ -15,12 +15,3 @@
 //= require bootstrap
 //= require jquery_ujs
 //= require turbolinks
-//= require react
-//= require react_ujs
-//= require components
-//= require codemirror
-//= require codemirror/modes/javascript
-//= require codemirror/addons/fold/foldcode
-//= require codemirror/addons/fold/foldgutter
-//= require codemirror/addons/fold/brace-fold
-//= require_tree .
