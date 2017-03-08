@@ -24,6 +24,18 @@
   margin-left: 5px;
 }
 
+.intent-info {
+  margin-top: 40px;
+}
+
+.intent-title {
+  margin-top: 20px;
+}
+
+.info-header {
+  margin-top: 20px;
+}
+
 td.jsgrid-cell input,
 td.jsgrid-cell select {
   width: 230px;
@@ -35,6 +47,13 @@ th.jsgrid-header-cell {
   text-transform: uppercase;
   text-align: center;
 }
+
+th.jsgrid-control-field {
+  .jsgrid-mode-button {
+    margin-bottom: 0;
+  }
+}
+
 
 td.jsgrid-cell {
   text-align: left;

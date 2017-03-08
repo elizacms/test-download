@@ -1,36 +1,40 @@
 <%= link_to(
-  "&larr; Intents".html_safe,
+  '&larr; Intents'.html_safe,
   edit_skill_intent_path(@skill, @intent),
-  class: "btn md grey"
+  class: 'btn md grey'
 ) %>
 <br><br>
 
-<div class="row">
-  <div class="col-md-3">
+<div class='row'>
+  <div class='col-xs-3'>
     <strong>Skill:</strong> <%= @skill.name %>
   </div>
-  <div class="col-md-3">
+  <div class='col-xs-9'>
     <strong>Intent:</strong> <%= @intent.name %>
   </div>
 </div>
 
-<br>
-
 <div id='jsGrid'></div>
+<br>
+<%= link_to(
+  'Next: Create Dialogs',
+  dialogs_page_path( @intent ),
+  class: 'btn lg black pull-right'
+) %>
 
 <div id='mturk-response-field'>
   <%= form_for [ @skill, @intent ] do | f | %>
     Mechanical Turk response fields<br>
     <%= f.text_field :mturk_response %>
 
-    <%= f.submit 'Submit', class: "btn md black" %><span id='submit-result'></span>
+    <%= f.submit 'Submit', class: 'btn md black' %><span id='submit-result'></span>
   <% end %>
 </div>
 
 <div class='fields'>
-  <button class="btn lg ghost json">Create JSON</button>
+  <button class='btn lg ghost json'>Show JSON</button>
   <br>
-  <pre><code class="json"></code></pre>
+  <pre><code class='json'></code></pre>
 </div>
 
 <script>

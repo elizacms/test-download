@@ -11,12 +11,12 @@
       <div class="col-xs-12 col-md-6">
         <br>
         <%= link_to(
-          "Edit Fields",
+          @intent.entities.any? ? 'Edit Fields' : 'Add Fields',
           fields_page_path( @skill, @intent ),
           class: 'btn lg black'
         ) %>
         <%= link_to(
-          "Edit Dialogs",
+          Dialog.for( @intent ).any? ? 'Edit Dialogs' : 'Add Dialogs',
           dialogs_page_path( @skill, @intent ),
           class: 'btn lg black'
         ) %>
@@ -49,7 +49,7 @@
   </div>
   <div class="row">
     <div class="col-xs-12 col-md-6">
-      <%= f.submit 'Submit', class: "btn md black" %>
+      <%= f.submit @intent.new_record? ? 'Create' : 'Update', class: 'btn md black' %>
     </div>
   </div>
 <% end %>

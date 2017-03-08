@@ -16,7 +16,7 @@ feature 'Dialogs', :js do
     click_link 'Intents'
 
     click_link 'Edit Details'
-    click_link 'Edit Dialogs'
+    click_link 'Add Dialogs'
 
     within 'form.dialog' do
       fill_in  :response,     with: 'what song would you like to hear'
@@ -34,7 +34,7 @@ feature 'Dialogs', :js do
     click_link 'Intents'
 
     click_link 'Edit Details'
-    click_link 'Edit Dialogs'
+    click_link 'Add Dialogs'
 
     within 'form.dialog' do
       fill_in  :response,     with: '   '
@@ -52,7 +52,7 @@ feature 'Dialogs', :js do
     click_link 'Intents'
 
     click_link 'Edit Details'
-    click_link 'Edit Dialogs'
+    click_link 'Add Dialogs'
 
     within 'form.dialog' do
       fill_in  :response,     with: 'what song would you like to hear'
@@ -80,7 +80,7 @@ feature 'Dialogs', :js do
     click_link 'Intents'
 
     click_link 'Edit Details'
-    click_link 'Edit Dialogs'
+    click_link 'Add Dialogs'
 
     within 'form.dialog' do
       fill_in  :response,     with: 'what song would you like to hear'

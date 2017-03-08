@@ -119,7 +119,11 @@ var Container = React.createClass({
   render() {
     return (
       <div>
-        <ExportCSV intent_id={this.props.intent_id}>
+        <ExportCSV
+          skill_name={this.props.skill_name}
+          intent_id={this.props.intent_id}
+          web_hook={this.props.web_hook}
+          >
         </ExportCSV>
 
         <Table

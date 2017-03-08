@@ -5,22 +5,12 @@
 ) %>
 <br><br>
 
-<div class='row'>
-  <div class='col-md-3'>
-    <strong>Skill:</strong> <%= @skill.name %>
-  </div>
-  <div class='col-md-3 text-center'>
-    <strong>Intent:</strong> <%= @intent.name %>
-  </div>
-  <div class='col-md-6 text-center'>
-    <strong>Web Hook:</strong> <%= @skill.web_hook %>
-  </div>
-</div><br>
-
 <%= react_component(
   'Container',
   {
     intent_id: @intent.name,
+    skill_name: @skill.name,
+    web_hook: @skill.web_hook,
     field_path: fields_page_path(@skill, @intent),
     fields: @fields
   }

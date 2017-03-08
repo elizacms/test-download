@@ -73,7 +73,7 @@ feature 'Intents pages' do
         fill_in :intent_name,           with:intent_name
         fill_in :intent_description,    with:intent_description
 
-        click_button 'Submit'
+        click_button 'Create'
       end
 
       expect( page ).to have_content '1 Intent'
@@ -92,7 +92,7 @@ feature 'Intents pages' do
 
       within 'form' do
         fill_in :intent_description, with:intent_description
-        click_button 'Submit'
+        click_button 'Create'
       end
 
       expect( page ).to have_content 'Create Intent'
@@ -126,7 +126,7 @@ feature 'Intents pages' do
 
       within 'form' do
         fill_in :intent_name, with: updated_name
-        click_button 'Submit'
+        click_button 'Update'
       end
 
       expect( page ).to have_content "Intent #{updated_name} updated."
@@ -180,12 +180,12 @@ feature 'Intents pages' do
         check :intent_requires_authorization
         page.evaluate_script("$('.external-apps-list input').last().attr('checked', true)")
 
-        click_button 'Submit'
+        click_button 'Update'
       end
 
-      expect( page ).to have_content "Intent get_ride updated."
+      expect( page ).to have_content 'Intent get_ride updated.'
       expect( Intent.first.requires_authorization ).to eq true
-      expect( Intent.first.external_applications ).to eq ["itunes"]
+      expect( Intent.first.external_applications ).to eq ['itunes']
     end
   end
 end

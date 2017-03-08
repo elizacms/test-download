@@ -23,4 +23,8 @@ class Dialog
       awaiting_field: awaiting_field
     }
   end
+
+  def self.for intent
+    self.all.to_a.select { |d| d.intent_id == intent.name }
+  end
 end

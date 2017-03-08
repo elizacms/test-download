@@ -53,7 +53,7 @@ function initFields(){
 
         fields: [
             {
-                title: 'id',
+                title: 'id "name"',
                 name: 'name',
                 type: 'text',
                 width: 100,
@@ -63,7 +63,7 @@ function initFields(){
             {
                 name: 'type',
                 type: 'select',
-                width: 100,
+                width: 80,
                 validate: 'required',
                 items: types.responseJSON,
                 valueField: 'name',
@@ -75,9 +75,14 @@ function initFields(){
                 width: 100,
                 validate: 'required'
             },
-            { type: 'control' }
+            {
+                type: 'control',
+                width: 100
+            }
         ]
-    })
+    });
+
+    $('th.jsgrid-control-field').find('input').before('Add Field ');
 }
 
 function initJSON(){
