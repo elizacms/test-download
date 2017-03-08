@@ -11,8 +11,8 @@
     <tr>
       <th>Name</th>
       <th>Web Hook</th>
-      <th>Edit Skill</th>
-      <th>Intents</th>
+      <th></th>
+      <th></th>
       <th>Your Role(s)</th>
     </tr>
   </thead>
@@ -21,8 +21,8 @@
       <tr>
         <td><%= s.name %></td>
         <td><%= s.web_hook %></td>
-        <td><%= link_to( "Edit", edit_skill_path( s.id )) %></td>
-        <td><%= link_to( "Intents", skill_intents_path( s.id )) %></td>
+        <td><%= link_to( "Edit", edit_skill_path( s.id ), class: 'btn sm black') %></td>
+        <td><%= link_to( "Manage Intents", skill_intents_path( s.id ), class: 'btn sm black') %></td>
         <td>
           <% roles_for_skill( s ).each do |s| %>
             <code><%= s %></code>
