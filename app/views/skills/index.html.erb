@@ -1,5 +1,5 @@
 <h2>
-  <%= pluralize @skills.count, t('skill') %>
+  <%= pluralize @skills.count, t('skill').capitalize %>
   <% if @current_user.has_role?( 'admin' ) %>
     <a href='/skills/new' class="btn md black pull-right">Create New Skill</a>
   <% end %>

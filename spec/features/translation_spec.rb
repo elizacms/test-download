@@ -1,4 +1,6 @@
 describe 'Translation', :js do
+  I18n.default_locale = 'de'
+
   let!( :owner ){ create :user                             }
   let!( :role  ){ create :role, name: 'owner', user: owner }
 
