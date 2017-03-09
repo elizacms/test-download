@@ -7,7 +7,8 @@ class Dialog
   field :missing,        type:Array, default:[]
   field :unresolved,     type:Array, default:[]
   field :present,        type:Array, default:[]
-  field :response,       type:String
+
+  has_one :response
 
   validates_presence_of :intent_id
 
@@ -16,11 +17,11 @@ class Dialog
       id: id,
       intent_id: intent_id,
       priority: priority,
-      response: response,
       unresolved: unresolved,
       missing: missing,
       present: present,
-      awaiting_field: awaiting_field
+      awaiting_field: awaiting_field,
+      response: response.serialize
     }
   end
 
