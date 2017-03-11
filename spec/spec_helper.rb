@@ -41,6 +41,7 @@ RSpec.configure do |config|
   ]
 
   config.before(:each) do
+    I18n.default_locale = 'en'
     Mongoid.purge!
     ActionMailer::Base.deliveries = []
   end

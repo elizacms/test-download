@@ -2,21 +2,19 @@ describe Dialog do
   let( :skill  ){ create :skill                }
   let( :intent ){ create :intent, skill: skill }
 
-  describe 'Missing' do
+  describe 'Dialogs' do
     specify 'Array with non-empty string should be valid' do
       expect(
         FactoryGirl.build(
           :dialog,
-          response: 'abc',
-          missing: ["abc"],
+          awaiting_field: ['abc'],
+          missing: ['abc'],
           intent_id: intent.name
         )
       ).to be_valid
     end
-  end
 
-  describe 'Must have one rule field' do
-    specify 'Success from missing' do
+    specify do
       expect(
         FactoryGirl.build(
           :dialog,

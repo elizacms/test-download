@@ -16,7 +16,7 @@ describe DialogUploader do
     DialogUploader.create_for( dialog_data, admin )
 
     expect( Dialog.last.intent_id ).to eq 'something'
-    expect( Dialog.last.response  ).to eq 'Hello world'
+    expect( Dialog.last.responses.first.response_value  ).to eq 'Hello world'
   end
 
   specify 'should return proper notice when dialog does not have an intent_id' do

@@ -8,7 +8,11 @@ describe 'Dialogs' do
   let( :params ){
     {
       priority:       90,
-      response:       'where would you like to go',
+      responses_attributes: [
+        response_value:   {text: 'some text'}.to_json,
+        response_trigger: 'some_trigger',
+        response_type:    'some_type'
+      ],
       intent_id:      intent.name,
       unresolved:     [ 'unresolved' ],
       missing:        [ field.name ],
@@ -23,7 +27,8 @@ describe 'Dialogs' do
       post '/dialogue_api/response', params.to_json
 
       expect( last_response.status ).to eq 201
-      expect( Dialog.count ).to eq 1
+      expect( Dialog.count   ).to eq 1
+      expect( Response.count ).to eq 1
     end
 
     specify 'Failure' do
@@ -34,7 +39,8 @@ describe 'Dialogs' do
 
       expect( last_response.status ).to eq 422
       expect( last_response.headers[ 'Warning' ] ).to eq "Intent can't be blank"
-      expect( Dialog.count ).to eq 0
+      expect( Dialog.count   ).to eq 0
+      expect( Response.count ).to eq 0
     end
   end
 
@@ -45,12 +51,23 @@ describe 'Dialogs' do
     end
 
     specify 'Success' do
+      update_params = params.merge!(
+        missing: ['Green Godess'],
+        responses_attributes: [
+          id: Response.last.id.to_s,
+          response_value: {text: 'some text'}.to_json,
+          response_trigger: 'some_trigger',
+          response_type: 'some_type'
+        ]
+      )
+
       header 'Content-Type', 'application/json'
-      put "/dialogue_api/response?response_id=#{Dialog.last.id}", params.merge!(response: 'Green Godess').to_json
+      put "/dialogue_api/response?response_id=#{Dialog.last.id}", update_params.to_json
 
       expect( last_response.status ).to eq 200
       expect( Dialog.count         ).to eq 1
-      expect( Dialog.last.response ).to eq 'Green Godess'
+      expect( Response.count       ).to eq 1
+      expect( Dialog.last.missing  ).to eq ['Green Godess']
     end
 
     specify 'Failure' do
@@ -61,7 +78,8 @@ describe 'Dialogs' do
 
       expect( last_response.status ).to eq 422
       expect( last_response.headers[ 'Warning' ] ).to eq "Intent can't be blank"
-      expect( Dialog.count ).to eq 1
+      expect( Dialog.count   ).to eq 1
+      expect( Response.count ).to eq 1
     end
   end
 
@@ -77,14 +95,20 @@ describe 'Dialogs' do
       header 'Content-Type', 'application/json'
       get '/dialogue_api/all_scenarios', { intent_id: intent.name }
 
+      expected_responses = [{
+        response_value:   "{\"text\":\"some text\"}",
+        response_type:    "some_type",
+        response_trigger: "some_trigger"
+      }]
+
       expect( last_response.status ).to eq 200
       expect( parsed_response.count ).to eq 1
-      expect( parsed_response[ 0 ][ :intent_id  ]).to eq intent.name
-      expect( parsed_response[ 0 ][ :missing    ]).to eq [ field.name ]
-      expect( parsed_response[ 0 ][ :unresolved ]).to eq [ 'unresolved' ]
-      expect( parsed_response[ 0 ][ :present    ]).to eq [ 'present', 'value' ]
+      expect( parsed_response[ 0 ][ :intent_id      ]).to eq intent.name
+      expect( parsed_response[ 0 ][ :missing        ]).to eq [ field.name ]
+      expect( parsed_response[ 0 ][ :unresolved     ]).to eq [ 'unresolved' ]
+      expect( parsed_response[ 0 ][ :present        ]).to eq [ 'present', 'value' ]
       expect( parsed_response[ 0 ][ :awaiting_field ]).to eq params[ :awaiting_field ]
-      expect( parsed_response[ 0 ][ :response       ]).to eq params[ :response ]
+      expect( parsed_response[ 0 ][ :responses      ]).to eq expected_responses
     end
   end
 
@@ -92,7 +116,8 @@ describe 'Dialogs' do
     let( :header_row ){ "intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en\n" }
     let( :data_row   ){
       "#{ intent.name },90,destination,unresolved,destination,"\
-      "present && value,where would you like to go"
+      "present && value,[{\"response_value\":\"{\\\"text\\\":\\\"some text\\\"}\","\
+      "\"response_type\":\"some_type\",\"response_trigger\":\"some_trigger\"}]"
     }
     let( :csv ){ header_row + data_row }
 

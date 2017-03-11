@@ -42,21 +42,22 @@ describe 'Dialog Upload' do
 
     expect( Dialog.count ).to eq 3
 
-    hw = Dialog.find_by(response: 'Hello world')
-    sl = Dialog.find_by(response: 'Drive down Silver Lake')
+    hw = Dialog.find_by(intent_id: 'something')
+    sl = Dialog.find_by(intent_id: 'la_passageways')
 
-    expect( hw.intent_id      ).to eq 'something'
-    expect( hw.priority       ).to eq 100
-    expect( hw.awaiting_field ).to eq ['hello']
-    expect( hw.unresolved     ).to eq ['goodbye', 'hello']
-    expect( hw.missing        ).to eq ['goodbye']
-    expect( hw.present        ).to eq ['goodbye', 'yo yo']
+    expect( hw.responses.first.response_value ).to eq 'Hello world'
+    expect( hw.priority                       ).to eq 100
+    expect( hw.awaiting_field                 ).to eq ['hello']
+    expect( hw.unresolved                     ).to eq ['goodbye', 'hello']
+    expect( hw.missing                        ).to eq ['goodbye']
+    expect( hw.present                        ).to eq ['goodbye', 'yo yo']
 
-    expect( sl.intent_id      ).to eq 'la_passageways'
-    expect( sl.priority       ).to eq 100
-    expect( sl.awaiting_field ).to eq ['virgil']
-    expect( sl.unresolved     ).to eq ['sdfsd']
-    expect( sl.missing        ).to eq ['1000_oaks']
-    expect( sl.present        ).to eq ['heliotrope', '23']
+    expect( sl.responses.first.response_value ).to eq 'Drive down Silver Lake'
+    expect( sl.intent_id                      ).to eq 'la_passageways'
+    expect( sl.priority                       ).to eq 100
+    expect( sl.awaiting_field                 ).to eq ['virgil']
+    expect( sl.unresolved                     ).to eq ['sdfsd']
+    expect( sl.missing                        ).to eq ['1000_oaks']
+    expect( sl.present                        ).to eq ['heliotrope', '23']
   end
 end

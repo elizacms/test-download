@@ -17,7 +17,6 @@ class DialogsController < ApplicationController
 
     if dialog.save
       render json: {}, status: :created
-
     else
       response.headers[ 'Warning' ] = dialog.errors.full_messages.join "\n"
       render json: dialog.errors, status: :unprocessable_entity
@@ -38,7 +37,7 @@ class DialogsController < ApplicationController
   def delete
     dialog = Dialog.find( params[ :response_id ] )
 
-    aneeda_says = dialog.response
+    aneeda_says = dialog.responses
     dialog.delete
 
     render plain: "You deleted the Dialog: #{aneeda_says}.", status: :ok
@@ -73,7 +72,13 @@ class DialogsController < ApplicationController
     params.permit(
       :intent_id,
       :priority,
-      :response,
+      responses_attributes: [
+        :id,
+        :response_value,
+        :response_trigger,
+        :response_type,
+        :_delete
+      ],
       awaiting_field:[],
       present: [],
       unresolved: [],

@@ -70,14 +70,19 @@ class DialogUploader
         end
 
         begin
-          Dialog.create!(
+          dialog = Dialog.create!(
             intent_id: d['intent_id'],
             priority: d['priority'].to_i,
             awaiting_field: value_for(d, 'awaiting_field'),
             missing: value_for(d, 'missing'),
             unresolved: value_for(d, 'unresolved'),
-            present: value_for(d, 'present'),
-            response: d['aneeda_en']
+            present: value_for(d, 'present')
+          )
+          Response.create!(
+            dialog_id: dialog.id,
+            response_type: '',
+            response_trigger: '',
+            response_value: d['aneeda_en']
           )
         rescue Mongoid::Errors::Validations
           not_valid += 1

@@ -1,3 +1,10 @@
 de:
   hello: 'Hallo Welt'
   skill: 'Fähigkeit'
+  mongoid:
+    errors:
+      messages:
+        nested_attributes:
+          message: 'thing'
+          summary: 'thing'
+          resolution: 'thing'
