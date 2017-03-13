@@ -22,15 +22,21 @@ export LANGUAGE=en
 ```
 
 4. Launch mongo server and rails app.
-`$ mongod`
+```
+$ mongod
+```
 open a new tab
-`$ source .env`
-`$ rails s`
+```
+$ source .env
+$ rails s
+```
 
 5. Create first Admin user.
-`$ rails c`
-`> User.create(email: 'my_email_address@iamplus.com')`
-`> User.first.set_role('admin')`
+```
+$ rails c
+> User.create(email: 'my_email_address@iamplus.com')
+> User.first.set_role('admin')
+```
 
 Now you should have a functional app. Load it up at localhost:3000.
 
