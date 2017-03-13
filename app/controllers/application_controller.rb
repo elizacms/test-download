@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   end
 
   def validate_permissions_for_skill
-    skill = Skill.find_by( id: params[ :id ] ) || Skill.find_by( id: params[ :skill_id ] )
+    skill = Skill.find_by( id: params[ :skill_id ] ) || Skill.find_by( id: params[ :id ] )
 
     unless user_owns_skill_or_is_admin?( @current_user, skill ) ||
            current_user.has_role?( 'developer', skill.name )
