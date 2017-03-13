@@ -1,7 +1,7 @@
 test:
   clients:
     default:
-      database: skills_manager_test<%= ENV['TEST_ENV_NUMBER'] %>
+      database: nlu_cms_test<%= ENV['TEST_ENV_NUMBER'] %>
       hosts:
         - localhost:27017
   options:
@@ -11,7 +11,7 @@ test:
 development:
   clients:
     default:
-      database: skills_manager_development
+      database: nlu_cms_development
       hosts:
         - localhost:27017
   options:

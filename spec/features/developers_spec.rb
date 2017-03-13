@@ -166,7 +166,7 @@ feature 'Developers' do
 
       expect( last_email.from ).to eq ['mailer@iamplus.com']
       expect( last_email.to ).to eq ['cash_is_hungry@iamplus.com']
-      expect( last_email.subject ).to eq "You've been given access to the Skills Manager"
+      expect( last_email.subject ).to eq "You've been given access to the nlu-cms"
     end
 
     specify 'Owner can invite a developer' do

@@ -6,7 +6,7 @@ class UserMailer < ActionMailer::Base
 
     mail(
       to: user_email,
-      subject: "You've been given access to the Skills Manager"
+      subject: "You've been given access to the nlu-cms"
     )
   end
 end

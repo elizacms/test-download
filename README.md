@@ -1,4 +1,4 @@
-# Skills Manager README
+# nlu-cms README
 
 ## Running the tests
 The tests can be run with
