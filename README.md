@@ -38,6 +38,11 @@ $ rails c
 > User.first.set_role('admin')
 ```
 
+6. Seed database with the initial DataFieldTypes.
+```
+$ rake db:seed
+```
+
 Now you should have a functional app. Load it up at localhost:3000.
 
 

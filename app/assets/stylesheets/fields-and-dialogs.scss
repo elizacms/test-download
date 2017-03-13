@@ -38,9 +38,9 @@
 
 td.jsgrid-cell input,
 td.jsgrid-cell select {
-  width: 230px;
+  width: 100%;
   min-width: unset;
-  margin: 0.5em 0.5em;
+  margin: 0 auto;
 }
 
 th.jsgrid-header-cell {
