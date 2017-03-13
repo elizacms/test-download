@@ -70,6 +70,33 @@ describe 'Dialogs' do
       expect( Dialog.last.missing  ).to eq ['Green Godess']
     end
 
+    specify 'Success with multiple responses_attributes update/create' do
+      update_params = params.merge!(
+        missing: ['Green Godess'],
+        responses_attributes: [
+          {
+            id: Response.last.id.to_s,
+            response_value:   {text: 'some text'}.to_json,
+            response_trigger: 'some_trigger',
+            response_type:    'some_type'
+          },
+          {
+            response_value:   {text: 'some awesome text'}.to_json,
+            response_trigger: 'some_other_trigger',
+            response_type:    'some_other_type'
+          }
+        ]
+      )
+
+      header 'Content-Type', 'application/json'
+      put "/dialogue_api/response?response_id=#{Dialog.last.id}", update_params.to_json
+
+      expect( last_response.status ).to eq 200
+      expect( Dialog.count         ).to eq 1
+      expect( Response.count       ).to eq 2
+      expect( Dialog.first.missing  ).to eq ['Green Godess']
+    end
+
     specify 'Failure' do
       params.merge!( intent_id: nil )
 
