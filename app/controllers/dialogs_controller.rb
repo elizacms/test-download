@@ -36,11 +36,9 @@ class DialogsController < ApplicationController
 
   def delete
     dialog = Dialog.find( params[ :response_id ] )
-
-    aneeda_says = dialog.responses
     dialog.delete
 
-    render plain: "You deleted the Dialog: #{aneeda_says}.", status: :ok
+    render plain: "You deleted a Dialog.", status: :ok
   end
 
   def csv

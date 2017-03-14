@@ -66,13 +66,14 @@ feature 'Dialogs', :js do
     expect( Dialog.count ).to eq 1
 
     find( '.icon-pencil' ).click
-    fill_in :response, with: 'Crazy Fish'
+    fill_in :priority, with: 120
+    fill_in  :response,     with: 'what song would you like to hear'
 
     click_button 'Update Dialog'
 
-    expect( page ).to have_content 'Crazy Fish'
+    expect( page ).to have_content 120
     expect( Dialog.count         ).to eq 1
-    expect( Dialog.last.response ).to eq 'Crazy Fish'
+    expect( Dialog.last.priority ).to eq 120
   end
 
   specify 'Deleting a dialog shows confirm' do
@@ -94,6 +95,6 @@ feature 'Dialogs', :js do
       page.find('.icon-cancel-circled').click
     end
 
-    expect( page ).to have_content 'You deleted the Dialog: what song would you like to hear.'
+    expect( page ).to have_content 'You deleted a Dialog.'
   end
 end
