@@ -123,6 +123,7 @@ describe 'Dialogs' do
       get '/dialogue_api/all_scenarios', { intent_id: intent.name }
 
       expected_responses = [{
+        id:               { :$oid => Response.last.id.to_s  },
         response_value:   "{\"text\":\"some text\"}",
         response_type:    "some_type",
         response_trigger: "some_trigger"

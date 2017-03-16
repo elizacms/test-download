@@ -19,7 +19,6 @@ feature 'Dialogs', :js do
     click_link 'Add Dialogs'
 
     within 'form.dialog' do
-      fill_in  :response,     with: 'what song would you like to hear'
       select   field.name,    from: 'unresolved-field'
       select   field.name,    from: 'awaiting-field'
     end
@@ -27,24 +26,6 @@ feature 'Dialogs', :js do
     click_button 'Create Dialog'
 
     expect( page ).to have_content 'destination is unresolved'
-  end
-
-  specify 'Fails when response is blank' do
-    visit '/login/success?code=0123abc'
-    click_link 'Intents'
-
-    click_link 'Edit Details'
-    click_link 'Add Dialogs'
-
-    within 'form.dialog' do
-      fill_in  :response,     with: '   '
-      select   field.name,    from: 'missing-field'
-      select   field.name,    from: 'awaiting-field'
-    end
-
-    click_button 'Create Dialog'
-
-    expect( page ).to have_content 'This field cannot be blank.'
   end
 
   specify 'User can update a dialog' do
@@ -55,7 +36,6 @@ feature 'Dialogs', :js do
     click_link 'Add Dialogs'
 
     within 'form.dialog' do
-      fill_in  :response,     with: 'what song would you like to hear'
       select   field.name,    from: 'unresolved-field'
       select   field.name,    from: 'awaiting-field'
     end
@@ -67,7 +47,6 @@ feature 'Dialogs', :js do
 
     find( '.icon-pencil' ).click
     fill_in :priority, with: 120
-    fill_in  :response,     with: 'what song would you like to hear'
 
     click_button 'Update Dialog'
 
@@ -84,7 +63,6 @@ feature 'Dialogs', :js do
     click_link 'Add Dialogs'
 
     within 'form.dialog' do
-      fill_in  :response,     with: 'what song would you like to hear'
       select   field.name,    from: 'missing-field'
       select   field.name,    from: 'awaiting-field'
     end
