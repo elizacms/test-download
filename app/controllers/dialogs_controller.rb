@@ -69,9 +69,11 @@ class DialogsController < ApplicationController
   def dialog_params
     params.permit(
       :intent_id,
+      :response_id, #refactor
       :priority,
       responses_attributes: [
-        :id,
+        :dialog_id, #refactor
+        :_id,
         :response_value,
         :response_trigger,
         :response_type,

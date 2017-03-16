@@ -7,10 +7,12 @@ var DialogForm = React.createClass({
 
   initialData(){
     return {
-      'unresolved-field': [{id: 0, value: '', inputValue: ''}],
-      'missing-field':    [{id: 0, value: '', inputValue: ''}],
-      'present-field':    [{id: 0, value: '', inputValue: ''}],
-      'awaiting-field':   [{id: 0, value: '', inputValue: ''}],
+      'unresolved-field':     [{id: 0, value: '', inputValue: ''}],
+      'missing-field':        [{id: 0, value: '', inputValue: ''}],
+      'present-field':        [{id: 0, value: '', inputValue: ''}],
+      'awaiting-field':       [{id: 0, value: '', inputValue: ''}],
+      'responses_attributes': [{id: 0, value: '', inputValue: '',
+                                response_trigger: '', response_id: ''}],
       priority: '',
       response: ''
     };
@@ -53,6 +55,24 @@ var DialogForm = React.createClass({
     }
   },
 
+  createNewIdForResponses(nextProps) {
+    const ary = [];
+    if (nextProps.data.responses) {
+      nextProps.data.responses.forEach(function(response, index){
+        const hsh = {};
+        hsh['id'] = index;
+        hsh['response_id'] = response.id.$oid;
+        hsh['value'] = response.response_type;
+        hsh['response_trigger'] = response.response_trigger;
+        hsh['inputValue'] = JSON.parse(response.response_value);
+
+        ary.push(hsh);
+      });
+
+      return ary;
+    }
+  },
+
   componentWillReceiveProps(nextProps) {
     if(Object.keys(nextProps.data).length > 0) {
       this.setState({
@@ -60,6 +80,7 @@ var DialogForm = React.createClass({
         'missing-field':    this.createNewId('missing', nextProps),
         'present-field':    this.createNewIdForPresent(nextProps),
         'awaiting-field':   this.createNewId('awaiting_field', nextProps),
+        'responses_attributes': this.createNewIdForResponses( nextProps ),
         priority:           nextProps.data.priority,
         response:           nextProps.data.response,
       });
@@ -84,7 +105,9 @@ var DialogForm = React.createClass({
     currentKey.push({
       id: currentKey[currentKey.length - 1].id + 1,
       value: '',
-      inputValue: ''
+      inputValue: '',
+      response_trigger: '',
+      response_id: ''
     });
 
     this.setState(currentState);
@@ -130,6 +153,32 @@ var DialogForm = React.createClass({
     return ary;
   },
 
+  parseResponseTypeFormInput(){
+    const ary = [];
+    const current_dialog_id = this.props.data.id.$oid;
+
+    $('[class^="response-type-row"]').each(function(i, this_row){
+      const obj = {};
+      const iv_obj = {};
+
+      obj[ '$oid' ]             = $(this_row).find('.response-id').val();
+      obj[ 'dialog_id' ]      = current_dialog_id;
+      obj[ 'response_type' ]  = $(this_row).find('.dialog-select').val();
+      obj['response_trigger'] = $(this_row).find('.response_trigger').val();
+
+      $(this_row).find('input').each(function(i, this_input){
+        if ( $(this_input).attr('name') ){
+          iv_obj[ $(this_input).attr('name') ] = $(this_input).val();
+        }
+      });
+      obj['response_value'] = JSON.stringify(iv_obj);
+
+      ary.push(obj);
+    });
+
+    return ary;
+  },
+
   createOrUpdateDialog(e){
     e.preventDefault();
     var data = {};
@@ -144,11 +193,13 @@ var DialogForm = React.createClass({
     data[ 'present'        ] = this.parseFormInput('present', true);
     data[ 'awaiting_field' ] = this.parseFormInput('awaiting');
 
-    if ( $('.aneeda-says').val().replace( /\s/g, '' ) == '' ){
-      this.props.messageState({'aneeda-says-error': 'This field cannot be blank.'});
+    data[ 'responses_attributes' ] = this.parseResponseTypeFormInput();
 
-      return false;
-    }
+    // if ( $('.aneeda-says').val().replace( /\s/g, '' ) == '' ){
+    //   this.props.messageState({'aneeda-says-error': 'This field cannot be blank.'});
+
+    //   return false;
+    // }
 
     this.props.createOrUpdateDialog(data);
   },
@@ -178,7 +229,7 @@ var DialogForm = React.createClass({
 
     return (
       <div>
-        <h4 className='inline'>Fields</h4>
+        <h4 className='inline'>Field Responses</h4>
         <a href={this.props.field_path} className='addField btn md grey pull-right'>Add a field</a>
         <a href='#' onClick={this.resetForm} className='btn md grey pull-right'>Reset fields</a>
         <form className='dialog' method='post' action='/dialogue_api/response'>
@@ -195,25 +246,32 @@ var DialogForm = React.createClass({
               onChange={this.priorityHandleChange} />
           </div>
 
-          <hr className='margin-15'></hr>
-
-          <div className='row'>
-            <strong className='two columns margin0'>Aneeda Says</strong>
-            <input
-              className='aneeda-says two columns'
-              name='response'
-              type='text'
-              placeholder='ex: Please log into your account'
-              value={this.state.response}
-              onChange={this.aneedaSaysHandleChange} />
-          </div>
-
           <Message message={this.props.response} name='aneeda-says-error'>
           </Message>
           <hr className='margin0'></hr>
 
           <table className='dialog'>
             <tbody>
+              {/* ******************************************************** */}
+              {this.state['responses_attributes'].map(function(input, index){
+                return(
+                  <ResponseTypeContainer
+                    key={input.id}
+                    index={index}
+                    name='responses_attributes'
+                    title='response type'
+                    addRow={this.addRow}
+                    deleteInput={this.deleteInput.bind(this, input, 'responses_attributes')}
+                    response_trigger={this.state['responses_attributes'][index].response_trigger}
+                    response_id={this.state['responses_attributes'][index].response_id}
+                    inputValue={this.state['responses_attributes'][index].inputValue}
+                    value={this.state['responses_attributes'][index].value}
+                    updateState={this.updateState}
+                  ></ResponseTypeContainer>
+                );
+              }.bind(this))}
+              {/* ******************************************************** */}
+
               {this.state['unresolved-field'].map(function(input, index){
                 return(
                   <DialogSelectbox
