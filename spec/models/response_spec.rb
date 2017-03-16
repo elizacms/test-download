@@ -12,8 +12,4 @@ describe Response do
   specify '#serialize' do
     expect(response.serialize).to eq expected
   end
-
-  specify '#serialize(true)' do
-    expect(response.serialize(true)).to eq expected.merge!(id: response.id.to_s)
-  end
 end
