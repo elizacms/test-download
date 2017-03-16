@@ -123,6 +123,21 @@ var DialogForm = React.createClass({
     newState.splice(newState.indexOf(input), 1)
 
     this.setState(this.state);
+
+    if (key === 'responses_attributes' && input['response_id'] !== '' ){
+      this.deleteResponse( input['response_id'] );
+    }
+  },
+
+  deleteResponse(response_id){
+    $.ajax({
+      type: 'DELETE',
+      url: '/dialogue_api/response/' + response_id,
+    })
+    .done( function( r ){
+console.log("-- Delete Response --");
+console.log(r);
+    })
   },
 
   resetForm(e){
@@ -168,7 +183,7 @@ var DialogForm = React.createClass({
       if (isUpdate && ($(this_row).find('.response-id').val() != '') ) {
         obj[ 'id' ] = $(this_row).find('.response-id').val();
       }
-      
+
 
       obj[ 'response_type' ]   = $(this_row).find('.dialog-select').val();
       obj[ 'response_trigger'] = $(this_row).find('.response_trigger').val();

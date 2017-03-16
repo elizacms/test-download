@@ -163,4 +163,22 @@ describe 'Dialogs' do
       expect( last_response.body   ).to eq csv
     end
   end
+
+  describe 'Response Delete' do
+    let!( :dialog   ){ create :dialog, intent_id: intent.name }
+    let!( :response ){ create :response, dialog: dialog       }
+    let!( :delete_params ){{
+      id: response.id
+    }}
+
+    specify 'success' do
+      expect( Dialog.count   ).to eq 1
+      expect( Response.count ).to eq 1
+      delete "/dialogue_api/response/#{response.id}", delete_params.to_json
+
+      expect( last_response.status ).to eq 202
+      expect( Dialog.count   ).to eq 1
+      expect( Response.count ).to eq 0
+    end
+  end
 end

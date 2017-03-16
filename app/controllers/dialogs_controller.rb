@@ -41,6 +41,13 @@ class DialogsController < ApplicationController
     render plain: "You deleted a Dialog.", status: :ok
   end
 
+  def delete_response
+    response = Response.find( params[:id] )
+    response.delete
+
+    render json: {}.to_json, status: 202
+  end
+
   def csv
     dialogs = Dialog.where( intent_id: params[ :intent_id ] ).order('priority DESC')
     filename = "#{ params[ :intent_id ] }.csv"
@@ -75,8 +82,7 @@ class DialogsController < ApplicationController
         :id,
         :response_value,
         :response_trigger,
-        :response_type,
-        :_delete
+        :response_type
       ],
       awaiting_field:[],
       present: [],

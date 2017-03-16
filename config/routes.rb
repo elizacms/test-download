@@ -102,6 +102,10 @@ Rails.application.routes.draw do
     to: 'dialogs#index',
     as: :get_dialogs
 
+  delete '/dialogue_api/response/:id',
+    to: 'dialogs#delete_response',
+    as: :delete_response
+
   get '/dialogue_api/csv',
     to: 'dialogs#csv'
 
