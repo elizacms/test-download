@@ -72,8 +72,7 @@ class DialogsController < ApplicationController
       :response_id, #refactor
       :priority,
       responses_attributes: [
-        :dialog_id, #refactor
-        :_id,
+        :id,
         :response_value,
         :response_trigger,
         :response_type,

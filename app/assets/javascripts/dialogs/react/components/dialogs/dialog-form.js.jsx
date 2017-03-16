@@ -165,7 +165,7 @@ var DialogForm = React.createClass({
       // obj[ '$oid' ] = $(this_row).find('.response-id').val();
       // obj[ 'dialog_id' ]       = current_dialog_id;
 
-      if (isUpdate) {
+      if (isUpdate && ($(this_row).find('.response-id').val() != '') ) {
         obj[ 'id' ] = $(this_row).find('.response-id').val();
       }
       
