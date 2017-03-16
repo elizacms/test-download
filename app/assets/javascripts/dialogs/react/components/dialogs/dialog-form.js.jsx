@@ -155,15 +155,21 @@ var DialogForm = React.createClass({
 
   parseResponseTypeFormInput(){
     const ary = [];
-    console.log(this.props.data);
-    const current_dialog_id = this.props.data.id.$oid;
+    // const current_dialog_id = this.props.data.id.$oid
+    const isUpdate = this.props.isUpdate;
 
     $('[class^="response-type-row"]').each(function(i, this_row){
       const obj = {};
       const iv_obj = {};
 
-      obj[ '$oid' ]            = $(this_row).find('.response-id').val();
-      obj[ 'dialog_id' ]       = current_dialog_id;
+      // obj[ '$oid' ] = $(this_row).find('.response-id').val();
+      // obj[ 'dialog_id' ]       = current_dialog_id;
+
+      if (isUpdate) {
+        obj[ 'id' ] = $(this_row).find('.response-id').val();
+      }
+      
+
       obj[ 'response_type' ]   = $(this_row).find('.dialog-select').val();
       obj[ 'response_trigger'] = $(this_row).find('.response_trigger').val();
 
