@@ -273,7 +273,7 @@ console.log(r);
 
           <table className='dialog'>
             <tbody>
-                            {/* ******************************************************** */}
+              {/* ******************************************************** */}
               {this.state['responses_attributes'].map(function(input, index){
                 return(
                   <ResponseType
