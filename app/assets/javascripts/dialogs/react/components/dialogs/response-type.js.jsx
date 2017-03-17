@@ -3,10 +3,10 @@ var ResponseType = React.createClass({
     return {
       responseType: 'text',
       index: '',
-      response_trigger: '',
       response_id: '',
       name: '',
-      // Text Type
+      // Response type fields
+      response_trigger: '',
       input_option: '',
       input_option_entity: '',
       input_link: '',
@@ -81,19 +81,9 @@ var ResponseType = React.createClass({
   },
 
   responseTypeMenuChange(event){
-    switch(this.state.responseType) {
-      case 'text': {
-        this.setState({ responseType: event.target.value });
-        break;
-      }
-      case 'video': {
-        this.setState({ responseType: event.target.value });
-        break;
-      }
-      default: {
-        break;
-      }
-    }
+    this.setState({
+      responseType: event.target.value
+    });
   },
 
   // Text Type Render //////////////////////////////////////////////////
@@ -150,7 +140,6 @@ var ResponseType = React.createClass({
             <input
               className='dialog-input response_trigger'
               type="text"
-              
               value={this.state.response_trigger}
               onChange={ (e) => this.textTypeInputChanges(e, 'response_trigger') }
             />
@@ -216,7 +205,71 @@ var ResponseType = React.createClass({
             <input
               className='dialog-input response_trigger'
               type="text"
-              
+              value={this.state.response_trigger}
+              onChange={ (e) => this.textTypeInputChanges(e, 'response_trigger') }
+            />
+          </label>
+        </div>
+      );
+    } else {
+      return(<div />);
+    }
+  },
+
+  // Card Type Render //////////////////////////////////////////////////
+  renderCardType() {
+    if (this.state.responseType === 'card'){
+      return(
+        <div>
+          <label>
+            Card Option &nbsp;
+            <input
+              className='dialog-input'
+              type="text"
+              name={'input_option'}
+              value={this.state.input_option}
+              onChange={ (e) => this.textTypeInputChanges(e, 'input_option') }
+            />
+          </label>
+          &nbsp;&nbsp;
+          <label>
+            Entity Value &nbsp;
+            <input
+              className='dialog-input'
+              type="text"
+              name={'input_option_entity'}
+              value={this.state.input_option_entity}
+              onChange={ (e) => this.textTypeInputChanges(e, 'input_option_entity') }
+            />
+          </label>
+          <br />
+          <label>
+            Link &nbsp;
+            <input
+              className='dialog-input'
+              type="text"
+              name={'input_link'}
+              value={this.state.input_link}
+              onChange={ (e) => this.textTypeInputChanges(e, 'input_link') }
+            />
+          </label>
+          &nbsp;&nbsp;
+          <label>
+            Entity Value &nbsp;
+            <input
+              className='dialog-input'
+              type="text"
+              name={'input_link_entity'}
+              value={this.state.input_link_entity}
+              onChange={ (e) => this.textTypeInputChanges(e, 'input_link_entity') }
+            />
+          </label>
+          <br />
+          <label>
+            Response Trigger &nbsp;
+            <input
+              className='dialog-input response_trigger'
+              type="text"
               value={this.state.response_trigger}
               onChange={ (e) => this.textTypeInputChanges(e, 'response_trigger') }
             />
@@ -233,6 +286,7 @@ var ResponseType = React.createClass({
       <div>
         { this.renderTextType()  }
         { this.renderVideoType() }
+        { this.renderCardType() }
       </div>
     );
   },
