@@ -112,6 +112,7 @@ var ResponseTypeContainer = React.createClass({
         <td className='row40'>
           <select
             className='dialog-select'
+            name='response-type-select'
             value={this.state.responseType}
             onChange={this.selectResponseTypeChange}
           >

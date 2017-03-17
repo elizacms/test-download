@@ -13,8 +13,7 @@ var DialogForm = React.createClass({
       'awaiting-field':       [{id: 0, value: '', inputValue: ''}],
       'responses_attributes': [{id: 0, value: '', inputValue: '',
                                 response_trigger: '', response_id: ''}],
-      priority: '',
-      response: ''
+      priority: ''
     };
   },
 
@@ -189,7 +188,7 @@ console.log(r);
       obj[ 'response_trigger'] = $(this_row).find('.response_trigger').val();
 
       $(this_row).find('input').each(function(i, this_input){
-        if ( $(this_input).attr('name') ){
+        if ( $(this_input).hasClass('response-input') ){
           iv_obj[ $(this_input).attr('name') ] = $(this_input).val();
         }
       });

@@ -94,7 +94,7 @@ var ResponseType = React.createClass({
           <label>
             Option &nbsp;
             <input
-              className='dialog-input'
+              className='dialog-input response-input'
               type="text"
               name={'input_option'}
               value={this.state.input_option}
@@ -105,7 +105,7 @@ var ResponseType = React.createClass({
           <label>
             Entity Value &nbsp;
             <input
-              className='dialog-input'
+              className='dialog-input response-input'
               type="text"
               name={'input_option_entity'}
               value={this.state.input_option_entity}
@@ -116,7 +116,7 @@ var ResponseType = React.createClass({
           <label>
             Link &nbsp;
             <input
-              className='dialog-input'
+              className='dialog-input response-input'
               type="text"
               name={'input_link'}
               value={this.state.input_link}
@@ -127,7 +127,7 @@ var ResponseType = React.createClass({
           <label>
             Entity Value &nbsp;
             <input
-              className='dialog-input'
+              className='dialog-input response-input'
               type="text"
               name={'input_link_entity'}
               value={this.state.input_link_entity}
@@ -139,6 +139,7 @@ var ResponseType = React.createClass({
             Response Trigger &nbsp;
             <input
               className='dialog-input response_trigger'
+              name='response_trigger_input'
               type="text"
               value={this.state.response_trigger}
               onChange={ (e) => this.textTypeInputChanges(e, 'response_trigger') }
@@ -159,7 +160,7 @@ var ResponseType = React.createClass({
           <label>
             Thumbnail &nbsp;
             <input
-              className='dialog-input'
+              className='dialog-input response-input'
               type="text"
               name={'input_option'}
               value={this.state.input_option}
@@ -170,7 +171,7 @@ var ResponseType = React.createClass({
           <label>
             Entity Value &nbsp;
             <input
-              className='dialog-input'
+              className='dialog-input response-input'
               type="text"
               name={'input_option_entity'}
               value={this.state.input_option_entity}
@@ -181,7 +182,7 @@ var ResponseType = React.createClass({
           <label>
             Link &nbsp;
             <input
-              className='dialog-input'
+              className='dialog-input response-input'
               type="text"
               name={'input_link'}
               value={this.state.input_link}
@@ -192,7 +193,7 @@ var ResponseType = React.createClass({
           <label>
             Entity Value &nbsp;
             <input
-              className='dialog-input'
+              className='dialog-input response-input'
               type="text"
               name={'input_link_entity'}
               value={this.state.input_link_entity}
@@ -204,6 +205,7 @@ var ResponseType = React.createClass({
             Response Trigger &nbsp;
             <input
               className='dialog-input response_trigger'
+              name='response_trigger_input'
               type="text"
               value={this.state.response_trigger}
               onChange={ (e) => this.textTypeInputChanges(e, 'response_trigger') }
@@ -224,7 +226,7 @@ var ResponseType = React.createClass({
           <label>
             Card Option &nbsp;
             <input
-              className='dialog-input'
+              className='dialog-input response-input'
               type="text"
               name={'input_option'}
               value={this.state.input_option}
@@ -235,7 +237,7 @@ var ResponseType = React.createClass({
           <label>
             Entity Value &nbsp;
             <input
-              className='dialog-input'
+              className='dialog-input response-input'
               type="text"
               name={'input_option_entity'}
               value={this.state.input_option_entity}
@@ -246,7 +248,7 @@ var ResponseType = React.createClass({
           <label>
             Link &nbsp;
             <input
-              className='dialog-input'
+              className='dialog-input response-input'
               type="text"
               name={'input_link'}
               value={this.state.input_link}
@@ -257,7 +259,7 @@ var ResponseType = React.createClass({
           <label>
             Entity Value &nbsp;
             <input
-              className='dialog-input'
+              className='dialog-input response-input'
               type="text"
               name={'input_link_entity'}
               value={this.state.input_link_entity}
@@ -269,6 +271,7 @@ var ResponseType = React.createClass({
             Response Trigger &nbsp;
             <input
               className='dialog-input response_trigger'
+              name='response_trigger_input'
               type="text"
               value={this.state.response_trigger}
               onChange={ (e) => this.textTypeInputChanges(e, 'response_trigger') }
@@ -320,6 +323,7 @@ var ResponseType = React.createClass({
         <td className='row40'>
           <select
             className='dialog-select'
+            name='response-type-select'
             value={this.state.responseType}
             onChange={this.responseTypeMenuChange}
           >

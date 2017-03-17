@@ -75,4 +75,120 @@ feature 'Dialogs', :js do
 
     expect( page ).to have_content 'You deleted a Dialog.'
   end
+
+  describe 'Responses Types' do
+    specify 'Can save a response of type text' do
+      visit '/login/success?code=0123abc'
+      click_link 'Intents'
+
+      click_link 'Edit Details'
+      click_link 'Add Dialogs'
+
+      within 'form.dialog' do
+        within '.response-type-row-0'do
+          select  'Text',                   from: 'response-type-select'
+          fill_in 'response_text',          with: 'abc def 123 10 9 8'
+          fill_in 'response_trigger_input', with: 'some kind of trigger'
+        end
+
+        select field.name,    from: 'unresolved-field'
+        select field.name,    from: 'awaiting-field'
+      end
+
+      click_button 'Create Dialog'
+
+      sleep 0.5
+
+      expect( Dialog.count   ).to eq 1
+      expect( Response.count ).to eq 1
+
+      expected_response_value = { 'response_text' => 'abc def 123 10 9 8' }.to_json
+
+      expect( Dialog.last.responses.first.response_type     ).to eq 'text'
+      expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
+      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
+    end
+
+    specify 'Can save a response of type text w/options' do
+      visit '/login/success?code=0123abc'
+      click_link 'Intents'
+
+      click_link 'Edit Details'
+      click_link 'Add Dialogs'
+
+      within 'form.dialog' do
+        within '.response-type-row-0'do
+          select  'Text w/options',          from: 'response-type-select'
+          fill_in 'response_text',           with: 'abc def 123 10 9 8'
+          fill_in 'input_option_text',       with: 'twin cats'
+          fill_in 'input_option_text_value', with: 'Jenny or Luna or Lady'
+          fill_in 'response_trigger_input',  with: 'some kind of trigger'
+        end
+
+        select field.name,    from: 'unresolved-field'
+        select field.name,    from: 'awaiting-field'
+      end
+
+      click_button 'Create Dialog'
+
+      sleep 0.5
+
+      expect( Dialog.count   ).to eq 1
+      expect( Response.count ).to eq 1
+
+      expected_response_value = {
+        'response_text'           => 'abc def 123 10 9 8',
+        'input_option_text'       => 'twin cats',
+        'input_option_text_value' => 'Jenny or Luna or Lady'
+      }.to_json
+
+      expect( Dialog.last.responses.first.response_type     ).to eq 'text w/options'
+      expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
+      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
+    end
+
+    specify 'Can save a response of type video' do
+      visit '/login/success?code=0123abc'
+      click_link 'Intents'
+
+      click_link 'Edit Details'
+      click_link 'Add Dialogs'
+
+      within 'form.dialog' do
+        within '.response-type-row-0'do
+          select  'Video',                  from: 'response-type-select'
+          fill_in 'response_text',          with: 'abc def 123 10 9 8'
+          fill_in 'input_thumbnail',        with: 'twin cats'
+          fill_in 'input_link',             with: 'Jenny or Luna or Lady'
+          fill_in 'response_trigger_input', with: 'some kind of trigger'
+        end
+
+        select field.name,    from: 'unresolved-field'
+        select field.name,    from: 'awaiting-field'
+      end
+
+      click_button 'Create Dialog'
+
+      sleep 0.5
+
+      expect( Dialog.count   ).to eq 1
+      expect( Response.count ).to eq 1
+
+      expected_response_value = {
+        'response_text'   => 'abc def 123 10 9 8',
+        'input_thumbnail' => 'twin cats',
+        'input_link'      => 'Jenny or Luna or Lady'
+      }.to_json
+
+      expect( Dialog.last.responses.first.response_type     ).to eq 'video'
+      expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
+      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
+    end
+
+    specify 'Can save a response of type 3' do
+    end
+
+    specify 'Can save a response of type 4' do
+    end
+  end
 end

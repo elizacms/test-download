@@ -110,7 +110,6 @@ var ResponseTypeText = React.createClass({
           <input
             className='dialog-input response_trigger'
             type="text"
-            
             value={this.state.response_trigger}
             onChange={ (e) => this.inputHandleChange(e, 'response_trigger') }
           />
