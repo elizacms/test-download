@@ -274,7 +274,25 @@ console.log(r);
 
           <table className='dialog'>
             <tbody>
-              {/* ******************************************************** */}
+                            {/* ******************************************************** */}
+              {this.state['responses_attributes'].map(function(input, index){
+                return(
+                  <ResponseType
+                    key={input.id}
+                    index={index}
+                    name='responses_attributes'
+                    title='Response type'
+                    addRow={this.addRow}
+                    deleteInput={this.deleteInput.bind(this, input, 'responses_attributes')}
+                    value={this.state['responses_attributes'][index].value}
+                    inputValue={this.state['responses_attributes'][index].inputValue}
+                    response_trigger={this.state['responses_attributes'][index].response_trigger}
+                    response_id={this.state['responses_attributes'][index].response_id}
+                    updateState={this.updateState}
+                  ></ResponseType>
+                );
+              }.bind(this))}
+              {/* ********************************************************
               {this.state['responses_attributes'].map(function(input, index){
                 return(
                   <ResponseTypeContainer
@@ -292,7 +310,7 @@ console.log(r);
                   ></ResponseTypeContainer>
                 );
               }.bind(this))}
-              {/* ******************************************************** */}
+              ******************************************************** */}
 
               {this.state['unresolved-field'].map(function(input, index){
                 return(
