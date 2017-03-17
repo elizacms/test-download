@@ -1,18 +1,18 @@
 var ResponseType = React.createClass({
   getInitialState(){
     return {
-      responseType: 'text',
+      name: '',
       index: '',
       response_id: '',
-      name: '',
+      responseType: 'text',
+      response_trigger: '',
       // Text Type
       response_text_input: '',
-      // Response type fields
-      // response_trigger: '',
-      // input_option: '',
-      // input_option_entity: '',
-      // input_link: '',
-      // input_link_entity: ''
+      // Video Type
+      response_video_text_input: '',
+      response_video_thumbnail_input: '',
+      response_video_entity_input: ''
+
     };
   },
 
@@ -24,12 +24,16 @@ var ResponseType = React.createClass({
       name: this.props.name
     });
 
-    const obj = {};
-    if (this.props.inputValue) {
-      objKey = Object.keys(this.props.inputValue);
-      objVal = this.props.inputValue[objKey];
-      obj[objKey] = objVal;
-      this.setState( obj )
+    const this_props_inputValue = this.props.inputValue;
+    if (this_props_inputValue) {
+      const obj = {};  //New object for setState
+
+      Object.keys(this_props_inputValue).forEach(function(k, i){
+        obj[k] = this_props_inputValue[k];
+      });
+
+      this.setState( obj );
+      this.setState({ responseType: this.props.value });
     };
   },
 
@@ -41,14 +45,17 @@ var ResponseType = React.createClass({
       name: nextProps.name
     });
 
-    const obj = {};
     if (nextProps.inputValue) {
-      objKey = Object.keys(nextProps.inputValue);
-      objVal = nextProps.inputValue[objKey];
-      obj[objKey] = objVal;
-      this.setState( obj )
+      const obj = {};
+
+      Object.keys(nextProps.inputValue).forEach(function(k, i){
+        obj[k] = nextProps.inputValue[k];
+      });
+
+      this.setState( obj );
+      this.setState({ responseType: nextProps.value });
     } else {
-      this.setState( this.getInitialState() ) //Next props has no input value. reset state.
+      this.setState( this.getInitialState() ); //Next props has no input value. reset state.
     }
   },
 
@@ -71,10 +78,6 @@ var ResponseType = React.createClass({
       id: this.props.index,
       value: this.state.responseType,
       inputValue: inputValueObj[field] = this.state[field],
-      // inputValue: { input_option: this.state.input_option,
-      //               input_option_entity: this.state.input_option_entity,
-      //               input_link: this.state.input_link,
-      //               input_link_entity: this.state.input_link_entity },
       response_trigger: this.state.response_trigger,
       response_id: this.state.response_id
     });
@@ -119,75 +122,9 @@ var ResponseType = React.createClass({
     }
   },
 
-  // Video Type Render //////////////////////////////////////////////////
-  renderVideoType() {
-    if (this.state.responseType === 'video'){
-      return(
-        <div>
-          <label>
-            Thumbnail &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name={'input_option'}
-              value={this.state.input_option}
-              onChange={ (e) => this.handleInputChanges(e, 'input_option') }
-            />
-          </label>
-          &nbsp;&nbsp;
-          <label>
-            Entity Value &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name={'input_option_entity'}
-              value={this.state.input_option_entity}
-              onChange={ (e) => this.handleInputChanges(e, 'input_option_entity') }
-            />
-          </label>
-          <br />
-          <label>
-            Link &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name={'input_link'}
-              value={this.state.input_link}
-              onChange={ (e) => this.handleInputChanges(e, 'input_link') }
-            />
-          </label>
-          &nbsp;&nbsp;
-          <label>
-            Entity Value &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name={'input_link_entity'}
-              value={this.state.input_link_entity}
-              onChange={ (e) => this.handleInputChanges(e, 'input_link_entity') }
-            />
-          </label>
-          <br />
-          <label>
-            Response Trigger &nbsp;
-            <input
-              className='dialog-input response_trigger'
-              name='response_trigger_input'
-              type='text'
-              value={this.state.response_trigger}
-              onChange={ (e) => this.handleInputChanges(e, 'response_trigger') }
-            />
-          </label>
-        </div>
-      );
-    } else {
-      return(<div />);
-    }
-  },
-
-  // Card Type Render //////////////////////////////////////////////////
-  renderCardType() {
-    if (this.state.responseType === 'card'){
+  // Text With Option Type Render //////////////////////////////////////////////////
+  renderTextWithOptionType() {
+    if (this.state.responseType === 'text_with_option'){
       return(
         <div>
           <label>
@@ -251,12 +188,69 @@ var ResponseType = React.createClass({
     }
   },
 
+  // Video Type Render //////////////////////////////////////////////////
+  renderVideoType() {
+    if (this.state.responseType === 'video'){
+      return(
+        <div>
+          <label>
+            Text &nbsp;
+            <input
+              className='dialog-input response-input'
+              type='text'
+              name='response_video_text_input'
+              value={this.state.response_video_text_input}
+              onChange={ (e) => this.handleInputChanges(e, 'response_video_text_input') }
+            />
+          </label>
+          <br />
+          <label>
+            Video &nbsp;
+            <input
+              className='dialog-input response-input'
+              type='text'
+              name='response_video_thumbnail_input'
+              placeholder='Thumbnail'
+              value={this.state.response_video_thumbnail_input}
+              onChange={ (e) => this.handleInputChanges(e, 'response_video_thumbnail_input') }
+            />
+          </label>
+          &nbsp;&nbsp;
+          <label>
+            Entity Value &nbsp;
+            <input
+              className='dialog-input response-input'
+              type='text'
+              name='response_video_entity_input'
+              placeholder='Link'
+              value={this.state.response_video_entity_input}
+              onChange={ (e) => this.handleInputChanges(e, 'response_video_entity_input') }
+            />
+          </label>
+          <br />
+          <label>
+            Response Trigger &nbsp;
+            <input
+              className='dialog-input response_trigger'
+              name='response_trigger_input'
+              type='text'
+              value={this.state.response_trigger}
+              onChange={ (e) => this.handleInputChanges(e, 'response_trigger') }
+            />
+          </label>
+        </div>
+      );
+    } else {
+      return(<div />);
+    }
+  },
+
   renderTypeContent() {
     return (
       <div>
         { this.renderTextType()  }
+        { this.renderTextWithOptionType() }
         { this.renderVideoType() }
-        { this.renderCardType() }
       </div>
     );
   },
@@ -295,8 +289,8 @@ var ResponseType = React.createClass({
             onChange={this.responseTypeMenuChange}
           >
             <option key='0' value='text'>Text</option>
-            <option key='1' value='video'>Video</option>
-            <option key='2' value='card'>Card</option>
+            <option key='1' value='text_with_option'>Text With Option</option>
+            <option key='2' value='video'>Video</option>
             <option key='3' value='3'>3</option>
             <option key='4' value='4'>4</option>
           </select>
