@@ -8,6 +8,10 @@ var ResponseType = React.createClass({
       response_trigger: '',
       // Text Type
       response_text_input: '',
+      // Text With Option
+      response_text_with_option_text_input: '',
+      response_text_with_option_option_input: '',
+      response_text_with_option_entity_input: '',
       // Video Type
       response_video_text_input: '',
       response_video_thumbnail_input: '',
@@ -122,41 +126,36 @@ var ResponseType = React.createClass({
     }
   },
 
+  // Additional Options
+  extraOption(){
+
+  },
+
   // Text With Option Type Render //////////////////////////////////////////////////
   renderTextWithOptionType() {
     if (this.state.responseType === 'text_with_option'){
       return(
         <div>
           <label>
-            Card Option &nbsp;
+            Text &nbsp;
             <input
               className='dialog-input response-input'
               type='text'
-              name={'input_option'}
-              value={this.state.input_option}
-              onChange={ (e) => this.handleInputChanges(e, 'input_option') }
-            />
-          </label>
-          &nbsp;&nbsp;
-          <label>
-            Entity Value &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name={'input_option_entity'}
-              value={this.state.input_option_entity}
-              onChange={ (e) => this.handleInputChanges(e, 'input_option_entity') }
+              name='response_text_with_option_text_input'
+              value={this.state.response_text_with_option_text_input}
+              onChange={ (e) => this.handleInputChanges(e, 'response_text_with_option_text_input') }
             />
           </label>
           <br />
+
           <label>
-            Link &nbsp;
+            Option &nbsp;
             <input
               className='dialog-input response-input'
               type='text'
-              name={'input_link'}
-              value={this.state.input_link}
-              onChange={ (e) => this.handleInputChanges(e, 'input_link') }
+              name='response_text_with_option_option_input'
+              value={this.state.response_text_with_option_option_input}
+              onChange={ (e) => this.handleInputChanges(e, 'response_text_with_option_option_input') }
             />
           </label>
           &nbsp;&nbsp;
@@ -165,11 +164,12 @@ var ResponseType = React.createClass({
             <input
               className='dialog-input response-input'
               type='text'
-              name={'input_link_entity'}
-              value={this.state.input_link_entity}
-              onChange={ (e) => this.handleInputChanges(e, 'input_link_entity') }
+              name='response_text_with_option_entity_input'
+              value={this.state.response_text_with_option_entity_input}
+              onChange={ (e) => this.handleInputChanges(e, 'response_text_with_option_entity_input') }
             />
           </label>
+
           <br />
           <label>
             Response Trigger &nbsp;
