@@ -162,11 +162,11 @@ feature 'Dialogs', :js do
 
       within 'form.dialog' do
         within '.response-type-row-0'do
-          select  'Text w/options',          from: 'response-type-select'
-          fill_in 'response_text',           with: 'abc def 123 10 9 8'
-          fill_in 'input_option_text',       with: 'twin cats'
-          fill_in 'input_option_text_value', with: 'Jenny or Luna or Lady'
-          fill_in 'response_trigger_input',  with: 'some kind of trigger'
+          select  'Text With Option',                       from: 'response-type-select'
+          fill_in 'response_text_with_option_text_input',   with: 'abc def 123 10 9 8'
+          fill_in 'response_text_with_option_option_input', with: 'twin cats'
+          fill_in 'response_text_with_option_entity_input', with: 'Jenny or Luna or Lady'
+          fill_in 'response_trigger_input',                 with: 'some kind of trigger'
         end
 
         select field.name,    from: 'unresolved-field'
@@ -181,12 +181,12 @@ feature 'Dialogs', :js do
       expect( Response.count ).to eq 1
 
       expected_response_value = {
-        'response_text'           => 'abc def 123 10 9 8',
-        'input_option_text'       => 'twin cats',
-        'input_option_text_value' => 'Jenny or Luna or Lady'
+        'response_text_with_option_text_input'   => 'abc def 123 10 9 8',
+        'response_text_with_option_option_input' => 'twin cats',
+        'response_text_with_option_entity_input' => 'Jenny or Luna or Lady'
       }.to_json
 
-      expect( Dialog.last.responses.first.response_type     ).to eq 'text w/options'
+      expect( Dialog.last.responses.first.response_type     ).to eq 'text_with_option'
       expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
       expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
     end
@@ -200,15 +200,15 @@ feature 'Dialogs', :js do
 
       within 'form.dialog' do
         within '.response-type-row-0'do
-          select  'Video',                  from: 'response-type-select'
-          fill_in 'response_text',          with: 'abc def 123 10 9 8'
-          fill_in 'input_thumbnail',        with: 'twin cats'
-          fill_in 'input_link',             with: 'Jenny or Luna or Lady'
-          fill_in 'response_trigger_input', with: 'some kind of trigger'
+          select  'Video',                          from: 'response-type-select'
+          fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
+          fill_in 'response_video_thumbnail_input', with: 'twin cats'
+          fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
+          fill_in 'response_trigger_input',         with: 'some kind of trigger'
         end
 
-        select field.name,    from: 'unresolved-field'
-        select field.name,    from: 'awaiting-field'
+        select field.name, from: 'unresolved-field'
+        select field.name, from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -219,14 +219,64 @@ feature 'Dialogs', :js do
       expect( Response.count ).to eq 1
 
       expected_response_value = {
-        'response_text'   => 'abc def 123 10 9 8',
-        'input_thumbnail' => 'twin cats',
-        'input_link'      => 'Jenny or Luna or Lady'
+        'response_video_text_input'      => 'abc def 123 10 9 8',
+        'response_video_thumbnail_input' => 'twin cats',
+        'response_video_entity_input'    => 'Jenny or Luna or Lady'
       }.to_json
 
       expect( Dialog.last.responses.first.response_type     ).to eq 'video'
       expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
       expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
+    end
+
+    specify 'Can save mulitple responses of type video and text' do
+      visit '/login/success?code=0123abc'
+      click_link 'Intents'
+
+      click_link 'Edit Details'
+      click_link 'Add Dialogs'
+
+      within 'form.dialog' do
+        within '.response-type-row-0'do
+          select  'Video',                          from: 'response-type-select'
+          fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
+          fill_in 'response_video_thumbnail_input', with: 'twin cats'
+          fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
+          fill_in 'response_trigger_input',         with: 'some kind of trigger'
+
+          find('span.icon-plus').click
+        end
+
+        within '.response-type-row-1' do
+          select  'Text',                   from: 'response-type-select'
+          fill_in 'response_text_input',    with: 'crazy dancing ninjas'
+          fill_in 'response_trigger_input', with: 'the best trigger'
+        end
+
+        select field.name, from: 'unresolved-field'
+        select field.name, from: 'awaiting-field'
+      end
+
+      click_button 'Create Dialog'
+
+      sleep 0.5
+
+      expect( Dialog.count   ).to eq 1
+      expect( Response.count ).to eq 2
+
+      expected_response_value = {
+        'response_video_text_input'      => 'abc def 123 10 9 8',
+        'response_video_thumbnail_input' => 'twin cats',
+        'response_video_entity_input'    => 'Jenny or Luna or Lady'
+      }.to_json
+      expected_response_2 = { 'response_text_input' => 'crazy dancing ninjas' }.to_json
+
+      expect( Dialog.last.responses.first.response_type     ).to eq 'video'
+      expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
+      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
+      expect( Dialog.last.responses.last.response_type      ).to eq 'text'
+      expect( Dialog.last.responses.last.response_trigger   ).to eq 'the best trigger'
+      expect( Dialog.last.responses.last.response_value     ).to eq expected_response_2
     end
 
     specify 'Can save a response of type 3' do
