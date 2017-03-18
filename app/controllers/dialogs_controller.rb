@@ -43,7 +43,7 @@ class DialogsController < ApplicationController
 
   def delete_response
     response = Response.find( params[:id] )
-    response.delete
+    response.destroy
 
     render json: {}.to_json, status: 202
   end

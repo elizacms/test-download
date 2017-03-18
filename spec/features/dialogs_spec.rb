@@ -77,13 +77,15 @@ feature 'Dialogs', :js do
   end
 
   describe 'Responses Types' do
-    specify 'Can save a response of type text' do
+    before do
       visit '/login/success?code=0123abc'
       click_link 'Intents'
 
       click_link 'Edit Details'
       click_link 'Add Dialogs'
+    end
 
+    specify 'Can save a response of type text' do
       within 'form.dialog' do
         within '.response-type-row-0'do
           select  'Text',                   from: 'response-type-select'
@@ -110,12 +112,6 @@ feature 'Dialogs', :js do
     end
 
     specify 'Can save mulitple responses of type text' do
-      visit '/login/success?code=0123abc'
-      click_link 'Intents'
-
-      click_link 'Edit Details'
-      click_link 'Add Dialogs'
-
       within 'form.dialog' do
         within '.response-type-row-0'do
           select  'Text',                   from: 'response-type-select'
@@ -154,12 +150,6 @@ feature 'Dialogs', :js do
     end
 
     specify 'Can save a response of type text w/options' do
-      visit '/login/success?code=0123abc'
-      click_link 'Intents'
-
-      click_link 'Edit Details'
-      click_link 'Add Dialogs'
-
       within 'form.dialog' do
         within '.response-type-row-0'do
           select  'Text With Option',                       from: 'response-type-select'
@@ -192,12 +182,6 @@ feature 'Dialogs', :js do
     end
 
     specify 'Can save a response of type video' do
-      visit '/login/success?code=0123abc'
-      click_link 'Intents'
-
-      click_link 'Edit Details'
-      click_link 'Add Dialogs'
-
       within 'form.dialog' do
         within '.response-type-row-0'do
           select  'Video',                          from: 'response-type-select'
@@ -230,14 +214,8 @@ feature 'Dialogs', :js do
     end
 
     specify 'Can save mulitple responses of type video and text' do
-      visit '/login/success?code=0123abc'
-      click_link 'Intents'
-
-      click_link 'Edit Details'
-      click_link 'Add Dialogs'
-
       within 'form.dialog' do
-        within '.response-type-row-0'do
+        within '.response-type-row-0' do
           select  'Video',                          from: 'response-type-select'
           fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
           fill_in 'response_video_thumbnail_input', with: 'twin cats'
@@ -277,6 +255,123 @@ feature 'Dialogs', :js do
       expect( Dialog.last.responses.last.response_type      ).to eq 'text'
       expect( Dialog.last.responses.last.response_trigger   ).to eq 'the best trigger'
       expect( Dialog.last.responses.last.response_value     ).to eq expected_response_2
+    end
+
+    specify 'Can save mulitple responses and update them' do
+      within 'form.dialog' do
+        within '.response-type-row-0'do
+          select  'Video',                          from: 'response-type-select'
+          fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
+          fill_in 'response_video_thumbnail_input', with: 'twin cats'
+          fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
+          fill_in 'response_trigger_input',         with: 'some kind of trigger'
+
+          find('span.icon-plus').click
+        end
+
+        within '.response-type-row-1' do
+          select  'Text',                   from: 'response-type-select'
+          fill_in 'response_text_input',    with: 'crazy dancing ninjas'
+          fill_in 'response_trigger_input', with: 'the best trigger'
+        end
+
+        select field.name, from: 'unresolved-field'
+        select field.name, from: 'awaiting-field'
+      end
+
+      click_button 'Create Dialog'
+
+      sleep 0.5
+
+      expect( Dialog.count   ).to eq 1
+      expect( Response.count ).to eq 2
+
+      find( '.icon-pencil' ).click
+
+      within 'form.dialog' do
+        within '.response-type-row-0'do
+          fill_in 'response_trigger_input', with: 'some kind of laser trigger'
+        end
+
+        within '.response-type-row-1' do
+          select  'Text',                from: 'response-type-select'
+          fill_in 'response_text_input', with: 'crazy dancing BARBIES'
+        end
+
+        select field.name, from: 'unresolved-field'
+        select field.name, from: 'awaiting-field'
+
+        click_button 'Update Dialog'
+      end
+
+      expected_response_value = {
+        'response_video_text_input'      => 'abc def 123 10 9 8',
+        'response_video_thumbnail_input' => 'twin cats',
+        'response_video_entity_input'    => 'Jenny or Luna or Lady'
+      }.to_json
+      expected_response_2 = { 'response_text_input' => 'crazy dancing BARBIES' }.to_json
+
+      expect( Dialog.last.responses.first.response_type     ).to eq 'video'
+      expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of laser trigger'
+      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
+      expect( Dialog.last.responses.last.response_type      ).to eq 'text'
+      expect( Dialog.last.responses.last.response_trigger   ).to eq 'the best trigger'
+      expect( Dialog.last.responses.last.response_value     ).to eq expected_response_2
+    end
+
+    specify 'Can save mulitple responses, then delete a response' do
+      within 'form.dialog' do
+        within '.response-type-row-0'do
+          select  'Video',                          from: 'response-type-select'
+          fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
+          fill_in 'response_video_thumbnail_input', with: 'twin cats'
+          fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
+          fill_in 'response_trigger_input',         with: 'some kind of trigger'
+
+          find('span.icon-plus').click
+        end
+
+        within '.response-type-row-1' do
+          select  'Text',                   from: 'response-type-select'
+          fill_in 'response_text_input',    with: 'crazy dancing ninjas'
+          fill_in 'response_trigger_input', with: 'the best trigger'
+        end
+
+        select field.name, from: 'unresolved-field'
+        select field.name, from: 'awaiting-field'
+      end
+
+      click_button 'Create Dialog'
+
+      sleep 0.5
+
+      expect( Dialog.count   ).to eq 1
+      expect( Response.count ).to eq 2
+
+      find( '.icon-pencil' ).click
+
+      within 'form.dialog' do
+        within '.response-type-row-0'do
+          fill_in 'response_trigger_input', with: 'some kind of laser trigger'
+        end
+
+        within '.response-type-row-1' do
+          find( 'span.icon-cancel-circled' ).click
+        end
+
+        click_button 'Update Dialog'
+      end
+
+      expected_response_value = {
+        'response_video_text_input'      => 'abc def 123 10 9 8',
+        'response_video_thumbnail_input' => 'twin cats',
+        'response_video_entity_input'    => 'Jenny or Luna or Lady'
+      }.to_json
+
+      expect( Response.count ).to eq 1
+      expect( Dialog.last.responses.first.response_type     ).to eq 'video'
+      expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of laser trigger'
+      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
     end
 
     specify 'Can save a response of type 3' do
