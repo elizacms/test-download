@@ -149,18 +149,25 @@ feature 'Dialogs', :js do
       expect( Dialog.last.responses.last.response_value     ).to eq expected_response_2
     end
 
-    specify 'Can save a response of type text w/options' do
+    specify 'Can save a response of type text with options with muli options' do
       within 'form.dialog' do
         within '.response-type-row-0'do
           select  'Text With Option',                       from: 'response-type-select'
           fill_in 'response_text_with_option_text_input',   with: 'abc def 123 10 9 8'
-          fill_in 'response_text_with_option_option_input', with: 'twin cats'
-          fill_in 'response_text_with_option_entity_input', with: 'Jenny or Luna or Lady'
           fill_in 'response_trigger_input',                 with: 'some kind of trigger'
+
+          find('.add-option').click
+
+          option_text = page.all( 'input.response-option-input' )
+
+          ap option_text[0]
+
+          option_text[0].set 'twin cats'
+          option_text[1].set 'Jenny or Luna or Lady'
+          option_text[2].set 'twin dogs'
+          option_text[3].set 'Lady Luna Reina'
         end
 
-        select field.name,    from: 'unresolved-field'
-        select field.name,    from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -172,8 +179,10 @@ feature 'Dialogs', :js do
 
       expected_response_value = {
         'response_text_with_option_text_input'   => 'abc def 123 10 9 8',
-        'response_text_with_option_option_input' => 'twin cats',
-        'response_text_with_option_entity_input' => 'Jenny or Luna or Lady'
+        'options' => [
+          { 'text' => 'twin cats', 'entity' => 'Jenny or Luna or Lady' },
+          { 'text' => 'twin dogs', 'entity' => 'Lady Luna Reina'       }
+        ]
       }.to_json
 
       expect( Dialog.last.responses.first.response_type     ).to eq 'text_with_option'
