@@ -169,12 +169,14 @@ console.log(r);
 
   parseResponseTypeFormInput(){
     const ary = [];
+    const state_responses_attributes = this.state.responses_attributes;
     // const current_dialog_id = this.props.data.id.$oid
     const isUpdate = this.props.isUpdate;
 
     $('[class^="response-type-row"]').each(function(i, this_row){
       const obj = {};
       const iv_obj = {};
+      const state_options = state_responses_attributes[i].inputValue.options;
 
       // obj[ '$oid' ] = $(this_row).find('.response-id').val();
       // obj[ 'dialog_id' ]       = current_dialog_id;
@@ -191,7 +193,11 @@ console.log(r);
         if ( $(this_input).hasClass('response-input') ){
           iv_obj[ $(this_input).attr('name') ] = $(this_input).val();
         }
+        if ( $(this_input).hasClass('response-option-input') ){
+          iv_obj[ 'options' ] = state_options;
+        }
       });
+
       obj['response_value'] = JSON.stringify(iv_obj);
 
       ary.push(obj);
@@ -280,6 +286,7 @@ console.log(r);
                     key={input.id}
                     index={index}
                     name='responses_attributes'
+                    className='response-type-text-with-option'
                     title='Response type'
                     addRow={this.addRow}
                     deleteInput={this.deleteInput.bind(this, input, 'responses_attributes')}

@@ -10,8 +10,7 @@ var ResponseType = React.createClass({
       response_text_input: '',
       // Text With Option
       response_text_with_option_text_input: '',
-      response_text_with_option_option_input: '',
-      response_text_with_option_entity_input: '',
+      options: [ {text:'', entity:''} ],
       // Video Type
       response_video_text_input: '',
       response_video_thumbnail_input: '',
@@ -126,9 +125,59 @@ var ResponseType = React.createClass({
     }
   },
 
-  // Additional Options
-  extraOption(){
+  // Text With Option BEGINS ///////////////////////////////////////////
+  addOptions(e) {
+    e.preventDefault();
 
+    this.setState({
+      options: this.state.options.concat([{ text: '', entity: '' }])
+    });
+  },
+
+  deleteOptions(index, e) {
+    e.preventDefault();
+
+    this.setState({
+      options: this.state.options.filter((o, i) => index !== i)
+    });
+  },
+
+  optionInputChange(event, index) {
+    // Update state for response_trigger
+    if (event.target.name == 'response_trigger_input'){
+      this.state.response_trigger = event.target.value;
+      this.setState({});
+    }
+    // Create new options array state
+    const newOptions = this.state.options.map((option, i) => {
+      if (index !== i) return option;
+
+      if (event.target.name == 'option_text') {
+        // return { ...option, text: event.target.value };
+        option.text = event.target.value;
+        return option;
+      }
+
+      if (event.target.name == 'option_entity') {
+        // return { ...option, entity: event.target.value };
+        option.entity = event.target.value;
+        return option;
+      }
+    });
+    this.setState({ options: newOptions });
+    // New inputValue object for updateState
+    const inputValueObj = {
+      response_text_with_option_text_input: this.state.response_text_with_option_text_input,
+      options: this.state.options
+    };
+    // updateState
+    this.props.updateState( 'responses_attributes', {
+      id: this.props.index,
+      value: this.state.responseType,
+      inputValue: inputValueObj,
+      response_trigger: this.state.response_trigger,
+      response_id: this.state.response_id
+    });
   },
 
   // Text With Option Type Render //////////////////////////////////////////////////
@@ -145,30 +194,42 @@ var ResponseType = React.createClass({
               value={this.state.response_text_with_option_text_input}
               onChange={ (e) => this.handleInputChanges(e, 'response_text_with_option_text_input') }
             />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a onClick={this.addOptions} href='#'>
+              <span className='icon-plus'>Option</span>
+            </a>
           </label>
           <br />
 
-          <label>
-            Option &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name='response_text_with_option_option_input'
-              value={this.state.response_text_with_option_option_input}
-              onChange={ (e) => this.handleInputChanges(e, 'response_text_with_option_option_input') }
-            />
-          </label>
-          &nbsp;&nbsp;
-          <label>
-            Entity Value &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name='response_text_with_option_entity_input'
-              value={this.state.response_text_with_option_entity_input}
-              onChange={ (e) => this.handleInputChanges(e, 'response_text_with_option_entity_input') }
-            />
-          </label>
+          {this.state.options.map((option, index) => (
+            <div key={index}>
+              <label>
+                Option &nbsp;
+                <input
+                  type='text'
+                  name='option_text'
+                  placeholder='Text'
+                  className='dialog-input response-option-input'
+                  value={option.text}
+                  onChange={ (e) => this.optionInputChange(e, index) }
+                />
+                &nbsp;&nbsp;
+                Entity &nbsp;
+                <input
+                  type='text'
+                  name='option_entity'
+                  placeholder='Entity Value'
+                  className='dialog-input response-option-input'
+                  value={option.entity}
+                  onChange={ (e) => this.optionInputChange(e, index) }
+                />
+                &nbsp;&nbsp;
+                <a onClick={this.deleteOptions.bind(this, index)} href='#'>
+                  <span className='icon-cancel-circled'></span>
+                </a>
+              </label>
+            </div>
+          ))}
 
           <br />
           <label>
@@ -178,7 +239,7 @@ var ResponseType = React.createClass({
               name='response_trigger_input'
               type='text'
               value={this.state.response_trigger}
-              onChange={ (e) => this.handleInputChanges(e, 'response_trigger') }
+              onChange={ (e) => this.optionInputChange(e) }
             />
           </label>
         </div>
