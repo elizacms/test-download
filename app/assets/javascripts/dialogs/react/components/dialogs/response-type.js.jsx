@@ -198,7 +198,7 @@ var ResponseType = React.createClass({
             />
             &nbsp;&nbsp;&nbsp;&nbsp;
             <a onClick={this.addOptions} href='#'>
-              <span className='icon-plus'>Option</span>
+              <span className='icon-plus add-option'>Option</span>
             </a>
           </label>
           <br />
@@ -376,7 +376,7 @@ var ResponseType = React.createClass({
           <label>
             Card &nbsp;
             <a onClick={this.addCard} href='#'>
-              <span className='icon-plus pull-right'>Card</span>
+              <span className='icon-plus add-card pull-right'>Card</span>
             </a>
           </label>
           <br />
@@ -407,7 +407,7 @@ var ResponseType = React.createClass({
                 <br />
                 Options:
                 <a onClick={this.addCardOption.bind(this, index)} href='#'>
-                  <span className='icon-plus pull-right'>Option</span>
+                  <span className='icon-plus add-option'>Option</span>
                 </a>
                 { card.options.map((option, ind) => (
                   <div key={ind}>

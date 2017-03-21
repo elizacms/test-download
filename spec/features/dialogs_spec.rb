@@ -25,7 +25,9 @@ feature 'Dialogs', :js do
 
     click_button 'Create Dialog'
 
-    expect( page ).to have_content 'destination is unresolved'
+    sleep 0.5
+
+    expect( page ).to have_content 'destination'
   end
 
   specify 'User can update a dialog' do
@@ -159,8 +161,6 @@ feature 'Dialogs', :js do
           find('.add-option').click
 
           option_text = page.all( 'input.response-option-input' )
-
-          ap option_text[0]
 
           option_text[0].set 'twin cats'
           option_text[1].set 'Jenny or Luna or Lady'
@@ -383,7 +383,77 @@ feature 'Dialogs', :js do
       expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
     end
 
-    specify 'Can save a response of type 3' do
+    specify 'Can save mulitple card types' do
+      within 'form.dialog' do
+        within '.response-type-row-0'do
+          select  'Card',                   from: 'response-type-select'
+          fill_in 'response_trigger_input', with: 'some kind of trigger'
+
+          within '.card-bg' do
+            find('.add-option').click
+          end
+
+          find('.add-card' ).click
+
+          card_text     = page.all( 'input.response-card-text-input'     )
+          icon_url      = page.all( 'input.response-card-icon-url-input' )
+          option_inputs = page.all( 'input.response-cards-input'         )
+
+          card_text[0].set 'twin cats'
+          card_text[1].set 'twin humans!?!'
+
+          icon_url[0].set 'Hello or Goodbye?'
+          icon_url[1].set 'Bad Dreams'
+
+          option_inputs[0].set 'yes'
+          option_inputs[1].set 'no'
+          option_inputs[2].set 'maybe'
+          option_inputs[3].set 'so'
+          option_inputs[4].set 'if he'
+          option_inputs[5].set 'let him go'
+        end
+
+      end
+
+      click_button 'Create Dialog'
+
+      sleep 0.5
+
+      expect( Dialog.count   ).to eq 1
+      expect( Response.count ).to eq 1
+
+      expected_response_value = {
+        "cards" => [
+          {
+            "text" => "twin cats",
+            "iconurl" => "Hello or Goodbye?",
+            "options" => [
+              {
+                "text" => "yes",
+                "entity" => "no"
+              },
+              {
+                "text" => "maybe",
+                "entity" => "so"
+              }
+            ]
+          },
+          {
+            "text" => "twin humans!?!",
+            "iconurl" => "Bad Dreams",
+            "options" => [
+              {
+                "text" => "if he",
+                "entity" => "let him go"
+              }
+            ]
+          }
+        ]
+      }.to_json
+
+      expect( Dialog.last.responses.first.response_type     ).to eq 'card'
+      expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
+      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
     end
 
     specify 'Can save a response of type 4' do
