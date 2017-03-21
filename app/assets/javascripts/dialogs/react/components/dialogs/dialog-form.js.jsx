@@ -134,8 +134,8 @@ var DialogForm = React.createClass({
       url: '/dialogue_api/response/' + response_id,
     })
     .done( function( r ){
-console.log("-- Delete Response --");
-console.log(r);
+      console.log("-- Delete Response --");
+      console.log(r);
     })
   },
 
@@ -177,6 +177,7 @@ console.log(r);
       const obj = {};
       const iv_obj = {};
       const state_options = state_responses_attributes[i].inputValue.options;
+      const state_cards   = state_responses_attributes[i].inputValue.cards;
 
       // obj[ '$oid' ] = $(this_row).find('.response-id').val();
       // obj[ 'dialog_id' ]       = current_dialog_id;
@@ -195,6 +196,9 @@ console.log(r);
         }
         if ( $(this_input).hasClass('response-option-input') ){
           iv_obj[ 'options' ] = state_options;
+        }
+        if ( $(this_input).hasClass('response-cards-input') ){
+          iv_obj[ 'cards' ] = state_cards;
         }
       });
 
