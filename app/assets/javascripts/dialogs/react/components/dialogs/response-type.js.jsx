@@ -89,9 +89,7 @@ var ResponseType = React.createClass({
   },
 
   responseTypeMenuChange(event){
-    this.setState({
-      responseType: event.target.value
-    });
+    this.setState({ responseType: event.target.value });
   },
 
   // Type-0 Text Type //////////////////////////////////////////////////
@@ -135,7 +133,6 @@ var ResponseType = React.createClass({
       options: this.state.options.concat([{ text: '', entity: '' }])
     });
   },
-
   deleteOptions(index, e) {
     e.preventDefault();
 
@@ -143,7 +140,6 @@ var ResponseType = React.createClass({
       options: this.state.options.filter((o, i) => index !== i)
     });
   },
-
   optionInputChange(event, index) {
     // Update state for response_trigger
     if (event.target.name == 'response_trigger_input'){
@@ -155,13 +151,11 @@ var ResponseType = React.createClass({
       if (index !== i) return option;
 
       if (event.target.name == 'option_text') {
-        // return { ...option, text: event.target.value };
         option.text = event.target.value;
         return option;
       }
 
       if (event.target.name == 'option_entity') {
-        // return { ...option, entity: event.target.value };
         option.entity = event.target.value;
         return option;
       }
@@ -182,7 +176,6 @@ var ResponseType = React.createClass({
     });
   },
 
-  // Text With Option Type Render //////////////////////////////////////
   renderTextWithOptionType() {
     if (this.state.responseType === 'text_with_option'){
       return(
@@ -319,12 +312,24 @@ var ResponseType = React.createClass({
   deleteCard(index, e) {
     e.preventDefault();
 
-    this.setState({
-      cards: this.state.cards.filter((c, i) => index !== i)
-    });
+    this.state.cards = this.state.cards.filter((c, i) => index !== i);
+
+    this.cardInputChange();
+  },
+  addCardOption(index, e) {
+    e.preventDefault();
+
+    this.state.cards[index].options.push( {text:'', entity:''} );
+    this.setState({});
+  },
+  deleteCardOption(card_index, option_index, e) {
+    e.preventDefault();
+
+    this.state.cards[card_index].options = this.state.cards[card_index].options.filter((o, i) => option_index !== i);
+    this.setState({});
   },
   cardInputChange(event, card_index, option_index) {
-    switch(event.target.name) {
+    switch(event && event.target.name) {
       case 'card_text':
         this.state.cards[card_index].text = event.target.value;
         break;
@@ -353,20 +358,6 @@ var ResponseType = React.createClass({
       response_trigger: this.state.response_trigger,
       response_id: this.state.response_id
     });
-  },
-
-  addCardOption(index, e) {
-    e.preventDefault();
-
-    this.state.cards[index].options.push( {text:'', entity:''} );
-    this.setState({});
-  },
-
-  deleteCardOption(card_index, option_index, e) {
-    e.preventDefault();
-
-    this.state.cards[card_index].options = this.state.cards[card_index].options.filter((o, i) => option_index !== i);
-    this.setState({});
   },
 
   renderCardType() {
