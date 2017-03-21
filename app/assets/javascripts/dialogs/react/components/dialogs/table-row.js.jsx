@@ -3,48 +3,48 @@ var TableRow = React.createClass({
     title: React.PropTypes.string
   },
 
-  parseRules(){
-    let rule = this.props.data;
-    conditions = [];
+  // parseRules(){
+  //   let rule = this.props.data;
+  //   conditions = [];
 
-    if( rule.hasOwnProperty('unresolved') ){
-      rule.unresolved.forEach(function(value, index){
-        if (value !== ''){
-          conditions.push( value + ' is unresolved' );
-        }
-      })
-    }
-    if( rule.hasOwnProperty('missing') ){
-      rule.missing.forEach(function(value, index){
-        if (value !== ''){
-          conditions.push( value + ' is missing' );
-        }
-      })
-    }
-    if( rule.hasOwnProperty('present') ){
-      var ary  = [];
-      var ary2 = [];
+  //   if( rule.hasOwnProperty('unresolved') ){
+  //     rule.unresolved.forEach(function(value, index){
+  //       if (value !== ''){
+  //         conditions.push( value + ' is unresolved' );
+  //       }
+  //     })
+  //   }
+  //   if( rule.hasOwnProperty('missing') ){
+  //     rule.missing.forEach(function(value, index){
+  //       if (value !== ''){
+  //         conditions.push( value + ' is missing' );
+  //       }
+  //     })
+  //   }
+  //   if( rule.hasOwnProperty('present') ){
+  //     var ary  = [];
+  //     var ary2 = [];
 
-      rule.present.forEach(function(value, index){
-        index % 2 == 0 ? ary.push(value) : ary2.push(value);
-      });
+  //     rule.present.forEach(function(value, index){
+  //       index % 2 == 0 ? ary.push(value) : ary2.push(value);
+  //     });
 
-      ary.forEach(function(value, index){
-        if (value !== ''){
-          conditions.push( value + ' is present: "' + ary2[index] + '"' );
-        }
-      });
-    }
+  //     ary.forEach(function(value, index){
+  //       if (value !== ''){
+  //         conditions.push( value + ' is present: "' + ary2[index] + '"' );
+  //       }
+  //     });
+  //   }
 
-    return conditions;
-  },
+  //   return conditions;
+  // },
 
   editRow(e){
     e.preventDefault();
     this.props.sendData(this.props.data);
 
     $('html, body').animate({
-      scrollTop: $("form").offset().top - 50
+      scrollTop: $('form').offset().top - 50
     }, 300);
   },
 
@@ -59,25 +59,35 @@ var TableRow = React.createClass({
   render() {
     let data = this.props.data;
     return (
-      <tr className="dialog-data">
-        <td className="priority">{data.priority}</td>
-        <td className="response">
+      <tr className='dialog-data'>
+        <td className='priority'>{data.priority}</td>
+        <td className='response text-center'>
           {data.responses.map(function(response, index){
             return(<div key={index}>Response Type: {response.response_type}</div>);
           })}
         </td>
-        <td>
-          {this.parseRules().map(function(condition, index){
+        <td className='unresolved'>
+          {data.unresolved.map(function(condition, index){
             return(<div key={index}>{condition}</div>);
           })}
         </td>
-        <td className="awaiting_field">
+        <td className='missing'>
+          {data.missing.map(function(condition, index){
+            return(<div key={index}>{condition}</div>);
+          })}
+        </td>
+        <td className='present'>
+          {data.present.map(function(condition, index){
+            return(<div key={index}>{condition}</div>);
+          })}
+        </td>
+        <td className='awaiting_field'>
           {data.awaiting_field.map(function(field, index){
             return(<div key={index}>{field}</div>);
           })}
         </td>
-        <td><a onClick={this.editRow} className="icon-pencil" href='#'></a></td>
-        <td><a onClick={this.deleteRow} className="icon-cancel-circled" rel="38" href="#"></a></td>
+        <td><a onClick={this.editRow} className='icon-pencil' href='#'></a></td>
+        <td><a onClick={this.deleteRow} className='icon-cancel-circled' rel='38' href='#'></a></td>
       </tr>
     );
   }
