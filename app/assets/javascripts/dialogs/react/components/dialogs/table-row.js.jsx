@@ -61,7 +61,11 @@ var TableRow = React.createClass({
     return (
       <tr className="dialog-data">
         <td className="priority">{data.priority}</td>
-        <td className="response">{data.response}</td>
+        <td className="response">
+          {data.responses.map(function(response, index){
+            return(<div key={index}>Response Type: {response.response_type}</div>);
+          })}
+        </td>
         <td>
           {this.parseRules().map(function(condition, index){
             return(<div key={index}>{condition}</div>);
