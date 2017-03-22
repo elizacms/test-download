@@ -313,6 +313,8 @@ feature 'Dialogs', :js do
         click_button 'Update Dialog'
       end
 
+      sleep 0.5
+
       expected_response_value = {
         'response_video_text_input'      => 'abc def 123 10 9 8',
         'response_video_thumbnail_input' => 'twin cats',

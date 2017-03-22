@@ -10,7 +10,7 @@ var Table = React.createClass({
           <tbody>
             <tr>
               <th className='row4'>&nbsp;Priority</th>
-              <th className='row18 text-center'>Response</th>
+              <th className='row20 text-center'>Response</th>
               <th className='row12'>Unresolved</th>
               <th className='row12'>Missing</th>
               <th className='row12'>Present</th>

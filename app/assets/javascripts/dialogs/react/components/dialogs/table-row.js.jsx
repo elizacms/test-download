@@ -3,41 +3,28 @@ var TableRow = React.createClass({
     title: React.PropTypes.string
   },
 
-  // parseRules(){
-  //   let rule = this.props.data;
-  //   conditions = [];
+  parseResponse(response){
+    var value = JSON.parse(response.response_value);
 
-  //   if( rule.hasOwnProperty('unresolved') ){
-  //     rule.unresolved.forEach(function(value, index){
-  //       if (value !== ''){
-  //         conditions.push( value + ' is unresolved' );
-  //       }
-  //     })
-  //   }
-  //   if( rule.hasOwnProperty('missing') ){
-  //     rule.missing.forEach(function(value, index){
-  //       if (value !== ''){
-  //         conditions.push( value + ' is missing' );
-  //       }
-  //     })
-  //   }
-  //   if( rule.hasOwnProperty('present') ){
-  //     var ary  = [];
-  //     var ary2 = [];
+    if ( response.response_type === 'text' ) {
+      return(value['response_text_input']);
+    } else if ( response.response_type === 'card' ) {
+      return(value['cards'][0]['text']);
+    } else if ( response.response_type === 'text_with_option' ) {
+      return(value['response_text_with_option_text_input']);
+    } else if ( response.response_type === 'video' ) {
+      return(value['response_video_text_input']);
+    } else if ( response.response_type === 'question_and_answer' ){
+      return(value['response_text_input']);
+    }
+  },
 
-  //     rule.present.forEach(function(value, index){
-  //       index % 2 == 0 ? ary.push(value) : ary2.push(value);
-  //     });
-
-  //     ary.forEach(function(value, index){
-  //       if (value !== ''){
-  //         conditions.push( value + ' is present: "' + ary2[index] + '"' );
-  //       }
-  //     });
-  //   }
-
-  //   return conditions;
-  // },
+  tableSeparator(length, index){
+    console.log(length);
+    if (length > 1 && index + 1 !== length){
+      return(<hr className='table-response-separator' />);
+    }
+  },
 
   editRow(e){
     e.preventDefault();
@@ -61,10 +48,19 @@ var TableRow = React.createClass({
     return (
       <tr className='dialog-data'>
         <td className='priority'>{data.priority}</td>
-        <td className='response text-center'>
+        <td className='response'>
           {data.responses.map(function(response, index){
-            return(<div key={index}>Response Type: {response.response_type}</div>);
-          })}
+            return(
+              <div key={index}>
+                Response [{index + 1}]:
+                <br />
+                Type: {response.response_type}
+                <br />
+                Text: {this.parseResponse(response)}
+                {this.tableSeparator(data.responses.length, index)}
+              </div>
+            );
+          }.bind(this))}
         </td>
         <td className='unresolved'>
           {data.unresolved.map(function(condition, index){

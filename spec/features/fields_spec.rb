@@ -79,6 +79,8 @@ feature 'Fields', :js do
 
       click_button 'JSON'
 
+      sleep 0.5
+
       expect( code_json_content ).to have_content 'get_ride'
       expect( code_json_content ).to have_content 'mturk_field'
       expect( code_json_content ).to have_content 'Uber.Destination'
