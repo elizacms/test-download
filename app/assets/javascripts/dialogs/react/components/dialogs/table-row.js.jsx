@@ -20,7 +20,6 @@ var TableRow = React.createClass({
   },
 
   tableSeparator(length, index){
-    console.log(length);
     if (length > 1 && index + 1 !== length){
       return(<hr className='table-response-separator' />);
     }
