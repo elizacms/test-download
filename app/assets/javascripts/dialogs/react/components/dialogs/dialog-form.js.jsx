@@ -246,6 +246,14 @@ var DialogForm = React.createClass({
     this.props.createOrUpdateDialog(data);
   },
 
+  cancelCreate(e){
+    e.preventDefault();
+
+    $('.dialogForm').hide();
+    $('.dialogTable').show();
+    $('.exportCSV').show();
+  },
+
   render() {
     var inputs = [
       {
@@ -404,6 +412,13 @@ var DialogForm = React.createClass({
             onClick={this.createOrUpdateDialog}
             className='btn lg ghost dialog-btn pull-right'
           >{this.props.createOrUpdateBtnText()}</button> &nbsp;
+          <a
+            href='#'
+            className='cancelCreate pull-right'
+            onClick={(e) => this.cancelCreate(e)}
+          >
+            Cancel
+          </a>
         </form>
       </div>
     );

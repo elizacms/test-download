@@ -92,6 +92,17 @@ table.jsgrid-table {
   display: none;
 }
 
+a.cancelCreate {
+  font-size: 13px;
+  margin-top: 10px;
+  margin-right: 5px;
+  color: black;
+
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
+
 .dialogs, .dialog {
   width: 100%;
   table-layout: fixed;
