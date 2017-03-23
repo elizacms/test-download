@@ -16,9 +16,6 @@ Rails.application.routes.draw do
     to: 'pages#current_user_session_destroy',
     as: :logout
 
-  get '/.well-known/acme-challenge/VPZ7ztdpjp4qhXU2dnRzRkTnzfrErUD9xiRZToDgWMQ',
-    to: 'pages#proof'
-
   resources :users
 
   match '/ajax-developers',
