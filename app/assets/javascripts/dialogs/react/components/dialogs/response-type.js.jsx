@@ -8,6 +8,7 @@ var ResponseType = React.createClass({
       response_trigger: '',
       // Text Type
       response_text_input: '',
+      response_text_spokentext: '',
       // Text With Option
       response_text_with_option_text_input: '',
       options: [ {text:'', entity:''} ],
@@ -114,6 +115,17 @@ var ResponseType = React.createClass({
               name='response_text_input'
               value={this.state.response_text_input}
               onChange={ (e) => this.handleInputChanges(e, 'response_text_input') }
+            />
+          </label>
+          <br />
+          <label>
+            Spoken Text &nbsp;
+            <input
+              className='dialog-input response-input'
+              type='text'
+              name='response_text_spokentext'
+              value={this.state.response_text_spokentext}
+              onChange={ (e) => this.handleInputChanges(e, 'response_text_spokentext') }
             />
           </label>
           <br />
