@@ -3,9 +3,15 @@ var Table = React.createClass({
     title: React.PropTypes.string
   },
 
+  showDialogForm(){
+    $('.dialogForm').show();
+    $('.dialogTable').hide();
+    $('.exportCSV').hide();
+  },
+
   render() {
     return (
-      <div>
+      <div className='dialogTable'>
         <table className='dialogs'>
           <tbody>
             <tr>
@@ -31,6 +37,12 @@ var Table = React.createClass({
             }
           </tbody>
         </table>
+        <button
+          className='btn lg ghost pull-right'
+          onClick={this.showDialogForm}
+        >
+          Create a Dialog
+        </button>
       </div>
     );
   }

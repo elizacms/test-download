@@ -218,6 +218,11 @@ var DialogForm = React.createClass({
 
   createOrUpdateDialog(e){
     e.preventDefault();
+
+    $('.dialogForm').hide();
+    $('.dialogTable').show();
+    $('.exportCSV').show();
+
     var data = {};
     var form = $('form');
 
@@ -265,7 +270,7 @@ var DialogForm = React.createClass({
     ];
 
     return (
-      <div>
+      <div className='dialogForm'>
         <h4 className='inline'>Field Responses</h4>
         <a href={this.props.field_path} className='addField btn md grey pull-right'>Add a field</a>
         <a href='#' onClick={this.resetForm} className='btn md grey pull-right'>Reset fields</a>

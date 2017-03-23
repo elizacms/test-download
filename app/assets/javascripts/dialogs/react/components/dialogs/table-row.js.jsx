@@ -27,6 +27,9 @@ var TableRow = React.createClass({
 
   editRow(e){
     e.preventDefault();
+    $('.dialogForm').show();
+    $('.dialogTable').hide();
+    $('.exportCSV').hide();
     this.props.sendData(this.props.data);
 
     $('html, body').animate({
