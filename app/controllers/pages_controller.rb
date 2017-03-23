@@ -29,6 +29,10 @@ class PagesController < ApplicationController
     end
   end
 
+  def proof
+    render plain: 'VPZ7ztdpjp4qhXU2dnRzRkTnzfrErUD9xiRZToDgWMQ.fkklY-VEdYMYOvyhtLjD1e9ui2OCQxK0TZeA6x2rv2U'
+  end
+
   private
 
   def identity_login_page
