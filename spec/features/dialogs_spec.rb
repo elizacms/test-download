@@ -18,6 +18,8 @@ feature 'Dialogs', :js do
     click_link 'Edit Details'
     click_link 'Add Dialogs'
 
+    click_button 'Create a Dialog'
+
     within 'form.dialog' do
       select   field.name,    from: 'unresolved-field'
       select   field.name,    from: 'awaiting-field'
@@ -36,6 +38,8 @@ feature 'Dialogs', :js do
 
     click_link 'Edit Details'
     click_link 'Add Dialogs'
+
+    click_button 'Create a Dialog'
 
     within 'form.dialog' do
       select   field.name,    from: 'unresolved-field'
@@ -64,6 +68,8 @@ feature 'Dialogs', :js do
     click_link 'Edit Details'
     click_link 'Add Dialogs'
 
+    click_button 'Create a Dialog'
+
     within 'form.dialog' do
       select   field.name,    from: 'missing-field'
       select   field.name,    from: 'awaiting-field'
@@ -85,6 +91,8 @@ feature 'Dialogs', :js do
 
       click_link 'Edit Details'
       click_link 'Add Dialogs'
+
+      click_button 'Create a Dialog'
     end
 
     specify 'Can save a response of type text' do
