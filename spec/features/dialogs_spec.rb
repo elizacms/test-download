@@ -9,9 +9,6 @@ feature 'Dialogs', :js do
   before do
     stub_identity_token
     stub_identity_account_for dev.email
-  end
-
-  specify 'Renders rule' do
     visit '/login/success?code=0123abc'
     click_link 'Intents'
 
@@ -19,10 +16,12 @@ feature 'Dialogs', :js do
     click_link 'Add Dialogs'
 
     click_button 'Create a Dialog'
+  end
 
+  specify 'Renders rule' do
     within 'form.dialog' do
-      select   field.name,    from: 'unresolved-field'
-      select   field.name,    from: 'awaiting-field'
+      select field.name, from: 'unresolved-field'
+      select field.name, from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'
@@ -33,17 +32,9 @@ feature 'Dialogs', :js do
   end
 
   specify 'User can update a dialog' do
-    visit '/login/success?code=0123abc'
-    click_link 'Intents'
-
-    click_link 'Edit Details'
-    click_link 'Add Dialogs'
-
-    click_button 'Create a Dialog'
-
     within 'form.dialog' do
-      select   field.name,    from: 'unresolved-field'
-      select   field.name,    from: 'awaiting-field'
+      select field.name, from: 'unresolved-field'
+      select field.name, from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'
@@ -62,17 +53,9 @@ feature 'Dialogs', :js do
   end
 
   specify 'Deleting a dialog shows confirm' do
-    visit '/login/success?code=0123abc'
-    click_link 'Intents'
-
-    click_link 'Edit Details'
-    click_link 'Add Dialogs'
-
-    click_button 'Create a Dialog'
-
     within 'form.dialog' do
-      select   field.name,    from: 'missing-field'
-      select   field.name,    from: 'awaiting-field'
+      select field.name, from: 'missing-field'
+      select field.name, from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'
@@ -85,16 +68,6 @@ feature 'Dialogs', :js do
   end
 
   describe 'Responses Types' do
-    before do
-      visit '/login/success?code=0123abc'
-      click_link 'Intents'
-
-      click_link 'Edit Details'
-      click_link 'Add Dialogs'
-
-      click_button 'Create a Dialog'
-    end
-
     specify 'Can save a response of type text' do
       within 'form.dialog' do
         within '.response-type-row-0'do
@@ -114,7 +87,10 @@ feature 'Dialogs', :js do
       expect( Dialog.count   ).to eq 1
       expect( Response.count ).to eq 1
 
-      expected_response_value = { 'response_text_input' => 'abc def 123 10 9 8' }.to_json
+      expected_response_value = {
+        'response_text_input'      => 'abc def 123 10 9 8',
+        'response_text_spokentext' => ''
+      }.to_json
 
       expect( Dialog.last.responses.first.response_type     ).to eq 'text'
       expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
@@ -148,8 +124,14 @@ feature 'Dialogs', :js do
       expect( Dialog.count   ).to eq 1
       expect( Response.count ).to eq 2
 
-      expected_response_1 = { 'response_text_input' => 'abc def 123 10 9 8' }.to_json
-      expected_response_2 = { 'response_text_input' => 'crazy dancing ninjas' }.to_json
+      expected_response_1 = {
+        'response_text_input'      => 'abc def 123 10 9 8',
+        'response_text_spokentext' => ''
+      }.to_json
+      expected_response_2 = {
+        'response_text_input' => 'crazy dancing ninjas',
+        'response_text_spokentext' => ''
+      }.to_json
 
       expect( Dialog.last.responses.first.response_type     ).to eq 'text'
       expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
@@ -162,9 +144,9 @@ feature 'Dialogs', :js do
     specify 'Can save a response of type text with options with muli options' do
       within 'form.dialog' do
         within '.response-type-row-0'do
-          select  'Text With Option',                       from: 'response-type-select'
-          fill_in 'response_text_with_option_text_input',   with: 'abc def 123 10 9 8'
-          fill_in 'response_trigger_input',                 with: 'some kind of trigger'
+          select  'Text With Option',                     from: 'response-type-select'
+          fill_in 'response_text_with_option_text_input', with: 'abc def 123 10 9 8'
+          fill_in 'response_trigger_input',               with: 'some kind of trigger'
 
           find('.add-option').click
 
@@ -243,9 +225,10 @@ feature 'Dialogs', :js do
         end
 
         within '.response-type-row-1' do
-          select  'Text',                   from: 'response-type-select'
-          fill_in 'response_text_input',    with: 'crazy dancing ninjas'
-          fill_in 'response_trigger_input', with: 'the best trigger'
+          select  'Text',                     from: 'response-type-select'
+          fill_in 'response_text_input',      with: 'crazy dancing ninjas'
+          fill_in 'response_trigger_input',   with: 'the best trigger'
+          fill_in 'response_text_spokentext', with: 'Speakout!'
         end
 
         select field.name, from: 'unresolved-field'
@@ -264,7 +247,11 @@ feature 'Dialogs', :js do
         'response_video_thumbnail_input' => 'twin cats',
         'response_video_entity_input'    => 'Jenny or Luna or Lady'
       }.to_json
-      expected_response_2 = { 'response_text_input' => 'crazy dancing ninjas' }.to_json
+      expected_response_2 = {
+        'response_text_input'      => 'crazy dancing ninjas',
+        'response_text_spokentext' => 'Speakout!'
+      }.to_json
+
 
       expect( Dialog.last.responses.first.response_type     ).to eq 'video'
       expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
@@ -328,7 +315,10 @@ feature 'Dialogs', :js do
         'response_video_thumbnail_input' => 'twin cats',
         'response_video_entity_input'    => 'Jenny or Luna or Lady'
       }.to_json
-      expected_response_2 = { 'response_text_input' => 'crazy dancing BARBIES' }.to_json
+      expected_response_2 = {
+        'response_text_input'      => 'crazy dancing BARBIES',
+        'response_text_spokentext' => ''
+      }.to_json
 
       expect( Dialog.last.responses.first.response_type     ).to eq 'video'
       expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of laser trigger'
@@ -466,7 +456,7 @@ feature 'Dialogs', :js do
       expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
     end
 
-    specify 'Can save a response of type 4' do
+    specify 'Can save a response of type Question and Answer' do
     end
   end
 end
