@@ -170,7 +170,6 @@ var DialogForm = React.createClass({
   parseResponseTypeFormInput(){
     const ary = [];
     const state_responses_attributes = this.state.responses_attributes;
-    // const current_dialog_id = this.props.data.id.$oid
     const isUpdate = this.props.isUpdate;
 
     $('[class^="response-type-row"]').each(function(i, this_row){
@@ -178,14 +177,12 @@ var DialogForm = React.createClass({
       const iv_obj = {};
       const state_options = state_responses_attributes[i].inputValue.options;
       const state_cards   = state_responses_attributes[i].inputValue.cards;
-
-      // obj[ '$oid' ] = $(this_row).find('.response-id').val();
-      // obj[ 'dialog_id' ]       = current_dialog_id;
+      const state_qna_answers = state_responses_attributes[i].inputValue.response_qna_answers;
+      const state_qna_faq     = state_responses_attributes[i].inputValue.response_qna_faq;
 
       if (isUpdate && ($(this_row).find('.response-id').val() != '') ) {
         obj[ 'id' ] = $(this_row).find('.response-id').val();
       }
-
 
       obj[ 'response_type' ]   = $(this_row).find('.dialog-select').val();
       obj[ 'response_trigger'] = $(this_row).find('.response_trigger').val();
@@ -199,6 +196,15 @@ var DialogForm = React.createClass({
         }
         if ( $(this_input).hasClass('response-cards-input') ){
           iv_obj[ 'cards' ] = state_cards;
+        }
+        if ( $(this_input).hasClass('response-qna-faq') ){
+          iv_obj[ 'response_qna_faq' ] = state_qna_faq;
+        }
+      });
+
+      $(this_row).find('textarea').each(function(j, this_textarea){
+        if ( $(this_textarea).hasClass('response-qna-answer-input') ){
+          iv_obj[ 'response_qna_answers' ] = state_qna_answers;
         }
       });
 

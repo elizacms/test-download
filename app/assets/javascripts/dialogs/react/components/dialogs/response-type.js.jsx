@@ -16,8 +16,17 @@ var ResponseType = React.createClass({
       // Video Type
       response_video_text_input: '',
       response_video_thumbnail_input: '',
-      response_video_entity_input: ''
-
+      response_video_entity_input: '',
+      // Q&A Type
+      response_qna_question: '',
+      response_qna_faq: false,
+      response_qna_answers: [ {answer: ''} ],
+      response_qna_video_thumbnail: '',
+      response_qna_video_url: '',
+      response_qna_image_thumbnail: '',
+      response_qna_image_url: '',
+      response_qna_link_text: '',
+      response_qna_url: ''
     };
   },
 
@@ -449,6 +458,177 @@ var ResponseType = React.createClass({
     }
   },
 
+  // Type-4 Q&A Type ///////////////////////////////////////////////////
+  addAnswer(e) {
+    e.preventDefault();
+
+    this.setState({
+      response_qna_answers: this.state.response_qna_answers.concat( [{answer:''}] )
+    });
+  },
+  deleteAnswer(index, e) {
+    e.preventDefault();
+
+    this.state.response_qna_answers = this.state.response_qna_answers.filter((a, i) => index !== i);
+
+    this.qnaInputChange();
+  },
+  qnaInputChange(event, index) {
+    // event.try(target).try(name)
+    const name = (( event || {} ).target || {} ).name;
+
+    if (name === 'response_qna_answers') {
+      this.state[name][index].answer = event.target.value;
+    } else if (name === 'response_qna_faq') {
+      this.state[name] = event.target.checked;
+    } else if (name) {
+      this.state[name] = event.target.value;
+    }
+
+    this.setState({});
+
+    // Create a new data object for update state
+    const inputValueObj = {
+      response_qna_question: this.state.response_qna_question,
+      response_qna_faq: this.state.response_qna_faq,
+      response_qna_answers: this.state.response_qna_answers,
+      response_qna_video_thumbnail: this.state.response_qna_video_thumbnail,
+      response_qna_video_url: this.state.response_qna_video_url,
+      response_qna_image_thumbnail: this.state.response_qna_image_thumbnail,
+      response_qna_image_url: this.state.response_qna_image_url,
+      response_qna_link_text: this.state.response_qna_link_text,
+      response_qna_url: this.state.response_qna_url
+    };
+    // updateState
+    this.props.updateState( 'responses_attributes', {
+      id: this.props.index,
+      value: this.state.responseType,
+      inputValue: inputValueObj,
+      response_trigger: this.state.response_trigger,
+      response_id: this.state.response_id
+    });
+  },
+
+  renderQnAType() {
+    if (this.state.responseType === 'qna'){
+      return(
+        <div>
+          <label>
+            Question &nbsp;
+            <input
+              className='dialog-input response-input'
+              type='text'
+              name='response_qna_question'
+              value={this.state.response_qna_question}
+              onChange={ (e) => this.qnaInputChange(e) }
+            />
+          </label>
+          <br />
+
+          <label>
+            Include in FAQ &nbsp;
+            <input
+              className='response-input'
+              type="checkbox"
+              name='response_qna_faq'
+              checked={this.state.response_qna_faq}
+              onChange={ (e) => this.qnaInputChange(e) }
+            />
+          </label>
+          <br />
+
+          <label>
+            Answer &nbsp;
+            <a onClick={this.addAnswer} href='#' className='pull-right'>
+              <span className='icon-plus add-answer'>Answer</span>
+            </a>
+          </label>
+          <br />
+          {this.state.response_qna_answers.map((answer, index) => (
+            <div key={index}>
+              <label>
+                <textarea
+                  name='response_qna_answers'
+                  className='response-qna-answer-input'
+                  value={answer.answer}
+                  onChange={ (e) => this.qnaInputChange(e, index) }
+                />
+                &nbsp;&nbsp;
+                <a onClick={this.deleteAnswer.bind(this, index)} href='#'>
+                  <span className='icon-cancel-circled'></span>
+                </a>
+              </label>
+            </div>
+          ))}
+          <br />
+
+          <label>
+            Video Thumbnail &nbsp;
+            <input
+              className='dialog-input response-input'
+              type='text'
+              name='response_qna_video_thumbnail'
+              value={this.state.response_qna_video_thumbnail}
+              onChange={ (e) => this.qnaInputChange(e) }
+            />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            Video Url &nbsp;
+            <input
+              className='dialog-input response-qna-faq'
+              type='text'
+              name='response_qna_video_url'
+              value={this.state.response_qna_video_url}
+              onChange={ (e) => this.qnaInputChange(e) }
+            />
+          </label>
+          <br />
+
+          <label>
+            Image Thumbnail &nbsp;
+            <input
+              className='dialog-input response-input'
+              type='text'
+              name='response_qna_image_thumbnail'
+              value={this.state.response_qna_image_thumbnail}
+              onChange={ (e) => this.qnaInputChange(e) }
+            />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            Image Url &nbsp;
+            <input
+              className='dialog-input response-input'
+              type='text'
+              name='response_qna_image_url'
+              value={this.state.response_qna_image_url}
+              onChange={ (e) => this.qnaInputChange(e) }
+            />
+          </label>
+          <br />
+
+          <label>
+            Link Text &nbsp;
+            <input
+              className='dialog-input response-input'
+              type='text'
+              name='response_qna_link_text'
+              value={this.state.response_qna_link_text}
+              onChange={ (e) => this.qnaInputChange(e) }
+            />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            Url &nbsp;
+            <input
+              className='dialog-input response-input'
+              type='text'
+              name='response_qna_url'
+              value={this.state.response_qna_url}
+              onChange={ (e) => this.qnaInputChange(e) }
+            />
+          </label>
+        </div>
+      )
+    }
+  },
+
+  // Main Render ///////////////////////////////////////////////////////
   renderTypeContent() {
     return (
       <div>
@@ -456,11 +636,11 @@ var ResponseType = React.createClass({
         { this.renderTextWithOptionType() }
         { this.renderVideoType() }
         { this.renderCardType() }
+        { this.renderQnAType() }
       </div>
     );
   },
 
-  // Main Render ///////////////////////////////////////////////////////
   render() {
     var hasCancel = '';
     if (this.props.index > 0){
@@ -497,7 +677,7 @@ var ResponseType = React.createClass({
             <option key='1' value='text_with_option'>Text With Option</option>
             <option key='2' value='video'>Video</option>
             <option key='3' value='card'>Card</option>
-            <option key='4' value='4'>4</option>
+            <option key='4' value='qna'>Q & A</option>
           </select>
           <br />
           { this.renderTypeContent() }

@@ -31,8 +31,7 @@ var Container = React.createClass({
     } else {
       var url = '/dialogue_api/response?';
     }
-console.log("-- create or update dialog --");
-console.log(data);
+
     $.ajax({
       type: this.state.isUpdate ? 'PUT' : 'POST',
       url: url,
@@ -77,8 +76,6 @@ console.log(data);
       data: data
     })
     .done( function( data ){
-console.log("-- ALL scenarios --");
-console.log(data);
       this.setState({ data: data });
     }.bind(this));
   },
