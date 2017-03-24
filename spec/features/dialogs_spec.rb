@@ -97,7 +97,7 @@ feature 'Dialogs', :js do
         within '.response-type-row-0'do
           select  'Text',                   from: 'response-type-select'
           fill_in 'response_text_input',    with: 'abc def 123 10 9 8'
-          fill_in 'response_trigger_input', with: 'some kind of trigger'
+          fill_in 'response_trigger', with: 'some kind of trigger'
         end
 
         select field.name, from: 'unresolved-field'
@@ -126,7 +126,7 @@ feature 'Dialogs', :js do
         within '.response-type-row-0'do
           select  'Text',                   from: 'response-type-select'
           fill_in 'response_text_input',    with: 'abc def 123 10 9 8'
-          fill_in 'response_trigger_input', with: 'some kind of trigger'
+          fill_in 'response_trigger', with: 'some kind of trigger'
 
           find('span.icon-plus').click
         end
@@ -134,7 +134,7 @@ feature 'Dialogs', :js do
         within '.response-type-row-1' do
           select  'Text',                   from: 'response-type-select'
           fill_in 'response_text_input',    with: 'crazy dancing ninjas'
-          fill_in 'response_trigger_input', with: 'the best trigger'
+          fill_in 'response_trigger', with: 'the best trigger'
         end
 
         select field.name, from: 'unresolved-field'
@@ -170,7 +170,7 @@ feature 'Dialogs', :js do
         within '.response-type-row-0'do
           select  'Text With Option',                     from: 'response-type-select'
           fill_in 'response_text_with_option_text_input', with: 'abc def 123 10 9 8'
-          fill_in 'response_trigger_input',               with: 'some kind of trigger'
+          fill_in 'response_trigger',               with: 'some kind of trigger'
 
           find('.add-option').click
 
@@ -211,7 +211,7 @@ feature 'Dialogs', :js do
           fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
           fill_in 'response_video_thumbnail_input', with: 'twin cats'
           fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
-          fill_in 'response_trigger_input',         with: 'some kind of trigger'
+          fill_in 'response_trigger',         with: 'some kind of trigger'
         end
 
         select field.name, from: 'unresolved-field'
@@ -243,7 +243,7 @@ feature 'Dialogs', :js do
           fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
           fill_in 'response_video_thumbnail_input', with: 'twin cats'
           fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
-          fill_in 'response_trigger_input',         with: 'some kind of trigger'
+          fill_in 'response_trigger',         with: 'some kind of trigger'
 
           find('span.icon-plus').click
         end
@@ -251,7 +251,7 @@ feature 'Dialogs', :js do
         within '.response-type-row-1' do
           select  'Text',                     from: 'response-type-select'
           fill_in 'response_text_input',      with: 'crazy dancing ninjas'
-          fill_in 'response_trigger_input',   with: 'the best trigger'
+          fill_in 'response_trigger',   with: 'the best trigger'
           fill_in 'response_text_spokentext', with: 'Speakout!'
         end
 
@@ -292,7 +292,7 @@ feature 'Dialogs', :js do
           fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
           fill_in 'response_video_thumbnail_input', with: 'twin cats'
           fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
-          fill_in 'response_trigger_input',         with: 'some kind of trigger'
+          fill_in 'response_trigger',         with: 'some kind of trigger'
 
           find('span.icon-plus').click
         end
@@ -300,7 +300,7 @@ feature 'Dialogs', :js do
         within '.response-type-row-1' do
           select  'Text',                   from: 'response-type-select'
           fill_in 'response_text_input',    with: 'crazy dancing ninjas'
-          fill_in 'response_trigger_input', with: 'the best trigger'
+          fill_in 'response_trigger', with: 'the best trigger'
         end
 
         select field.name, from: 'unresolved-field'
@@ -318,7 +318,7 @@ feature 'Dialogs', :js do
 
       within 'form.dialog' do
         within '.response-type-row-0'do
-          fill_in 'response_trigger_input', with: 'some kind of laser trigger'
+          fill_in 'response_trigger', with: 'some kind of laser trigger'
         end
 
         within '.response-type-row-1' do
@@ -359,7 +359,7 @@ feature 'Dialogs', :js do
           fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
           fill_in 'response_video_thumbnail_input', with: 'twin cats'
           fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
-          fill_in 'response_trigger_input',         with: 'some kind of trigger'
+          fill_in 'response_trigger',               with: 'some kind of trigger'
 
           find('span.icon-plus').click
         end
@@ -367,7 +367,7 @@ feature 'Dialogs', :js do
         within '.response-type-row-1' do
           select  'Text',                   from: 'response-type-select'
           fill_in 'response_text_input',    with: 'crazy dancing ninjas'
-          fill_in 'response_trigger_input', with: 'the best trigger'
+          fill_in 'response_trigger', with: 'the best trigger'
         end
 
         select field.name, from: 'unresolved-field'
@@ -385,7 +385,7 @@ feature 'Dialogs', :js do
 
       within 'form.dialog' do
         within '.response-type-row-0'do
-          fill_in 'response_trigger_input', with: 'some kind of laser trigger'
+          fill_in 'response_trigger', with: 'some kind of laser trigger'
         end
 
         within '.response-type-row-1' do
@@ -411,7 +411,7 @@ feature 'Dialogs', :js do
       within 'form.dialog' do
         within '.response-type-row-0'do
           select  'Card',                   from: 'response-type-select'
-          fill_in 'response_trigger_input', with: 'some kind of trigger'
+          fill_in 'response_trigger', with: 'some kind of trigger'
 
           within '.card-bg' do
             find('.add-option').click

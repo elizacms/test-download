@@ -84,25 +84,33 @@ var ResponseType = React.createClass({
     this.props.deleteInput();
   },
 
-  handleInputChanges(event, field) {
-    this.state[field] = event.target.value;
-    this.setState({});
+  responseTypeMenuChange(event){
+    this.setState({ responseType: event.target.value });
+  },
 
-    const inputValueObj = {};
+  updateParentState(newInputValue) {
     this.props.updateState( 'responses_attributes', {
       id: this.props.index,
       value: this.state.responseType,
-      inputValue: inputValueObj[field] = this.state[field],
+      inputValue: newInputValue,
       response_trigger: this.state.response_trigger,
       response_id: this.state.response_id
     });
   },
 
-  responseTypeMenuChange(event){
-    this.setState({ responseType: event.target.value });
-  },
-
   // Type-0 Text Type //////////////////////////////////////////////////
+  textTypeInputChange(event){
+    const field = event.target.name;
+
+    // Update component state, then update dialog-form state.
+    this.setState({
+      [field]: event.target.value
+    }, () => {
+      const updatedInputValue = {[field]: this.state[field]};
+      this.updateParentState(updatedInputValue);
+    });
+
+  },
   renderTextType() {
     if (this.state.responseType === 'text'){
       return(
@@ -115,7 +123,8 @@ var ResponseType = React.createClass({
               type='text'
               name='response_text_input'
               value={this.state.response_text_input}
-              onChange={ (e) => this.handleInputChanges(e, 'response_text_input') }
+              // onChange={ (e) => this.handleInputChanges(e, 'response_text_input') }
+              onChange={this.textTypeInputChange}
             />
           <br />
           <label>
@@ -126,17 +135,17 @@ var ResponseType = React.createClass({
               type='text'
               name='response_text_spokentext'
               value={this.state.response_text_spokentext}
-              onChange={ (e) => this.handleInputChanges(e, 'response_text_spokentext') }
+              onChange={this.textTypeInputChange}
             />
           <br />
           <label>
             Response Trigger &nbsp;
             <input
               className='dialog-input response_trigger'
-              name='response_trigger_input'
+              name='response_trigger'
               type='text'
               value={this.state.response_trigger}
-              onChange={ (e) => this.handleInputChanges(e, 'response_trigger') }
+              onChange={this.textTypeInputChange}
             />
           </label>
         </div>
@@ -159,44 +168,41 @@ var ResponseType = React.createClass({
 
     this.setState({
       options: this.state.options.filter((o, i) => index !== i)
-    });
+    }, this.optionInputChange );
   },
   optionInputChange(event, index) {
-    // Update state for response_trigger
-    if (event.target.name == 'response_trigger_input'){
-      this.state.response_trigger = event.target.value;
-      this.setState({});
-    }
+    // event.try(target).try(name)
+    const field = (( event || {} ).target || {}).name;
+    const value = (( event || {} ).target || {}).value;
+
     // Create new options array state
     const newOptions = this.state.options.map((option, i) => {
       if (index !== i) return option;
 
       if (event.target.name == 'option_text') {
-        option.text = event.target.value;
+        option.text = value;
         return option;
       }
 
       if (event.target.name == 'option_entity') {
-        option.entity = event.target.value;
+        option.entity = value;
         return option;
       }
     });
-    this.setState({ options: newOptions });
-    // New inputValue object for updateState
-    const inputValueObj = {
-      response_text_with_option_text_input: this.state.response_text_with_option_text_input,
-      options: this.state.options
-    };
-    // updateState
-    this.props.updateState( 'responses_attributes', {
-      id: this.props.index,
-      value: this.state.responseType,
-      inputValue: inputValueObj,
-      response_trigger: this.state.response_trigger,
-      response_id: this.state.response_id
+
+    // Update component state, then update dialog-form state.
+    this.setState({
+      options: newOptions,
+      [field]: value
+    }, () => {
+      // New inputValue object for updateState
+      const updatedInputValue = {
+        response_text_with_option_text_input: this.state.response_text_with_option_text_input,
+        options: this.state.options
+      };
+      this.updateParentState(updatedInputValue);
     });
   },
-
   renderTextWithOptionType() {
     if (this.state.responseType === 'text_with_option'){
       return(
@@ -208,7 +214,7 @@ var ResponseType = React.createClass({
               type='text'
               name='response_text_with_option_text_input'
               value={this.state.response_text_with_option_text_input}
-              onChange={ (e) => this.handleInputChanges(e, 'response_text_with_option_text_input') }
+              onChange={this.optionInputChange}
             />
             &nbsp;&nbsp;&nbsp;&nbsp;
             <a onClick={this.addOptions} href='#'>
@@ -252,10 +258,10 @@ var ResponseType = React.createClass({
             Response Trigger &nbsp;
             <input
               className='dialog-input response_trigger'
-              name='response_trigger_input'
+              name='response_trigger'
               type='text'
               value={this.state.response_trigger}
-              onChange={ (e) => this.optionInputChange(e) }
+              onChange={this.optionInputChange}
             />
           </label>
         </div>
@@ -266,6 +272,22 @@ var ResponseType = React.createClass({
   },
 
   // Type-2 Video Type /////////////////////////////////////////////////
+  videoInputChange(event){
+    const field = event.target.name;
+    const value = event.target.value;
+
+    // Update component state, then update dialog-form state.
+    this.setState({
+      [field]: value
+    }, () => {
+      const updatedInputValue = {
+        response_video_text_input: this.state.response_video_text_input,
+        response_video_thumbnail_input: this.state.response_video_thumbnail_input,
+        response_video_entity_input: this.state.response_video_entity_input
+      };
+      this.updateParentState(updatedInputValue);
+    });
+  },
   renderVideoType() {
     if (this.state.responseType === 'video'){
       return(
@@ -277,7 +299,7 @@ var ResponseType = React.createClass({
               type='text'
               name='response_video_text_input'
               value={this.state.response_video_text_input}
-              onChange={ (e) => this.handleInputChanges(e, 'response_video_text_input') }
+              onChange={this.videoInputChange}
             />
           </label>
           <br />
@@ -289,7 +311,7 @@ var ResponseType = React.createClass({
               name='response_video_thumbnail_input'
               placeholder='Thumbnail'
               value={this.state.response_video_thumbnail_input}
-              onChange={ (e) => this.handleInputChanges(e, 'response_video_thumbnail_input') }
+              onChange={this.videoInputChange}
             />
           </label>
           &nbsp;&nbsp;
@@ -301,7 +323,7 @@ var ResponseType = React.createClass({
               name='response_video_entity_input'
               placeholder='Link'
               value={this.state.response_video_entity_input}
-              onChange={ (e) => this.handleInputChanges(e, 'response_video_entity_input') }
+              onChange={this.videoInputChange}
             />
           </label>
           <br />
@@ -309,10 +331,10 @@ var ResponseType = React.createClass({
             Response Trigger &nbsp;
             <input
               className='dialog-input response_trigger'
-              name='response_trigger_input'
+              name='response_trigger'
               type='text'
               value={this.state.response_trigger}
-              onChange={ (e) => this.handleInputChanges(e, 'response_trigger') }
+              onChange={this.videoInputChange}
             />
           </label>
         </div>
@@ -347,40 +369,42 @@ var ResponseType = React.createClass({
     e.preventDefault();
 
     this.state.cards[card_index].options = this.state.cards[card_index].options.filter((o, i) => option_index !== i);
-    this.setState({});
+
+    this.cardInputChange();
   },
   cardInputChange(event, card_index, option_index) {
-    switch(event && event.target.name) {
+    const field = (( event || {} ).target || {}).name;
+    const value = (( event || {} ).target || {}).value;
+
+    switch(field) {
       case 'card_text':
-        this.state.cards[card_index].text = event.target.value;
+        this.state.cards[card_index].text = value;
         break;
       case 'card_icon_url':
-        this.state.cards[card_index].iconurl = event.target.value;
+        this.state.cards[card_index].iconurl = value;
         break;
       case 'card_option_text':
-        this.state.cards[card_index].options[option_index].text = event.target.value;
+        this.state.cards[card_index].options[option_index].text = value;
         break;
       case 'card_option_entity':
-        this.state.cards[card_index].options[option_index].entity = event.target.value;
+        this.state.cards[card_index].options[option_index].entity = value;
         break;
-      case 'response_trigger_input':
-        this.state.response_trigger = event.target.value;
+      case 'response_trigger':
+        this.state.response_trigger = value;
       default:
         break;
     }
-    this.setState({});
 
-    const inputValueObj = { cards: this.state.cards };
-    // updateState
-    this.props.updateState( 'responses_attributes', {
-      id: this.props.index,
-      value: this.state.responseType,
-      inputValue: inputValueObj,
-      response_trigger: this.state.response_trigger,
-      response_id: this.state.response_id
+    // Update component state, then update dialog-form state.
+    this.setState({
+      cards: this.state.cards,
+    }, () => {
+      // New inputValue object for updateState
+      const updatedInputValue = { cards: this.state.cards };
+      this.updateParentState(updatedInputValue);
     });
-  },
 
+  },
   renderCardType() {
     if (this.state.responseType === 'card'){
       return(
@@ -457,7 +481,7 @@ var ResponseType = React.createClass({
             Response Trigger &nbsp;
             <input
               className='dialog-input response_trigger'
-              name='response_trigger_input'
+              name='response_trigger'
               type='text'
               value={this.state.response_trigger}
               onChange={ (e) => this.cardInputChange(e) }
@@ -486,7 +510,6 @@ var ResponseType = React.createClass({
     this.qnaInputChange();
   },
   qnaInputChange(event, index) {
-    // event.try(target).try(name)
     const name = (( event || {} ).target || {} ).name;
 
     if (name === 'response_qna_answers') {
