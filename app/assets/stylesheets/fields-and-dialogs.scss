@@ -65,6 +65,30 @@ table.jsgrid-table {
 }
 
 // The below styles override the 'shared-styles'
+
+.responseTypeLabel {
+  margin: 20px 0;
+  display: block;
+  top: 5px;
+  position: absolute;
+}
+
+.responseValueLabel {
+  margin: 20px 0;
+  display: block;
+}
+
+.responseTriggerLabel {
+  margin: 20px 0;
+  display: block;
+  bottom: 5px;
+  position: absolute;
+}
+
+label {
+  min-width: 100px !important;
+}
+
 .dialog-select {
   min-width: 260px !important;
   margin-top: 10px !important;
@@ -127,6 +151,7 @@ a.cancelCreate {
 }
 .row16{
   width: 16%;
+  position: relative;
 }
 .row20{
   width: 20%;

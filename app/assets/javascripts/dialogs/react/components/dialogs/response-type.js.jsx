@@ -108,7 +108,8 @@ var ResponseType = React.createClass({
       return(
         <div>
           <label>
-            Text &nbsp;
+            <span className='dialog-label'>Text &nbsp;</span>
+          </label>
             <input
               className='dialog-input response-input'
               type='text'
@@ -116,10 +117,10 @@ var ResponseType = React.createClass({
               value={this.state.response_text_input}
               onChange={ (e) => this.handleInputChanges(e, 'response_text_input') }
             />
-          </label>
           <br />
           <label>
-            Spoken Text &nbsp;
+            <span className='dialog-label'>Spoken Text &nbsp;</span>
+          </label>
             <input
               className='dialog-input response-input'
               type='text'
@@ -675,7 +676,17 @@ var ResponseType = React.createClass({
     return(
       <tr className={`response-type-row-${this.props.index}`}>
         <td className='row16'>
-          <strong>{this.props.title}</strong>
+          <span className='responseTypeLabel'>
+            <strong>Response type</strong>
+          </span>
+          <br />
+          <span className='responseValueLabel'>
+            <strong>Response value</strong>
+          </span>
+          <br />
+          <span className='responseTriggerLabel'>
+            <strong>Response trigger</strong>
+          </span>
         </td>
 
         <td className='row40'>
@@ -693,6 +704,13 @@ var ResponseType = React.createClass({
           </select>
           <br />
           { this.renderTypeContent() }
+          <input
+            className='dialog-input response_trigger'
+            name='response_trigger_input'
+            type='text'
+            value={this.state.response_trigger}
+            onChange={ (e) => this.cardInputChange(e) }
+          />
         </td>
 
         <td className='valign-top'>
