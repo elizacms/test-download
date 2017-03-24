@@ -252,6 +252,9 @@ var DialogForm = React.createClass({
     $('.dialogForm').hide();
     $('.dialogTable').show();
     $('.exportCSV').show();
+
+    this.props.resetDialogData();
+    this.props.resetIsUpdateState();
   },
 
   render() {
