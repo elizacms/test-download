@@ -128,7 +128,6 @@ var ResponseType = React.createClass({
               value={this.state.response_text_spokentext}
               onChange={ (e) => this.handleInputChanges(e, 'response_text_spokentext') }
             />
-          </label>
           <br />
           <label>
             Response Trigger &nbsp;
