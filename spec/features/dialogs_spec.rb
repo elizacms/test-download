@@ -52,6 +52,30 @@ feature 'Dialogs', :js do
     expect( Dialog.last.priority ).to eq 120
   end
 
+  specify 'User can cancel updating a dialog' do
+    within 'form.dialog' do
+      select field.name, from: 'unresolved-field'
+      select field.name, from: 'awaiting-field'
+    end
+
+    click_button 'Create Dialog'
+
+    sleep 0.5
+    expect( Dialog.count ).to eq 1
+
+    find( '.icon-pencil' ).click
+    fill_in :priority, with: 120
+    click_button 'Update Dialog'
+    find( '.icon-pencil' ).click
+
+    expect(page).to have_selector("input.priority-input[value='120']")
+
+    click_link 'Cancel'
+    click_button 'Create a Dialog'
+
+    expect(page).to have_selector("input.priority-input[value='']")
+  end
+
   specify 'Deleting a dialog shows confirm' do
     within 'form.dialog' do
       select field.name, from: 'missing-field'
