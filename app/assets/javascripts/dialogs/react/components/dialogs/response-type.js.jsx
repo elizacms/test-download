@@ -116,38 +116,27 @@ var ResponseType = React.createClass({
       return(
         <div>
           <label>
-            <span className='dialog-label'>Text &nbsp;</span>
+            <span className='dialog-label'>Text</span>
           </label>
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name='response_text_input'
-              value={this.state.response_text_input}
-              // onChange={ (e) => this.handleInputChanges(e, 'response_text_input') }
-              onChange={this.textTypeInputChange}
-            />
+          <input
+            className='dialog-input response-input'
+            type='text'
+            name='response_text_input'
+            value={this.state.response_text_input}
+            // onChange={ (e) => this.handleInputChanges(e, 'response_text_input') }
+            onChange={this.textTypeInputChange}
+          />
           <br />
           <label>
-            <span className='dialog-label'>Spoken Text &nbsp;</span>
+            <span className='dialog-label'>Spoken Text</span>
           </label>
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name='response_text_spokentext'
-              value={this.state.response_text_spokentext}
-              onChange={this.textTypeInputChange}
-            />
-          <br />
-          <label>
-            Response Trigger &nbsp;
-            <input
-              className='dialog-input response_trigger'
-              name='response_trigger'
-              type='text'
-              value={this.state.response_trigger}
-              onChange={this.textTypeInputChange}
-            />
-          </label>
+          <input
+            className='dialog-input response-input'
+            type='text'
+            name='response_text_spokentext'
+            value={this.state.response_text_spokentext}
+            onChange={this.textTypeInputChange}
+          />
         </div>
       );
     } else {
@@ -208,62 +197,49 @@ var ResponseType = React.createClass({
       return(
         <div>
           <label>
-            Text &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name='response_text_with_option_text_input'
-              value={this.state.response_text_with_option_text_input}
-              onChange={this.optionInputChange}
-            />
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <a onClick={this.addOptions} href='#'>
-              <span className='icon-plus add-option'>Option</span>
-            </a>
+            <span className='dialog-label'>Text</span>
           </label>
+          <input
+            className='dialog-input response-input'
+            type='text'
+            name='response_text_with_option_text_input'
+            value={this.state.response_text_with_option_text_input}
+            onChange={this.optionInputChange}
+          />
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <a onClick={this.addOptions} href='#'>
+            <span className='icon-plus add-option'>Option</span>
+          </a>
           <br />
-
           {this.state.options.map((option, index) => (
             <div key={index}>
               <label>
-                Option &nbsp;
-                <input
-                  type='text'
-                  name='option_text'
-                  placeholder='Text'
-                  className='dialog-input response-option-input'
-                  value={option.text}
-                  onChange={ (e) => this.optionInputChange(e, index) }
-                />
-                &nbsp;&nbsp;
-                Entity &nbsp;
-                <input
-                  type='text'
-                  name='option_entity'
-                  placeholder='Entity Value'
-                  className='dialog-input response-option-input'
-                  value={option.entity}
-                  onChange={ (e) => this.optionInputChange(e, index) }
-                />
-                &nbsp;&nbsp;
-                <a onClick={this.deleteOptions.bind(this, index)} href='#'>
-                  <span className='icon-cancel-circled'></span>
-                </a>
+                <span className='dialog-label'>Option</span>
               </label>
+              <input
+                type='text'
+                name='option_text'
+                placeholder='Text'
+                className='dialog-input response-option-input'
+                value={option.text}
+                onChange={ (e) => this.optionInputChange(e, index) }
+              />
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <label><span className='dialog-label'>Entity</span></label>
+              <input
+                type='text'
+                name='option_entity'
+                placeholder='Entity Value'
+                className='dialog-input response-option-input'
+                value={option.entity}
+                onChange={ (e) => this.optionInputChange(e, index) }
+              />
+              &nbsp;&nbsp;
+              <a onClick={this.deleteOptions.bind(this, index)} href='#'>
+                <span className='icon-cancel-circled'></span>
+              </a>
             </div>
           ))}
-
-          <br />
-          <label>
-            Response Trigger &nbsp;
-            <input
-              className='dialog-input response_trigger'
-              name='response_trigger'
-              type='text'
-              value={this.state.response_trigger}
-              onChange={this.optionInputChange}
-            />
-          </label>
         </div>
       );
     } else {
@@ -292,51 +268,34 @@ var ResponseType = React.createClass({
     if (this.state.responseType === 'video'){
       return(
         <div>
-          <label>
-            Text &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name='response_video_text_input'
-              value={this.state.response_video_text_input}
-              onChange={this.videoInputChange}
-            />
-          </label>
+          <label><span className='dialog-label'>Text</span></label>
+          <input
+            className='dialog-input response-input'
+            type='text'
+            name='response_video_text_input'
+            value={this.state.response_video_text_input}
+            onChange={this.videoInputChange}
+          />
           <br />
-          <label>
-            Video &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name='response_video_thumbnail_input'
-              placeholder='Thumbnail'
-              value={this.state.response_video_thumbnail_input}
-              onChange={this.videoInputChange}
-            />
-          </label>
-          &nbsp;&nbsp;
-          <label>
-            Entity Value &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name='response_video_entity_input'
-              placeholder='Link'
-              value={this.state.response_video_entity_input}
-              onChange={this.videoInputChange}
-            />
-          </label>
-          <br />
-          <label>
-            Response Trigger &nbsp;
-            <input
-              className='dialog-input response_trigger'
-              name='response_trigger'
-              type='text'
-              value={this.state.response_trigger}
-              onChange={this.videoInputChange}
-            />
-          </label>
+          <label><span className='dialog-label'>Video</span></label>
+          <input
+            className='dialog-input response-input'
+            type='text'
+            name='response_video_thumbnail_input'
+            placeholder='Thumbnail'
+            value={this.state.response_video_thumbnail_input}
+            onChange={this.videoInputChange}
+          />
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <label><span className='dialog-label'>Entity Value</span></label>
+          <input
+            className='dialog-input response-input'
+            type='text'
+            name='response_video_entity_input'
+            placeholder='Link'
+            value={this.state.response_video_entity_input}
+            onChange={this.videoInputChange}
+          />
         </div>
       );
     } else {
@@ -409,84 +368,65 @@ var ResponseType = React.createClass({
     if (this.state.responseType === 'card'){
       return(
         <div>
-          <label>
-            Card &nbsp;
-            <a onClick={this.addCard} href='#'>
-              <span className='icon-plus add-card pull-right'>Card</span>
-            </a>
-          </label>
+          <label><span className='dialog-label'>Card</span></label>
+          <a onClick={this.addCard} href='#'>
+            <span className='icon-plus add-card pull-right'>Card</span>
+          </a>
           <br />
-
           {this.state.cards.map((card, index) => (
             <div key={index} className="card-bg">
-              <label>
-                Text &nbsp;
-                <input
-                  type='text'
-                  name='card_text'
-                  className='dialog-input response-card-text-input'
-                  value={card.text}
-                  onChange={ (e) => this.cardInputChange(e, index) }
-                />
-                <a onClick={this.deleteCard.bind(this, index)} href='#'>
-                  <span className='icon-cancel-circled pull-right'>Card</span>
-                </a>
-                <br />
-                Icon URL &nbsp;
-                <input
-                  type='text'
-                  name='card_icon_url'
-                  className='dialog-input response-card-icon-url-input'
-                  value={card.iconurl}
-                  onChange={ (e) => this.cardInputChange(e, index) }
-                />
-                <br />
-                Options:
-                <a onClick={this.addCardOption.bind(this, index)} href='#'>
-                  <span className='icon-plus add-option'>Option</span>
-                </a>
-                { card.options.map((option, ind) => (
-                  <div key={ind}>
-                    <label>
-                      Text &nbsp;
-                      <input
-                        type='text'
-                        name='card_option_text'
-                        className='dialog-input response-cards-input'
-                        value={option.text}
-                        onChange={ (e) => this.cardInputChange(e,index, ind) }
-                      />
-                      &nbsp;&nbsp;
-                      Entity &nbsp;
-                      <input
-                        type='text'
-                        name='card_option_entity'
-                        className='dialog-input response-cards-input'
-                        value={option.entity}
-                        onChange={ (e) => this.cardInputChange(e,index, ind) }
-                      />
-                      &nbsp;&nbsp;
-                      <a onClick={this.deleteCardOption.bind(this, index, ind)} href='#'>
-                        <span className='icon-cancel-circled'></span>
-                      </a>
-                    </label>
-                  </div>
-                ))}
-              </label>
+              <label><span className='dialog-label'>Text</span></label>
+              <input
+                type='text'
+                name='card_text'
+                className='dialog-input response-card-text-input'
+                value={card.text}
+                onChange={ (e) => this.cardInputChange(e, index) }
+              />
+              <a onClick={this.deleteCard.bind(this, index)} href='#'>
+                <span className='icon-cancel-circled pull-right'>Card</span>
+              </a>
+              <br />
+              <label><span className='dialog-label'>Icon URL</span></label>
+              <input
+                type='text'
+                name='card_icon_url'
+                className='dialog-input response-card-icon-url-input'
+                value={card.iconurl}
+                onChange={ (e) => this.cardInputChange(e, index) }
+              />
+              <br />
+              Options:
+              <a onClick={this.addCardOption.bind(this, index)} href='#'>
+                <span className='icon-plus add-option'>Option</span>
+              </a>
+              {card.options.map((option, ind) => (
+                <div key={ind}>
+                  <label><span className='dialog-label'>Text</span></label>
+                  <input
+                    type='text'
+                    name='card_option_text'
+                    className='dialog-input response-cards-input'
+                    value={option.text}
+                    onChange={ (e) => this.cardInputChange(e,index, ind) }
+                  />
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <label><span className='dialog-label'>Entity</span></label>
+                  <input
+                    type='text'
+                    name='card_option_entity'
+                    className='dialog-input response-cards-input'
+                    value={option.entity}
+                    onChange={ (e) => this.cardInputChange(e,index, ind) }
+                  />
+                  &nbsp;&nbsp;
+                  <a onClick={this.deleteCardOption.bind(this, index, ind)} href='#'>
+                    <span className='icon-cancel-circled'></span>
+                  </a>
+                </div>
+              ))}
             </div>
           ))}
-
-          <br />
-          <label>
-            Response Trigger &nbsp;
-            <input
-              className='dialog-input response_trigger'
-              name='response_trigger'
-              type='text'
-              value={this.state.response_trigger}
-              onChange={ (e) => this.cardInputChange(e) }
-            />
-          </label>
         </div>
       );
     } else {
@@ -548,32 +488,30 @@ var ResponseType = React.createClass({
     if (this.state.responseType === 'qna'){
       return(
         <div>
-          <label>
-            Question &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name='response_qna_question'
-              value={this.state.response_qna_question}
-              onChange={ (e) => this.qnaInputChange(e) }
-            />
-          </label>
+          <label><span className='dialog-label'>Question</span></label>
+          <input
+            className='dialog-input response-input'
+            type='text'
+            name='response_qna_question'
+            value={this.state.response_qna_question}
+            onChange={ (e) => this.qnaInputChange(e) }
+          />
           <br />
 
           <label>
-            Include in FAQ &nbsp;
-            <input
-              className='response-input'
-              type="checkbox"
-              name='response_qna_faq'
-              checked={this.state.response_qna_faq}
-              onChange={ (e) => this.qnaInputChange(e) }
-            />
+            <span className='dialog-label'>Include in FAQ</span>
           </label>
+          <input
+            className='response-input'
+            type="checkbox"
+            name='response_qna_faq'
+            checked={this.state.response_qna_faq}
+            onChange={ (e) => this.qnaInputChange(e) }
+          />
           <br />
 
           <label>
-            Answer &nbsp;
+            <span className='dialog-label'>Answer</span>
             <a onClick={this.addAnswer} href='#' className='pull-right'>
               <span className='icon-plus add-answer'>Answer</span>
             </a>
@@ -598,66 +536,62 @@ var ResponseType = React.createClass({
           <br />
 
           <label>
-            Video Thumbnail &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name='response_qna_video_thumbnail'
-              value={this.state.response_qna_video_thumbnail}
-              onChange={ (e) => this.qnaInputChange(e) }
-            />
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            Video Url &nbsp;
-            <input
-              className='dialog-input response-qna-faq'
-              type='text'
-              name='response_qna_video_url'
-              value={this.state.response_qna_video_url}
-              onChange={ (e) => this.qnaInputChange(e) }
-            />
+            <span className='dialog-label'>Video Thumbnail</span>
           </label>
+          <input
+            className='dialog-input response-input'
+            type='text'
+            name='response_qna_video_thumbnail'
+            value={this.state.response_qna_video_thumbnail}
+            onChange={ (e) => this.qnaInputChange(e) }
+          />
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <label><span className='dialog-label'>Video Url</span></label>
+          <input
+            className='dialog-input response-qna-faq'
+            type='text'
+            name='response_qna_video_url'
+            value={this.state.response_qna_video_url}
+            onChange={ (e) => this.qnaInputChange(e) }
+          />
           <br />
 
-          <label>
-            Image Thumbnail &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name='response_qna_image_thumbnail'
-              value={this.state.response_qna_image_thumbnail}
-              onChange={ (e) => this.qnaInputChange(e) }
-            />
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            Image Url &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name='response_qna_image_url'
-              value={this.state.response_qna_image_url}
-              onChange={ (e) => this.qnaInputChange(e) }
-            />
-          </label>
+          <label><span className='dialog-label'>Image Thumbnail</span></label>
+          <input
+            className='dialog-input response-input'
+            type='text'
+            name='response_qna_image_thumbnail'
+            value={this.state.response_qna_image_thumbnail}
+            onChange={ (e) => this.qnaInputChange(e) }
+          />
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <label><span className='dialog-label'>Image Url</span></label>
+          <input
+            className='dialog-input response-input'
+            type='text'
+            name='response_qna_image_url'
+            value={this.state.response_qna_image_url}
+            onChange={ (e) => this.qnaInputChange(e) }
+          />
           <br />
 
-          <label>
-            Link Text &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name='response_qna_link_text'
-              value={this.state.response_qna_link_text}
-              onChange={ (e) => this.qnaInputChange(e) }
-            />
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            Url &nbsp;
-            <input
-              className='dialog-input response-input'
-              type='text'
-              name='response_qna_url'
-              value={this.state.response_qna_url}
-              onChange={ (e) => this.qnaInputChange(e) }
-            />
-          </label>
+          <label><span className='dialog-label'>Link Text</span></label>
+          <input
+            className='dialog-input response-input'
+            type='text'
+            name='response_qna_link_text'
+            value={this.state.response_qna_link_text}
+            onChange={ (e) => this.qnaInputChange(e) }
+          />
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <label><span className='dialog-label'>Url</span></label>
+          <input
+            className='dialog-input response-input'
+            type='text'
+            name='response_qna_url'
+            value={this.state.response_qna_url}
+            onChange={ (e) => this.qnaInputChange(e) }
+          />
         </div>
       )
     }
@@ -711,7 +645,7 @@ var ResponseType = React.createClass({
           </span>
         </td>
 
-        <td className='row40'>
+        <td className='row44_5'>
           <select
             className='dialog-select'
             name='response-type-select'
@@ -724,11 +658,12 @@ var ResponseType = React.createClass({
             <option key='3' value='card'>Card</option>
             <option key='4' value='qna'>Q & A</option>
           </select>
-          <br />
+          <br /><br />
           { this.renderTypeContent() }
+          <br />
           <input
             className='dialog-input response_trigger'
-            name='response_trigger_input'
+            name='response_trigger'
             type='text'
             value={this.state.response_trigger}
             onChange={ (e) => this.cardInputChange(e) }
