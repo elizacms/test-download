@@ -88,6 +88,14 @@ var ResponseType = React.createClass({
     this.setState({ responseType: event.target.value });
   },
 
+  responseTriggerChange(event){
+    this.setState({
+      response_trigger: event.target.value
+    }, () => {
+      this.updateParentState({});
+    });
+  },
+
   updateParentState(newInputValue) {
     this.props.updateState( 'responses_attributes', {
       id: this.props.index,
@@ -474,14 +482,9 @@ var ResponseType = React.createClass({
       response_qna_link_text: this.state.response_qna_link_text,
       response_qna_url: this.state.response_qna_url
     };
+
     // updateState
-    this.props.updateState( 'responses_attributes', {
-      id: this.props.index,
-      value: this.state.responseType,
-      inputValue: inputValueObj,
-      response_trigger: this.state.response_trigger,
-      response_id: this.state.response_id
-    });
+    this.updateParentState(inputValueObj);
   },
 
   renderQnAType() {
@@ -502,7 +505,7 @@ var ResponseType = React.createClass({
             <span className='dialog-label'>Include in FAQ</span>
           </label>
           <input
-            className='response-input'
+            className='response-qna-faq'
             type="checkbox"
             name='response_qna_faq'
             checked={this.state.response_qna_faq}
@@ -548,7 +551,7 @@ var ResponseType = React.createClass({
           &nbsp;&nbsp;&nbsp;&nbsp;
           <label><span className='dialog-label'>Video Url</span></label>
           <input
-            className='dialog-input response-qna-faq'
+            className='dialog-input response-input'
             type='text'
             name='response_qna_video_url'
             value={this.state.response_qna_video_url}
@@ -666,7 +669,8 @@ var ResponseType = React.createClass({
             name='response_trigger'
             type='text'
             value={this.state.response_trigger}
-            onChange={ (e) => this.cardInputChange(e) }
+            // onChange={ (e) => this.cardInputChange(e) }
+            onChange={this.responseTriggerChange}
           />
         </td>
 

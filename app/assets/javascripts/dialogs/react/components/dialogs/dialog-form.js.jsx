@@ -113,7 +113,13 @@ var DialogForm = React.createClass({
   },
 
   updateState(name, obj){
-    this.state[name][obj.id] = obj;
+    if ( obj.inputValue && Object.keys(obj.inputValue).length === 0 ){
+      // Update response_trigger only
+      this.state[name][obj.id].response_trigger = obj.response_trigger;
+    } else {
+      this.state[name][obj.id] = obj;
+    }
+
     this.setState({});
   },
 
