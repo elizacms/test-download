@@ -330,25 +330,7 @@ var DialogForm = React.createClass({
                   ></ResponseType>
                 );
               }.bind(this))}
-              {/* ********************************************************
-              {this.state['responses_attributes'].map(function(input, index){
-                return(
-                  <ResponseTypeContainer
-                    key={input.id}
-                    index={index}
-                    name='responses_attributes'
-                    title='response type'
-                    addRow={this.addRow}
-                    deleteInput={this.deleteInput.bind(this, input, 'responses_attributes')}
-                    response_trigger={this.state['responses_attributes'][index].response_trigger}
-                    response_id={this.state['responses_attributes'][index].response_id}
-                    inputValue={this.state['responses_attributes'][index].inputValue}
-                    value={this.state['responses_attributes'][index].value}
-                    updateState={this.updateState}
-                  ></ResponseTypeContainer>
-                );
-              }.bind(this))}
-              ******************************************************** */}
+              {/* ******************************************************** */}
 
               {this.state['unresolved-field'].map(function(input, index){
                 return(
