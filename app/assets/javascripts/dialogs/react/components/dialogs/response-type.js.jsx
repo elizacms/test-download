@@ -34,7 +34,7 @@ var ResponseType = React.createClass({
 
   componentDidMount() {
     const response_trigger_key = Object.keys(this.props.response_trigger)[0] || 'null';
-    const response_trigger_value = Object.values(this.props.response_trigger)[0] || '';
+    const response_trigger_value = this.props.response_trigger[ response_trigger_key ] || '';
 
     this.setState({
       trigger_type: response_trigger_key,
@@ -59,7 +59,7 @@ var ResponseType = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     const response_trigger_key = Object.keys(nextProps.response_trigger)[0] || '';
-    const response_trigger_value = Object.values(nextProps.response_trigger)[0] || '';
+    const response_trigger_value = nextProps.response_trigger[ response_trigger_key ] || '';
 
     this.setState({
       trigger_type: response_trigger_key,

@@ -99,8 +99,10 @@ feature 'Dialogs', :js do
         within '.response-type-row-0'do
           select  'Text',                from: 'response-type-select'
           fill_in 'response_text_input', with: 'abc def 123 10 9 8'
-          fill_in 'response_trigger',    with: 'some kind of trigger'
         end
+
+        select 'Time delay in seconds', from: 'trigger_type'
+        fill_in 'timeDelayInSecs', with: '5'
 
         select field.name, from: 'unresolved-field'
         select field.name, from: 'awaiting-field'
@@ -118,8 +120,10 @@ feature 'Dialogs', :js do
         'response_text_spokentext' => ''
       }.to_json
 
+      expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
+
       expect( Dialog.last.responses.first.response_type     ).to eq 'text'
-      expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
+      expect( Dialog.last.responses.first.response_trigger  ).to eq expected_response_trigger
       expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
     end
 
@@ -128,16 +132,22 @@ feature 'Dialogs', :js do
         within '.response-type-row-0'do
           select  'Text',                   from: 'response-type-select'
           fill_in 'response_text_input',    with: 'abc def 123 10 9 8'
-          fill_in 'response_trigger', with: 'some kind of trigger'
 
           find('span.icon-plus').click
+
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs', with: '5'
         end
+
 
         within '.response-type-row-1' do
           select  'Text',                   from: 'response-type-select'
           fill_in 'response_text_input',    with: 'crazy dancing ninjas'
-          fill_in 'response_trigger', with: 'the best trigger'
+
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs', with: '6'
         end
+
 
         select field.name, from: 'unresolved-field'
         select field.name, from: 'awaiting-field'
@@ -154,16 +164,19 @@ feature 'Dialogs', :js do
         'response_text_input'      => 'abc def 123 10 9 8',
         'response_text_spokentext' => ''
       }.to_json
+      expected_response_trigger_1 = {'timeDelayInSecs' => '5'}.to_json
+
       expected_response_2 = {
         'response_text_input' => 'crazy dancing ninjas',
         'response_text_spokentext' => ''
       }.to_json
+      expected_response_trigger_2 = {'timeDelayInSecs' => '6'}.to_json
 
       expect( Dialog.last.responses.first.response_type     ).to eq 'text'
-      expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
+      expect( Dialog.last.responses.first.response_trigger  ).to eq expected_response_trigger_1
       expect( Dialog.last.responses.first.response_value    ).to eq expected_response_1
       expect( Dialog.last.responses.last.response_type      ).to eq 'text'
-      expect( Dialog.last.responses.last.response_trigger   ).to eq 'the best trigger'
+      expect( Dialog.last.responses.last.response_trigger   ).to eq expected_response_trigger_2
       expect( Dialog.last.responses.last.response_value     ).to eq expected_response_2
     end
 
@@ -172,7 +185,7 @@ feature 'Dialogs', :js do
         within '.response-type-row-0'do
           select  'Text With Option',                     from: 'response-type-select'
           fill_in 'response_text_with_option_text_input', with: 'abc def 123 10 9 8'
-          fill_in 'response_trigger',                     with: 'some kind of trigger'
+
           find('.add-option').click
 
           option_text = page.all( 'input.response-option-input' )
@@ -181,6 +194,9 @@ feature 'Dialogs', :js do
           option_text[1].set 'Jenny or Luna or Lady'
           option_text[2].set 'twin dogs'
           option_text[3].set 'Lady Luna Reina'
+
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs', with: '5'
         end
       end
 
@@ -198,9 +214,10 @@ feature 'Dialogs', :js do
           { 'text' => 'twin dogs', 'entity' => 'Lady Luna Reina'       }
         ]
       }.to_json
+      expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
       expect( Dialog.last.responses.first.response_type     ).to eq 'text_with_option'
-      expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
+      expect( Dialog.last.responses.first.response_trigger  ).to eq expected_response_trigger
       expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
     end
 
@@ -211,7 +228,9 @@ feature 'Dialogs', :js do
           fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
           fill_in 'response_video_thumbnail_input', with: 'twin cats'
           fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
-          fill_in 'response_trigger',               with: 'some kind of trigger'
+
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs', with: '5'
         end
 
         select field.name, from: 'unresolved-field'
@@ -230,9 +249,10 @@ feature 'Dialogs', :js do
         'response_video_thumbnail_input' => 'twin cats',
         'response_video_entity_input'    => 'Jenny or Luna or Lady'
       }.to_json
+      expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
       expect( Dialog.last.responses.first.response_type     ).to eq 'video'
-      expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
+      expect( Dialog.last.responses.first.response_trigger  ).to eq expected_response_trigger
       expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
     end
 
@@ -243,7 +263,8 @@ feature 'Dialogs', :js do
           fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
           fill_in 'response_video_thumbnail_input', with: 'twin cats'
           fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
-          fill_in 'response_trigger',               with: 'some kind of trigger'
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs', with: '5'
 
           find('span.icon-plus').click
         end
@@ -251,8 +272,10 @@ feature 'Dialogs', :js do
         within '.response-type-row-1' do
           select  'Text',                     from: 'response-type-select'
           fill_in 'response_text_input',      with: 'crazy dancing ninjas'
-          fill_in 'response_trigger',         with: 'the best trigger'
           fill_in 'response_text_spokentext', with: 'Speakout!'
+
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs', with: '6'
         end
 
         select field.name, from: 'unresolved-field'
@@ -271,17 +294,20 @@ feature 'Dialogs', :js do
         'response_video_thumbnail_input' => 'twin cats',
         'response_video_entity_input'    => 'Jenny or Luna or Lady'
       }.to_json
+      expected_response_trigger_1 = {'timeDelayInSecs' => '5'}.to_json
+
       expected_response_2 = {
         'response_text_input'      => 'crazy dancing ninjas',
         'response_text_spokentext' => 'Speakout!'
       }.to_json
+      expected_response_trigger_2 = {'timeDelayInSecs' => '6'}.to_json
 
 
       expect( Dialog.last.responses.first.response_type     ).to eq 'video'
-      expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
+      expect( Dialog.last.responses.first.response_trigger  ).to eq expected_response_trigger_1
       expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
       expect( Dialog.last.responses.last.response_type      ).to eq 'text'
-      expect( Dialog.last.responses.last.response_trigger   ).to eq 'the best trigger'
+      expect( Dialog.last.responses.last.response_trigger   ).to eq expected_response_trigger_2
       expect( Dialog.last.responses.last.response_value     ).to eq expected_response_2
     end
 
@@ -292,7 +318,9 @@ feature 'Dialogs', :js do
           fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
           fill_in 'response_video_thumbnail_input', with: 'twin cats'
           fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
-          fill_in 'response_trigger',               with: 'some kind of trigger'
+
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs', with: '5'
 
           find('span.icon-plus').click
         end
@@ -300,7 +328,9 @@ feature 'Dialogs', :js do
         within '.response-type-row-1' do
           select  'Text',                   from: 'response-type-select'
           fill_in 'response_text_input',    with: 'crazy dancing ninjas'
-          fill_in 'response_trigger',       with: 'the best trigger'
+
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs', with: '6'
         end
 
         select field.name, from: 'unresolved-field'
@@ -320,7 +350,9 @@ feature 'Dialogs', :js do
         within '.response-type-row-1' do
           select  'Text',                from: 'response-type-select'
           fill_in 'response_text_input', with: 'crazy dancing BARBIES'
-          fill_in 'response_trigger',    with: 'some kind of laser trigger'
+
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs', with: '7'
         end
 
         select field.name, from: 'unresolved-field'
@@ -336,16 +368,19 @@ feature 'Dialogs', :js do
         'response_video_thumbnail_input' => 'twin cats',
         'response_video_entity_input'    => 'Jenny or Luna or Lady'
       }.to_json
+      expected_response_trigger_1 = {'timeDelayInSecs' => '5'}.to_json
+
       expected_response_2 = {
         'response_text_input'      => 'crazy dancing BARBIES',
         'response_text_spokentext' => ''
       }.to_json
+      expected_response_trigger_2 = {'timeDelayInSecs' => '7'}.to_json
 
       expect( Response.first.response_type     ).to eq 'video'
-      expect( Response.first.response_trigger  ).to eq 'some kind of trigger'
+      expect( Response.first.response_trigger  ).to eq expected_response_trigger_1
       expect( Response.first.response_value    ).to eq expected_response_value
       expect( Response.last.response_type      ).to eq 'text'
-      expect( Response.last.response_trigger   ).to eq 'some kind of laser trigger'
+      expect( Response.last.response_trigger   ).to eq expected_response_trigger_2
       expect( Response.last.response_value     ).to eq expected_response_2
     end
 
@@ -356,7 +391,9 @@ feature 'Dialogs', :js do
           fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
           fill_in 'response_video_thumbnail_input', with: 'twin cats'
           fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
-          fill_in 'response_trigger',               with: 'some kind of trigger'
+
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs', with: '5'
 
           find('span.icon-plus').click
         end
@@ -364,7 +401,9 @@ feature 'Dialogs', :js do
         within '.response-type-row-1' do
           select  'Text',                from: 'response-type-select'
           fill_in 'response_text_input', with: 'crazy dancing ninjas'
-          fill_in 'response_trigger',    with: 'the best trigger'
+
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs', with: '6'
         end
 
         select field.name, from: 'unresolved-field'
@@ -386,7 +425,8 @@ feature 'Dialogs', :js do
         end
 
         within '.response-type-row-0' do
-          fill_in 'response_trigger', with: 'some kind of laser trigger'
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs', with: '7'
         end
 
         click_button 'Update Dialog'
@@ -397,10 +437,11 @@ feature 'Dialogs', :js do
         'response_video_thumbnail_input' => 'twin cats',
         'response_video_entity_input'    => 'Jenny or Luna or Lady'
       }.to_json
+      expected_response_trigger = {'timeDelayInSecs' => '7'}.to_json
 
       expect( Response.count ).to eq 1
       expect( Response.first.response_type     ).to eq 'video'
-      expect( Response.first.response_trigger  ).to eq 'some kind of laser trigger'
+      expect( Response.first.response_trigger  ).to eq expected_response_trigger
       expect( Response.first.response_value    ).to eq expected_response_value
     end
 
@@ -431,7 +472,8 @@ feature 'Dialogs', :js do
           option_inputs[4].set 'if he'
           option_inputs[5].set 'let him go'
 
-          fill_in 'response_trigger', with: 'some kind of trigger'
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs', with: '5'
         end
       end
 
@@ -470,9 +512,10 @@ feature 'Dialogs', :js do
           }
         ]
       }.to_json
+      expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
       expect( Dialog.last.responses.first.response_type     ).to eq 'card'
-      expect( Dialog.last.responses.first.response_trigger  ).to eq 'some kind of trigger'
+      expect( Dialog.last.responses.first.response_trigger  ).to eq expected_response_trigger
       expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
     end
 
