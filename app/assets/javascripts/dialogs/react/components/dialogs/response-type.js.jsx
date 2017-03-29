@@ -107,7 +107,7 @@ var ResponseType = React.createClass({
     } else if ( ttype === 'timeDelayInSecs') {
       this.state.response_trigger = { [ttype]: '' };
     } else {
-      this.state.response_trigger = 'null';
+      this.state.response_trigger = '';
     }
     this.setState({});
 
@@ -125,7 +125,7 @@ var ResponseType = React.createClass({
     } else if ( ttype === 'timeDelayInSecs') {
       this.state.response_trigger = { [ttype]: event.target.value };
     } else {
-      this.state.response_trigger = 'null';
+      this.state.response_trigger = '';
     }
     this.setState({});
 

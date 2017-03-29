@@ -581,5 +581,61 @@ feature 'Dialogs', :js do
       expect( Dialog.last.responses[2].response_trigger ).to eq expected_response_trigger_3
       expect( Dialog.last.responses[3].response_trigger ).to eq expected_response_trigger_4
      end
+
+     specify 'Can edit and save mulitple response-trigger-types' do
+      within 'form.dialog' do
+        fill_in 'priority', with: '1'
+        within '.response-type-row-0' do
+          select  'Text',                     from: 'response-type-select'
+          fill_in 'response_text_input',      with: 'Hello Kitty'
+          fill_in 'response_text_spokentext', with: 'So Cute!'
+
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs', with: '9'
+
+          find('span.icon-plus').click
+        end
+
+        within '.response-type-row-1' do
+          select  'Text',                     from: 'response-type-select'
+          fill_in 'response_text_input',      with: 'Today is'
+          fill_in 'response_text_spokentext', with: 'March 29th 2017'
+
+          select 'Video closed', from: 'trigger_type'
+          find('input.dialog-input.response_trigger').click
+        end
+
+        select field.name, from: 'unresolved-field'
+        select field.name, from: 'awaiting-field'
+      end
+
+      click_button 'Create Dialog'
+      sleep 0.5
+
+      find( '.icon-pencil' ).click
+
+      within 'form.dialog' do
+        within '.response-type-row-0' do
+          select 'Null', from: 'trigger_type'
+        end
+
+        within '.response-type-row-1' do
+          select 'Customer service', from: 'trigger_type'
+        end
+      end
+
+      click_button 'Update Dialog'
+      sleep 0.5
+
+      expected_response_trigger_1 = """".to_json
+      # expected_response_trigger_1 = {'timeDelayInSecs' => '9'}.to_json
+      # expected_response_trigger_2 = {'videoClosed'     => true}.to_json
+      expected_response_trigger_2 = {'customerService' => false}.to_json
+
+      expect( Dialog.count   ).to eq 1
+      expect( Response.count ).to eq 2
+      expect( Dialog.last.responses[0].response_trigger ).to eq expected_response_trigger_1
+      expect( Dialog.last.responses[1].response_trigger ).to eq expected_response_trigger_2
+     end
   end
 end
