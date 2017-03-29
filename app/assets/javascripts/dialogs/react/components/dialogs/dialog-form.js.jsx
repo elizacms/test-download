@@ -62,7 +62,7 @@ var DialogForm = React.createClass({
         hsh['id'] = index;
         hsh['response_id'] = response.id.$oid;
         hsh['value'] = response.response_type;
-        hsh['response_trigger'] = response.response_trigger;
+        hsh['response_trigger'] = JSON.parse(response.response_trigger);
         hsh['inputValue'] = JSON.parse(response.response_value);
 
         ary.push(hsh);
@@ -191,7 +191,8 @@ var DialogForm = React.createClass({
       }
 
       obj[ 'response_type' ]   = $(this_row).find('.dialog-select').val();
-      obj[ 'response_trigger'] = $(this_row).find('.response_trigger').val();
+      // obj[ 'response_trigger'] = $(this_row).find('.response_trigger').val();
+      obj[ 'response_trigger' ] = JSON.stringify(state_responses_attributes[i].response_trigger);
 
       $(this_row).find('input').each(function(i, this_input){
         if ( $(this_input).hasClass('response-input') ){
@@ -242,12 +243,6 @@ var DialogForm = React.createClass({
     data[ 'awaiting_field' ] = this.parseFormInput('awaiting');
 
     data[ 'responses_attributes' ] = this.parseResponseTypeFormInput();
-
-    // if ( $('.aneeda-says').val().replace( /\s/g, '' ) == '' ){
-    //   this.props.messageState({'aneeda-says-error': 'This field cannot be blank.'});
-
-    //   return false;
-    // }
 
     this.props.createOrUpdateDialog(data);
   },

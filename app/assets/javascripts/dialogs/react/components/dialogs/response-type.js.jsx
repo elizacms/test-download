@@ -6,6 +6,7 @@ var ResponseType = React.createClass({
       response_id: '',
       responseType: 'text',
       response_trigger: '',
+      trigger_type: 'null',
       // Text Type
       response_text_input: '',
       response_text_spokentext: '',
@@ -32,8 +33,12 @@ var ResponseType = React.createClass({
   },
 
   componentDidMount() {
+    const response_trigger_key = Object.keys(this.props.response_trigger)[0] || 'null';
+    const response_trigger_value = Object.values(this.props.response_trigger)[0] || '';
+
     this.setState({
-      response_trigger: this.props.response_trigger,
+      trigger_type: response_trigger_key,
+      response_trigger: response_trigger_value,
       index: this.props.index,
       response_id: this.props.response_id,
       name: this.props.name
@@ -53,8 +58,12 @@ var ResponseType = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
+    const response_trigger_key = Object.keys(nextProps.response_trigger)[0] || '';
+    const response_trigger_value = Object.values(nextProps.response_trigger)[0] || '';
+
     this.setState({
-      response_trigger: nextProps.response_trigger,
+      trigger_type: response_trigger_key,
+      response_trigger: response_trigger_value,
       index: nextProps.index,
       response_id: nextProps.response_id,
       name: nextProps.name
@@ -88,12 +97,39 @@ var ResponseType = React.createClass({
     this.setState({ responseType: event.target.value });
   },
 
+  triggerMenuChange(event){
+    const ttype = event.target.value;
+
+    this.setState({ trigger_type: ttype });
+
+    if (ttype === 'videoClosed' || ttype === 'customerService') {
+      this.state.response_trigger = { [ttype]: false };
+    } else if ( ttype === 'timeDelayInSecs') {
+      this.state.response_trigger = { [ttype]: '' };
+    } else {
+      this.state.response_trigger = 'null';
+    }
+    this.setState({});
+
+    this.updateParentState({});
+  },
+
   responseTriggerChange(event){
-    this.setState({
-      response_trigger: event.target.value
-    }, () => {
-      this.updateParentState({});
-    });
+    let ttype = event.target.name;
+    if (this.state.trigger_type === 'null') {
+      ttype = 'null';
+    }
+
+    if (ttype === 'videoClosed' || ttype === 'customerService') {
+      this.state.response_trigger = { [ttype]: event.target.checked };
+    } else if ( ttype === 'timeDelayInSecs') {
+      this.state.response_trigger = { [ttype]: event.target.value };
+    } else {
+      this.state.response_trigger = 'null';
+    }
+    this.setState({});
+
+    this.updateParentState({});
   },
 
   updateParentState(newInputValue) {
@@ -600,6 +636,47 @@ var ResponseType = React.createClass({
     }
   },
 
+  // Render Response Trigger type ////////////////////////////////////////
+  renderTriggerType() {
+    if (this.state.trigger_type === 'timeDelayInSecs') {
+      return(
+        <input
+          className='dialog-input response_trigger'
+          name='timeDelayInSecs'
+          type='number'
+          placeholder="seconds"
+          value={this.state.response_trigger}
+          onChange={this.responseTriggerChange}
+        />
+      );
+    } else if (this.state.trigger_type === 'videoClosed') {
+      return(
+        <input
+          className='dialog-input response_trigger'
+          name='videoClosed'
+          type='checkbox'
+          checked={this.state.response_trigger}
+          onChange={this.responseTriggerChange}
+        />
+      );
+    } else if (this.state.trigger_type === 'customerService'){
+      return(
+        <input
+          className='dialog-input response_trigger'
+          name='customerService'
+          type='checkbox'
+          value={this.state.response_trigger}
+          checked={this.state.response_trigger}
+          onChange={this.responseTriggerChange}
+        />
+      );
+    } else {
+      return(
+        <div></div>
+      );
+    }
+  },
+
   // Main Render ///////////////////////////////////////////////////////
   renderTypeContent() {
     return (
@@ -664,14 +741,19 @@ var ResponseType = React.createClass({
           <br /><br />
           { this.renderTypeContent() }
           <br />
-          <input
-            className='dialog-input response_trigger'
-            name='response_trigger'
-            type='text'
-            value={this.state.response_trigger}
-            // onChange={ (e) => this.cardInputChange(e) }
-            onChange={this.responseTriggerChange}
-          />
+
+          <select
+            name='trigger_type'
+            value={ this.state.trigger_type }
+            onChange={(e) => this.triggerMenuChange(e)}
+          >
+            <option key='0' value='null'>Null</option>
+            <option key='1' value='timeDelayInSecs'>Time delay in seconds</option>
+            <option key='2' value='videoClosed'>Video closed</option>
+            <option key='3' value='customerService'>Customer service</option>
+          </select>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          { this.renderTriggerType() }
         </td>
 
         <td className='valign-top'>
