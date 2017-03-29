@@ -521,5 +521,65 @@ feature 'Dialogs', :js do
 
     specify 'Can save a response of type Question and Answer' do
     end
+
+    specify 'Can save mulitple response-trigger-types' do
+      within 'form.dialog' do
+        within '.response-type-row-0' do
+          select  'Text',                     from: 'response-type-select'
+          fill_in 'response_text_input',      with: 'Hello Kitty'
+          fill_in 'response_text_spokentext', with: 'So Cute!'
+
+          # Create 3 more Responses
+          find('span.icon-plus').click
+          find('span.icon-plus').click
+          find('span.icon-plus').click
+        end
+
+        within '.response-type-row-1' do
+          select  'Text',                     from: 'response-type-select'
+          fill_in 'response_text_input',      with: 'Today is'
+          fill_in 'response_text_spokentext', with: 'March 29th 2017'
+
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs', with: '8'
+        end
+
+        within '.response-type-row-2' do
+          select  'Text',                     from: 'response-type-select'
+          fill_in 'response_text_input',      with: 'Coffee'
+          fill_in 'response_text_spokentext', with: 'Extra dark'
+
+          select 'Video closed', from: 'trigger_type'
+          find('input.dialog-input.response_trigger').click
+        end
+
+        within '.response-type-row-3' do
+          select  'Text',                     from: 'response-type-select'
+          fill_in 'response_text_input',      with: 'Panda Express'
+          fill_in 'response_text_spokentext', with: 'Chinese Kitchen'
+
+          select 'Customer service', from: 'trigger_type'
+        end
+
+        select field.name, from: 'unresolved-field'
+        select field.name, from: 'awaiting-field'
+      end
+
+      click_button 'Create Dialog'
+
+      sleep 0.5
+
+      expected_response_trigger_1 = """".to_json
+      expected_response_trigger_2 = {'timeDelayInSecs' => '8'}.to_json
+      expected_response_trigger_3 = {'videoClosed'     => true}.to_json
+      expected_response_trigger_4 = {'customerService' => false}.to_json
+
+      expect( Dialog.count   ).to eq 1
+      expect( Response.count ).to eq 4
+      expect( Dialog.last.responses[0].response_trigger ).to eq expected_response_trigger_1
+      expect( Dialog.last.responses[1].response_trigger ).to eq expected_response_trigger_2
+      expect( Dialog.last.responses[2].response_trigger ).to eq expected_response_trigger_3
+      expect( Dialog.last.responses[3].response_trigger ).to eq expected_response_trigger_4
+     end
   end
 end
