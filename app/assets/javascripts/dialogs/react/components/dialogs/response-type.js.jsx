@@ -34,11 +34,10 @@ var ResponseType = React.createClass({
 
   componentDidMount() {
     const response_trigger_key = Object.keys(this.props.response_trigger)[0] || 'null';
-    const response_trigger_value = this.props.response_trigger[ response_trigger_key ] || '';
 
     this.setState({
       trigger_type: response_trigger_key,
-      response_trigger: response_trigger_value,
+      response_trigger: this.props.response_trigger,
       index: this.props.index,
       response_id: this.props.response_id,
       name: this.props.name
@@ -59,11 +58,10 @@ var ResponseType = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     const response_trigger_key = Object.keys(nextProps.response_trigger)[0] || '';
-    const response_trigger_value = nextProps.response_trigger[ response_trigger_key ] || '';
 
     this.setState({
       trigger_type: response_trigger_key,
-      response_trigger: response_trigger_value,
+      response_trigger: nextProps.response_trigger,
       index: nextProps.index,
       response_id: nextProps.response_id,
       name: nextProps.name
@@ -212,27 +210,31 @@ var ResponseType = React.createClass({
     const newOptions = this.state.options.map((option, i) => {
       if (index !== i) return option;
 
-      if (event.target.name == 'option_text') {
+      if (field == 'option_text') {
         option.text = value;
         return option;
       }
 
-      if (event.target.name == 'option_entity') {
+      if (field == 'option_entity') {
         option.entity = value;
         return option;
       }
     });
 
+    if (field == 'response_text_with_option_text_input'){
+      var to_be_set = { response_text_with_option_text_input: value };
+    } else {
+      var to_be_set = { options: newOptions };
+    }
+
     // Update component state, then update dialog-form state.
-    this.setState({
-      options: newOptions,
-      [field]: value
-    }, () => {
+    this.setState(to_be_set, () => {
       // New inputValue object for updateState
       const updatedInputValue = {
         response_text_with_option_text_input: this.state.response_text_with_option_text_input,
         options: this.state.options
       };
+
       this.updateParentState(updatedInputValue);
     });
   },
@@ -645,7 +647,7 @@ var ResponseType = React.createClass({
           name='timeDelayInSecs'
           type='number'
           placeholder="seconds"
-          value={this.state.response_trigger}
+          value={this.state.response_trigger.timeDelayInSecs}
           onChange={this.responseTriggerChange}
         />
       );
@@ -655,7 +657,7 @@ var ResponseType = React.createClass({
           className='dialog-input response_trigger'
           name='videoClosed'
           type='checkbox'
-          checked={this.state.response_trigger}
+          checked={this.state.response_trigger.videoClosed}
           onChange={this.responseTriggerChange}
         />
       );
@@ -666,7 +668,7 @@ var ResponseType = React.createClass({
           name='customerService'
           type='checkbox'
           value={this.state.response_trigger}
-          checked={this.state.response_trigger}
+          checked={this.state.response_trigger.customerService}
           onChange={this.responseTriggerChange}
         />
       );

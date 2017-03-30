@@ -628,8 +628,6 @@ feature 'Dialogs', :js do
       sleep 0.5
 
       expected_response_trigger_1 = """".to_json
-      # expected_response_trigger_1 = {'timeDelayInSecs' => '9'}.to_json
-      # expected_response_trigger_2 = {'videoClosed'     => true}.to_json
       expected_response_trigger_2 = {'customerService' => false}.to_json
 
       expect( Dialog.count   ).to eq 1
