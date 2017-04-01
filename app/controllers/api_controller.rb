@@ -77,7 +77,7 @@ class ApiController < ApplicationController
   def skill
     url = request.headers[ 'X-Skill-Url' ]
 
-    send_courier_and_render_json( url, params.to_json ){ return }
+    send_courier_and_render_json( url, params['api'].to_json ){ return }
   end
 
   def process_intent_upload
