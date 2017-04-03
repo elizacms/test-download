@@ -25,7 +25,7 @@ class CustomCSV
         format( d.unresolved     ),
         format( d.missing        ),
         format_present_field( d.present ),
-        d.responses.empty? ? '{}' : d.responses.map(&:serialize).to_json
+        d.responses.empty? ? '{}' : d.responses.map(&:serialize).map{|r| r.delete_if {|k,v| k == :id } }.to_json
       ]
     end
 

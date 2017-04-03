@@ -24,7 +24,7 @@ var ExportCSV = React.createClass({
 
   render() {
     return (
-      <div>
+      <div className='exportCSV'>
         <div className='row'>
           <div className='col-xs-3 info-header'>
             <strong>Skill: </strong>{this.skillName()}

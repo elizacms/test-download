@@ -149,6 +149,7 @@ var Container = React.createClass({
           resetIsUpdateState={this.resetIsUpdateState}
           resetDialogData={this.resetDialogData}
           createOrUpdateBtnText={this.createOrUpdateBtnText}
+          isUpdate={this.state.isUpdate}
         ></DialogForm>
       </div>
     );

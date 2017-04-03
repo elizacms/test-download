@@ -3,16 +3,24 @@ var Table = React.createClass({
     title: React.PropTypes.string
   },
 
+  showDialogForm(){
+    $('.dialogForm').show();
+    $('.dialogTable').hide();
+    $('.exportCSV').hide();
+  },
+
   render() {
     return (
-      <div>
+      <div className='dialogTable'>
         <table className='dialogs'>
           <tbody>
             <tr>
               <th className='row4'>&nbsp;Priority</th>
-              <th className='row20'>AneedA Says</th>
-              <th className='row20'>Rules</th>
-              <th className='row10'>Awaiting Field</th>
+              <th className='row20 text-center'>Response</th>
+              <th className='row12'>Unresolved</th>
+              <th className='row12'>Missing</th>
+              <th className='row12'>Present</th>
+              <th className='row12'>Awaiting Field</th>
               <th className='row3'>Options</th>
               <th className='row3'></th>
             </tr>
@@ -29,6 +37,12 @@ var Table = React.createClass({
             }
           </tbody>
         </table>
+        <button
+          className='btn lg ghost pull-right'
+          onClick={this.showDialogForm}
+        >
+          Create a Dialog
+        </button>
       </div>
     );
   }

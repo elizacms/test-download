@@ -4,6 +4,7 @@ describe Response do
   let!( :dialog   ){ create :dialog, intent_id: intent.name }
   let!( :response ){ create :response, dialog: dialog       }
   let!( :expected ){{
+    id: BSON::ObjectId(response.id.to_s),
     response_type: 'some_type',
     response_value: {text: "where would you like to go?"}.to_json,
     response_trigger: 'some_trigger'
@@ -11,9 +12,5 @@ describe Response do
 
   specify '#serialize' do
     expect(response.serialize).to eq expected
-  end
-
-  specify '#serialize(true)' do
-    expect(response.serialize(true)).to eq expected.merge!(id: response.id.to_s)
   end
 end

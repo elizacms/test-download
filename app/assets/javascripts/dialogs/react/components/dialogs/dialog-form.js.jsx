@@ -7,12 +7,13 @@ var DialogForm = React.createClass({
 
   initialData(){
     return {
-      'unresolved-field': [{id: 0, value: '', inputValue: ''}],
-      'missing-field':    [{id: 0, value: '', inputValue: ''}],
-      'present-field':    [{id: 0, value: '', inputValue: ''}],
-      'awaiting-field':   [{id: 0, value: '', inputValue: ''}],
-      priority: '',
-      response: ''
+      'unresolved-field':     [{id: 0, value: '', inputValue: ''}],
+      'missing-field':        [{id: 0, value: '', inputValue: ''}],
+      'present-field':        [{id: 0, value: '', inputValue: ''}],
+      'awaiting-field':       [{id: 0, value: '', inputValue: ''}],
+      'responses_attributes': [{id: 0, value: '', inputValue: '',
+                                response_trigger: '', response_id: ''}],
+      priority: ''
     };
   },
 
@@ -53,6 +54,24 @@ var DialogForm = React.createClass({
     }
   },
 
+  createNewIdForResponses(nextProps) {
+    const ary = [];
+    if (nextProps.data.responses) {
+      nextProps.data.responses.forEach(function(response, index){
+        const hsh = {};
+        hsh['id'] = index;
+        hsh['response_id'] = response.id.$oid;
+        hsh['value'] = response.response_type;
+        hsh['response_trigger'] = JSON.parse(response.response_trigger);
+        hsh['inputValue'] = JSON.parse(response.response_value);
+
+        ary.push(hsh);
+      });
+
+      return ary;
+    }
+  },
+
   componentWillReceiveProps(nextProps) {
     if(Object.keys(nextProps.data).length > 0) {
       this.setState({
@@ -60,6 +79,7 @@ var DialogForm = React.createClass({
         'missing-field':    this.createNewId('missing', nextProps),
         'present-field':    this.createNewIdForPresent(nextProps),
         'awaiting-field':   this.createNewId('awaiting_field', nextProps),
+        'responses_attributes': this.createNewIdForResponses( nextProps ),
         priority:           nextProps.data.priority,
         response:           nextProps.data.response,
       });
@@ -84,14 +104,22 @@ var DialogForm = React.createClass({
     currentKey.push({
       id: currentKey[currentKey.length - 1].id + 1,
       value: '',
-      inputValue: ''
+      inputValue: '',
+      response_trigger: '',
+      response_id: ''
     });
 
     this.setState(currentState);
   },
 
   updateState(name, obj){
-    this.state[name][obj.id] = obj;
+    if ( obj.inputValue && Object.keys(obj.inputValue).length === 0 ){
+      // Update response_trigger only
+      this.state[name][obj.id].response_trigger = obj.response_trigger;
+    } else {
+      this.state[name][obj.id] = obj;
+    }
+
     this.setState({});
   },
 
@@ -100,6 +128,21 @@ var DialogForm = React.createClass({
     newState.splice(newState.indexOf(input), 1)
 
     this.setState(this.state);
+
+    if (key === 'responses_attributes' && input['response_id'] !== '' ){
+      this.deleteResponse( input['response_id'] );
+    }
+  },
+
+  deleteResponse(response_id){
+    $.ajax({
+      type: 'DELETE',
+      url: '/dialogue_api/response/' + response_id,
+    })
+    .done( function( r ){
+      console.log("-- Delete Response --");
+      console.log(r);
+    })
   },
 
   resetForm(e){
@@ -130,8 +173,63 @@ var DialogForm = React.createClass({
     return ary;
   },
 
+  parseResponseTypeFormInput(){
+    const ary = [];
+    const state_responses_attributes = this.state.responses_attributes;
+    const isUpdate = this.props.isUpdate;
+
+    $('[class^="response-type-row"]').each(function(i, this_row){
+      const obj = {};
+      const iv_obj = {};
+      const state_options = state_responses_attributes[i].inputValue.options;
+      const state_cards   = state_responses_attributes[i].inputValue.cards;
+      const state_qna_answers = state_responses_attributes[i].inputValue.response_qna_answers;
+      const state_qna_faq     = state_responses_attributes[i].inputValue.response_qna_faq;
+
+      if (isUpdate && ($(this_row).find('.response-id').val() != '') ) {
+        obj[ 'id' ] = $(this_row).find('.response-id').val();
+      }
+
+      obj[ 'response_type' ]   = $(this_row).find('.dialog-select').val();
+      // obj[ 'response_trigger'] = $(this_row).find('.response_trigger').val();
+      obj[ 'response_trigger' ] = JSON.stringify(state_responses_attributes[i].response_trigger);
+
+      $(this_row).find('input').each(function(i, this_input){
+        if ( $(this_input).hasClass('response-input') ){
+          iv_obj[ $(this_input).attr('name') ] = $(this_input).val();
+        }
+        if ( $(this_input).hasClass('response-option-input') ){
+          iv_obj[ 'options' ] = state_options;
+        }
+        if ( $(this_input).hasClass('response-cards-input') ){
+          iv_obj[ 'cards' ] = state_cards;
+        }
+        if ( $(this_input).hasClass('response-qna-faq') ){
+          iv_obj[ 'response_qna_faq' ] = state_qna_faq;
+        }
+      });
+
+      $(this_row).find('textarea').each(function(j, this_textarea){
+        if ( $(this_textarea).hasClass('response-qna-answer-input') ){
+          iv_obj[ 'response_qna_answers' ] = state_qna_answers;
+        }
+      });
+
+      obj['response_value'] = JSON.stringify(iv_obj);
+
+      ary.push(obj);
+    });
+
+    return ary;
+  },
+
   createOrUpdateDialog(e){
     e.preventDefault();
+
+    $('.dialogForm').hide();
+    $('.dialogTable').show();
+    $('.exportCSV').show();
+
     var data = {};
     var form = $('form');
 
@@ -144,13 +242,20 @@ var DialogForm = React.createClass({
     data[ 'present'        ] = this.parseFormInput('present', true);
     data[ 'awaiting_field' ] = this.parseFormInput('awaiting');
 
-    if ( $('.aneeda-says').val().replace( /\s/g, '' ) == '' ){
-      this.props.messageState({'aneeda-says-error': 'This field cannot be blank.'});
-
-      return false;
-    }
+    data[ 'responses_attributes' ] = this.parseResponseTypeFormInput();
 
     this.props.createOrUpdateDialog(data);
+  },
+
+  cancelCreate(e){
+    e.preventDefault();
+
+    $('.dialogForm').hide();
+    $('.dialogTable').show();
+    $('.exportCSV').show();
+
+    this.props.resetDialogData();
+    this.props.resetIsUpdateState();
   },
 
   render() {
@@ -177,8 +282,8 @@ var DialogForm = React.createClass({
     ];
 
     return (
-      <div>
-        <h4 className='inline'>Fields</h4>
+      <div className='dialogForm'>
+        <h4 className='inline'>Field Responses</h4>
         <a href={this.props.field_path} className='addField btn md grey pull-right'>Add a field</a>
         <a href='#' onClick={this.resetForm} className='btn md grey pull-right'>Reset fields</a>
         <form className='dialog' method='post' action='/dialogue_api/response'>
@@ -195,25 +300,33 @@ var DialogForm = React.createClass({
               onChange={this.priorityHandleChange} />
           </div>
 
-          <hr className='margin-15'></hr>
-
-          <div className='row'>
-            <strong className='two columns margin0'>Aneeda Says</strong>
-            <input
-              className='aneeda-says two columns'
-              name='response'
-              type='text'
-              placeholder='ex: Please log into your account'
-              value={this.state.response}
-              onChange={this.aneedaSaysHandleChange} />
-          </div>
-
           <Message message={this.props.response} name='aneeda-says-error'>
           </Message>
           <hr className='margin0'></hr>
 
           <table className='dialog'>
             <tbody>
+              {/* ******************************************************** */}
+              {this.state['responses_attributes'].map(function(input, index){
+                return(
+                  <ResponseType
+                    key={input.id}
+                    index={index}
+                    name='responses_attributes'
+                    className='response-type-text-with-option'
+                    title='Response type'
+                    addRow={this.addRow}
+                    deleteInput={this.deleteInput.bind(this, input, 'responses_attributes')}
+                    value={this.state['responses_attributes'][index].value}
+                    inputValue={this.state['responses_attributes'][index].inputValue}
+                    response_trigger={this.state['responses_attributes'][index].response_trigger}
+                    response_id={this.state['responses_attributes'][index].response_id}
+                    updateState={this.updateState}
+                  ></ResponseType>
+                );
+              }.bind(this))}
+              {/* ******************************************************** */}
+
               {this.state['unresolved-field'].map(function(input, index){
                 return(
                   <DialogSelectbox
@@ -285,6 +398,13 @@ var DialogForm = React.createClass({
             onClick={this.createOrUpdateDialog}
             className='btn lg ghost dialog-btn pull-right'
           >{this.props.createOrUpdateBtnText()}</button> &nbsp;
+          <a
+            href='#'
+            className='cancelCreate pull-right'
+            onClick={(e) => this.cancelCreate(e)}
+          >
+            Cancel
+          </a>
         </form>
       </div>
     );

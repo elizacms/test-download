@@ -65,6 +65,30 @@ table.jsgrid-table {
 }
 
 // The below styles override the 'shared-styles'
+
+.responseTypeLabel {
+  margin: 20px 0;
+  display: block;
+  top: 10px;
+  position: absolute;
+}
+
+.responseValueLabel {
+  margin: 20px 0;
+  display: block;
+}
+
+.responseTriggerLabel {
+  margin: 20px 0;
+  display: block;
+  bottom: 10px;
+  position: absolute;
+}
+
+label {
+  min-width: 95px !important;
+}
+
 .dialog-select {
   min-width: 260px !important;
   margin-top: 10px !important;
@@ -88,6 +112,21 @@ table.jsgrid-table {
   margin-bottom: 5px !important;
 }
 
+.dialogForm {
+  display: none;
+}
+
+a.cancelCreate {
+  font-size: 13px;
+  margin-top: 10px;
+  margin-right: 5px;
+  color: black;
+
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
+
 .dialogs, .dialog {
   width: 100%;
   table-layout: fixed;
@@ -107,11 +146,12 @@ table.jsgrid-table {
 .row5{
   width: 5%;
 }
-.row10{
-  width: 10%;
+.row12{
+  width: 12%;
 }
 .row16{
   width: 16%;
+  position: relative;
 }
 .row20{
   width: 20%;
@@ -121,6 +161,13 @@ table.jsgrid-table {
 }
 .row40{
   width: 40%;
+}
+.row44_5{
+  width: 44.5%;
+}
+
+.table-response-separator {
+  margin: 5px 0;
 }
 
 table.dialogs{
@@ -150,4 +197,14 @@ table.dialogs{
 
 #mturk-response-field #submit-result {
   margin: 0 0 0 17px;
+}
+
+.valign-top {
+  vertical-align: top;
+}
+.card-bg {
+  background: #EFEFEF;
+  padding-top: 6px;
+  margin-bottom: 6px;
+  width: 200%;
 }

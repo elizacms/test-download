@@ -3,48 +3,37 @@ var TableRow = React.createClass({
     title: React.PropTypes.string
   },
 
-  parseRules(){
-    let rule = this.props.data;
-    conditions = [];
+  parseResponse(response){
+    var value = JSON.parse(response.response_value);
 
-    if( rule.hasOwnProperty('unresolved') ){
-      rule.unresolved.forEach(function(value, index){
-        if (value !== ''){
-          conditions.push( value + ' is unresolved' );
-        }
-      })
+    if ( response.response_type === 'text' ) {
+      return(value['response_text_input']);
+    } else if ( response.response_type === 'card' ) {
+      return(value['cards'][0]['text']);
+    } else if ( response.response_type === 'text_with_option' ) {
+      return(value['response_text_with_option_text_input']);
+    } else if ( response.response_type === 'video' ) {
+      return(value['response_video_text_input']);
+    } else if ( response.response_type === 'question_and_answer' ){
+      return(value['response_text_input']);
     }
-    if( rule.hasOwnProperty('missing') ){
-      rule.missing.forEach(function(value, index){
-        if (value !== ''){
-          conditions.push( value + ' is missing' );
-        }
-      })
+  },
+
+  tableSeparator(length, index){
+    if (length > 1 && index + 1 !== length){
+      return(<hr className='table-response-separator' />);
     }
-    if( rule.hasOwnProperty('present') ){
-      var ary  = [];
-      var ary2 = [];
-
-      rule.present.forEach(function(value, index){
-        index % 2 == 0 ? ary.push(value) : ary2.push(value);
-      });
-
-      ary.forEach(function(value, index){
-        if (value !== ''){
-          conditions.push( value + ' is present: "' + ary2[index] + '"' );
-        }
-      });
-    }
-
-    return conditions;
   },
 
   editRow(e){
     e.preventDefault();
+    $('.dialogForm').show();
+    $('.dialogTable').hide();
+    $('.exportCSV').hide();
     this.props.sendData(this.props.data);
 
     $('html, body').animate({
-      scrollTop: $("form").offset().top - 50
+      scrollTop: $('form').offset().top - 50
     }, 300);
   },
 
@@ -59,21 +48,44 @@ var TableRow = React.createClass({
   render() {
     let data = this.props.data;
     return (
-      <tr className="dialog-data">
-        <td className="priority">{data.priority}</td>
-        <td className="response">{data.response}</td>
-        <td>
-          {this.parseRules().map(function(condition, index){
+      <tr className='dialog-data'>
+        <td className='priority'>{data.priority}</td>
+        <td className='response'>
+          {data.responses.map(function(response, index){
+            return(
+              <div key={index}>
+                Response [{index + 1}]:
+                <br />
+                Type: {response.response_type}
+                <br />
+                Text: {this.parseResponse(response)}
+                {this.tableSeparator(data.responses.length, index)}
+              </div>
+            );
+          }.bind(this))}
+        </td>
+        <td className='unresolved'>
+          {data.unresolved.map(function(condition, index){
             return(<div key={index}>{condition}</div>);
           })}
         </td>
-        <td className="awaiting_field">
+        <td className='missing'>
+          {data.missing.map(function(condition, index){
+            return(<div key={index}>{condition}</div>);
+          })}
+        </td>
+        <td className='present'>
+          {data.present.map(function(condition, index){
+            return(<div key={index}>{condition}</div>);
+          })}
+        </td>
+        <td className='awaiting_field'>
           {data.awaiting_field.map(function(field, index){
             return(<div key={index}>{field}</div>);
           })}
         </td>
-        <td><a onClick={this.editRow} className="icon-pencil" href='#'></a></td>
-        <td><a onClick={this.deleteRow} className="icon-cancel-circled" rel="38" href="#"></a></td>
+        <td><a onClick={this.editRow} className='icon-pencil' href='#'></a></td>
+        <td><a onClick={this.deleteRow} className='icon-cancel-circled' rel='38' href='#'></a></td>
       </tr>
     );
   }

@@ -123,6 +123,7 @@ describe 'Dialogs' do
       get '/dialogue_api/all_scenarios', { intent_id: intent.name }
 
       expected_responses = [{
+        id:               { :$oid => Response.last.id.to_s  },
         response_value:   "{\"text\":\"some text\"}",
         response_type:    "some_type",
         response_trigger: "some_trigger"
@@ -161,6 +162,24 @@ describe 'Dialogs' do
       expect( last_response.status ).to eq 200
       expect( last_response.headers[ 'Content-Type' ]).to eq 'text/csv'
       expect( last_response.body   ).to eq csv
+    end
+  end
+
+  describe 'Response Delete' do
+    let!( :dialog   ){ create :dialog, intent_id: intent.name }
+    let!( :response ){ create :response, dialog: dialog       }
+    let!( :delete_params ){{
+      id: response.id
+    }}
+
+    specify 'success' do
+      expect( Dialog.count   ).to eq 1
+      expect( Response.count ).to eq 1
+      delete "/dialogue_api/response/#{response.id}", delete_params.to_json
+
+      expect( last_response.status ).to eq 202
+      expect( Dialog.count   ).to eq 1
+      expect( Response.count ).to eq 0
     end
   end
 end
