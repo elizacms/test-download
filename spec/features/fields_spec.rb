@@ -12,7 +12,7 @@ feature 'Fields', :js do
   end
 
   specify 'Developer can see Fields' do
-    visit "/login/success?code=0123abc"
+    visit '/login/success?code=0123abc'
 
     click_link 'Intents'
     click_link 'Edit Details'
@@ -24,13 +24,13 @@ feature 'Fields', :js do
 
   describe 'Saves Fields' do
     specify do
-      visit "/login/success?code=0123abc"
+      visit '/login/success?code=0123abc'
 
       click_link 'Intents'
       click_link 'Edit Details'
       click_link 'Edit Fields'
 
-      find( 'input.jsgrid-insert-mode-button' ).click
+      # find( 'input.jsgrid-insert-mode-button' ).click
 
       expect( page ).to have_content field.name
       expect( page ).to have_content field.type
@@ -38,7 +38,7 @@ feature 'Fields', :js do
   end
 
   specify 'Has Skill info' do
-    visit "/login/success?code=0123abc"
+    visit '/login/success?code=0123abc'
 
     click_link 'Intents'
     click_link 'Edit Details'
@@ -71,7 +71,7 @@ feature 'Fields', :js do
     }
 
     specify do
-      visit "/login/success?code=0123abc"
+      visit '/login/success?code=0123abc'
 
       click_link 'Intents'
       click_link 'Edit Details'

@@ -77,12 +77,31 @@ function initFields(){
             },
             {
                 type: 'control',
-                width: 100
+                width: 100,
+                modeSwitchButton: false,
+                insertTemplate: function() { return getCustomInsertControls("#jsGrid") },
             }
         ]
     });
 
-    $('th.jsgrid-control-field').find('input').before('Add Field ');
+    // $('tr.jsgrid-insert-row td.jsgrid-control-field').html('<input value="Save" class="btn sm black pull-left" onclick="customInsert(this)" type="button" style="width: 30%" title="Insert"/>');
+}
+
+// function customInsert(item){
+//     console.log( item );
+//     debugger
+// }
+
+function getCustomInsertControls(gridId) {
+    var grid = $(gridId).data('JSGrid');
+    return $("<input>").addClass('btn sm black pull-left')
+                      .attr({ type: 'button', value: 'Save' })
+                      .css('width', '30%')
+                      .on('click', function () {
+                          grid.insertItem().done(function () {
+                              grid.option("inserting", false)
+                          });
+                      })
 }
 
 function initJSON(){

@@ -84,8 +84,8 @@ var TableRow = React.createClass({
             return(<div key={index}>{field}</div>);
           })}
         </td>
-        <td><a onClick={this.editRow} className='icon-pencil' href='#'></a></td>
-        <td><a onClick={this.deleteRow} className='icon-cancel-circled' rel='38' href='#'></a></td>
+        <td><a onClick={this.editRow} className='fa fa-pencil' href='#'></a></td>
+        <td><a onClick={this.deleteRow} className='fa fa-trash' rel='38' href='#'></a></td>
       </tr>
     );
   }

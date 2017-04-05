@@ -252,9 +252,8 @@ var ResponseType = React.createClass({
             value={this.state.response_text_with_option_text_input}
             onChange={this.optionInputChange}
           />
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <a onClick={this.addOptions} href='#'>
-            <span className='icon-plus add-option'>Option</span>
+          <a className='pull-right' onClick={this.addOptions} href='#'>
+            <span className='add-option'>Add Option</span>
           </a>
           <br />
           {this.state.options.map((option, index) => (
@@ -270,8 +269,7 @@ var ResponseType = React.createClass({
                 value={option.text}
                 onChange={ (e) => this.optionInputChange(e, index) }
               />
-              &nbsp;&nbsp;&nbsp;&nbsp;
-              <label><span className='dialog-label'>Entity</span></label>
+              <label><span className='dialog-label option-label-right'>Entity</span></label>
               <input
                 type='text'
                 name='option_entity'
@@ -282,7 +280,7 @@ var ResponseType = React.createClass({
               />
               &nbsp;&nbsp;
               <a onClick={this.deleteOptions.bind(this, index)} href='#'>
-                <span className='icon-cancel-circled'></span>
+                <span className='fa fa-trash'></span>
               </a>
             </div>
           ))}
@@ -332,8 +330,7 @@ var ResponseType = React.createClass({
             value={this.state.response_video_thumbnail_input}
             onChange={this.videoInputChange}
           />
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <label><span className='dialog-label'>Entity Value</span></label>
+          <label><span className='dialog-label video-label-right'>Entity Value</span></label>
           <input
             className='dialog-input response-input'
             type='text'
@@ -414,13 +411,13 @@ var ResponseType = React.createClass({
     if (this.state.responseType === 'card'){
       return(
         <div>
-          <label><span className='dialog-label'>Card</span></label>
+          <label><span className='dialog-label card-label'>Cards</span></label>
           <a onClick={this.addCard} href='#'>
-            <span className='icon-plus add-card pull-right'>Card</span>
+            <span className='add-card'>Add Card</span>
           </a>
           <br />
           {this.state.cards.map((card, index) => (
-            <div key={index} className="card-bg">
+            <div key={index} className='card-bg'>
               <label><span className='dialog-label'>Text</span></label>
               <input
                 type='text'
@@ -430,7 +427,7 @@ var ResponseType = React.createClass({
                 onChange={ (e) => this.cardInputChange(e, index) }
               />
               <a onClick={this.deleteCard.bind(this, index)} href='#'>
-                <span className='icon-cancel-circled pull-right'>Card</span>
+                <span className='fa fa-trash pull-right'></span>
               </a>
               <br />
               <label><span className='dialog-label'>Icon URL</span></label>
@@ -442,9 +439,9 @@ var ResponseType = React.createClass({
                 onChange={ (e) => this.cardInputChange(e, index) }
               />
               <br />
-              Options:
+              <label><span className='dialog-label'>Options:</span></label>
               <a onClick={this.addCardOption.bind(this, index)} href='#'>
-                <span className='icon-plus add-option'>Option</span>
+                <span className='add-option'>Add Option</span>
               </a>
               {card.options.map((option, ind) => (
                 <div key={ind}>
@@ -456,8 +453,7 @@ var ResponseType = React.createClass({
                     value={option.text}
                     onChange={ (e) => this.cardInputChange(e,index, ind) }
                   />
-                  &nbsp;&nbsp;&nbsp;&nbsp;
-                  <label><span className='dialog-label'>Entity</span></label>
+                  <label><span className='dialog-label card-entity-right'>Entity</span></label>
                   <input
                     type='text'
                     name='card_option_entity'
@@ -467,7 +463,7 @@ var ResponseType = React.createClass({
                   />
                   &nbsp;&nbsp;
                   <a onClick={this.deleteCardOption.bind(this, index, ind)} href='#'>
-                    <span className='icon-cancel-circled'></span>
+                    <span className='fa fa-trash'></span>
                   </a>
                 </div>
               ))}
@@ -553,10 +549,10 @@ var ResponseType = React.createClass({
 
           <label>
             <span className='dialog-label'>Answer</span>
-            <a onClick={this.addAnswer} href='#' className='pull-right'>
-              <span className='icon-plus add-answer'>Answer</span>
-            </a>
           </label>
+          <a onClick={this.addAnswer} href='#' className='pull-right'>
+            <span className='add-answer'>Add Answer</span>
+          </a>
           <br />
           {this.state.response_qna_answers.map((answer, index) => (
             <div key={index}>
@@ -569,7 +565,7 @@ var ResponseType = React.createClass({
                 />
                 &nbsp;&nbsp;
                 <a onClick={this.deleteAnswer.bind(this, index)} href='#'>
-                  <span className='icon-cancel-circled'></span>
+                  <i className='fa fa-trash answer-delete'></i>
                 </a>
               </label>
             </div>
@@ -586,8 +582,7 @@ var ResponseType = React.createClass({
             value={this.state.response_qna_video_thumbnail}
             onChange={ (e) => this.qnaInputChange(e) }
           />
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <label><span className='dialog-label'>Video Url</span></label>
+          <label><span className='dialog-label qna-label-right'>Video Url</span></label>
           <input
             className='dialog-input response-input'
             type='text'
@@ -605,8 +600,7 @@ var ResponseType = React.createClass({
             value={this.state.response_qna_image_thumbnail}
             onChange={ (e) => this.qnaInputChange(e) }
           />
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <label><span className='dialog-label'>Image Url</span></label>
+          <label><span className='dialog-label qna-label-right'>Image Url</span></label>
           <input
             className='dialog-input response-input'
             type='text'
@@ -624,8 +618,7 @@ var ResponseType = React.createClass({
             value={this.state.response_qna_link_text}
             onChange={ (e) => this.qnaInputChange(e) }
           />
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <label><span className='dialog-label'>Url</span></label>
+          <label><span className='dialog-label qna-label-right'>Url</span></label>
           <input
             className='dialog-input response-input'
             type='text'
@@ -697,7 +690,7 @@ var ResponseType = React.createClass({
     if (this.props.index > 0){
       hasCancel = (
         <a onClick={this.deleteInput} href='#'>
-          <span className='icon-cancel-circled pull-right'></span>
+          <span className='fa fa-trash pull-right'></span>
         </a>
       );
     }
@@ -706,7 +699,7 @@ var ResponseType = React.createClass({
     if ( this.props.index < 1){
       hasAdd = (
         <a onClick={this.addRow} href='#'>
-          <span className='icon-plus pull-right'>Response</span>
+          <span className='pull-right add-response'>Add Response</span>
         </a>
       );
     }

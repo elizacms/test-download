@@ -283,9 +283,9 @@ var DialogForm = React.createClass({
 
     return (
       <div className='dialogForm'>
-        <h4 className='inline'>Field Responses</h4>
-        <a href={this.props.field_path} className='addField btn md grey pull-right'>Add a field</a>
-        <a href='#' onClick={this.resetForm} className='btn md grey pull-right'>Reset fields</a>
+        <h4 className='inline'>Responses</h4>
+        <a href={this.props.field_path} className='addField btn md grey pull-right'>Manage fields</a>
+        <a href='#' onClick={this.resetForm} className='btn md grey pull-right'>Reset</a>
         <form className='dialog' method='post' action='/dialogue_api/response'>
           <input type='hidden' name='intent-id' value={this.props.intent_id} />
           <hr className='margin5050'></hr>

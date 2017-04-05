@@ -16,6 +16,7 @@ gem 'bootstrap', '~> 4.0.0.alpha4'
 gem 'react-rails', '~> 1.7'
 gem 'httparty', '~> 0.14.0'
 gem 'codemirror-rails', '~> 5.11'
+gem 'font-awesome-rails', '~> 4.7'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'

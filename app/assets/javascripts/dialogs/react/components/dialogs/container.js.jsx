@@ -32,6 +32,8 @@ var Container = React.createClass({
       var url = '/dialogue_api/response?';
     }
 
+    IAM.loading.start({ type:'logo', duration: false });
+
     $.ajax({
       type: this.state.isUpdate ? 'PUT' : 'POST',
       url: url,
@@ -42,6 +44,10 @@ var Container = React.createClass({
       var form = $('form');
       form.find( 'input' ).val( '' );
       form.find( 'select' ).val( '' );
+
+      $('.iam-loading').each(function(){
+          IAM.loading.stop({id: $(this).attr('rel')});
+      });
 
       this.resetDialogData();
       this.getAllScenarios();

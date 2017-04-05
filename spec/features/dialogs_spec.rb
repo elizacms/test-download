@@ -42,7 +42,7 @@ feature 'Dialogs', :js do
     sleep 0.5
     expect( Dialog.count ).to eq 1
 
-    find( '.icon-pencil' ).click
+    find( '.fa-pencil' ).click
     fill_in :priority, with: 120
 
     click_button 'Update Dialog'
@@ -63,10 +63,10 @@ feature 'Dialogs', :js do
     sleep 0.5
     expect( Dialog.count ).to eq 1
 
-    find( '.icon-pencil' ).click
+    find( '.fa-pencil' ).click
     fill_in :priority, with: 120
     click_button 'Update Dialog'
-    find( '.icon-pencil' ).click
+    find( '.fa-pencil' ).click
 
     expect(page).to have_selector("input.priority-input[value='120']")
 
@@ -87,7 +87,7 @@ feature 'Dialogs', :js do
     click_button 'Create Dialog'
 
     accept_alert do
-      page.find('.icon-cancel-circled').click
+      page.find('.fa-trash').click
     end
 
     expect( page ).to have_content 'You deleted a Dialog.'
@@ -133,7 +133,7 @@ feature 'Dialogs', :js do
           select  'Text',                   from: 'response-type-select'
           fill_in 'response_text_input',    with: 'abc def 123 10 9 8'
 
-          find('span.icon-plus').click
+          find('.add-response').click
 
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs', with: '5'
@@ -266,7 +266,7 @@ feature 'Dialogs', :js do
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs', with: '5'
 
-          find('span.icon-plus').click
+          find('.add-response').click
         end
 
         within '.response-type-row-1' do
@@ -322,7 +322,7 @@ feature 'Dialogs', :js do
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs', with: '5'
 
-          find('span.icon-plus').click
+          find('.add-response').click
         end
 
         within '.response-type-row-1' do
@@ -344,7 +344,7 @@ feature 'Dialogs', :js do
       expect( Dialog.count   ).to eq 1
       expect( Response.count ).to eq 2
 
-      find( '.icon-pencil' ).click
+      find( '.fa-pencil' ).click
 
       within 'form.dialog' do
         within '.response-type-row-1' do
@@ -395,7 +395,7 @@ feature 'Dialogs', :js do
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs', with: '5'
 
-          find('span.icon-plus').click
+          find('.add-response').click
         end
 
         within '.response-type-row-1' do
@@ -417,11 +417,11 @@ feature 'Dialogs', :js do
       expect( Dialog.count   ).to eq 1
       expect( Response.count ).to eq 2
 
-      find( '.icon-pencil' ).click
+      find( '.fa-pencil' ).click
 
       within 'form.dialog' do
         within '.response-type-row-1' do
-          find( 'span.icon-cancel-circled' ).click
+          find( '.fa-trash' ).click
         end
 
         within '.response-type-row-0' do
@@ -530,9 +530,9 @@ feature 'Dialogs', :js do
           fill_in 'response_text_spokentext', with: 'So Cute!'
 
           # Create 3 more Responses
-          find('span.icon-plus').click
-          find('span.icon-plus').click
-          find('span.icon-plus').click
+          find('.add-response').click
+          find('.add-response').click
+          find('.add-response').click
         end
 
         within '.response-type-row-1' do
@@ -593,7 +593,7 @@ feature 'Dialogs', :js do
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs', with: '9'
 
-          find('span.icon-plus').click
+          find('.add-response').click
         end
 
         within '.response-type-row-1' do
@@ -612,7 +612,7 @@ feature 'Dialogs', :js do
       click_button 'Create Dialog'
       sleep 0.5
 
-      find( '.icon-pencil' ).click
+      find( '.fa-pencil' ).click
 
       within 'form.dialog' do
         within '.response-type-row-0' do

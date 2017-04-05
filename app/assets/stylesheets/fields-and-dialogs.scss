@@ -11,11 +11,7 @@
   margin-bottom: 20px;
 }
 
-.response-message {
-  color: red;
-}
-
-.aneeda-says-error {
+.response-message, .aneeda-says-error {
   color: red;
 }
 
@@ -54,6 +50,9 @@ th.jsgrid-control-field {
   }
 }
 
+tr.jsgrid-insert-row {
+  display: table-row !important;
+}
 
 td.jsgrid-cell {
   text-align: left;
@@ -87,28 +86,61 @@ table.jsgrid-table {
 
 label {
   min-width: 95px !important;
+  padding-top: 5px;
+}
+
+textarea {
+  min-width: 720px !important;
 }
 
 .dialog-select {
-  min-width: 260px !important;
+  min-width: 250px !important;
   margin-top: 10px !important;
 }
 
+.response-qna-faq {
+  margin-top: 12px;
+}
+
+.qna-label-right, .video-label-right, .option-label-right {
+  padding-right: 5px;
+  float: right;
+}
+
+.add-option, .add-card, .add-answer {
+  position: absolute;
+  right: 30px;
+}
+
+.card-entity-right {
+  padding-right: 5px;
+  float: right;
+}
+
+.card-label {
+  font-size: 20px;
+}
+
+.answer-delete {
+  position: relative;
+  bottom: 50px;
+}
+
 .awaiting-dialog-select {
-  min-width: 260px !important;
+  min-width: 250px !important;
   margin-top: 0 !important;
 }
 
 .priority-input{
-  width: 260px !important;
+  width: 250px !important;
 }
 
 .aneeda-says{
-  min-width: 260px !important;
+  min-width: 250px !important;
 }
 
 .dialog-input {
-  min-width: 260px !important;
+  min-width: 250px !important;
   margin-bottom: 5px !important;
 }
 
@@ -204,7 +236,7 @@ table.dialogs{
 }
 .card-bg {
   background: #EFEFEF;
-  padding-top: 6px;
+  padding: 12px;
   margin-bottom: 6px;
   width: 200%;
 }
