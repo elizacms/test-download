@@ -2,6 +2,11 @@
   display: inline !important;
 }
 
+textarea#intent_description {
+  min-width: 350px !important;
+  min-height: 250px !important;
+}
+
 #files {
   display: none;
 }

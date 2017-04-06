@@ -89,8 +89,9 @@ label {
   padding-top: 5px;
 }
 
-textarea {
+textarea.response-qna-answer-input {
   min-width: 720px !important;
+  min-height: 120px !important;
 }
 
 .dialog-select {

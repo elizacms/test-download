@@ -147,7 +147,7 @@ $(document).on('turbolinks:load', function(){
               var user_data = payload['user_data'] = {};
 
               nlu['intent']   = intent;
-              nlu['mentions'] = mentions;
+              nlu['mentions'] = [mentions[0]];
               user_data['tokens'] = [{'provider': 'iamplus', 'value': token}];
 
               $('#skill_retrieve').val( JSON.stringify( retrieveJSON, null, 2 ) );

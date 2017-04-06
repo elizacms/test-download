@@ -44,6 +44,7 @@ describe 'Test Queries', :js do
         .to receive(:post_request).twice
         .and_return({response: "{\"intent\":\"fake_news\",\"mentions\":[]}", time: 0.011})
 
+      select 'production', from: 'intent_list_url'
       select 'Music', from: 'intents'
 
       within '.wrapper-query' do

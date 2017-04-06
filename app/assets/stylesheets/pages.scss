@@ -1,7 +1,7 @@
 // The below styles override the 'shared-styles'
 
 textarea {
-  min-height: 120px !important;
+  min-height: 250px !important;
 }
 
 form {
@@ -16,6 +16,13 @@ form {
   max-width: 600px !important;
   font-size: 14px !important;
   font-family: monospace !important;
+}
+
+textarea#skill_retrieve,
+textarea#skill_format {
+  resize: both !important;
+  max-width: none !important;
+  max-height: none !important;
 }
 
 .skill {

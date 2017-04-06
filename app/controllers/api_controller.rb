@@ -31,6 +31,8 @@ class ApiController < ApplicationController
 
   def wrapper_query
     url = case request.headers[ 'X-Test-Env' ]
+    when 'demo'
+      'http://us-demo-aneeda.sensiya.com/api/ai/say'
     when 'production'
       'https://us-aneeda.sensiya.com/api/ai/say'
     when 'de-production'
@@ -57,6 +59,8 @@ class ApiController < ApplicationController
 
   def nlu_query
     url = case request.headers[ 'X-Test-Env' ]
+    when 'demo'
+      'http://nlu-demo.aneeda.ai:8080/query'
     when 'production', 'de-production'
       'http://nlu.aneeda.ai:8080/query'
     when 'staging'
