@@ -57,8 +57,10 @@ function initFields(){
                 name: 'name',
                 type: 'text',
                 width: 100,
-                validate: 'required',
-                editing: false
+                editing: false,
+                validate: function(value){
+                    return /^[a-zA-Z0-9_]*$/.test(value);
+                }
             },
             {
                 name: 'type',
@@ -81,7 +83,8 @@ function initFields(){
                 modeSwitchButton: false,
                 insertTemplate: function() { return getCustomInsertControls("#jsGrid") },
             }
-        ]
+        ],
+        invalidMessage: "Alphanumeric characters only"
     });
 
     // $('tr.jsgrid-insert-row td.jsgrid-control-field').html('<input value="Save" class="btn sm black pull-left" onclick="customInsert(this)" type="button" style="width: 30%" title="Insert"/>');
