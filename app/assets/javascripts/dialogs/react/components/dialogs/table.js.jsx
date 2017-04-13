@@ -28,6 +28,7 @@ var Table = React.createClass({
               this.props.data.map(function(dialog, index){
                 return <TableRow
                           sendData={this.props.sendData}
+                          copyData={this.props.copyData}
                           deleteRow={this.props.deleteRow}
                           data={dialog}
                           key={index}
