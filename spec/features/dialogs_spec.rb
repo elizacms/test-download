@@ -592,7 +592,7 @@ feature 'Dialogs', :js do
         within '.response-type-row-0' do
           select  'Text',                     from: 'response-type-select'
           fill_in 'response_text_input',      with: 'Hello Kitty'
-          fill_in 'response_spokentext', with: 'So Cute!'
+          fill_in 'response_spokentext',      with: 'So Cute!'
 
           # Create 3 more Responses
           find('.add-response').click
@@ -603,27 +603,28 @@ feature 'Dialogs', :js do
         within '.response-type-row-1' do
           select  'Text',                     from: 'response-type-select'
           fill_in 'response_text_input',      with: 'Today is'
-          fill_in 'response_spokentext', with: 'March 29th 2017'
+          fill_in 'response_spokentext',      with: 'March 29th 2017'
 
           select 'Time delay in seconds', from: 'trigger_type'
-          fill_in 'timeDelayInSecs', with: '8'
+          fill_in 'timeDelayInSecs',      with: '8'
         end
 
         within '.response-type-row-2' do
           select  'Text',                     from: 'response-type-select'
           fill_in 'response_text_input',      with: 'Coffee'
-          fill_in 'response_spokentext', with: 'Extra dark'
+          fill_in 'response_spokentext',      with: 'Extra dark'
 
           select 'Video closed', from: 'trigger_type'
-          find('input.dialog-input.response_trigger').click
+          page.all('input.dialog-input.response_trigger')[0].click
         end
 
         within '.response-type-row-3' do
           select  'Text',                     from: 'response-type-select'
           fill_in 'response_text_input',      with: 'Panda Express'
-          fill_in 'response_spokentext', with: 'Chinese Kitchen'
+          fill_in 'response_spokentext',      with: 'Chinese Kitchen'
 
           select 'Customer service', from: 'trigger_type'
+          page.all('input.dialog-input.response_trigger')[1].click
         end
 
         select field.name, from: 'unresolved-field'
@@ -635,9 +636,9 @@ feature 'Dialogs', :js do
       sleep 0.5
 
       expected_response_trigger_1 = """".to_json
-      expected_response_trigger_2 = {'timeDelayInSecs' => '8'}.to_json
-      expected_response_trigger_3 = {'videoClosed'     => true}.to_json
-      expected_response_trigger_4 = {'customerService' => false}.to_json
+      expected_response_trigger_2 = {'timeDelayInSecs' => '8'    }.to_json
+      expected_response_trigger_3 = {'videoClosed'     => 'true' }.to_json
+      expected_response_trigger_4 = {'customerService' => 'false'}.to_json
 
       expect( Dialog.count   ).to eq 1
       expect( Response.count ).to eq 4
@@ -645,9 +646,9 @@ feature 'Dialogs', :js do
       expect( Dialog.last.responses[1].response_trigger ).to eq expected_response_trigger_2
       expect( Dialog.last.responses[2].response_trigger ).to eq expected_response_trigger_3
       expect( Dialog.last.responses[3].response_trigger ).to eq expected_response_trigger_4
-     end
+    end
 
-     specify 'Can edit and save mulitple response-trigger-types' do
+    specify 'Can edit and save mulitple response-trigger-types' do
       within 'form.dialog' do
         fill_in 'priority', with: '1'
         within '.response-type-row-0' do
@@ -667,7 +668,7 @@ feature 'Dialogs', :js do
           fill_in 'response_spokentext', with: 'March 29th 2017'
 
           select 'Video closed', from: 'trigger_type'
-          find('input.dialog-input.response_trigger').click
+          page.all('input.dialog-input.response_trigger')[1].click
         end
 
         select field.name, from: 'unresolved-field'
@@ -686,6 +687,7 @@ feature 'Dialogs', :js do
 
         within '.response-type-row-1' do
           select 'Customer service', from: 'trigger_type'
+          page.all('input.dialog-input.response_trigger')[1].click
         end
       end
 
@@ -693,12 +695,12 @@ feature 'Dialogs', :js do
       sleep 0.5
 
       expected_response_trigger_1 = """".to_json
-      expected_response_trigger_2 = {'customerService' => false}.to_json
+      expected_response_trigger_2 = {'customerService' => 'false'}.to_json
 
       expect( Dialog.count   ).to eq 1
       expect( Response.count ).to eq 2
       expect( Dialog.last.responses[0].response_trigger ).to eq expected_response_trigger_1
       expect( Dialog.last.responses[1].response_trigger ).to eq expected_response_trigger_2
-     end
+    end
   end
 end
