@@ -13,7 +13,7 @@ class User
   before_save -> { self.email.strip!; self.email.downcase! }
 
   def skills_for( role )
-    user_roles( role ).map { |r| Skill.find_by( id: r.skill_id ) }
+    user_roles( role ).map { |r| Skill.find_by( id: r.skill_id ) }.delete_if { |s| s.nil? }
   end
 
   def user_skills
