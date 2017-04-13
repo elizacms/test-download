@@ -114,17 +114,13 @@ var ResponseType = React.createClass({
 
   responseTriggerChange(event){
     let ttype = event.target.name;
-    if (this.state.trigger_type === 'null') {
-      ttype = 'null';
+
+    if ( this.state.trigger_type == 'null' ) {
+      this.state.response_trigger = '';
+    } else {
+      this.state.response_trigger = { [ttype]: event.target.value };
     }
 
-    if (ttype === 'videoClosed' || ttype === 'customerService') {
-      this.state.response_trigger = { [ttype]: event.target.checked };
-    } else if ( ttype === 'timeDelayInSecs') {
-      this.state.response_trigger = { [ttype]: event.target.value };
-    } else {
-      this.state.response_trigger = '';
-    }
     this.setState({});
 
     this.updateParentState({});
@@ -700,24 +696,57 @@ var ResponseType = React.createClass({
       );
     } else if (this.state.trigger_type === 'videoClosed') {
       return(
-        <input
-          className='dialog-input response_trigger'
-          name='videoClosed'
-          type='checkbox'
-          checked={this.state.response_trigger.videoClosed}
-          onChange={this.responseTriggerChange}
-        />
+        <span>
+          <label>
+            <input
+              className='dialog-input response_trigger'
+              name='videoClosed'
+              type='radio'
+              value='true'
+              checked={this.state.response_trigger.videoClosed == 'true'}
+              onChange={this.responseTriggerChange}
+            />&nbsp;
+            True
+          </label>
+          <label>
+            <input
+              className='dialog-input response_trigger'
+              name='videoClosed'
+              type='radio'
+              value='false'
+              checked={this.state.response_trigger.videoClosed == 'false'}
+              onChange={this.responseTriggerChange}
+            />&nbsp;
+            False
+          </label>
+        </span>
       );
     } else if (this.state.trigger_type === 'customerService'){
       return(
-        <input
-          className='dialog-input response_trigger'
-          name='customerService'
-          type='checkbox'
-          value={this.state.response_trigger}
-          checked={this.state.response_trigger.customerService}
-          onChange={this.responseTriggerChange}
-        />
+        <span>
+          <label>
+            <input
+              className='dialog-input response_trigger'
+              name='customerService'
+              type='radio'
+              value='true'
+              checked={this.state.response_trigger.customerService == 'true'}
+              onChange={this.responseTriggerChange}
+            />&nbsp;
+            True
+          </label>
+          <label>
+            <input
+              className='dialog-input response_trigger'
+              name='customerService'
+              type='radio'
+              value='false'
+              checked={this.state.response_trigger.customerService == 'false'}
+              onChange={this.responseTriggerChange}
+            />&nbsp;
+            False
+          </label>
+        </span>
       );
     } else {
       return(
