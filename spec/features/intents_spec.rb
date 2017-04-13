@@ -76,9 +76,8 @@ feature 'Intents pages' do
         click_button 'Create'
       end
 
-      expect( page ).to have_content '1 Intent'
       expect( page ).to have_content intent_name
-      expect( page ).to have_content intent_description
+      expect( page ).to have_content skill.name
     end
   end
 

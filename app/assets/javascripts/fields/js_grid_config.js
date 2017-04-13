@@ -70,10 +70,9 @@ function initFields(){
                 textField: 'name'
             },
             {
-                name: 'mturk_field',
+                name: 'Training Data',
                 type: 'text',
-                width: 100,
-                validate: 'required'
+                width: 100
             },
             {
                 type: 'control',
