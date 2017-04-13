@@ -85,7 +85,7 @@ var DialogSelectbox = React.createClass({
     }
 
     var hasAdd = '';
-    if ( this.props.index < 1){
+    if ( this.props.index<1 && this.props.name!='awaiting-field' && this.props.name!='unresolved-field' ){
       hasAdd = (
         <a onClick={this.addRow} href='#'>
           <span className='icon-plus pull-right'></span>
