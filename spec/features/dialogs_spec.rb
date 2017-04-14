@@ -78,6 +78,35 @@ feature 'Dialogs', :js do
     expect(page).to have_selector("input.priority-input[value='']")
   end
 
+  specify 'User can duplicate a dialog', :focus do
+    within 'form.dialog' do
+      select field.name, from: 'unresolved-field'
+      select field.name, from: 'awaiting-field'
+      fill_in :priority, with: 120
+    end
+
+    click_button 'Create Dialog'
+
+    find( '.fa-clone' ).click
+
+    within 'form.dialog' do
+      select field.name, from: 'present-field'
+      select 'None',     from: 'awaiting-field'
+
+      click_button 'Create Dialog'
+    end
+
+    expect( Dialog.count                ).to eq 2
+    expect( Dialog.first.priority       ).to eq 120
+    expect( Dialog.first.unresolved     ).to eq [field.name]
+    expect( Dialog.first.awaiting_field ).to eq [field.name]
+    expect( Dialog.first.present        ).to eq ['None', '']
+    expect( Dialog.last.priority        ).to eq 120
+    expect( Dialog.last.unresolved      ).to eq [field.name]
+    expect( Dialog.last.awaiting_field  ).to eq ['None']
+    expect( Dialog.last.present         ).to eq [field.name, '']
+  end
+
   specify 'Deleting a dialog shows confirm' do
     within 'form.dialog' do
       select field.name, from: 'missing-field'
