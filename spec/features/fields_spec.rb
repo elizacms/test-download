@@ -86,4 +86,33 @@ feature 'Fields', :js do
       expect( code_json_content ).to have_content 'Uber.Destination'
     end
   end
+
+  describe 'Field ID/Name must be alphanumeric and underbars' do
+    before do
+      visit '/login/success?code=0123abc'
+
+      click_link 'Intents'
+      click_link 'Edit Details'
+      click_link 'Edit Fields'
+    end
+
+    specify 'Valid should succeed' do
+      sleep 0.5
+      execute_script('$("tr.jsgrid-insert-row td input").val("abc_123");')
+      page.all('input.black.sm')[0].click
+      sleep 0.5
+
+      expect( page ).to have_content 'abc_123'
+    end
+
+    specify 'Invalid should fail' do
+      sleep 0.5
+      execute_script('$("tr.jsgrid-insert-row td input").val("Holy Moly!");')
+      page.all('input.black.sm')[0].click
+
+      accept_alert {}
+      sleep 0.5
+      expect( page ).to_not have_content 'Holy Moly!'
+    end
+  end
 end

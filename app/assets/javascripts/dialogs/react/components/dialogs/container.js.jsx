@@ -102,6 +102,10 @@ var Container = React.createClass({
     this.setState({dialogData: data, isUpdate: true, currentDialogId: data.id});
   },
 
+  copyData(data){
+    this.setState({dialogData: data, isUpdate: false, currentDialogId: null});
+  },
+
   deleteRow(dialogData, rowIndex){
     let stateData = this.state.data;
 
@@ -134,6 +138,7 @@ var Container = React.createClass({
 
         <Table
           sendData={this.sendData}
+          copyData={this.copyData}
           deleteRow={this.deleteRow}
           data={this.state.data}
         ></Table>

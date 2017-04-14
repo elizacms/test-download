@@ -37,6 +37,18 @@ var TableRow = React.createClass({
     }, 300);
   },
 
+  copyRow(e){
+    e.preventDefault();
+    $('.dialogForm').show();
+    $('.dialogTable').hide();
+    $('.exportCSV').hide();
+    this.props.copyData(this.props.data);
+
+    $('html, body').animate({
+      scrollTop: $('form').offset().top - 50
+    }, 300);
+  },
+
   deleteRow(e){
     e.preventDefault();
 
@@ -84,8 +96,11 @@ var TableRow = React.createClass({
             return(<div key={index}>{field}</div>);
           })}
         </td>
-        <td><a onClick={this.editRow} className='fa fa-pencil' href='#'></a></td>
-        <td><a onClick={this.deleteRow} className='fa fa-trash' rel='38' href='#'></a></td>
+        <td>
+          <a onClick={this.editRow} className='fa fa-pencil' href='#' title='Edit'></a>&nbsp;&nbsp;
+          <a onClick={this.copyRow} className='fa fa-clone'  href='#' title='Copy'></a>&nbsp;&nbsp;
+          <a onClick={this.deleteRow} className='fa fa-trash' rel='38' href='#' title='Delete'></a>
+        </td>
       </tr>
     );
   }

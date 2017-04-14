@@ -9,12 +9,12 @@ var ResponseType = React.createClass({
       trigger_type: 'null',
       // Text Type
       response_text_input: '',
-      response_text_spokentext: '',
+      response_spokentext: '',
       // Text With Option
       response_text_with_option_text_input: '',
       options: [ {text:'', entity:''} ],
       // Card Type
-      cards:[{ text:'', iconurl:'', options:[{text:'', entity:''}] }],
+      cards:[{ text:'', spokentext:'', iconurl:'', options:[{text:'', entity:''}] }],
       // Video Type
       response_video_text_input: '',
       response_video_thumbnail_input: '',
@@ -33,7 +33,7 @@ var ResponseType = React.createClass({
   },
 
   componentDidMount() {
-    const response_trigger_key = Object.keys(this.props.response_trigger)[0] || 'null';
+    const response_trigger_key = Object.keys(this.props.response_trigger)[0] || '';
 
     this.setState({
       trigger_type: response_trigger_key,
@@ -114,17 +114,13 @@ var ResponseType = React.createClass({
 
   responseTriggerChange(event){
     let ttype = event.target.name;
-    if (this.state.trigger_type === 'null') {
-      ttype = 'null';
+
+    if ( this.state.trigger_type == 'null' ) {
+      this.state.response_trigger = '';
+    } else {
+      this.state.response_trigger = { [ttype]: event.target.value };
     }
 
-    if (ttype === 'videoClosed' || ttype === 'customerService') {
-      this.state.response_trigger = { [ttype]: event.target.checked };
-    } else if ( ttype === 'timeDelayInSecs') {
-      this.state.response_trigger = { [ttype]: event.target.value };
-    } else {
-      this.state.response_trigger = '';
-    }
     this.setState({});
 
     this.updateParentState({});
@@ -175,8 +171,8 @@ var ResponseType = React.createClass({
           <input
             className='dialog-input response-input'
             type='text'
-            name='response_text_spokentext'
-            value={this.state.response_text_spokentext}
+            name='response_spokentext'
+            value={this.state.response_spokentext}
             onChange={this.textTypeInputChange}
           />
         </div>
@@ -221,8 +217,10 @@ var ResponseType = React.createClass({
       }
     });
 
-    if (field == 'response_text_with_option_text_input'){
+    if (field == 'response_text_with_option_text_input') {
       var to_be_set = { response_text_with_option_text_input: value };
+    } else if (field == 'response_spokentext') {
+      var to_be_set = { response_spokentext: value };
     } else {
       var to_be_set = { options: newOptions };
     }
@@ -251,6 +249,17 @@ var ResponseType = React.createClass({
             name='response_text_with_option_text_input'
             value={this.state.response_text_with_option_text_input}
             onChange={this.optionInputChange}
+          />
+          <br />
+          <label>
+            <span className='dialog-label'>Spoken Text</span>
+          </label>
+          <input
+            className='dialog-input response-input'
+            type='text'
+            name='response_spokentext'
+            value={this.state.response_spokentext}
+            onChange={this.textTypeInputChange}
           />
           <a className='pull-right' onClick={this.addOptions} href='#'>
             <span className='add-option'>Add Option</span>
@@ -302,6 +311,7 @@ var ResponseType = React.createClass({
     }, () => {
       const updatedInputValue = {
         response_video_text_input: this.state.response_video_text_input,
+        response_spokentext: this.state.response_spokentext,
         response_video_thumbnail_input: this.state.response_video_thumbnail_input,
         response_video_entity_input: this.state.response_video_entity_input
       };
@@ -318,6 +328,17 @@ var ResponseType = React.createClass({
             type='text'
             name='response_video_text_input'
             value={this.state.response_video_text_input}
+            onChange={this.videoInputChange}
+          />
+          <br />
+          <label>
+            <span className='dialog-label'>Spoken Text</span>
+          </label>
+          <input
+            className='dialog-input response-input'
+            type='text'
+            name='response_spokentext'
+            value={this.state.response_spokentext}
             onChange={this.videoInputChange}
           />
           <br />
@@ -382,6 +403,9 @@ var ResponseType = React.createClass({
       case 'card_text':
         this.state.cards[card_index].text = value;
         break;
+      case 'card_spokentext':
+        this.state.cards[card_index].spokentext = value;
+        break;
       case 'card_icon_url':
         this.state.cards[card_index].iconurl = value;
         break;
@@ -429,6 +453,17 @@ var ResponseType = React.createClass({
               <a onClick={this.deleteCard.bind(this, index)} href='#'>
                 <span className='fa fa-trash pull-right'></span>
               </a>
+              <br />
+              <label>
+                <span className='dialog-label'>Spoken Text</span>
+              </label>
+              <input
+                className='dialog-input response-card-spoken-text'
+                type='text'
+                name='card_spokentext'
+                value={card.spokentext}
+                onChange={ (e) => this.cardInputChange(e, index) }
+              />
               <br />
               <label><span className='dialog-label'>Icon URL</span></label>
               <input
@@ -494,7 +529,9 @@ var ResponseType = React.createClass({
   qnaInputChange(event, index) {
     const name = (( event || {} ).target || {} ).name;
 
-    if (name === 'response_qna_answers') {
+    if (name === 'response_spokentext') {
+      this.state[name] = event.target.value;
+    } else if (name === 'response_qna_answers') {
       this.state[name][index].answer = event.target.value;
     } else if (name === 'response_qna_faq') {
       this.state[name] = event.target.checked;
@@ -506,6 +543,7 @@ var ResponseType = React.createClass({
 
     // Create a new data object for update state
     const inputValueObj = {
+      response_spokentext: this.state.response_spokentext,
       response_qna_question: this.state.response_qna_question,
       response_qna_faq: this.state.response_qna_faq,
       response_qna_answers: this.state.response_qna_answers,
@@ -525,6 +563,18 @@ var ResponseType = React.createClass({
     if (this.state.responseType === 'qna'){
       return(
         <div>
+          <label>
+            <span className='dialog-label'>Spoken Text</span>
+          </label>
+          <input
+            className='dialog-input response-input'
+            type='text'
+            name='response_spokentext'
+            value={this.state.response_spokentext}
+            onChange={ (e) => this.qnaInputChange(e) }
+          />
+          <br />
+
           <label><span className='dialog-label'>Question</span></label>
           <input
             className='dialog-input response-input'
@@ -646,24 +696,57 @@ var ResponseType = React.createClass({
       );
     } else if (this.state.trigger_type === 'videoClosed') {
       return(
-        <input
-          className='dialog-input response_trigger'
-          name='videoClosed'
-          type='checkbox'
-          checked={this.state.response_trigger.videoClosed}
-          onChange={this.responseTriggerChange}
-        />
+        <span>
+          <label>
+            <input
+              className='dialog-input response_trigger'
+              name='videoClosed'
+              type='radio'
+              value='true'
+              checked={this.state.response_trigger.videoClosed == 'true'}
+              onChange={this.responseTriggerChange}
+            />&nbsp;
+            True
+          </label>
+          <label>
+            <input
+              className='dialog-input response_trigger'
+              name='videoClosed'
+              type='radio'
+              value='false'
+              checked={this.state.response_trigger.videoClosed == 'true' ? false : true}
+              onChange={this.responseTriggerChange}
+            />&nbsp;
+            False
+          </label>
+        </span>
       );
     } else if (this.state.trigger_type === 'customerService'){
       return(
-        <input
-          className='dialog-input response_trigger'
-          name='customerService'
-          type='checkbox'
-          value={this.state.response_trigger}
-          checked={this.state.response_trigger.customerService}
-          onChange={this.responseTriggerChange}
-        />
+        <span>
+          <label>
+            <input
+              className='dialog-input response_trigger'
+              name='customerService'
+              type='radio'
+              value='true'
+              checked={this.state.response_trigger.customerService == 'true'}
+              onChange={this.responseTriggerChange}
+            />&nbsp;
+            True
+          </label>
+          <label>
+            <input
+              className='dialog-input response_trigger'
+              name='customerService'
+              type='radio'
+              value='false'
+              checked={this.state.response_trigger.videoClosed == 'true' ? false : true}
+              onChange={this.responseTriggerChange}
+            />&nbsp;
+            False
+          </label>
+        </span>
       );
     } else {
       return(
