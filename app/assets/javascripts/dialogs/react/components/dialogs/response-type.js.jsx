@@ -741,7 +741,7 @@ var ResponseType = React.createClass({
               name='customerService'
               type='radio'
               value='false'
-              checked={this.state.response_trigger.videoClosed == 'true' ? false : true}
+              checked={this.state.response_trigger.customerService == 'true' ? false : true}
               onChange={this.responseTriggerChange}
             />&nbsp;
             False
