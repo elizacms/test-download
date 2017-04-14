@@ -1,6 +1,7 @@
 describe User do
-  let!( :user   ){ create :user  }
-  let!( :skill  ){ create :skill }
+  let!( :user   ){ create :user                                            }
+  let!( :user2  ){ create :user, email: 'another_user@imaplus.com'         }
+  let!( :skill  ){ create :skill                                           }
   let!( :skill2 ){ create :skill, name: 'Other Skill', web_hook: 'bite.me' }
 
   specify '#set_role admin creates Role' do
@@ -64,11 +65,15 @@ describe User do
     expect( user.skills_for( 'owner' ) ).to eq [skill, skill2]
   end
 
-  specify '#skill_for("owner") should return all skill that user is dev or owner of' do
+  specify '#skills_for("owner") should return all skill that user is dev or owner of' do
     user.set_role :owner, skill2.name
     user.set_role :developer, skill.name
 
     expect( user.user_skills ).to eq [ skill2, skill ]
+  end
+
+  specify '#skills_for("developer") should return [] when no skills are developed for' do
+    expect( user2.skills_for('developer') ).to eq []
   end
 
   specify '#is_a_skill_owner? should return true if skills are owned' do
