@@ -78,7 +78,7 @@ feature 'Dialogs', :js do
     expect(page).to have_selector("input.priority-input[value='']")
   end
 
-  specify 'User can duplicate a dialog', :focus do
+  specify 'User can duplicate a dialog' do
     within 'form.dialog' do
       select field.name, from: 'unresolved-field'
       select field.name, from: 'awaiting-field'
