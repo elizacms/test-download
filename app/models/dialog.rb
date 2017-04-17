@@ -8,6 +8,7 @@ class Dialog
   field :missing,        type:Array, default:[]
   field :unresolved,     type:Array, default:[]
   field :present,        type:Array, default:[]
+  field :comments,       type:String
 
   has_many :responses
   accepts_nested_attributes_for :responses, dependent: :destory

@@ -13,7 +13,8 @@ var DialogForm = React.createClass({
       'awaiting-field':       [{id: 0, value: '', inputValue: ''}],
       'responses_attributes': [{id: 0, value: '', inputValue: '',
                                 response_trigger: '', response_id: ''}],
-      priority: ''
+      priority: '',
+      comments: ''
     };
   },
 
@@ -75,13 +76,14 @@ var DialogForm = React.createClass({
   componentWillReceiveProps(nextProps) {
     if(Object.keys(nextProps.data).length > 0) {
       this.setState({
-        'unresolved-field': this.createNewId('unresolved', nextProps),
-        'missing-field':    this.createNewId('missing', nextProps),
-        'present-field':    this.createNewIdForPresent(nextProps),
-        'awaiting-field':   this.createNewId('awaiting_field', nextProps),
+        'unresolved-field':     this.createNewId('unresolved', nextProps),
+        'missing-field':        this.createNewId('missing', nextProps),
+        'present-field':        this.createNewIdForPresent(nextProps),
+        'awaiting-field':       this.createNewId('awaiting_field', nextProps),
         'responses_attributes': this.createNewIdForResponses( nextProps ),
-        priority:           nextProps.data.priority,
-        response:           nextProps.data.response,
+        priority:               nextProps.data.priority,
+        response:               nextProps.data.response,
+        comments:               nextProps.data.comments
       });
     } else {
       this.setState(this.initialData());
@@ -181,8 +183,8 @@ var DialogForm = React.createClass({
     $('[class^="response-type-row"]').each(function(i, this_row){
       const obj = {};
       const iv_obj = {};
-      const state_options = state_responses_attributes[i].inputValue.options;
-      const state_cards   = state_responses_attributes[i].inputValue.cards;
+      const state_options     = state_responses_attributes[i].inputValue.options;
+      const state_cards       = state_responses_attributes[i].inputValue.cards;
       const state_qna_answers = state_responses_attributes[i].inputValue.response_qna_answers;
       const state_qna_faq     = state_responses_attributes[i].inputValue.response_qna_faq;
 
@@ -241,6 +243,7 @@ var DialogForm = React.createClass({
     data[ 'missing'        ] = this.parseFormInput('missing');
     data[ 'present'        ] = this.parseFormInput('present', true);
     data[ 'awaiting_field' ] = this.parseFormInput('awaiting');
+    data[ 'comments'       ] = this.state.comments;
 
     data[ 'responses_attributes' ] = this.parseResponseTypeFormInput();
 
@@ -391,6 +394,18 @@ var DialogForm = React.createClass({
                   ></DialogSelectbox>
                 );
               }.bind(this))}
+              <tr>
+                <td className='row16'>
+                  <strong>Comments</strong>
+                </td>
+                <td className='row40'>
+                  <textarea
+                    className='comments-field'
+                    name='comments'
+                    value={this.state['comments'].value}
+                  ></textarea>
+                </td>
+              </tr>
             </tbody>
           </table>
 

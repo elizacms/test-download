@@ -78,6 +78,7 @@ class DialogsController < ApplicationController
       :intent_id,
       :response_id, #refactor
       :priority,
+      :comments,
       responses_attributes: [
         :id,
         :response_value,
