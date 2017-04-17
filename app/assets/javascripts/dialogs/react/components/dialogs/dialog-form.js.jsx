@@ -266,28 +266,6 @@ var DialogForm = React.createClass({
   },
 
   render() {
-    var inputs = [
-      {
-        name: 'unresolved-field',
-        title: 'is unresolved'
-      },
-      {
-        name: 'missing-field',
-        title: 'is missing'
-      },
-      {
-        name: 'present-field',
-        title: 'is present',
-        hasInput: true,
-        inputPlaceholder: 'present value',
-        inputName: 'present-value'
-      },
-      {
-        name: 'awaiting-field',
-        title: 'Awaiting field'
-      }
-    ];
-
     return (
       <div className='dialogForm'>
         <h4 className='inline'>Responses</h4>
