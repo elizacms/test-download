@@ -95,6 +95,10 @@ var DialogForm = React.createClass({
     this.setState({ priority: event.target.value });
   },
 
+  commentsHandleChange(event) {
+    this.setState({ comments: event.target.value });
+  },
+
   aneedaSaysHandleChange(event){
     this.setState({ response: event.target.value });
   },
@@ -394,20 +398,18 @@ var DialogForm = React.createClass({
                   ></DialogSelectbox>
                 );
               }.bind(this))}
-              <tr>
-                <td className='row16'>
-                  <strong>Comments</strong>
-                </td>
-                <td className='row40'>
-                  <textarea
-                    className='comments-field'
-                    name='comments'
-                    value={this.state['comments'].value}
-                  ></textarea>
-                </td>
-              </tr>
             </tbody>
           </table>
+
+          <div className='row'>
+            <strong className='two columns margin0'>Comments</strong>
+            <textarea
+              className='three columns comments-input'
+              name='comments'
+              value={this.state.comments}
+              onChange={this.commentsHandleChange}
+            />
+          </div>
 
           <button
             onClick={this.createOrUpdateDialog}

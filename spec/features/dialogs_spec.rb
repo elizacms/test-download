@@ -31,7 +31,7 @@ feature 'Dialogs', :js do
     expect( page ).to have_content 'destination'
   end
 
-  specify 'User can update a dialog', :focus do
+  specify 'User can update a dialog' do
     within 'form.dialog' do
       select field.name, from: 'unresolved-field'
       select field.name, from: 'awaiting-field'

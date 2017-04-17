@@ -20,6 +20,7 @@ class Dialog
       id: id,
       intent_id: intent_id,
       priority: priority,
+      comments: comments,
       unresolved: unresolved,
       missing: missing,
       present: present,
