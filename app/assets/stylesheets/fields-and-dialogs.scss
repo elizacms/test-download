@@ -94,6 +94,11 @@ textarea.response-qna-answer-input {
   min-height: 120px !important;
 }
 
+textarea.comments-input {
+  min-width: 720px !important;
+  min-height: 100px !important;
+}
+
 .dialog-select {
   min-width: 250px !important;
   margin-top: 10px !important;
@@ -132,8 +137,13 @@ textarea.response-qna-answer-input {
   margin-top: 0 !important;
 }
 
+.comments-label {
+  padding-top: 25px;
+}
+
 .priority-input{
   width: 250px !important;
+  margin-bottom: 0px !important;
 }
 
 .aneeda-says{

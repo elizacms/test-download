@@ -380,7 +380,9 @@ var DialogForm = React.createClass({
           </table>
 
           <div className='row'>
-            <strong className='two columns margin0'>Comments</strong>
+            <span>
+              <strong className='two columns margin0 comments-label'>Comments</strong>
+            </span>
             <textarea
               className='three columns comments-input'
               name='comments'
