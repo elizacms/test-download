@@ -9,7 +9,7 @@ var DialogForm = React.createClass({
     return {
       'unresolved-field':     [{id: 0, value: '', inputValue: ''}],
       'missing-field':        [{id: 0, value: '', inputValue: ''}],
-      'present-field':        [{id: 0, value: '', inputValue: ''}],
+      'present-field':        [{id: 0, value: 'None', inputValue: ''}],
       'awaiting-field':       [{id: 0, value: '', inputValue: ''}],
       'responses_attributes': [{id: 0, value: '', inputValue: '',
                                 response_trigger: '', response_id: ''}],
@@ -160,25 +160,6 @@ var DialogForm = React.createClass({
     }
   },
 
-  parseFormInput(name, hasExtra){
-    var ary = [];
-
-   $('form').find( 'select[name="' + name + '-field"]' ).each(function(){
-      ary.push($(this).val());
-    });
-
-    if (hasExtra){
-      ary2 = [];
-      $('form').find( 'input[name="' + name + '-value"]' ).each(function(index){
-        ary2.push(ary[index]);
-        ary2.push($(this).val());
-      });
-      return ary2;
-    }
-
-    return ary;
-  },
-
   parseResponseTypeFormInput(){
     const ary = [];
     const state_responses_attributes = this.state.responses_attributes;
@@ -243,10 +224,10 @@ var DialogForm = React.createClass({
     data[ 'priority'   ] = form.find( 'input[name="priority"]'          ).val();
     data[ 'response'   ] = form.find( 'input[name="response"]'          ).val();
 
-    data[ 'unresolved'     ] = this.parseFormInput('unresolved');
-    data[ 'missing'        ] = this.parseFormInput('missing');
-    data[ 'present'        ] = this.parseFormInput('present', true);
-    data[ 'awaiting_field' ] = this.parseFormInput('awaiting');
+    data[ 'unresolved'     ] = this.state['unresolved-field'].map( (e)=>e.value );
+    data[ 'missing'        ] = this.state['missing-field'].map( (e)=>e.value );
+    data[ 'present'        ] = [].concat.apply( [], this.state['present-field'].map((e)=>[e.value, e.inputValue]) ); //concat.apply = merging
+    data[ 'awaiting_field' ] = this.state['awaiting-field'].map( (e)=>e.value );
     data[ 'comments'       ] = this.state.comments;
 
     data[ 'responses_attributes' ] = this.parseResponseTypeFormInput();
