@@ -103,6 +103,11 @@ var Container = React.createClass({
   },
 
   copyData(data){
+    // remove responses ids from the original
+    for(var i=0; i<data.responses.length; i++){
+      data.responses[i].id="";
+    }
+
     this.setState({dialogData: data, isUpdate: false, currentDialogId: null});
   },
 

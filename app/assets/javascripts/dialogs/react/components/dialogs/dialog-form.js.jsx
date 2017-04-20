@@ -18,9 +18,6 @@ var DialogForm = React.createClass({
     };
   },
 
-  propTypes: {
-  },
-
   createNewId(rules, nextProps){
     var ary = [];
 
@@ -134,21 +131,23 @@ var DialogForm = React.createClass({
     newState.splice(newState.indexOf(input), 1)
 
     this.setState(this.state);
-
-    if (key === 'responses_attributes' && input['response_id'] !== '' ){
-      this.deleteResponse( input['response_id'] );
-    }
   },
 
-  deleteResponse(response_id){
-    $.ajax({
-      type: 'DELETE',
-      url: '/dialogue_api/response/' + response_id,
-    })
-    .done( function( r ){
-      console.log("-- Delete Response --");
-      console.log(r);
-    })
+  deleteResponse(input){
+    var new_state = this.state.responses_attributes;
+    new_state.splice( new_state.indexOf(input), 1);
+
+    this.setState(this.state);
+
+    if (input['response_id']){
+      $.ajax({
+        type: 'DELETE',
+        url: '/dialogue_api/response/' + input['response_id'],
+      })
+      .done(function(){
+        console.log("-- Delete Response --");
+      });
+    }
   },
 
   resetForm(e){
@@ -160,56 +159,6 @@ var DialogForm = React.createClass({
     }
   },
 
-  parseResponseTypeFormInput(){
-    const ary = [];
-    const state_responses_attributes = this.state.responses_attributes;
-    const isUpdate = this.props.isUpdate;
-
-    $('[class^="response-type-row"]').each(function(i, this_row){
-      const obj = {};
-      const iv_obj = {};
-      const state_options     = state_responses_attributes[i].inputValue.options;
-      const state_cards       = state_responses_attributes[i].inputValue.cards;
-      const state_qna_answers = state_responses_attributes[i].inputValue.response_qna_answers;
-      const state_qna_faq     = state_responses_attributes[i].inputValue.response_qna_faq;
-
-      if (isUpdate && ($(this_row).find('.response-id').val() != '') ) {
-        obj[ 'id' ] = $(this_row).find('.response-id').val();
-      }
-
-      obj[ 'response_type' ]   = $(this_row).find('.dialog-select').val();
-      // obj[ 'response_trigger'] = $(this_row).find('.response_trigger').val();
-      obj[ 'response_trigger' ] = JSON.stringify(state_responses_attributes[i].response_trigger);
-
-      $(this_row).find('input').each(function(i, this_input){
-        if ( $(this_input).hasClass('response-input') ){
-          iv_obj[ $(this_input).attr('name') ] = $(this_input).val();
-        }
-        if ( $(this_input).hasClass('response-option-input') ){
-          iv_obj[ 'options' ] = state_options;
-        }
-        if ( $(this_input).hasClass('response-cards-input') ){
-          iv_obj[ 'cards' ] = state_cards;
-        }
-        if ( $(this_input).hasClass('response-qna-faq') ){
-          iv_obj[ 'response_qna_faq' ] = state_qna_faq;
-        }
-      });
-
-      $(this_row).find('textarea').each(function(j, this_textarea){
-        if ( $(this_textarea).hasClass('response-qna-answer-input') ){
-          iv_obj[ 'response_qna_answers' ] = state_qna_answers;
-        }
-      });
-
-      obj['response_value'] = JSON.stringify(iv_obj);
-
-      ary.push(obj);
-    });
-
-    return ary;
-  },
-
   createOrUpdateDialog(e){
     e.preventDefault();
 
@@ -218,11 +167,9 @@ var DialogForm = React.createClass({
     $('.exportCSV').show();
 
     var data = {};
-    var form = $('form');
 
-    data[ 'intent_id'  ] = form.find( 'input[name="intent-id"]'         ).val();
-    data[ 'priority'   ] = form.find( 'input[name="priority"]'          ).val();
-    data[ 'response'   ] = form.find( 'input[name="response"]'          ).val();
+    data[ 'intent_id'      ] = this.props.intent_id;
+    data[ 'priority'       ] = this.state.priority;
 
     data[ 'unresolved'     ] = this.state['unresolved-field'].map( (e)=>e.value );
     data[ 'missing'        ] = this.state['missing-field'].map( (e)=>e.value );
@@ -230,7 +177,18 @@ var DialogForm = React.createClass({
     data[ 'awaiting_field' ] = this.state['awaiting-field'].map( (e)=>e.value );
     data[ 'comments'       ] = this.state.comments;
 
-    data[ 'responses_attributes' ] = this.parseResponseTypeFormInput();
+    data[ 'responses_attributes' ] = this.state.responses_attributes.map( (e) => {
+      if ( e.response_id ){
+        return ({ id: e.response_id,
+                  response_type: e.value,
+                  response_trigger: JSON.stringify(e.response_trigger),
+                  response_value: JSON.stringify(e.inputValue) });
+      } else {
+        return ({ response_type: e.value,
+                  response_trigger: JSON.stringify(e.response_trigger),
+                  response_value: JSON.stringify(e.inputValue) });
+      }
+    });
 
     this.props.createOrUpdateDialog(data);
   },
@@ -252,11 +210,12 @@ var DialogForm = React.createClass({
         <h4 className='inline'>Responses</h4>
         <a href={this.props.field_path} className='addField btn md grey pull-right'>Manage fields</a>
         <a href='#' onClick={this.resetForm} className='btn md grey pull-right'>Reset</a>
-        <form className='dialog' method='post' action='/dialogue_api/response'>
+        {/*<form className='dialog' method='post' action='/dialogue_api/response'>*/}
+        <div className='dialog-form'>
           <input type='hidden' name='intent-id' value={this.props.intent_id} />
-          <hr className='margin5050'></hr>
+          <hr className='margin50220'></hr>
 
-          <div className='row'>
+          <div>
             <strong className='two columns margin0'>Priority</strong>
             <input
               className='three columns priority-input'
@@ -265,6 +224,7 @@ var DialogForm = React.createClass({
               value={this.state.priority}
               onChange={this.priorityHandleChange} />
           </div>
+          <br /><br />
 
           <Message message={this.props.response} name='aneeda-says-error'>
           </Message>
@@ -282,7 +242,8 @@ var DialogForm = React.createClass({
                     className='response-type-text-with-option'
                     title='Response type'
                     addRow={this.addRow}
-                    deleteInput={this.deleteInput.bind(this, input, 'responses_attributes')}
+                    // deleteInput={this.deleteInput.bind(this, input, 'responses_attributes')}
+                    deleteInput={this.deleteResponse.bind(this, input)}
                     value={this.state['responses_attributes'][index].value}
                     inputValue={this.state['responses_attributes'][index].inputValue}
                     response_trigger={this.state['responses_attributes'][index].response_trigger}
@@ -360,7 +321,7 @@ var DialogForm = React.createClass({
             </tbody>
           </table>
 
-          <div className='row'>
+          <div  className="bottom-pad128">
             <span>
               <strong className='two columns margin0 comments-label'>Comments</strong>
             </span>
@@ -383,7 +344,8 @@ var DialogForm = React.createClass({
           >
             Cancel
           </a>
-        </form>
+        {/*</form>*/}
+        </div>
       </div>
     );
   }

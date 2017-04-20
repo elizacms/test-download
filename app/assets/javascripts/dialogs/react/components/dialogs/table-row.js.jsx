@@ -33,7 +33,7 @@ var TableRow = React.createClass({
     this.props.sendData(this.props.data);
 
     $('html, body').animate({
-      scrollTop: $('form').offset().top - 50
+      scrollTop: $('.dialog-form').offset().top - 50
     }, 300);
   },
 
@@ -45,7 +45,7 @@ var TableRow = React.createClass({
     this.props.copyData(this.props.data);
 
     $('html, body').animate({
-      scrollTop: $('form').offset().top - 50
+      scrollTop: $('.dialog-form').offset().top - 50
     }, 300);
   },
 

@@ -32,6 +32,31 @@
   margin-top: 20px;
 }
 
+.add-remove-response{
+  position: absolute;
+  right: 21px;
+}
+.option-trash-position{
+  position: absolute;
+  right: 55px;
+  margin-top: 10px;
+}
+.bottom-pad128 {
+  padding-bottom: 128px;
+}
+.top-margin-21{
+  margin-top: -21px;
+}
+.abs-position{
+  position: absolute;
+}
+.float-left{
+  float: left;
+}
+.qna-inputs{
+  height: 128px;
+}
+
 td.jsgrid-cell input,
 td.jsgrid-cell select {
   width: 100%;
@@ -171,7 +196,7 @@ a.cancelCreate {
 }
 
 .dialogs, .dialog {
-  width: 100%;
+  max-width: 100%;
   table-layout: fixed;
   white-space: nowrap;
 }
@@ -226,8 +251,8 @@ table.dialogs{
   margin-top:  -15px !important;
   margin-bottom: 0 !important;
 }
-.margin5050{
-  margin: 5px 0 5px 0 !important;
+.margin50220{
+  margin: 5px 0 22px 0 !important;
 }
 
 #mturk-response-field {
@@ -249,5 +274,5 @@ table.dialogs{
   background: #EFEFEF;
   padding: 12px;
   margin-bottom: 6px;
-  width: 200%;
+  width: 160%;
 }

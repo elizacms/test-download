@@ -19,7 +19,7 @@ feature 'Dialogs', :js do
   end
 
   specify 'Renders rule' do
-    within 'form.dialog' do
+    within '.dialog-form' do
       select field.name, from: 'unresolved-field'
       select field.name, from: 'awaiting-field'
     end
@@ -32,7 +32,7 @@ feature 'Dialogs', :js do
   end
 
   specify 'User can update a dialog' do
-    within 'form.dialog' do
+    within '.dialog-form' do
       select field.name, from: 'unresolved-field'
       select field.name, from: 'awaiting-field'
       fill_in :comments, with: 'Here are my comments'
@@ -55,7 +55,7 @@ feature 'Dialogs', :js do
   end
 
   specify 'User can cancel updating a dialog' do
-    within 'form.dialog' do
+    within '.dialog-form' do
       select field.name, from: 'unresolved-field'
       select field.name, from: 'awaiting-field'
     end
@@ -81,7 +81,7 @@ feature 'Dialogs', :js do
   end
 
   specify 'User can duplicate a dialog' do
-    within 'form.dialog' do
+    within '.dialog-form' do
       select field.name, from: 'unresolved-field'
       select field.name, from: 'awaiting-field'
       fill_in :priority, with: 120
@@ -91,7 +91,7 @@ feature 'Dialogs', :js do
 
     find( '.fa-clone' ).click
 
-    within 'form.dialog' do
+    within '.dialog-form' do
       select field.name, from: 'present-field'
       select 'None',     from: 'awaiting-field'
 
@@ -110,7 +110,7 @@ feature 'Dialogs', :js do
   end
 
   specify 'Deleting a dialog shows confirm' do
-    within 'form.dialog' do
+    within '.dialog-form' do
       select field.name, from: 'missing-field'
       select field.name, from: 'awaiting-field'
     end
@@ -126,7 +126,7 @@ feature 'Dialogs', :js do
 
   describe 'Responses Types' do
     specify 'Can save a response of type text' do
-      within 'form.dialog' do
+      within '.dialog-form' do
         within '.response-type-row-0'do
           select  'Text',                from: 'response-type-select'
           fill_in 'response_text_input', with: 'abc def 123 10 9 8'
@@ -160,13 +160,13 @@ feature 'Dialogs', :js do
     end
 
     specify 'Can save mulitple responses of type text' do
-      within 'form.dialog' do
+      within '.dialog-form' do
         within '.response-type-row-0'do
           select  'Text',                   from: 'response-type-select'
           fill_in 'response_text_input',    with: 'abc def 123 10 9 8'
           fill_in 'response_spokentext',    with: 'Speak out!'
 
-          find('.add-response').click
+          find('.add-remove-response').click
 
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs', with: '5'
@@ -214,7 +214,7 @@ feature 'Dialogs', :js do
     end
 
     specify 'Can save a response of type text with options with muli options' do
-      within 'form.dialog' do
+      within '.dialog-form' do
         within '.response-type-row-0'do
           select  'Text With Option',                     from: 'response-type-select'
           fill_in 'response_text_with_option_text_input', with: 'abc def 123 10 9 8'
@@ -257,7 +257,7 @@ feature 'Dialogs', :js do
     end
 
     specify 'Can save a response of type video' do
-      within 'form.dialog' do
+      within '.dialog-form' do
         within '.response-type-row-0'do
           select  'Video',                          from: 'response-type-select'
           fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
@@ -294,7 +294,7 @@ feature 'Dialogs', :js do
     end
 
     specify 'Can save mulitple responses of type video and text' do
-      within 'form.dialog' do
+      within '.dialog-form' do
         within '.response-type-row-0' do
           select  'Video',                          from: 'response-type-select'
           fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
@@ -304,7 +304,7 @@ feature 'Dialogs', :js do
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs', with: '5'
 
-          find('.add-response').click
+          find('.add-remove-response').click
         end
 
         within '.response-type-row-1' do
@@ -351,7 +351,7 @@ feature 'Dialogs', :js do
     end
 
     specify 'Can save mulitple responses and update them' do
-      within 'form.dialog' do
+      within '.dialog-form' do
         within '.response-type-row-0'do
           select  'Video',                          from: 'response-type-select'
           fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
@@ -362,7 +362,7 @@ feature 'Dialogs', :js do
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs', with: '5'
 
-          find('.add-response').click
+          find('.add-remove-response').click
         end
 
         within '.response-type-row-1' do
@@ -387,7 +387,7 @@ feature 'Dialogs', :js do
 
       find( '.fa-pencil' ).click
 
-      within 'form.dialog' do
+      within '.dialog-form' do
         within '.response-type-row-1' do
           select  'Text',                from: 'response-type-select'
           fill_in 'response_text_input', with: 'crazy dancing BARBIES'
@@ -428,7 +428,7 @@ feature 'Dialogs', :js do
     end
 
     specify 'Can save mulitple responses, then delete a response' do
-      within 'form.dialog' do
+      within '.dialog-form' do
         within '.response-type-row-0'do
           select  'Video',                          from: 'response-type-select'
           fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
@@ -439,7 +439,7 @@ feature 'Dialogs', :js do
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs', with: '5'
 
-          find('.add-response').click
+          find('.add-remove-response').click
         end
 
         within '.response-type-row-1' do
@@ -463,7 +463,7 @@ feature 'Dialogs', :js do
 
       find( '.fa-pencil' ).click
 
-      within 'form.dialog' do
+      within '.dialog-form' do
         within '.response-type-row-1' do
           find( '.fa-trash' ).click
         end
@@ -491,7 +491,7 @@ feature 'Dialogs', :js do
     end
 
     specify 'Can save mulitple card types' do
-      within 'form.dialog' do
+      within '.dialog-form' do
         within '.response-type-row-0'do
           select  'Card', from: 'response-type-select'
           within '.card-bg' do
@@ -552,14 +552,14 @@ feature 'Dialogs', :js do
           },
           {
             "text" => "twin humans!?!",
+            "spokentext" => "Speak up!",
             "iconurl" => "Bad Dreams",
             "options" => [
               {
                 "text" => "if he",
                 "entity" => "let him go"
               }
-            ],
-            "spokentext" => "Speak up!"
+            ]
           }
         ]
       }.to_json
@@ -571,7 +571,7 @@ feature 'Dialogs', :js do
     end
 
     specify 'Can save a response of type Question and Answer' do
-      within 'form.dialog' do
+      within '.dialog-form' do
         within '.response-type-row-0'do
           select  'Q & A',                          from: 'response-type-select'
           fill_in 'response_spokentext',            with: 'Speak out!'
@@ -603,13 +603,13 @@ feature 'Dialogs', :js do
         'response_spokentext'           => 'Speak out!',
         'response_qna_question'         => 'Lunch?',
         'response_qna_faq'              => false,
+        'response_qna_answers'          => [{answer:'Hamburger'}],
         'response_qna_video_thumbnail'  => 'Video thumbnail',
         'response_qna_video_url'        => 'http://www.youtube.com/qna_video',
         'response_qna_image_thumbnail'  => 'image thumbnail',
         'response_qna_image_url'        => 'http://www.ig.com/qna_image',
         'response_qna_link_text'        => 'link text',
-        'response_qna_url'              => 'qna url',
-        'response_qna_answers'          => [{answer:'Hamburger'}]
+        'response_qna_url'              => 'qna url'
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '4'}.to_json
 
@@ -619,16 +619,16 @@ feature 'Dialogs', :js do
     end
 
     specify 'Can save mulitple response-trigger-types' do
-      within 'form.dialog' do
+      within '.dialog-form' do
         within '.response-type-row-0' do
           select  'Text',                     from: 'response-type-select'
           fill_in 'response_text_input',      with: 'Hello Kitty'
           fill_in 'response_spokentext',      with: 'So Cute!'
 
           # Create 3 more Responses
-          find('.add-response').click
-          find('.add-response').click
-          find('.add-response').click
+          find('.add-remove-response').click
+          find('.add-remove-response').click
+          find('.add-remove-response').click
         end
 
         within '.response-type-row-1' do
@@ -680,7 +680,7 @@ feature 'Dialogs', :js do
     end
 
     specify 'Can edit and save mulitple response-trigger-types' do
-      within 'form.dialog' do
+      within '.dialog-form' do
         fill_in 'priority', with: '1'
         within '.response-type-row-0' do
           select  'Text',                     from: 'response-type-select'
@@ -690,7 +690,7 @@ feature 'Dialogs', :js do
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs', with: '9'
 
-          find('.add-response').click
+          find('.add-remove-response').click
         end
 
         within '.response-type-row-1' do
@@ -711,7 +711,7 @@ feature 'Dialogs', :js do
 
       find( '.fa-pencil' ).click
 
-      within 'form.dialog' do
+      within '.dialog-form' do
         within '.response-type-row-0' do
           select 'Null', from: 'trigger_type'
         end

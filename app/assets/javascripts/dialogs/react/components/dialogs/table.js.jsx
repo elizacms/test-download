@@ -22,7 +22,6 @@ var Table = React.createClass({
               <th className='row12'>Present</th>
               <th className='row12'>Awaiting Field</th>
               <th className='row3'>Options</th>
-              <th className='row3'></th>
             </tr>
             {
               this.props.data.map(function(dialog, index){

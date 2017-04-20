@@ -101,7 +101,7 @@ var ResponseType = React.createClass({
     this.setState({ trigger_type: ttype });
 
     if (ttype === 'videoClosed' || ttype === 'customerService') {
-      this.state.response_trigger = { [ttype]: false };
+      this.state.response_trigger = { [ttype]: 'false' };
     } else if ( ttype === 'timeDelayInSecs') {
       this.state.response_trigger = { [ttype]: '' };
     } else {
@@ -144,7 +144,8 @@ var ResponseType = React.createClass({
     this.setState({
       [field]: event.target.value
     }, () => {
-      const updatedInputValue = {[field]: this.state[field]};
+      const updatedInputValue = { response_text_input: this.state.response_text_input,
+                                  response_spokentext: this.state.response_spokentext };
       this.updateParentState(updatedInputValue);
     });
 
@@ -161,7 +162,6 @@ var ResponseType = React.createClass({
             type='text'
             name='response_text_input'
             value={this.state.response_text_input}
-            // onChange={ (e) => this.handleInputChanges(e, 'response_text_input') }
             onChange={this.textTypeInputChange}
           />
           <br />
@@ -230,6 +230,7 @@ var ResponseType = React.createClass({
       // New inputValue object for updateState
       const updatedInputValue = {
         response_text_with_option_text_input: this.state.response_text_with_option_text_input,
+        response_spokentext: this.state.response_spokentext,
         options: this.state.options
       };
 
@@ -283,13 +284,13 @@ var ResponseType = React.createClass({
                 type='text'
                 name='option_entity'
                 placeholder='Entity Value'
-                className='dialog-input response-option-input'
+                className='dialog-input response-option-input abs-position'
                 value={option.entity}
                 onChange={ (e) => this.optionInputChange(e, index) }
               />
               &nbsp;&nbsp;
               <a onClick={this.deleteOptions.bind(this, index)} href='#'>
-                <span className='fa fa-trash'></span>
+                <span className='fa fa-trash option-trash-position'></span>
               </a>
             </div>
           ))}
@@ -353,7 +354,7 @@ var ResponseType = React.createClass({
           />
           <label><span className='dialog-label video-label-right'>Entity Value</span></label>
           <input
-            className='dialog-input response-input'
+            className='dialog-input response-input abs-position'
             type='text'
             name='response_video_entity_input'
             placeholder='Link'
@@ -372,7 +373,7 @@ var ResponseType = React.createClass({
     e.preventDefault();
 
     this.setState({
-      cards: this.state.cards.concat( [{ text:'', iconurl:'', options:[{text:'', entity:''}] }] )
+      cards: this.state.cards.concat( [{ text:'', spokentext:'', iconurl:'', options:[{text:'', entity:''}] }] )
     });
   },
   deleteCard(index, e) {
@@ -415,8 +416,6 @@ var ResponseType = React.createClass({
       case 'card_option_entity':
         this.state.cards[card_index].options[option_index].entity = value;
         break;
-      case 'response_trigger':
-        this.state.response_trigger = value;
       default:
         break;
     }
@@ -451,7 +450,7 @@ var ResponseType = React.createClass({
                 onChange={ (e) => this.cardInputChange(e, index) }
               />
               <a onClick={this.deleteCard.bind(this, index)} href='#'>
-                <span className='fa fa-trash pull-right'></span>
+                <span className='fa fa-trash option-trash-position'></span>
               </a>
               <br />
               <label>
@@ -492,13 +491,13 @@ var ResponseType = React.createClass({
                   <input
                     type='text'
                     name='card_option_entity'
-                    className='dialog-input response-cards-input'
+                    className='dialog-input response-cards-input abs-position'
                     value={option.entity}
                     onChange={ (e) => this.cardInputChange(e,index, ind) }
                   />
                   &nbsp;&nbsp;
                   <a onClick={this.deleteCardOption.bind(this, index, ind)} href='#'>
-                    <span className='fa fa-trash'></span>
+                    <span className='fa fa-trash option-trash-position'></span>
                   </a>
                 </div>
               ))}
@@ -621,61 +620,62 @@ var ResponseType = React.createClass({
             </div>
           ))}
           <br />
-
-          <label>
-            <span className='dialog-label'>Video Thumbnail</span>
-          </label>
-          <input
-            className='dialog-input response-input'
-            type='text'
-            name='response_qna_video_thumbnail'
-            value={this.state.response_qna_video_thumbnail}
-            onChange={ (e) => this.qnaInputChange(e) }
-          />
-          <label><span className='dialog-label qna-label-right'>Video Url</span></label>
-          <input
-            className='dialog-input response-input'
-            type='text'
-            name='response_qna_video_url'
-            value={this.state.response_qna_video_url}
-            onChange={ (e) => this.qnaInputChange(e) }
-          />
-          <br />
-
-          <label><span className='dialog-label'>Image Thumbnail</span></label>
-          <input
-            className='dialog-input response-input'
-            type='text'
-            name='response_qna_image_thumbnail'
-            value={this.state.response_qna_image_thumbnail}
-            onChange={ (e) => this.qnaInputChange(e) }
-          />
-          <label><span className='dialog-label qna-label-right'>Image Url</span></label>
-          <input
-            className='dialog-input response-input'
-            type='text'
-            name='response_qna_image_url'
-            value={this.state.response_qna_image_url}
-            onChange={ (e) => this.qnaInputChange(e) }
-          />
-          <br />
-
-          <label><span className='dialog-label'>Link Text</span></label>
-          <input
-            className='dialog-input response-input'
-            type='text'
-            name='response_qna_link_text'
-            value={this.state.response_qna_link_text}
-            onChange={ (e) => this.qnaInputChange(e) }
-          />
-          <label><span className='dialog-label qna-label-right'>Url</span></label>
-          <input
-            className='dialog-input response-input'
-            type='text'
-            name='response_qna_url'
-            value={this.state.response_qna_url}
-            onChange={ (e) => this.qnaInputChange(e) }
-          />
+          <div className="qna-inputs">
+            <div className="abs-position">
+              <label>
+                <span className='dialog-label'>Video Thumbnail</span>
+              </label>
+              <input
+                className='dialog-input response-input'
+                type='text'
+                name='response_qna_video_thumbnail'
+                value={this.state.response_qna_video_thumbnail}
+                onChange={ (e) => this.qnaInputChange(e) }
+              />
+              <label><span className='dialog-label qna-label-right'>Video Url</span></label>
+              <input
+                className='dialog-input response-input'
+                type='text'
+                name='response_qna_video_url'
+                value={this.state.response_qna_video_url}
+                onChange={ (e) => this.qnaInputChange(e) }
+              />
+            <br />
+              <label><span className='dialog-label'>Image Thumbnail</span></label>
+              <input
+                className='dialog-input response-input'
+                type='text'
+                name='response_qna_image_thumbnail'
+                value={this.state.response_qna_image_thumbnail}
+                onChange={ (e) => this.qnaInputChange(e) }
+              />
+              <label><span className='dialog-label qna-label-right'>Image Url</span></label>
+              <input
+                className='dialog-input response-input'
+                type='text'
+                name='response_qna_image_url'
+                value={this.state.response_qna_image_url}
+                onChange={ (e) => this.qnaInputChange(e) }
+              />
+            <br />
+              <label><span className='dialog-label'>Link Text</span></label>
+              <input
+                className='dialog-input response-input'
+                type='text'
+                name='response_qna_link_text'
+                value={this.state.response_qna_link_text}
+                onChange={ (e) => this.qnaInputChange(e) }
+              />
+              <label><span className='dialog-label qna-label-right'>Url</span></label>
+              <input
+                className='dialog-input response-input'
+                type='text'
+                name='response_qna_url'
+                value={this.state.response_qna_url}
+                onChange={ (e) => this.qnaInputChange(e) }
+              />
+            </div>
+          </div>
         </div>
       )
     }
@@ -686,7 +686,7 @@ var ResponseType = React.createClass({
     if (this.state.trigger_type === 'timeDelayInSecs') {
       return(
         <input
-          className='dialog-input response_trigger'
+          className='dialog-input response_trigger abs-position'
           name='timeDelayInSecs'
           type='number'
           placeholder="seconds"
@@ -696,7 +696,10 @@ var ResponseType = React.createClass({
       );
     } else if (this.state.trigger_type === 'videoClosed') {
       return(
-        <span>
+        <form
+          className="top-margin-21"
+        >
+        &nbsp;&nbsp;&nbsp;&nbsp;
           <label>
             <input
               className='dialog-input response_trigger'
@@ -719,11 +722,14 @@ var ResponseType = React.createClass({
             />&nbsp;
             False
           </label>
-        </span>
+        </form>
       );
     } else if (this.state.trigger_type === 'customerService'){
       return(
-        <span>
+        <form
+          className="top-margin-21"
+        >
+        &nbsp;&nbsp;&nbsp;&nbsp;
           <label>
             <input
               className='dialog-input response_trigger'
@@ -746,7 +752,7 @@ var ResponseType = React.createClass({
             />&nbsp;
             False
           </label>
-        </span>
+        </form>
       );
     } else {
       return(
@@ -773,7 +779,7 @@ var ResponseType = React.createClass({
     if (this.props.index > 0){
       hasCancel = (
         <a onClick={this.deleteInput} href='#'>
-          <span className='fa fa-trash pull-right'></span>
+          <span className='fa fa-trash add-remove-response'></span>
         </a>
       );
     }
@@ -782,7 +788,7 @@ var ResponseType = React.createClass({
     if ( this.props.index < 1){
       hasAdd = (
         <a onClick={this.addRow} href='#'>
-          <span className='pull-right add-response'>Add Response</span>
+          <span className='add-remove-response'>Add Response</span>
         </a>
       );
     }
@@ -821,6 +827,7 @@ var ResponseType = React.createClass({
           <br />
 
           <select
+            className='float-left'
             name='trigger_type'
             value={ this.state.trigger_type }
             onChange={(e) => this.triggerMenuChange(e)}
@@ -835,7 +842,7 @@ var ResponseType = React.createClass({
         </td>
 
         <td className='valign-top'>
-          <input type='hidden' className='response-id' value={this.props.response_id} />
+          {/*<input type='hidden' className='response-id' value={this.props.response_id} />*/}
           {hasCancel}
           {hasAdd}
         </td>
