@@ -147,7 +147,7 @@ $(document).on('turbolinks:load', function(){
               var user_data = payload['user_data'] = {};
 
               nlu['intent']   = intent;
-              nlu['mentions'] = [mentions[0]];
+              nlu['mentions'] = groomMentions(mentions);
               user_data['tokens'] = [{'provider': 'iamplus', 'value': token}];
 
               $('#skill_retrieve').val( JSON.stringify( retrieveJSON, null, 2 ) );
@@ -163,6 +163,20 @@ $(document).on('turbolinks:load', function(){
               $('#skill_format').val( JSON.stringify( formatJSON, null, 2 ) );
           }
       });
+  }
+
+  function groomMentions( mentions ){
+      if (mentions.length == 1){
+          return mentions;
+      }
+
+      mentions.map(function(mention, index){
+          if (('entity' in mention)){
+              mentions.splice(index);
+          }
+      });
+
+      return mentions;
   }
 
   function stopLoadingAndReport(r, section){
