@@ -1,7 +1,7 @@
 class CustomCSV
   class << self
     def for dialogs
-      header = "intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en\n"
+      header = "intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en,comments\n"
 
       csv = dialogs.map do | d |
         first = ''
@@ -25,7 +25,8 @@ class CustomCSV
         format( d.unresolved     ),
         format( d.missing        ),
         format_present_field( d.present ),
-        d.responses.empty? ? '{}' : d.responses.map(&:serialize).map{|r| r.delete_if {|k,v| k == :id } }.to_json
+        format_responses( d.responses ),
+        d.comments
       ]
     end
 
@@ -33,6 +34,22 @@ class CustomCSV
       return 'None' if value.all?( &:blank? )
 
       %Q/#{ value.map! { |v| v }.join(" && ") }/
+    end
+
+    def format_responses( responses )
+      if responses.empty?
+        '[{}]'
+      else
+        r = responses.map do |r|
+          {
+            'ResponseType'    => r.response_type,
+            'ResponseValue'   => JSON.parse(r.response_value),
+            'ResponseTrigger' => r.response_trigger
+          }
+        end
+
+        %Q/"#{r.to_json.gsub('"', '""')}"/
+      end
     end
 
     def make_pairs( ary )
@@ -48,10 +65,6 @@ class CustomCSV
       %Q/#{ pairs.map! do |pair|
         pair[1].blank? ? "#{pair[0]}" : "#{pair[0]} && #{pair[1]}"
       end.join(" && ") }/
-    end
-
-    def format_response( value )
-      value.include?(',') ? %Q/#{value}/ : value
     end
   end
 end
