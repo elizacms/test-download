@@ -6,6 +6,9 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+u = User.create(email: 'iamplusqa@gmail.com')
+Role.create(name:"admin", user_id: u.id)
+
 FieldDataType.create( name: 'Boolean'  )
 FieldDataType.create( name: 'Date'     )
 FieldDataType.create( name: 'DateTime' )
