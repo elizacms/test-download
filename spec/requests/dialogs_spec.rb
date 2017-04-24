@@ -17,7 +17,8 @@ describe 'Dialogs' do
       unresolved:     [ 'unresolved' ],
       missing:        [ field.name ],
       present:        [ 'present', 'value' ],
-      awaiting_field: [ field.name ]
+      awaiting_field: [ field.name ],
+      comments:       'some comments'
     }
   }
 
@@ -141,11 +142,13 @@ describe 'Dialogs' do
   end
 
   describe 'CSV export' do
-    let( :header_row ){ "intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en\n" }
+    let( :header_row ){
+      "intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en,comments\n"
+    }
     let( :data_row   ){
-      "#{ intent.name },90,destination,unresolved,destination,"\
-      "present && value,[{\"response_value\":\"{\\\"text\\\":\\\"some text\\\"}\","\
-      "\"response_type\":\"some_type\",\"response_trigger\":\"some_trigger\"}]"
+      "#{ intent.name },90,destination,unresolved,destination,present && value,"\
+      "\"[{\"\"ResponseType\"\":\"\"some_type\"\",\"\"ResponseValue\"\""\
+      ":{\"\"text\"\":\"\"some text\"\"},\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
     }
     let( :csv ){ header_row + data_row }
 
