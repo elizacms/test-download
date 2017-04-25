@@ -166,17 +166,21 @@ $(document).on('turbolinks:load', function(){
   }
 
   function groomMentions( mentions ){
-      if (mentions.length == 1){
+      if (mentions.length == 1 && 'entity' in mentions[0]){
+          return [];
+      } else if ( mentions.length == 1 && (!('entity' in mentions[0])) ) {
           return mentions;
       }
 
+      var groomedMentions = [];
+
       mentions.map(function(mention, index){
-          if (('entity' in mention)){
-              mentions.splice(index);
+          if (mention['type'].match('list') == null){
+              groomedMentions.push(mention);
           }
       });
 
-      return mentions;
+      return groomedMentions;
   }
 
   function stopLoadingAndReport(r, section){
