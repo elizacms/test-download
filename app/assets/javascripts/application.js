@@ -10,6 +10,7 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require_tree ./iamplus_shared
 //= require jquery3
 //= require tether
 //= require bootstrap
