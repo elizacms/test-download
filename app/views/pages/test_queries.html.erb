@@ -63,24 +63,25 @@
     <%= render partial: 'query_response', locals: { name: 'nlu-query' } %>
   </div>
 </div>
-
+<br>
 <div class='skill-retrieve skill collapse section'>
   <h4>Skill (Retrieve)</h4>
   <div class='row'>
     <%= form_tag '/api/skill' do %>
-      <div class='col-md-9'>
+      <div class='col-md-10'>
         <%= hidden_field_tag :skill_retrieve_url, nil, class: 'skill-url' %>
         <%= text_area_tag(
           :skill_retrieve,
           nil,
-          class: 'form-control text-input'
+          class: 'form-control text-input text-input-retrieve'
         ) %>
       </div>
-      <div class='col-md-3'>
+      <div class='col-md-2'>
         <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
       </div>
     <% end %>
   </div>
+  <br>
   <div class='row'>
     <div class='col-md-12'>
       <%= render partial: 'query_response', locals: { name: 'skill-retrieve' } %>
@@ -92,19 +93,20 @@
   <h4>Skill (Format)</h4>
   <div class='row'>
     <%= form_tag '/api/skill' do %>
-      <div class='col-md-9'>
+      <div class='col-md-10'>
         <%= hidden_field_tag :skill_format_url, nil, class: 'skill-url' %>
         <%= text_area_tag(
           :skill_format,
           nil,
-          class: 'form-control text-input'
+          class: 'form-control text-input text-input-format'
         ) %>
       </div>
-      <div class='col-md-3'>
+      <div class='col-md-2'>
         <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
       </div>
     <% end %>
   </div>
+  <br>
   <div class='row'>
     <div class='col-md-12'>
       <%= render partial: 'query_response', locals: { name: 'skill-format' } %>

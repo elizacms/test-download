@@ -49,11 +49,12 @@ $(document).on('turbolinks:load', function(){
       e.preventDefault();
       IAM.loading.start({ type:'logo', duration: false });
 
-      var action = $(this).closest('form').attr('action');
-      var inputText = $(this).closest('.row').find('.text-input');
+      var action      = $(this).closest('form').attr('action');
+      var inputText   = $(this).closest('.row').find('.text-input');
+      var thisSection = $(this).closest('.section');
 
-      if ($(this).closest('.section').find('.CodeMirror').length > 0){
-          $(this).closest('.section').find('.CodeMirror').remove();
+      if (thisSection.find('.responseCodeMirror').length > 0) {
+          thisSection.find('.responseCodeMirror').remove();
       }
 
       if (action === '/api/wrapper-query' || action === '/api/nlu-query'){
@@ -150,9 +151,13 @@ $(document).on('turbolinks:load', function(){
               nlu['mentions'] = groomMentions(mentions);
               user_data['tokens'] = [{'provider': 'iamplus', 'value': token}];
 
-              $('#skill_retrieve').val( JSON.stringify( retrieveJSON, null, 2 ) );
+              var r = JSON.stringify( retrieveJSON, null, 2 );
+              $('#skill_retrieve'    ).val( r );
               $('#skill_retrieve_url').val( skillUrl + '.com/retrieve');
-              $('#skill_format_url').val( skillUrl + '.com/format');
+              $('#skill_format_url'  ).val( skillUrl + '.com/format');
+
+              createAndPopulateCodeMirror(r, $('.skill-retrieve'), '.text-input-retrieve', false, true );
+              console.log('retrieve');
           } else if ( action === '/api/skill' ){
               var formatJSON = {};
               var nlu = formatJSON['nlu_response'] = {};
@@ -160,7 +165,12 @@ $(document).on('turbolinks:load', function(){
               nlu['intent']   = intent;
               nlu['mentions'] = mentions;
 
-              $('#skill_format').val( JSON.stringify( formatJSON, null, 2 ) );
+              r = JSON.stringify( formatJSON, null, 2 );
+              $('#skill_format').val( r );
+
+              if ($('.skill-format').find('.requestCodeMirror').length === 0) {
+                createAndPopulateCodeMirror(r, $('.skill-format'), '.text-input-format', false, true );
+              }
           }
       });
   }
@@ -188,13 +198,13 @@ $(document).on('turbolinks:load', function(){
           IAM.loading.stop({id: $(this).attr('rel')});
       });
 
-      createAndPopulateCodeMirror(r, section);
+      createAndPopulateCodeMirror(r['response'], section, '.codeArea', true, false);
       populateCurlCommandModal(r, section);
 
-      section.find('.codeArea').text(r['response']);
+      section.find('.codeArea'   ).text( r['response'] );
       section.find('.server-time').text( r['time'] );
-      section.find('.url-used').text( r['url'] );
-      section.find('.notes').addClass('in');
+      section.find('.url-used'   ).text( r['url'] );
+      section.find('.notes'      ).addClass('in');
       section.find('.copyBtnMain').addClass('in');
   }
 
@@ -206,16 +216,23 @@ $(document).on('turbolinks:load', function(){
       section.find('.modalCode').html(curlCommand);
   }
 
-  function createAndPopulateCodeMirror(r, section){
-      var codeArea = section.find('.codeArea')[0];
+  function createAndPopulateCodeMirror(r, section, textArea, readOnly, requestText){
+      var codeArea = section.find(textArea)[0];
       var cm = CodeMirror.fromTextArea( codeArea, {
           lineNumbers: true,
-          foldGutter: true,
-          readOnly: true,
-          gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
+          foldGutter:  true,
+          readOnly:    readOnly,
+          gutters:     ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
       });
 
       cm.setSize(null, 420);
-      cm.setValue(r['response']);
+      cm.setValue(r);
+
+      if (requestText) {
+          $(codeArea).siblings('.CodeMirror').addClass('requestCodeMirror');
+      }
+      else {
+          $(codeArea).siblings('.CodeMirror').addClass('responseCodeMirror');
+      }
   }
 });
