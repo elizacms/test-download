@@ -27,7 +27,8 @@ textarea#skill_format {
 
 .skill {
   .test-btn {
-    margin-top: 380px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 }
 
@@ -57,3 +58,6 @@ h4 {
   margin-bottom: 15px;
 }
 
+.responseCodeMirror {
+  border: 1px solid black;
+}

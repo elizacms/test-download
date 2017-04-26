@@ -41,6 +41,8 @@ class ApiController < ApplicationController
       'http://us-staging-aneeda.sensiya.com/api/ai/say'
     when 'development'
       'http://us-dev-aneeda.sensiya.com/api/ai/say'
+    when 'qa'
+      'http://us-qa-aneeda.sensiya.com/api/ai/say'
     end
 
     json = {
@@ -67,6 +69,8 @@ class ApiController < ApplicationController
       'http://nlu-staging.aneeda.ai:8080/query'
     when 'development'
       'http://nlu-dev.aneeda.ai:8080/query'
+    when 'qa'
+      'http://nlu-qa.aneeda.ai:8080/query'
     end
 
     json = {

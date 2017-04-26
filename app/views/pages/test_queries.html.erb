@@ -4,11 +4,12 @@
     <%= select_tag(
       'intent_list_url',
       options_for_select([
-        ['demo', 'demo'],
+        ['development', 'development'],
+        ['qa', 'qa'],
+        ['staging', 'staging'],
         ['production', 'production'],
         ['de-production', 'de-production'],
-        ['staging', 'staging'],
-        ['development', 'development']
+        ['demo', 'demo']
       ]),
       onchange: 'clearForms()'
     ) %>
@@ -26,7 +27,7 @@
         ['Concerts', "When is Adele's next concert?"],
         ['Movies', 'Who stars in The Force Awakens?'],
         ['Music', 'Play Hello by Adele.'],
-        ['News', "What's the news on Trump?"],
+        ['News', "What's the news about Los Angeles?"],
         ['Sports', 'What was The Broncos record in 2015?'],
         # ['Tansport', 'Get me an Uber to LAX.'],
         ['TV', 'Tell me about The Big Bang Theory.'],
@@ -64,52 +65,44 @@
   </div>
 </div>
 <br>
-<div class='skill-retrieve skill collapse section'>
-  <h4>Skill (Retrieve)</h4>
-  <div class='row'>
-    <%= form_tag '/api/skill' do %>
-      <div class='col-md-10'>
-        <%= hidden_field_tag :skill_retrieve_url, nil, class: 'skill-url' %>
-        <%= text_area_tag(
-          :skill_retrieve,
-          nil,
-          class: 'form-control text-input text-input-retrieve'
-        ) %>
-      </div>
-      <div class='col-md-2'>
-        <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
-      </div>
-    <% end %>
-  </div>
-  <br>
-  <div class='row'>
-    <div class='col-md-12'>
-      <%= render partial: 'query_response', locals: { name: 'skill-retrieve' } %>
+<div class='skill-retrieve skill row collapse section'>
+  <%= form_tag '/api/skill' do %>
+    <div class='col-xs-12'>
+      <h4>Skill (Retrieve)</h4>
+      <%= hidden_field_tag :skill_retrieve_url, nil, class: 'skill-url' %>
+      <%= text_area_tag(
+        :skill_retrieve,
+        nil,
+        class: 'form-control text-input text-input-retrieve'
+      ) %>
     </div>
+    <div class='col-xs-12'>
+      <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
+    </div>
+  <% end %>
+  <br>
+  <div class='col-xs-12'>
+    <%= render partial: 'query_response', locals: { name: 'skill-retrieve' } %>
   </div>
 </div>
 
-<div class='skill-format skill collapse section'>
-  <h4>Skill (Format)</h4>
-  <div class='row'>
-    <%= form_tag '/api/skill' do %>
-      <div class='col-md-10'>
-        <%= hidden_field_tag :skill_format_url, nil, class: 'skill-url' %>
-        <%= text_area_tag(
-          :skill_format,
-          nil,
-          class: 'form-control text-input text-input-format'
-        ) %>
-      </div>
-      <div class='col-md-2'>
-        <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
-      </div>
-    <% end %>
-  </div>
-  <br>
-  <div class='row'>
-    <div class='col-md-12'>
-      <%= render partial: 'query_response', locals: { name: 'skill-format' } %>
+<div class='skill-format skill row collapse section'>
+  <%= form_tag '/api/skill' do %>
+    <div class='col-xs-12'>
+      <h4>Skill (Format)</h4>
+      <%= hidden_field_tag :skill_format_url, nil, class: 'skill-url' %>
+      <%= text_area_tag(
+        :skill_format,
+        nil,
+        class: 'form-control text-input text-input-format'
+      ) %>
     </div>
+    <div class='col-xs-12'>
+      <%= submit_tag 'Test', class: 'btn lg black pull-right test-btn' %>
+    </div>
+  <% end %>
+  <br>
+  <div class='col-xs-12'>
+    <%= render partial: 'query_response', locals: { name: 'skill-format' } %>
   </div>
 </div>

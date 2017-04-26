@@ -50,8 +50,9 @@ $(document).on('turbolinks:load', function(){
       IAM.loading.start({ type:'logo', duration: false });
 
       var action      = $(this).closest('form').attr('action');
-      var inputText   = $(this).closest('.row').find('.text-input');
       var thisSection = $(this).closest('.section');
+      var inputText   = thisSection.find('.text-input');
+
 
       if (thisSection.find('.responseCodeMirror').length > 0) {
           thisSection.find('.responseCodeMirror').remove();
@@ -106,7 +107,7 @@ $(document).on('turbolinks:load', function(){
           headers: {
               'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content'),
               'Content-Type': 'application/json',
-              'X-Skill-Url':  $(this).parents('.row').find('.skill-url').val(),
+              'X-Skill-Url':  $(this).parents('.skill').find('.skill-url').val(),
               'X-Test-Env':   $('#intent_list_url').val()
           },
           url:  action,
@@ -157,7 +158,6 @@ $(document).on('turbolinks:load', function(){
               $('#skill_format_url'  ).val( skillUrl + '.com/format');
 
               createAndPopulateCodeMirror(r, $('.skill-retrieve'), '.text-input-retrieve', false, true );
-              console.log('retrieve');
           } else if ( action === '/api/skill' ){
               var formatJSON = {};
               var nlu = formatJSON['nlu_response'] = {};
