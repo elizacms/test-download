@@ -12,17 +12,18 @@ pipeline {
       }
     }
 
+    stage('UnitTest') {
+      steps {
+        sh 'bash ./pipeline/run-unit-tests.sh'
+        step([$class: 'JUnitResultArchiver', testResults: 'junit.xml'])
+      }
+    }
+
     stage('Update App') {
       steps {
         sh "BRANCH=${env.BRANCH_NAME} bash ./pipeline/update_app.sh"
       }
     }
-  //   stage('UnitTest') {
-  //     steps {
-  //       sh 'bash ./pipeline/run-unit-tests.sh'
-  //       step([$class: 'JUnitResultArchiver', testResults: 'junit.xml'])
-  //     }
-  //   }
   //   stage('DeployHeroku') {
   //     steps {
   //       sh "BRANCH=${env.BRANCH_NAME} bash ./pipeline/deploy-to-heroku.sh"
