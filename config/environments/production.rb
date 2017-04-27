@@ -1,5 +1,3 @@
-require 'syslog/logger'
-
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -75,9 +73,7 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
   if ENV['ELIZA_CMS'] == 'true'
-    config.lograge.enabled = true
-    config.lograge.formatter = Lograge::Formatters::Logstash.new
-    config.logger = Syslog::Logger.new('nlu-cms')
+    config.logger = RemoteSyslogLogger.new( '127.0.0.1', 514, program: "nlu-cms-#{Rails.env}" )
   else
     if ENV["RAILS_LOG_TO_STDOUT"].present?
       logger           = ActiveSupport::Logger.new(STDOUT)

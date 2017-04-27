@@ -17,8 +17,7 @@ gem 'react-rails', '~> 1.7'
 gem 'httparty', '~> 0.14.0'
 gem 'codemirror-rails', '~> 5.11'
 gem 'font-awesome-rails', '~> 4.7'
-gem 'lograge', '~> 0.4'
-gem 'logstash-event', '~> 1.2'
+gem 'remote_syslog_logger', '~> 1.0'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'

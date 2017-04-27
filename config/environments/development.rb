@@ -34,6 +34,10 @@ Rails.application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
+  if ENV['ELIZA_CMS'] == 'true'
+    config.logger = RemoteSyslogLogger.new( '127.0.0.1', 514, program: "nlu-cms-#{Rails.env}" )
+  end
+
   # Raise an error on page load if there are pending migrations.
   # config.active_record.migration_error = :page_load
 
