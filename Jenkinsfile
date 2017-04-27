@@ -64,6 +64,7 @@ def testFunction() {
   }
 }
 
+
 @NonCPS
 def reportOnTestsForBuild() {
   def build = manager.build
