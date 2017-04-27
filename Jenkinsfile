@@ -13,7 +13,7 @@ pipeline {
     }
     stage('Checkout devops'){
       steps {
-        git branch: 'dev', credentialsId: '91ef69c0-263e-45fb-a7a3-f672dddfabf5', url: 'https://github.com/iAmPlus/devops.git'
+        git credentialsId: '91ef69c0-263e-45fb-a7a3-f672dddfabf5', url: 'https://github.com/iAmPlus/devops.git'
       }
     }
   //   stage('UnitTest') {
