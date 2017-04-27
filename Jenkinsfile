@@ -13,7 +13,7 @@ pipeline {
     }
     stage('Checkout devops'){
       steps {
-        sh "git clone git@github.com:iAmPlus/devops.git"
+        git branch: 'dev', credentialsId: '91ef69c0-263e-45fb-a7a3-f672dddfabf5', url: 'ssh://git@github.com:iAmPlus/devops.git'
       }
     }
   //   stage('UnitTest') {
