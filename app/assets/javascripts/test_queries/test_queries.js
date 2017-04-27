@@ -161,9 +161,12 @@ $(document).on('turbolinks:load', function(){
           } else if ( action === '/api/skill' ){
               var formatJSON = {};
               var nlu = formatJSON['nlu_response'] = {};
+              var payload = nlu['payload'] = {};
+              var user_data = payload['user_data'] = {};
 
               nlu['intent']   = intent;
               nlu['mentions'] = mentions;
+              user_data['tokens'] = [{'provider': 'iamplus', 'value': token}];
 
               r = JSON.stringify( formatJSON, null, 2 );
               $('#skill_format').val( r );
