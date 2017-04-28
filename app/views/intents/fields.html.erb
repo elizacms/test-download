@@ -24,7 +24,7 @@
 
 <div id='mturk-response-field'>
   <%= form_for [ @skill, @intent ] do | f | %>
-    Mechanical Turk response fields<br>
+    Training Data Response Fields<br>
     <%= f.text_field :mturk_response %>
 
     <%= f.submit 'Submit', class: 'btn md ghost' %><span id='submit-result'></span>
