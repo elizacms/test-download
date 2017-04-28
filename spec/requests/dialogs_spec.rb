@@ -18,6 +18,7 @@ describe 'Dialogs' do
       missing:        [ field.name ],
       present:        [ 'present', 'value' ],
       awaiting_field: [ field.name ],
+      entity_values:  [ 'some', 'value' ],
       comments:       'some comments'
     }
   }
@@ -143,10 +144,10 @@ describe 'Dialogs' do
 
   describe 'CSV export' do
     let( :header_row ){
-      "intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en,comments\n"
+      "intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,aneeda_en,comments\n"
     }
     let( :data_row   ){
-      "#{ intent.name },90,destination,unresolved,destination,present && value,"\
+      "#{ intent.name },90,destination,unresolved,destination,present && value,\"[\"('some','value')\"]\","\
       "\"[{\"\"ResponseType\"\":\"\"some_type\"\",\"\"ResponseValue\"\""\
       ":{\"\"text\"\":\"\"some text\"\"},\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
     }

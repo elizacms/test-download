@@ -88,7 +88,8 @@ class DialogsController < ApplicationController
       awaiting_field:[],
       present: [],
       unresolved: [],
-      missing: []
+      missing: [],
+      entity_values: []
     )
   end
 end

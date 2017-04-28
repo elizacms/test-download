@@ -11,6 +11,7 @@ describe CustomCSV do
       unresolved: [],
       missing: [ 'A missing rule' ],
       awaiting_field: [ 'destination' ],
+      entity_values: ['some','thing','another','wing'],
       comments: 'some comments'
     )
 
@@ -53,24 +54,24 @@ describe CustomCSV do
   end
 
   let( :expected ){
-    "intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en,comments\n"\
+    "intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,aneeda_en,comments\n"\
     "#{intent.name},90,destination,None,A missing rule,a && b && c && d && efg,"\
-    "\"[{\"\"ResponseType\"\":\"\"Card\"\","\
+    "\"[\"('some','thing')\", \"('another','wing')\"]\",\"[{\"\"ResponseType\"\":\"\"Card\"\","\
     "\"\"ResponseValue\"\":{\"\"text\"\":\"\"where would you like to go?\"\"},"\
     "\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
   }
 
   let( :expected2 ){
-    "intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en,comments\n"\
+    "intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,aneeda_en,comments\n"\
     "#{intent.name},90,destination,This is unresolved && That is unresolved too,"\
-    "missing this && missing that,None,\"[{\"\"ResponseType\"\":\"\"Card\"\","\
+    "missing this && missing that,None,None,\"[{\"\"ResponseType\"\":\"\"Card\"\","\
     "\"\"ResponseValue\"\":{\"\"text\"\":\"\"where would you like to go?\"\"},"\
     "\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
   }
 
   let( :expected3 ){
-    "intent_id,priority,awaiting_field,unresolved,missing,present,aneeda_en,comments\n"\
-    "#{intent.name},90,None,None,missing,None,\"[{\"\"ResponseType\"\":\"\"Card\"\","\
+    "intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,aneeda_en,comments\n"\
+    "#{intent.name},90,None,None,missing,None,None,\"[{\"\"ResponseType\"\":\"\"Card\"\","\
     "\"\"ResponseValue\"\":{\"\"text\"\":\"\"where would you like to go?\"\"},"\
     "\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
   }

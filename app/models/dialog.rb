@@ -8,6 +8,7 @@ class Dialog
   field :missing,        type:Array, default:[]
   field :unresolved,     type:Array, default:[]
   field :present,        type:Array, default:[]
+  field :entity_values,  type:Array, default:[]
   field :comments,       type:String
 
   has_many :responses
@@ -25,6 +26,7 @@ class Dialog
       missing: missing,
       present: present,
       awaiting_field: awaiting_field,
+      entity_values: entity_values,
       responses: responses.map(&:serialize)
     }
   end

@@ -5,5 +5,7 @@ FactoryGirl.define do
     missing [ 'A missing rule' ]
     awaiting_field [ 'destination' ]
     intent_id intent.name
+    entity_values ['some','thing']
+    comments 'some comment'
   end
 end

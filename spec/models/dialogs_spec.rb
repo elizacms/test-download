@@ -42,5 +42,15 @@ describe Dialog do
         )
       ).to be_valid
     end
+
+    specify 'Success from entity_values' do
+      expect(
+        FactoryGirl.build(
+          :dialog,
+          intent_id: intent.name,
+          entity_values: ['some','thing']
+        )
+      ).to be_valid
+    end
   end
 end
