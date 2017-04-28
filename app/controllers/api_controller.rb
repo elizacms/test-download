@@ -76,7 +76,12 @@ class ApiController < ApplicationController
     json = {
       'iAmPlusId' => current_user.email,
       'input'     => params[:nlu_query],
-      'appData'   => { 'id' => 'com.iamplus.aneedacall' }
+      'appData'   => { 'id' => 'com.iamplus.aneedacall' },
+      'oauthIdentity' => {
+        'oauthToken'        => session[:access_token],
+        'oauthExpiry'       => session[:access_token_expiry],
+        'oauthRefreshToken' => session[:refresh_token]
+      }
     }
 
     send_courier_and_render_json( url, json.to_json ){ return }
