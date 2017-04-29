@@ -124,6 +124,19 @@ feature 'Dialogs', :js do
     expect( page ).to have_content 'You deleted a Dialog.'
   end
 
+  specify 'User can add an entity and a value for the entity' do
+    within '.dialog-form' do
+      select field.name, from: 'entity-value-field'
+      fill_in 'entity-value', with: 'my wonderful value'
+    end
+
+    click_button 'Create Dialog'
+
+    sleep 0.5
+
+    expect( Dialog.last.entity_values ).to eq( ['destination','my wonderful value'] )
+  end
+
   describe 'Responses Types' do
     specify 'Can save a response of type text' do
       within '.dialog-form' do
