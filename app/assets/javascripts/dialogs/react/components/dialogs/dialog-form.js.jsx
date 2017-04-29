@@ -13,6 +13,7 @@ var DialogForm = React.createClass({
       'awaiting-field':       [{id: 0, value: '', inputValue: ''}],
       'responses_attributes': [{id: 0, value: '', inputValue: '',
                                 response_trigger: '', response_id: ''}],
+      'entity-value-field':   [{id: 0, value: 'None', inputValue: ''}],
       priority: '',
       comments: ''
     };
@@ -52,6 +53,28 @@ var DialogForm = React.createClass({
     }
   },
 
+  createNewIdFor(key, nextProps) {
+    if (nextProps.data[key]){
+      var ary  = [];
+      var ary2 = [];
+      var res  = [];
+
+      nextProps.data[key].forEach(function(value, index){
+        index % 2 == 0 ? ary.push(value) : ary2.push(value);
+      });
+
+      ary.forEach(function(value, index){
+        var hsh = {};
+        hsh['id'] = index;
+        hsh['value'] = value;
+        hsh['inputValue'] = ary2[index];
+        res.push(hsh);
+      });
+
+      return res;
+    }
+  },
+
   createNewIdForResponses(nextProps) {
     const ary = [];
     if (nextProps.data.responses) {
@@ -75,7 +98,9 @@ var DialogForm = React.createClass({
       this.setState({
         'unresolved-field':     this.createNewId('unresolved', nextProps),
         'missing-field':        this.createNewId('missing', nextProps),
-        'present-field':        this.createNewIdForPresent(nextProps),
+        // 'present-field':        this.createNewIdForPresent(nextProps),
+        'present-field':        this.createNewIdFor('present', nextProps),
+        'entity-value-field':   this.createNewIdFor('entity_values',nextProps),
         'awaiting-field':       this.createNewId('awaiting_field', nextProps),
         'responses_attributes': this.createNewIdForResponses( nextProps ),
         priority:               nextProps.data.priority,
@@ -174,6 +199,7 @@ var DialogForm = React.createClass({
     data[ 'unresolved'     ] = this.state['unresolved-field'].map( (e)=>e.value );
     data[ 'missing'        ] = this.state['missing-field'].map( (e)=>e.value );
     data[ 'present'        ] = [].concat.apply( [], this.state['present-field'].map((e)=>[e.value, e.inputValue]) ); //concat.apply = merging
+    data[ 'entity_values'   ] = [].concat.apply( [], this.state['entity-value-field'].map((e)=>[e.value, e.inputValue]) );
     data[ 'awaiting_field' ] = this.state['awaiting-field'].map( (e)=>e.value );
     data[ 'comments'       ] = this.state.comments;
 
@@ -303,6 +329,27 @@ var DialogForm = React.createClass({
                   ></DialogSelectbox>
                 );
               }.bind(this))}
+
+              {this.state['entity-value-field'].map(function(input, index){
+                return(
+                  <DialogSelectbox
+                    key={input.id}
+                    index={index}
+                    fields={this.props.fields}
+                    name='entity-value-field'
+                    title='entity value'
+                    addRow={this.addRow}
+                    deleteInput={this.deleteInput.bind(this, input, 'entity-value-field')}
+                    hasInput={true}
+                    inputName='entity-value'
+                    inputPlaceholder='entity value'
+                    inputValue={this.state['entity-value-field'][index].inputValue}
+                    value={this.state['entity-value-field'][index].value}
+                    updateState={this.updateState}
+                  ></DialogSelectbox>
+                );
+              }.bind(this))}
+
               {this.state['awaiting-field'].map(function(input, index){
                 return(
                   <DialogSelectbox
