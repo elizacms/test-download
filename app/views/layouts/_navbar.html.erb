@@ -18,7 +18,9 @@
 
         <%= link_to 'Skills', skills_path %>
 
-        <%= link_to 'Test Queries', test_queries_path %>
+        <% unless ENV['ELIZA_CMS'] == 'true' %>
+          <%= link_to 'Test Queries', test_queries_path %>
+        <% end %>
 
         <div id="regularLogout" class="dropdown pull-right">
           <a id="userMenu" class="navlink dropdown-toggle" href="javascript:void(0);" data-toggle="dropdown">
