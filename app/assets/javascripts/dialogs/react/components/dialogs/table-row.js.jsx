@@ -86,14 +86,19 @@ var TableRow = React.createClass({
             return(<div key={index}>{condition}</div>);
           })}
         </td>
-        <td className='present'>
-          {data.present.map(function(condition, index){
-            return(<div key={index}>{condition}</div>);
-          })}
-        </td>
         <td className='awaiting_field'>
           {data.awaiting_field.map(function(field, index){
             return(<div key={index}>{field}</div>);
+          })}
+        </td>
+        <td className='entity_values'>
+          {data.entity_values.map(function(field, index){
+            return(<div key={index}>{field}</div>);
+          })}
+        </td>
+        <td className='present'>
+          {data.present.map(function(condition, index){
+            return(<div key={index}>{condition}</div>);
           })}
         </td>
         <td>

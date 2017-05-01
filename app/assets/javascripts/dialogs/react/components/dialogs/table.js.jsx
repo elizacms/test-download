@@ -16,11 +16,12 @@ var Table = React.createClass({
           <tbody>
             <tr>
               <th className='row4'>&nbsp;Priority</th>
-              <th className='row20 text-center'>Response</th>
+              <th className='row20'>Response</th>
               <th className='row12'>Unresolved</th>
               <th className='row12'>Missing</th>
-              <th className='row12'>Present</th>
               <th className='row12'>Awaiting Field</th>
+              <th className='row12'>Entity Values</th>
+              <th className='row12'>Present</th>
               <th className='row3'>Options</th>
             </tr>
             {
