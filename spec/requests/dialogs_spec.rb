@@ -147,7 +147,7 @@ describe 'Dialogs' do
       "intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,aneeda_en,comments\n"
     }
     let( :data_row   ){
-      "#{ intent.name },90,destination,unresolved,destination,present && value,\"[\"('some','value')\"]\","\
+      "#{ intent.name },90,destination,unresolved,destination,present && value,\"[('some','value')]\","\
       "\"[{\"\"ResponseType\"\":\"\"some_type\"\",\"\"ResponseValue\"\""\
       ":{\"\"text\"\":\"\"some text\"\"},\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
     }

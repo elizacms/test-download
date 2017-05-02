@@ -1,4 +1,4 @@
-describe CustomCSV do
+describe CustomCSV, :focus do
   let!(  :skill   ){ create :skill                }
   let!(  :intent  ){ create :intent, skill: skill }
   let!(  :text    ){ "{\"text\":\"where would you like to go?\"}" }
@@ -56,7 +56,7 @@ describe CustomCSV do
   let( :expected ){
     "intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,aneeda_en,comments\n"\
     "#{intent.name},90,destination,None,A missing rule,a && b && c && d && efg,"\
-    "\"[\"('some','thing')\", \"('another','wing')\"]\",\"[{\"\"ResponseType\"\":\"\"Card\"\","\
+    "\"[('some','thing'), ('another','wing')]\",\"[{\"\"ResponseType\"\":\"\"Card\"\","\
     "\"\"ResponseValue\"\":{\"\"text\"\":\"\"where would you like to go?\"\"},"\
     "\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
   }
@@ -76,7 +76,7 @@ describe CustomCSV do
     "\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
   }
 
-  specify 'Empty values' do
+  specify 'Empty values', :focus do
     expect( CustomCSV.for( [ @dialog ] ) ).to eq expected
   end
 
