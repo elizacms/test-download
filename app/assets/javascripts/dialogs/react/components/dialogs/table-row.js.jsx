@@ -19,6 +19,16 @@ var TableRow = React.createClass({
     }
   },
 
+  showLoneEV(entity_values){
+    if (entity_values.length === 2 && entity_values[1] === ''){
+      return(
+        <div>
+          {"[('" + entity_values[0] + "')]"}
+        </div>
+      );
+    }
+  },
+
   tableSeparator(length, index){
     if (length > 1 && index + 1 !== length){
       return(<hr className='table-response-separator' />);
@@ -92,12 +102,12 @@ var TableRow = React.createClass({
           })}
         </td>
         <td className='entity_values'>
-          {data.entity_values.map(function(field, index){
-            return(
-              <div key={index}>
-                {data.entity_values.length === 1 ? "[('None')]" : index % 2 === 0 ? "[('" + field + "'," : "'" + field + "')]" }
-              </div>
-            );
+          {data.entity_values.length === 2 && data.entity_values[1] === '' ? this.showLoneEV(data.entity_values) : data.entity_values.map(function(value, index){
+              return(
+                <div key={index}>
+                  {index % 2 === 0 ? "[('" + value + "'," : "'" + value + "')]"}
+                </div>
+              );
           })}
         </td>
         <td className='present'>
