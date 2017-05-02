@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   before_action :validate_user_from_identity, only: [ :login_success ]
-  before_action :validate_current_user, only: [ :test_queries, :dialogs_upload ]
+  before_action :validate_current_user, only: [ :test_queries, :dialogs_upload, :nlu_training ]
 
   def index
     @identity_login_page = oauth_client.auth_code.authorize_url( redirect_uri:redirect_uri )
@@ -21,6 +21,11 @@ class PagesController < ApplicationController
   end
 
   def test_queries
+  end
+
+  def nlu_training
+    last_build_no = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/api/json")['builds'].first['number']
+    @last_build = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/#{last_build_no}/api/json")
   end
 
   def dialogs_upload

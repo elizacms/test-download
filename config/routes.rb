@@ -128,4 +128,8 @@ Rails.application.routes.draw do
   get '/test-queries',
     to: 'pages#test_queries',
     as: :test_queries
+
+  get '/nlu-training',
+    to: 'pages#nlu_training',
+    as: :nlu_training
 end

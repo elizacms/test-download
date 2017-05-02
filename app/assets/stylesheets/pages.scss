@@ -65,3 +65,15 @@ h4 {
 .requestCodeMirror {
   border: 1px solid #ADD8E6;
 }
+
+.nluTraining {
+  font-size: 18px;
+
+  .success {
+    color: green;
+  }
+
+  .fail {
+    color: red;
+  }
+}
