@@ -18,7 +18,7 @@
 
         <%= link_to 'Skills', skills_path %>
 
-        <% unless ENV['ELIZA_CMS'] == 'true' %>
+        <% if ENV['ELIZA_CMS'] != 'true' %>
           <%= link_to 'Test Queries', test_queries_path %>
         <% end %>
 

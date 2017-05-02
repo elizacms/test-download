@@ -45,7 +45,7 @@ class CustomCSV
         pair[1].blank? ? "('#{pair[0]}')" : "('#{pair[0]}','#{pair[1]}')"
       end
 
-      %Q/"#{ev}"/
+      %Q/"#{ev.to_s.gsub( '"', '' )}"/
     end
 
     def format_responses( responses )

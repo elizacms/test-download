@@ -93,7 +93,11 @@ var TableRow = React.createClass({
         </td>
         <td className='entity_values'>
           {data.entity_values.map(function(field, index){
-            return(<div key={index}>{field}</div>);
+            return(
+              <div key={index}>
+                {data.entity_values.length === 1 ? "[('None')]" : index % 2 === 0 ? "[('" + field + "'," : "'" + field + "')]" }
+              </div>
+            );
           })}
         </td>
         <td className='present'>
