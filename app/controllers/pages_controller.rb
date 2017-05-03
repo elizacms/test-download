@@ -24,6 +24,10 @@ class PagesController < ApplicationController
   end
 
   def nlu_training
+    unless ENV['ELIZA_CMS'] == 'true'
+      redirect_to skills_path, notice: 'That resource is not available.'
+    end
+
     last_build_no = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/api/json")['builds'].first['number']
     @last_build = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/#{last_build_no}/api/json")
   end
