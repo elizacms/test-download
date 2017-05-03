@@ -22,6 +22,10 @@
           <%= link_to 'Test Queries', test_queries_path %>
         <% end %>
 
+        <% if ENV['ELIZA_CMS'] == 'true' %>
+          <%= link_to 'NLU Training', nlu_training_path %>
+        <% end %>
+
         <div id="regularLogout" class="dropdown pull-right">
           <a id="userMenu" class="navlink dropdown-toggle" href="javascript:void(0);" data-toggle="dropdown">
             <span class="icon-contacts"></span>
