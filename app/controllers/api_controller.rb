@@ -56,7 +56,7 @@ class ApiController < ApplicationController
       }
     }
 
-    send_courier_and_render_json( url, json.to_json ){ return }
+    send_courier_and_render_json( url, json.to_json, session[:access_token] ){ return }
   end
 
   def nlu_query
@@ -122,8 +122,8 @@ class ApiController < ApplicationController
     )
   end
 
-  def send_courier_and_render_json( url, body )
-    courier = Courier.post_request( url, body )
+  def send_courier_and_render_json( url, body, auth_token=nil )
+    courier = Courier.post_request( url, body, auth_token )
 
     render json: {
       response: courier[:response],
