@@ -37,7 +37,7 @@ describe 'Test Queries', :js do
         'oauthExpiry'       => nil,
         'oauthRefreshToken' => nil
       }
-    }.to_json }
+    }.to_json}
 
     before do
       allow(Courier)
@@ -57,7 +57,7 @@ describe 'Test Queries', :js do
         expect( page ).to have_content "{\"intent\":\"fake_news\",\"mentions\":[]}"
       end
 
-      expect(Courier).to have_received(:post_request).with( url, expected_params )
+      expect(Courier).to have_received(:post_request).with( url, expected_params, 'access_token' )
     end
   end
 
