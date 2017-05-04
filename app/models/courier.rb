@@ -1,8 +1,11 @@
 class Courier
   class <<self
-    def post_request( url, body )
+    def post_request( url, body, auth_token=nil )
+      headers = { 'Content-Type' => 'application/json' }
+      headers.merge!( 'Auth-Token' => auth_token ) if auth_token
+
       start_time = Time.now
-      res = HTTParty.post( url, body: body, headers: { 'Content-Type' => 'application/json' } )
+      res = HTTParty.post( url, body: body, headers: headers )
       end_time = Time.now
 
       begin
