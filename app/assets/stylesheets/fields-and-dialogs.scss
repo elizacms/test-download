@@ -34,6 +34,12 @@
 
 .info-header {
   margin-top: 20px;
+  white-space: nowrap;
+}
+
+.info-header-button{
+  margin-top: -43px;
+  float: right;
 }
 
 .add-remove-response{

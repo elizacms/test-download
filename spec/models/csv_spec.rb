@@ -1,4 +1,4 @@
-describe CustomCSV, :focus do
+describe CustomCSV do
   let!(  :skill   ){ create :skill                }
   let!(  :intent  ){ create :intent, skill: skill }
   let!(  :text    ){ "{\"text\":\"where would you like to go?\"}" }
@@ -76,7 +76,7 @@ describe CustomCSV, :focus do
     "\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
   }
 
-  specify 'Empty values', :focus do
+  specify 'Empty values' do
     expect( CustomCSV.for( [ @dialog ] ) ).to eq expected
   end
 
