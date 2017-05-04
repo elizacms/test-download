@@ -15,14 +15,14 @@ var Table = React.createClass({
         <table className='dialogs'>
           <tbody>
             <tr>
-              <th className='row4'>&nbsp;Priority</th>
+              <th className='row5'>&nbsp;Priority</th>
               <th className='row20'>Response</th>
               <th className='row12'>Unresolved</th>
               <th className='row12'>Missing</th>
               <th className='row12'>Awaiting Field</th>
               <th className='row12'>Entity Values</th>
               <th className='row12'>Present</th>
-              <th className='row3'>Options</th>
+              <th className='row8'>Options</th>
             </tr>
             {
               this.props.data.map(function(dialog, index){

@@ -30,17 +30,18 @@ var ExportCSV = React.createClass({
             Export CSV
           </button>
         </div>
-        <div className='row'>
-          <div className='col-xs-2 info-header'>
+        <div className='info-header'>
+          <div>
             <strong>Skill: </strong>{this.skillName()}
           </div>
-          <div className='col-xs-4 info-header'>
+          <div>
             <strong>Intent: </strong>{this.intentID()}
           </div>
-          <div className='col-xs-6 info-header'>
+          <div>
             <strong>Webhook: </strong>{this.webHook()}
           </div>
         </div>
+
         <hr className='margin0'></hr>
       </div>
     );

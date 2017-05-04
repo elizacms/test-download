@@ -33,8 +33,11 @@
 }
 
 .info-header {
-  margin-top: 20px;
-  white-space: nowrap;
+  width: 100%;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
 }
 
 .info-header-button{
@@ -215,14 +218,11 @@ a.cancelCreate {
   display: inline;
 }
 
-.row3{
-  width: 3%;
-}
-.row4{
-  width: 4%;
-}
 .row5{
   width: 5%;
+}
+.row8{
+  width: 8%;
 }
 .row12{
   width: 12%;
@@ -233,9 +233,6 @@ a.cancelCreate {
 }
 .row20{
   width: 20%;
-}
-.row30{
-  width: 30%;
 }
 .row40{
   width: 40%;
