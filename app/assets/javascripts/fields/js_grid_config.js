@@ -23,7 +23,7 @@ function initFields(){
         controller: {
             loadData: function(){
                 filter = { intent_id: intent._id.$oid };
-                console.log( filter );
+
                 return ajaxCall( 'GET', '/fields', filter);
             },
             insertItem: function(item){
@@ -72,7 +72,8 @@ function initFields(){
                 textField: 'name'
             },
             {
-                name: 'Training Data',
+                title: 'Training Data',
+                name: 'mturk_field',
                 type: 'text',
                 width: 100
             },
