@@ -12,19 +12,26 @@ class Intent
   validates_presence_of   :name
   validates_uniqueness_of :name, scope: :skill_id
 
-  def save
-    File.open("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/#{self.name}.json", 'w+') do |f|
-      f.write({
-        name: self['name'],
-        description: self['description'],
-        mturk_response: self['mturk_response']
-      }.to_json)
+  before_save ->{ validate }
 
-      self.delete('name')
-      self.delete('description')
-      self.delete('mturk_response')
-    end
+  def external_applications
+    self.requires_authorization == false ? [] : self[:external_applications]
+  end
 
-    super
+  def save opts
+    file_data = {
+      name: self.name,
+      description: self.description,
+      mturk_response: self.mturk_response
+    }.to_json
+
+    File.write("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/#{self.name}.json",
+               file_data)
+
+    self.name = nil
+    self.description = nil
+    self.mturk_response = nil
+
+    super validate:false
   end
 end
