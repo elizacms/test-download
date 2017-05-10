@@ -11,4 +11,20 @@ class Intent
 
   validates_presence_of   :name
   validates_uniqueness_of :name, scope: :skill_id
+
+  def save
+    File.open("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/#{self.name}.json", 'w+') do |f|
+      f.write({
+        name: self['name'],
+        description: self['description'],
+        mturk_response: self['mturk_response']
+      }.to_json)
+
+      self.delete('name')
+      self.delete('description')
+      self.delete('mturk_response')
+    end
+
+    super
+  end
 end

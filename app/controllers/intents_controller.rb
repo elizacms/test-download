@@ -6,7 +6,7 @@ class IntentsController < ApplicationController
                 only: [ :edit, :update, :destroy, :fields, :dialogs, :submit_mturk_response ]
 
   def index
-    @intents = @skill.intents
+    @intents = IntentManager.all
   end
 
   def new
@@ -14,12 +14,10 @@ class IntentsController < ApplicationController
   end
 
   def create
-    @intent = @skill.intents.create( intent_params )
-
-    if @intent.persisted?
+    if Intent.create(intent_params)
       redirect_to(
-        fields_page_path(skill_id: @skill, id: @intent),
-        flash: { success: "Intent #{ @intent.name } created." }
+        fields_page_path(skill_id: @skill, id: params[:intent][:name]),
+          flash: { success: "Intent #{ params[:intent][:name] } created." }
       )
     else
       flash.now[ :alert ] = @intent.errors.full_messages.join( "\n" )
@@ -81,7 +79,7 @@ class IntentsController < ApplicationController
   end
 
   def find_intent
-    @intent = @skill.intents.find( params[ :id ] )
+    @intent = IntentManager.find( params[:id] )
   end
 
   def intent_params

@@ -1,6 +1,6 @@
 <%= link_to(
   '&larr; Intents'.html_safe,
-  edit_skill_intent_path(@skill, @intent),
+  edit_skill_intent_path(@skill, @intent['name']),
   class: 'btn md grey'
 ) %>
 <br><br>
@@ -10,7 +10,7 @@
     <strong>Skill:</strong> <%= @skill.name %>
   </div>
   <div class='col-xs-9'>
-    <strong>Intent:</strong> <%= @intent.name %>
+    <strong>Intent:</strong> <%= @intent['name'] %>
   </div>
 </div>
 
@@ -23,11 +23,11 @@
 ) %>
 
 <div id='mturk-response-field'>
-  <%= form_for [ @skill, @intent ] do | f | %>
+  <%= form_tag("/skills/#{@skill.id}/intents/#{@intent['name']}") do %>
     Training Data Response Fields<br>
-    <%= f.text_field :mturk_response %>
+    <%= text_field_tag :mturk_response, @intent['mturk_response'] %>
 
-    <%= f.submit 'Submit', class: 'btn md ghost' %><span id='submit-result'></span>
+    <%= submit_tag 'Submit', class: 'btn md ghost' %><span id='submit-result'></span>
   <% end %>
 </div>
 

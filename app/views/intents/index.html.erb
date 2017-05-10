@@ -28,12 +28,12 @@
   </thead>
   <% @intents.each do |intent| %>
     <tr>
-      <td><%= intent.name %></td>
-      <td><%= intent.description %></td>
+      <td><%= intent['name'] %></td>
+      <td><%= intent['description'] %></td>
       <td>
         <%= link_to(
           "Edit Details",
-          edit_skill_intent_path( @skill, intent ),
+          edit_skill_intent_path( @skill, intent.try(:[], 'name') ),
           class: 'btn sm black'
         )%>
       </td>

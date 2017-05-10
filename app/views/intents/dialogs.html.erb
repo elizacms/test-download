@@ -1,6 +1,6 @@
 <%= link_to(
   '&larr; Intents'.html_safe,
-  edit_skill_intent_path(@skill, @intent),
+  edit_skill_intent_path(@skill, @intent['name']),
   class: 'btn md grey pull-left'
 ) %>
 <br><br>
@@ -11,7 +11,7 @@
     intent_id: @intent.name,
     skill_name: @skill.name,
     web_hook: @skill.web_hook,
-    field_path: fields_page_path(@skill, @intent),
+    field_path: fields_page_path(@skill, @intent['name']),
     fields: @fields
   },
   class: 'dialogs-container'
