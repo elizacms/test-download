@@ -1,0 +1,5 @@
+{
+  "name": "test_intent_1",
+  "description": "Some test description",
+  "mturk_response": "Some training data"
+}

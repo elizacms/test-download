@@ -1,55 +1,33 @@
-<%= form_for [ @skill, @intent ] do |f|%>
+<%= form_tag "/skills/#{@skill.id}/intents/#{@intent['name']}" do %>
   <div class="row">
     <div class="col-xs-12 col-md-6">
-      <%= f.label :name %>
-      <%= f.text_field :name %><br><br>
+      <%= label_tag :name %>
+      <%= text_field_tag :name, @intent['name'] %><br><br>
 
-      <%= f.label :description %><br>
-      <%= f.text_area :description %><br><br>
+      <%= label_tag :description %><br>
+      <%= text_area_tag :description, @intent['description'] %><br><br>
     </div>
-    <% if !@intent.new_record? %>
+    <% if IntentManager.find_by( @intent['name'] ) %>
       <div class="col-xs-12 col-md-6">
         <br>
         <%= link_to(
-          @intent.entities.any? ? 'Edit Fields' : 'Add Fields',
-          fields_page_path( @skill, @intent ),
+          'Edit Fields',
+          fields_page_path( @skill, @intent['name'] ),
           class: 'btn lg black'
         ) %>
         <%= link_to(
-          Dialog.for( @intent ).any? ? 'Edit Dialogs' : 'Add Dialogs',
-          dialogs_page_path( @skill, @intent ),
+          'Edit Dialogs',
+          dialogs_page_path( @skill, @intent['name'] ),
           class: 'btn lg black'
         ) %>
       </div>
     <% end %>
-    <div class="col-xs-12 col-md-6">
-      <br><br>
-      <%= f.check_box :requires_authorization %>
-      <%= f.label :requires_authorization %>
-      <div class="collapse" id="authList">
-        <h4>Which applications need an authorization code?</h4>
-        <% ExternalApplications::LIST.in_groups_of(2) do |group| %>
-          <div class='row'>
-          <% group.each do |app| %>
-            <% next if app.to_s == '' %>
-            <div class='col-md-6 external-apps-list'>
-              <%= hidden_field_tag 'intent[external_applications][]', '' %>
-              <%= check_box_tag(
-                'intent[external_applications][]',
-                app.to_s,
-                @intent.external_applications.include?( app.to_s )
-              ) %>
-              <%= label_tag app.to_s %>
-            </div>
-          <% end %>
-          </div>
-        <% end %>
-      </div>
-    </div>
   </div>
   <div class="row">
     <div class="col-xs-12 col-md-6">
-      <%= f.submit @intent.new_record? ? 'Create' : 'Update', class: 'btn md black' %>
+      <%= submit_tag(
+        IntentManager.find_by( @intent['name'] ) ? 'Update' : 'Create' , class: 'btn md black'
+      ) %>
     </div>
   </div>
 <% end %>
