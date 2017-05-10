@@ -1,4 +1,4 @@
-describe IntentManager, :focus do
+describe IntentManager do
 
   describe '::all' do
     it 'finds all files that end with .json' do
