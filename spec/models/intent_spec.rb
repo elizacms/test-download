@@ -1,13 +1,12 @@
-describe Intent do
+describe Intent, :focus do
   let(:valid_intent){{
     "name"           => "valid_intent",
     "description"    => "some description",
     "mturk_response" => "some response"
   }}
-  let( :intent_file    ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/valid_intent.json" }
-  let( :non_file       ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/.json"             }
-  let( :skill          ){ create :skill                                                  }
-  let( :intent_from_db ){ Intent.first                                                   }
+  let( :skill          ){ create :skill }
+  let( :intent_from_db ){ Intent.first  }
+  let( :read_file      ){ JSON.parse(File.read(intent_file(Intent.last.id))) }
 
   describe '#create' do
     it 'should save a valid intent' do
@@ -15,8 +14,8 @@ describe Intent do
 
       expect(Intent.count).to eq 1
 
-      expect(File.exist?(intent_file)).to eq true
-      expect(JSON.parse(File.read(intent_file))['mturk_response']).to eq 'some response'
+      expect(File.exist?(intent_file(Intent.last.id))).to eq true
+      expect((read_file)['mturk_response']).to eq 'some response'
 
       expect(intent_from_db.name).to eq nil
       expect(intent_from_db.description).to eq nil
@@ -31,13 +30,11 @@ describe Intent do
     end
   end
 
-  describe '#update', :focus do
+  describe '#update' do
     it 'should update a valid intent' do
       skill.intents.create(valid_intent)
 
-      ap :SPEC_START
       skill.intents.first.update('description' => 'updated description')
-      ap :UPDATE_FINISHED
 
       expect(Intent.count).to eq 1
 
@@ -45,7 +42,9 @@ describe Intent do
       expect(intent_from_db.description).to eq nil
       expect(intent_from_db.mturk_response).to eq nil
 
-      expect(JSON.parse(File.read(intent_file))['description']).to eq 'updated description'
+      expect((read_file)['description']).to eq 'updated description'
+      expect((read_file)['name']).to eq 'valid_intent'
+      expect((read_file)['mturk_response']).to eq 'some response'
     end
   end
 end

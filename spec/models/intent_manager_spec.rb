@@ -1,4 +1,4 @@
-describe IntentManager do
+describe IntentManager, :focus do
   let(:data){{
     "name"           => "intent",
     "description"    => "Some test description",

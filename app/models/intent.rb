@@ -12,17 +12,17 @@ class Intent
   validates_presence_of :name
   validate :unique_name
 
-  # before_save -> { validate }
-
   def external_applications
     self.requires_authorization == false ? [] : self[:external_applications]
   end
 
   def unique_name
-    ap __method__
+    all_files = Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" ].delete_if do |f|
+      f =~ /#{self.id.to_s}/
+    end
 
-    all_names = Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" ].map do | f |
-      JSON.parse( File.read(f)).with_indifferent_access[ :name ]
+    all_names = all_files.map do |f|
+      JSON.parse( File.read(f) ).with_indifferent_access[ :name ]
     end
 
     if all_names.include? name
@@ -31,24 +31,19 @@ class Intent
   end
 
   def update attributes={}
-    ap __method__
-    
-    self.name = JSON.parse(File.read("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/valid_intent.json"))['name']
-    
-    self.description = attributes[ :description]
+    [:name, :description, :mturk_response].each do |k|
+      if attributes[k]
+        self[k] = attributes[k]
+      else
+        self[k] = JSON.parse(File.read("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/#{self.id}.json"))[k.to_s]
+      end
+    end
 
-    save
+    super
   end
 
   def save opts={}
-    ap __method__
-
-    unless valid?
-      ap "valid? #{ valid? }"
-      # ap attributes
-      ap errors.full_messages
-      return
-    end
+    return unless valid?
 
     file_data = {
       name: self.name,
@@ -56,7 +51,7 @@ class Intent
       mturk_response: self.mturk_response
     }.to_json
 
-    File.write("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/#{self.name}.json", file_data)
+    File.write("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/#{self.id}.json", file_data)
 
     self.name = nil
     self.description = nil
