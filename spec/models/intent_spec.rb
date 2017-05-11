@@ -1,4 +1,4 @@
-describe Intent, :focus do
+describe Intent do
   let(:valid_intent){{
     "name"           => "valid_intent",
     "description"    => "some description",
@@ -23,18 +23,21 @@ describe Intent, :focus do
       expect(intent_from_db.mturk_response).to eq nil
     end
 
-    it 'should not create a duplicate intent in mongo' do
-      skill.intents.create!(valid_intent)
-      skill.intents.create!(valid_intent)
+    it 'should not create a intent with same name' do
+      skill.intents.create(valid_intent)
+      skill.intents.create(valid_intent)
 
       expect(Intent.count).to eq 1
     end
   end
 
-  describe '#update' do
+  describe '#update', :focus do
     it 'should update a valid intent' do
-      skill.intents.create!(valid_intent)
-      skill.intents.first.update!('description' => 'updated description')
+      skill.intents.create(valid_intent)
+
+      ap :SPEC_START
+      skill.intents.first.update('description' => 'updated description')
+      ap :UPDATE_FINISHED
 
       expect(Intent.count).to eq 1
 

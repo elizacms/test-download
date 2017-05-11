@@ -14,20 +14,44 @@ class Intent
   validates_presence_of :name
   validate :unique_name
 
-  before_create -> { validate }
+  # before_save -> { validate }
 
   def external_applications
     self.requires_authorization == false ? [] : self[:external_applications]
   end
 
   def unique_name
-    ap self.name
-    if File.exist?( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/#{self.name}.json" )
-      errors.add(:name, "must be unique")
+    ap __method__
+
+    all_names = Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" ].map do | f |
+      JSON.parse( File.read(f)).with_indifferent_access[ :name ]
+    end
+
+    if all_names.include? name
+      errors.add :name, 'must be unique'
     end
   end
 
-  def save opts
+  def update attributes={}
+    ap __method__
+    
+    self.name = JSON.parse(File.read("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/valid_intent.json"))['name']
+    
+    self.description = attributes[ :description]
+
+    save
+  end
+
+  def save opts={}
+    ap __method__
+
+    unless valid?
+      ap "valid? #{ valid? }"
+      # ap attributes
+      ap errors.full_messages
+      return
+    end
+
     file_data = {
       name: self.name,
       description: self.description,
