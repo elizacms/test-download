@@ -1,6 +1,5 @@
 # nlu-cms README
 
-
 ## Initial Development Setup
 1. Launch your local setup of Identity (perferably at localhost:3030)
 `$ rails s -p 3030`
