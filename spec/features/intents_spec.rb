@@ -164,27 +164,4 @@ feature 'Intents pages' do
       expect( current_path ).to eq '/'
     end
   end
-
-  describe 'Developer can click "requires_authorization" and '\
-  ' save an external app to the intent', :js do
-    let!( :intent ){ create :intent, skill: skill }
-
-    specify do
-      visit '/login/success?code=0123abc'
-      click_link 'Intents'
-
-      click_link 'Edit Details'
-
-      within 'form' do
-        check :intent_requires_authorization
-        page.evaluate_script("$('.external-apps-list input').last().attr('checked', true)")
-
-        click_button 'Update'
-      end
-
-      expect( page ).to have_content 'Intent get_ride updated.'
-      expect( Intent.first.requires_authorization ).to eq true
-      expect( Intent.first.external_applications ).to eq ['itunes']
-    end
-  end
 end

@@ -22,30 +22,6 @@
         ) %>
       </div>
     <% end %>
-    <div class="col-xs-12 col-md-6">
-      <br><br>
-      <%= f.check_box :requires_authorization %>
-      <%= f.label :requires_authorization %>
-      <div class="collapse" id="authList">
-        <h4>Which applications need an authorization code?</h4>
-        <% ExternalApplications::LIST.in_groups_of(2) do |group| %>
-          <div class='row'>
-          <% group.each do |app| %>
-            <% next if app.to_s == '' %>
-            <div class='col-md-6 external-apps-list'>
-              <%= hidden_field_tag 'intent[external_applications][]', '' %>
-              <%= check_box_tag(
-                'intent[external_applications][]',
-                app.to_s,
-                @intent.external_applications.include?( app.to_s )
-              ) %>
-              <%= label_tag app.to_s %>
-            </div>
-          <% end %>
-          </div>
-        <% end %>
-      </div>
-    </div>
   </div>
   <div class="row">
     <div class="col-xs-12 col-md-6">

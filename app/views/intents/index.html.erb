@@ -23,8 +23,6 @@
     <tr>
       <th>Name</th>
       <th>Description</th>
-      <th>Requires Auth</th>
-      <th>Apps</th>
       <th></th>
     </tr>
   </thead>
@@ -32,12 +30,6 @@
     <tr>
       <td><%= intent.name %></td>
       <td><%= intent.description %></td>
-      <td class="<%= intent.requires_authorization? ? "icon-check" : "icon-cross" %>"></td>
-      <td>
-        <% intent.external_applications.each do |app| %>
-          <code><%= app %></code>
-        <% end %>
-      </td>
       <td>
         <%= link_to(
           "Edit Details",
