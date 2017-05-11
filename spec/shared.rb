@@ -23,3 +23,7 @@ end
 def dialog_data(file='spec/shared/test.csv')
   CSV.parse( File.read( file ), headers:true ).map{ |r| r.to_hash }
 end
+
+def intent_file(intent_id)
+  "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/#{intent_id}.json"
+end
