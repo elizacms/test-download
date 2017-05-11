@@ -37,16 +37,25 @@ pipeline {
       junit 'junit.xml'
     }
     failure {
-      slackSend (channel: '#nlu-cms_dev', color: '#FF0000', message: "FAILED: Job (${env.BUILD_URL}) " + getCommitInfo())
+      slackSend (channel: '#nlu-cms_dev', color: '#FF0000', message: "FAILED: Job (${env.BUILD_URL}) \n" + getCommitAuthor() + " " + getCommitId() + "\n" + getCommitMessage())
     }
     success {
-      slackSend (channel: '#nlu-cms_dev', color: '#00FF00', message: "SUCCESSFUL: Job (${env.BUILD_URL}) " + getCommitInfo())
+      slackSend (channel: '#nlu-cms_dev', color: '#00FF00', message: "SUCCESSFUL: Job (${env.BUILD_URL}) \n" + getCommitAuthor() + " " + getCommitId() + "\n" + getCommitMessage())
     }
   }
 }
 
-def getCommitInfo() {
-  def props = readFile "commit_info.properties"
-  println props
+def getCommitAuthor() {
+  def props = readFile "commit_author_email.properties"
+  return props
+}
+
+def getCommitId() {
+  def props = readFile "commit_id.properties"
+  return props
+}
+
+def getCommitMessage() {
+  def props = readFile "commit_message.properties"
   return props
 }
