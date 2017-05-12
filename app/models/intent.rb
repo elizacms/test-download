@@ -12,10 +12,6 @@ class Intent
   validates_presence_of :name
   validate :unique_name
 
-  def external_applications
-    self.requires_authorization == false ? [] : self[:external_applications]
-  end
-
   def unique_name
     all_files = Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" ].delete_if do |f|
       f =~ /#{self.id.to_s}/
@@ -31,13 +27,8 @@ class Intent
   end
 
   def update attributes={}
-    [:name, :description, :mturk_response].each do |k|
-      if attributes[k]
-        self[k] = attributes[k]
-      else
-        self[k] = JSON.parse(File.read("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/#{self.id}.json"))[k.to_s]
-      end
-    end
+    existing = JSON.parse(File.read("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/#{self.id}.json"))
+    self.attributes = existing.merge!( attributes )
 
     super
   end
@@ -58,5 +49,11 @@ class Intent
     self.mturk_response = nil
 
     super( validate: false )
+  end
+
+  def destroy
+    File.delete("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/#{self.id}.json")
+
+    super
   end
 end

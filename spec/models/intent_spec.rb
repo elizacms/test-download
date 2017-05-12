@@ -42,9 +42,26 @@ describe Intent, :focus do
       expect(intent_from_db.description).to eq nil
       expect(intent_from_db.mturk_response).to eq nil
 
-      expect((read_file)['description']).to eq 'updated description'
       expect((read_file)['name']).to eq 'valid_intent'
+      expect((read_file)['description']).to eq 'updated description'
       expect((read_file)['mturk_response']).to eq 'some response'
+
+      expect( Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents"].count ).to eq 1
+    end
+  end
+
+  describe '#destroy', :focus do
+    it 'should succeed' do
+      skill.intents.create!(valid_intent)
+      expect(Intent.count).to eq 1
+
+      file_id = Intent.last.id
+
+      Intent.last.destroy
+
+      expect(Intent.count).to eq 0
+      expect(File.exist?(intent_file(file_id))).to eq false
+      expect( Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json"].count ).to eq 0
     end
   end
 end

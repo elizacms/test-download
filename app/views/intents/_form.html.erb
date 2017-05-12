@@ -1,23 +1,23 @@
-<%= form_tag "/skills/#{@skill.id}/intents/#{@intent['name']}" do %>
+<%= form_for( [@skill, @intent] ) do |f| %>
   <div class="row">
     <div class="col-xs-12 col-md-6">
       <%= label_tag :name %>
-      <%= text_field_tag :name, @intent['name'] %><br><br>
+      <%= text_field_tag :name, @intent_data ? @intent_data['name'] : '' %><br><br>
 
       <%= label_tag :description %><br>
-      <%= text_area_tag :description, @intent['description'] %><br><br>
+      <%= text_area_tag :description, @intent_data ? @intent_data['description'] : '' %><br><br>
     </div>
-    <% if IntentManager.find_by( @intent['name'] ) %>
+    <% if IntentManager.find( @intent.id ) %>
       <div class="col-xs-12 col-md-6">
         <br>
         <%= link_to(
           'Edit Fields',
-          fields_page_path( @skill, @intent['name'] ),
+          fields_page_path( @skill, @intent ),
           class: 'btn lg black'
         ) %>
         <%= link_to(
           'Edit Dialogs',
-          dialogs_page_path( @skill, @intent['name'] ),
+          dialogs_page_path( @skill, @intent ),
           class: 'btn lg black'
         ) %>
       </div>
@@ -26,7 +26,7 @@
   <div class="row">
     <div class="col-xs-12 col-md-6">
       <%= submit_tag(
-        IntentManager.find_by( @intent['name'] ) ? 'Update' : 'Create' , class: 'btn md black'
+        IntentManager.find( @intent.id ) ? 'Update' : 'Create' , class: 'btn md black'
       ) %>
     </div>
   </div>

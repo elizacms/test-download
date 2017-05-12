@@ -149,8 +149,8 @@ feature 'Intents pages' do
   end
 
   describe 'Developer cannot see another developers intents' do
-    let!( :intent      ){ create :intent, skill: skill                  }
-    let!( :developer_2 ){ create :user, email: "dev2@iamplus.com"       }
+    let!( :intent      ){ create :intent, skill: skill            }
+    let!( :developer_2 ){ create :user, email: "dev2@iamplus.com" }
 
     before do
       stub_identity_token

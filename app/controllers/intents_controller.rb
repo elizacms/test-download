@@ -6,7 +6,15 @@ class IntentsController < ApplicationController
                 only: [ :edit, :update, :destroy, :fields, :dialogs, :submit_mturk_response ]
 
   def index
-    @intents = IntentManager.all
+    @intents = Intent.all.map do |intent|
+      data = JSON.parse(File.read("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/#{intent.id}.json"))
+      {
+        id: intent.id,
+        name: data['name'],
+        description: data['description'],
+        mturk_response: data['mturk_response']
+      }
+    end
   end
 
   def new
@@ -14,10 +22,12 @@ class IntentsController < ApplicationController
   end
 
   def create
-    if Intent.create(intent_params)
+    @intent = @skill.intents.create(intent_params)
+
+    if @intent.persisted?
       redirect_to(
-        fields_page_path(skill_id: @skill, id: params[:intent][:name]),
-          flash: { success: "Intent #{ params[:intent][:name] } created." }
+        fields_page_path(skill_id: @skill, id: @intent.id),
+          flash: { success: "Intent #{ params[:name] } created." }
       )
     else
       flash.now[ :alert ] = @intent.errors.full_messages.join( "\n" )
@@ -29,11 +39,11 @@ class IntentsController < ApplicationController
   end
 
   def update
-    if @intent.update( intent_params )
+    if @skill.intents.find(@intent.id).update( intent_params )
       redirect_to(
         edit_skill_intent_path( @skill, @intent ),
         flash: {
-          success: "Intent #{@intent.name} updated."
+          success: "Intent #{intent_params[:name]} updated."
         }
       )
     else
@@ -79,10 +89,11 @@ class IntentsController < ApplicationController
   end
 
   def find_intent
-    @intent = IntentManager.find( params[:id] )
+    @intent = Intent.find( params[:id] )
+    @intent_data = IntentManager.find( params[:id] )
   end
 
   def intent_params
-    params.require( :intent ).permit( :name, :description, :web_hook, :mturk_response )
+    params.permit( :id, :name, :description, :web_hook, :mturk_response )
   end
 end
