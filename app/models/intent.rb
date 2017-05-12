@@ -12,6 +12,11 @@ class Intent
   validates_presence_of :name
   validate :unique_name
 
+  def attrs
+    file_path = "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/#{self.id}.json"
+    File.exist?(file_path) ? JSON.parse(File.read(file_path)) : nil
+  end
+
   def unique_name
     all_files = Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" ].delete_if do |f|
       f =~ /#{self.id.to_s}/

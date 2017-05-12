@@ -53,7 +53,7 @@ class IntentsController < ApplicationController
   end
 
   def destroy
-    name = @intent.name
+    name = @intent.attrs['name']
     @intent.destroy
 
     redirect_to(
@@ -68,7 +68,7 @@ class IntentsController < ApplicationController
   end
 
   def submit_mturk_response
-    if @intent.update mturk_response:params[ :mturk_response ]
+    if @intent.update mturk_response: params[ :mturk_response ]
       head 200
     else
       head 422
@@ -90,7 +90,6 @@ class IntentsController < ApplicationController
 
   def find_intent
     @intent = Intent.find( params[:id] )
-    @intent_data = IntentManager.find( params[:id] )
   end
 
   def intent_params
