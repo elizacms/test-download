@@ -44,6 +44,7 @@ RSpec.configure do |config|
     I18n.default_locale = 'en'
     Mongoid.purge!
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents" )
+    Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/fields" )
     # Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/dialogs" )
     ActionMailer::Base.deliveries = []
   end

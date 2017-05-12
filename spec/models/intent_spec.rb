@@ -1,4 +1,4 @@
-describe Intent do
+describe Intent, :focus do
   let(:valid_intent){{
     "name"           => "valid_intent",
     "description"    => "some description",
@@ -60,7 +60,7 @@ describe Intent do
   end
 
   describe '#destroy' do
-    it 'should succeed' do
+    it 'should delete both the mongo intent and the FS intent' do
       skill.intents.create!(valid_intent)
       expect(Intent.count).to eq 1
 
