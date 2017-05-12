@@ -45,7 +45,7 @@ RSpec.configure do |config|
     Mongoid.purge!
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents" )
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/fields" )
-    # Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/dialogs" )
+    Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/dialogs" )
     ActionMailer::Base.deliveries = []
   end
 

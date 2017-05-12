@@ -8,6 +8,7 @@ class Intent
 
   belongs_to :skill
   has_many :entities, class_name:'Field'
+  has_many :dialogs
 
   field :name,           type:String
   field :description,    type:String
