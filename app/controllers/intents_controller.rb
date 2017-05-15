@@ -53,7 +53,7 @@ class IntentsController < ApplicationController
   end
 
   def destroy
-    name = @intent.attrs['name']
+    name = @intent.attrs[:name]
     @intent.destroy
 
     redirect_to(

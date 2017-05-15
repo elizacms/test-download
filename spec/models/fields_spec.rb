@@ -1,4 +1,4 @@
-describe Field do
+describe Field, :focus do
   let!( :skill  ){ create :skill }
   let!( :intent_params ){{
     'name'           => 'My Intent',
@@ -10,6 +10,7 @@ describe Field do
     'type'        => 'some type',
     'mturk_field' => 'Turkey Field'
   }}
+  let(:fields_path  ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/fields/*.json" }
   let(:field_from_db){ Field.last }
   let!(:intent){ skill.intents.create!(intent_params) }
   let!(:field ){ intent.entities.create!(valid_field) }
@@ -23,7 +24,7 @@ describe Field do
   describe '#create' do
     it 'should create a field' do
       expect(Field.count).to eq 1
-      expect(Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/fields/*.json"].count).to eq 1
+      expect(Dir[fields_path].count).to eq 1
     end
   end
 
@@ -32,15 +33,15 @@ describe Field do
       field.update('type' => 'beyond classification')
 
       expect(Field.count).to eq 1
-      expect(Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/fields/*.json"].count).to eq 1
+      expect(Dir[fields_path].count).to eq 1
 
       expect(field_from_db.name).to eq nil
       expect(field_from_db.type).to eq nil
       expect(field_from_db.mturk_field).to eq nil
 
-      expect(field.attrs['name']).to eq 'some name'
-      expect(field.attrs['type']).to eq 'beyond classification'
-      expect(field.attrs['mturk_field']).to eq 'Turkey Field'
+      expect(field.attrs[:name]).to eq 'some name'
+      expect(field.attrs[:type]).to eq 'beyond classification'
+      expect(field.attrs[:mturk_field]).to eq 'Turkey Field'
     end
   end
 
@@ -53,7 +54,7 @@ describe Field do
 
       expect(Field.count).to eq 0
       expect(File.exist?(intent_file(file_id))).to eq false
-      expect( Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/fields/*.json"].count ).to eq 0
+      expect( Dir[fields_path].count ).to eq 0
     end
   end
 end

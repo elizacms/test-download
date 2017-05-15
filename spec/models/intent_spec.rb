@@ -1,4 +1,4 @@
-describe Intent do
+describe Intent, :focus do
   let(:valid_intent){{
     "name"           => "valid_intent",
     "description"    => "some description",
@@ -11,9 +11,9 @@ describe Intent do
     it 'should return a hash of attributes' do
       skill.intents.create!(valid_intent)
 
-      expect(Intent.last.attrs['name']).to eq 'valid_intent'
-      expect(Intent.last.attrs['description']).to eq 'some description'
-      expect(Intent.last.attrs['mturk_response']).to eq 'some response'
+      expect(Intent.last.attrs[:name]).to eq 'valid_intent'
+      expect(Intent.last.attrs[:description]).to eq 'some description'
+      expect(Intent.last.attrs[:mturk_response]).to eq 'some response'
     end
   end
 
@@ -24,7 +24,7 @@ describe Intent do
       expect(Intent.count).to eq 1
 
       expect(File.exist?(intent_file(Intent.last.id))).to eq true
-      expect(Intent.last.attrs['mturk_response']).to eq 'some response'
+      expect(Intent.last.attrs[:mturk_response]).to eq 'some response'
 
       expect(intent_from_db.name).to eq nil
       expect(intent_from_db.description).to eq nil
@@ -51,9 +51,9 @@ describe Intent do
       expect(intent_from_db.description).to eq nil
       expect(intent_from_db.mturk_response).to eq nil
 
-      expect(Intent.last.attrs['name']).to eq 'valid_intent'
-      expect(Intent.last.attrs['description']).to eq 'updated description'
-      expect(Intent.last.attrs['mturk_response']).to eq 'some response'
+      expect(Intent.last.attrs[:name]).to eq 'valid_intent'
+      expect(Intent.last.attrs[:description]).to eq 'updated description'
+      expect(Intent.last.attrs[:mturk_response]).to eq 'some response'
 
       expect( Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents"].count ).to eq 1
     end

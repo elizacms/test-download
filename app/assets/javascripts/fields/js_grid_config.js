@@ -39,10 +39,10 @@ function initFields(){
                 });
             },
             updateItem: function(item){
-                return ajaxCall( 'PUT', '/fields/'+ item["_id"]["$oid"], item);
+                return ajaxCall( 'PUT', '/fields/'+ item['id']['$oid'], item);
             },
             deleteItem: function(item){
-                return ajaxCall( 'DELETE', '/fields/' + item["_id"]["$oid"], null);
+                return ajaxCall( 'DELETE', '/fields/' + item['id']['$oid'], null);
 
             }
         },

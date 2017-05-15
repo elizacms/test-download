@@ -1,10 +1,7 @@
 class Intent
   include Mongoid::Document
   include Mongoid::Timestamps
-  include FileSystem::Accessible
-  include FileSystem::Persistable
-  include FileSystem::Updatable
-  include FileSystem::Destroyable
+  include FileSystem::CrudAble
 
   belongs_to :skill
   has_many :entities, class_name:'Field'

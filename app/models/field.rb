@@ -1,10 +1,7 @@
 class Field
   include Mongoid::Document
   include Mongoid::Timestamps
-  include FileSystem::Accessible
-  include FileSystem::Persistable
-  include FileSystem::Updatable
-  include FileSystem::Destroyable
+  include FileSystem::CrudAble
 
   field :name,        type: String
   field :type,        type: String
@@ -20,15 +17,7 @@ class Field
   end
 
   def serialize
-    attrs = self.attrs
-
-    {
-      _id: _id,
-      id: attrs['name'],
-      name: attrs['name'],
-      type: attrs['type'],
-      mturk_field: attrs['mturk_field']
-    }
+    self.attrs.merge!(id: self.id)
   end
 
   def unique_name
@@ -37,7 +26,7 @@ class Field
     end
 
     all_names = all_files.map do |f|
-      JSON.parse( File.read(f) ).with_indifferent_access[ :name ]
+      JSON.parse( File.read(f), symbolize_names: true )[ :name ]
     end
 
     if all_names.include? name

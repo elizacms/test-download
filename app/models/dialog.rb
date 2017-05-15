@@ -1,10 +1,7 @@
 class Dialog
   include Mongoid::Document
   include Mongoid::Attributes::Dynamic
-  include FileSystem::Accessible
-  include FileSystem::Persistable
-  include FileSystem::Updatable
-  include FileSystem::Destroyable
+  include FileSystem::CrudAble
 
   field :intent_id,      type:String
   field :priority,       type:Integer
@@ -27,19 +24,7 @@ class Dialog
 
   def serialize
     attrs = self.attrs
-
-    {
-      id: attrs['id'],
-      intent_id: attrs['intent_id'],
-      priority: attrs['priority'],
-      comments: attrs['comments'],
-      unresolved: attrs['unresolved'],
-      missing: attrs['missing'],
-      present: attrs['present'],
-      awaiting_field: attrs['awaiting_field'],
-      entity_values: attrs['entity_values'],
-      responses: responses.map(&:serialize)
-    }
+    attrs.merge!( responses: responses.map(&:serialize) )
   end
 
   def self.for intent

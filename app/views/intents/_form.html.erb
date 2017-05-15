@@ -2,10 +2,10 @@
   <div class="row">
     <div class="col-xs-12 col-md-6">
       <%= label_tag :name %>
-      <%= text_field_tag :name, @intent.attrs.try(:[], 'name') %><br><br>
+      <%= text_field_tag :name, @intent.attrs.try(:[], :name) %><br><br>
 
       <%= label_tag :description %><br>
-      <%= text_area_tag :description, @intent.attrs.try(:[],'description') %><br><br>
+      <%= text_area_tag :description, @intent.attrs.try(:[], :description) %><br><br>
     </div>
     <% if Intent.find_by( id: @intent.id ) %>
       <div class="col-xs-12 col-md-6">
