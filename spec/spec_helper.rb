@@ -46,6 +46,7 @@ RSpec.configure do |config|
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents" )
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/fields" )
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/dialogs" )
+    Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/responses" )
     ActionMailer::Base.deliveries = []
   end
 

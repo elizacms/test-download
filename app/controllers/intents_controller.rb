@@ -6,15 +6,7 @@ class IntentsController < ApplicationController
                 only: [ :edit, :update, :destroy, :fields, :dialogs, :submit_mturk_response ]
 
   def index
-    @intents = Intent.all.map do |intent|
-      data = JSON.parse(File.read("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/#{intent.id}.json"))
-      {
-        id: intent.id,
-        name: data['name'],
-        description: data['description'],
-        mturk_response: data['mturk_response']
-      }
-    end
+    @intents = Intent.all.map { |intent| intent.attrs.merge!(id: intent.id) }
   end
 
   def new

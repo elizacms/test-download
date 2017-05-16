@@ -19,12 +19,11 @@ class Dialog
   validates_presence_of :intent_id
 
   def self.file_system_tracked_attributes
-    %w(intent_id priority awaiting_field missing unresolved present entity_values comments)
+    %w(priority awaiting_field missing unresolved present entity_values comments)
   end
 
   def serialize
-    attrs = self.attrs
-    attrs.merge!( responses: responses.map(&:serialize) )
+    self.attrs.merge!( responses: responses.map(&:serialize) )
   end
 
   def self.for intent

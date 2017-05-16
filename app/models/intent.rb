@@ -24,11 +24,24 @@ class Intent
     end
 
     all_names = all_files.map do |f|
-      JSON.parse( File.read(f) ).with_indifferent_access[ :name ]
+      JSON.parse( File.read(f), symbolize_names: true )[ :name ]
     end
 
     if all_names.include? name
       errors.add :name, 'must be unique'
+    end
+  end
+
+  class << self
+    def find_by_name( name )
+      Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" ].each do |file|
+        if JSON.parse(File.read(file), symbolize_names: true)[:name] == name
+          id = file.split('/').last.split('.json').first
+          return Intent.find(id)
+        end
+      end
+
+      return nil
     end
   end
 end

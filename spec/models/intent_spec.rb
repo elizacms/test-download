@@ -1,15 +1,22 @@
-describe Intent, :focus do
+describe Intent do
   let(:valid_intent){{
     "name"           => "valid_intent",
     "description"    => "some description",
     "mturk_response" => "some response"
   }}
-  let( :skill          ){ create :skill }
-  let( :intent_from_db ){ Intent.first  }
+  let(  :skill          ){ create :skill }
+  let(  :intent_from_db ){ Intent.first  }
+  let!( :intent         ){ skill.intents.create!(valid_intent) }
+
+  describe '::find_by_name(name)' do
+    it 'should find the intent by name' do
+      expect( Intent.find_by_name( 'valid_intent' ).attrs[:description]).to eq 'some description'
+    end
+  end
 
   describe '#attrs' do
     it 'should return a hash of attributes' do
-      skill.intents.create!(valid_intent)
+
 
       expect(Intent.last.attrs[:name]).to eq 'valid_intent'
       expect(Intent.last.attrs[:description]).to eq 'some description'
@@ -19,8 +26,6 @@ describe Intent, :focus do
 
   describe '#create' do
     it 'should save a valid intent' do
-      skill.intents.create!(valid_intent)
-
       expect(Intent.count).to eq 1
 
       expect(File.exist?(intent_file(Intent.last.id))).to eq true
@@ -41,8 +46,6 @@ describe Intent, :focus do
 
   describe '#update' do
     it 'should update a valid intent' do
-      skill.intents.create(valid_intent)
-
       skill.intents.first.update('description' => 'updated description')
 
       expect(Intent.count).to eq 1
@@ -61,7 +64,6 @@ describe Intent, :focus do
 
   describe '#destroy' do
     it 'should delete both the mongo intent and the FS intent' do
-      skill.intents.create!(valid_intent)
       expect(Intent.count).to eq 1
 
       file_id = Intent.last.id

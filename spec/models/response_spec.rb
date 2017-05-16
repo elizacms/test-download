@@ -1,8 +1,8 @@
 describe Response do
-  let!( :skill    ){ create :skill                          }
-  let!( :intent   ){ create :intent, skill: skill           }
-  let!( :dialog   ){ create :dialog, intent_id: intent.name }
-  let!( :response ){ create :response, dialog: dialog       }
+  let!( :skill    ){ create :skill                        }
+  let!( :intent   ){ create :intent, skill: skill         }
+  let!( :dialog   ){ create :dialog, intent_id: intent.id }
+  let!( :response ){ create :response, dialog: dialog     }
   let!( :expected ){{
     id: BSON::ObjectId(response.id.to_s),
     response_type: 'some_type',

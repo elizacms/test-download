@@ -1,4 +1,4 @@
-describe Dialog, :focus do
+describe Dialog do
   let!( :skill  ){ create :skill }
   let!( :valid_intent ){{
     "name"           => "valid_intent",

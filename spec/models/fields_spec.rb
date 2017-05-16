@@ -1,4 +1,4 @@
-describe Field, :focus do
+describe Field do
   let!( :skill  ){ create :skill }
   let!( :intent_params ){{
     'name'           => 'My Intent',

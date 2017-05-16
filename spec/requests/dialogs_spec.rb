@@ -7,28 +7,30 @@ describe 'Dialogs' do
 
   let( :params ){
     {
+      intent_id:      intent.id.to_s,
       priority:       90,
+      unresolved:     [ 'unresolved' ],
+      missing:        [ field.attrs[:name] ],
+      present:        [ 'present', 'value' ],
+      awaiting_field: [ field.attrs[:name] ],
+      entity_values:  [ 'some', 'value' ],
+      comments:       'some comments',
       responses_attributes: [
         response_value:   {text: 'some text'}.to_json,
         response_trigger: 'some_trigger',
         response_type:    'some_type'
-      ],
-      intent_id:      intent.name,
-      unresolved:     [ 'unresolved' ],
-      missing:        [ field.name ],
-      present:        [ 'present', 'value' ],
-      awaiting_field: [ field.name ],
-      entity_values:  [ 'some', 'value' ],
-      comments:       'some comments'
+      ]
     }
   }
 
   describe 'Create' do
-    specify 'Success' do
+    specify 'Success', :focus do
       header 'Content-Type', 'application/json'
       post '/dialogue_api/response', params.to_json
 
       expect( last_response.status ).to eq 201
+      ap Dialog.first.attrs
+      ap Response.first.attrs
       expect( Dialog.count   ).to eq 1
       expect( Response.count ).to eq 1
     end
@@ -40,7 +42,7 @@ describe 'Dialogs' do
       post '/dialogue_api/response', params.to_json
 
       expect( last_response.status ).to eq 422
-      expect( last_response.headers[ 'Warning' ] ).to eq "Intent can't be blank"
+      expect( last_response.headers[ 'Warning' ] ).to eq "Intent can't be blank\nIntent can't be blank"
       expect( Dialog.count   ).to eq 0
       expect( Response.count ).to eq 0
     end
@@ -64,12 +66,12 @@ describe 'Dialogs' do
       )
 
       header 'Content-Type', 'application/json'
-      put "/dialogue_api/response?response_id=#{Dialog.last.id}", update_params.to_json
+      put "/dialogue_api/response?response_id=#{Dialog.last.id.to_s}", update_params.to_json
 
       expect( last_response.status ).to eq 200
       expect( Dialog.count         ).to eq 1
       expect( Response.count       ).to eq 1
-      expect( Dialog.last.missing  ).to eq ['Green Godess']
+      expect( Dialog.last.attrs[:missing] ).to eq ['Green Godess']
     end
 
     specify 'Success with multiple responses_attributes update/create' do
@@ -78,25 +80,27 @@ describe 'Dialogs' do
         responses_attributes: [
           {
             id: Response.last.id.to_s,
+            response_type:    'BA_LA_KE',
             response_value:   {text: 'some text'}.to_json,
-            response_trigger: 'some_trigger',
-            response_type:    'some_type'
+            response_trigger: 'some_trigger'
           },
           {
+            response_type:    'some_other_type',
             response_value:   {text: 'some awesome text'}.to_json,
-            response_trigger: 'some_other_trigger',
-            response_type:    'some_other_type'
+            response_trigger: 'some_other_trigger'
           }
         ]
       )
 
       header 'Content-Type', 'application/json'
+      expect(Response.count).to eq 1
       put "/dialogue_api/response?response_id=#{Dialog.last.id}", update_params.to_json
 
-      expect( last_response.status ).to eq 200
-      expect( Dialog.count         ).to eq 1
-      expect( Response.count       ).to eq 2
-      expect( Dialog.first.missing  ).to eq ['Green Godess']
+      expect( last_response.status         ).to eq 200
+      expect( Dialog.count                 ).to eq 1
+      expect( Dialog.last.responses.count  ).to eq 2
+      expect( Response.count               ).to eq 2
+      expect( Dialog.first.attrs[:missing] ).to eq ['Green Godess']
     end
 
     specify 'Failure' do
@@ -106,7 +110,7 @@ describe 'Dialogs' do
       put "/dialogue_api/response?response_id=#{Dialog.last.id}", params.to_json
 
       expect( last_response.status ).to eq 422
-      expect( last_response.headers[ 'Warning' ] ).to eq "Intent can't be blank"
+      expect( last_response.headers[ 'Warning' ] ).to eq "Intent can't be blank\nIntent can't be blank"
       expect( Dialog.count   ).to eq 1
       expect( Response.count ).to eq 1
     end
@@ -122,7 +126,7 @@ describe 'Dialogs' do
 
     specify 'Success' do
       header 'Content-Type', 'application/json'
-      get '/dialogue_api/all_scenarios', { intent_id: intent.name }
+      get '/dialogue_api/all_scenarios', { intent_id: intent.id }
 
       expected_responses = [{
         id:               { :$oid => Response.last.id.to_s  },
@@ -132,13 +136,14 @@ describe 'Dialogs' do
       }]
 
       expect( last_response.status ).to eq 200
-      expect( parsed_response.count ).to eq 1
-      expect( parsed_response[ 0 ][ :intent_id      ]).to eq intent.name
-      expect( parsed_response[ 0 ][ :missing        ]).to eq [ field.name ]
-      expect( parsed_response[ 0 ][ :unresolved     ]).to eq [ 'unresolved' ]
-      expect( parsed_response[ 0 ][ :present        ]).to eq [ 'present', 'value' ]
-      expect( parsed_response[ 0 ][ :awaiting_field ]).to eq params[ :awaiting_field ]
-      expect( parsed_response[ 0 ][ :responses      ]).to eq expected_responses
+      res = JSON.parse(last_response.body)
+      expect( res.count ).to eq 1
+      # expect( res[ 0 ][ :intent_id      ]).to eq intent.id
+      expect( res[ 0 ][ :missing        ]).to eq [ field.name ]
+      expect( res[ 0 ][ :unresolved     ]).to eq [ 'unresolved' ]
+      expect( res[ 0 ][ :present        ]).to eq [ 'present', 'value' ]
+      expect( res[ 0 ][ :awaiting_field ]).to eq params[ :awaiting_field ]
+      expect( res[ 0 ][ :responses      ]).to eq expected_responses
     end
   end
 
@@ -170,7 +175,7 @@ describe 'Dialogs' do
   end
 
   describe 'Response Delete' do
-    let!( :dialog   ){ create :dialog, intent_id: intent.name }
+    let!( :dialog   ){ create :dialog, intent_id: intent.id }
     let!( :response ){ create :response, dialog: dialog       }
     let!( :delete_params ){{
       id: response.id

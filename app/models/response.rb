@@ -1,5 +1,6 @@
 class Response
   include Mongoid::Document
+  include FileSystem::CrudAble
 
   field :response_type,    type:String
   field :response_trigger, type:String
@@ -7,12 +8,11 @@ class Response
 
   belongs_to :dialog
 
+  def self.file_system_tracked_attributes
+    %w(response_type response_trigger response_value)
+  end
+
   def serialize
-    {
-      id: id,
-      response_value: response_value,
-      response_type: response_type.blank? ? '{}' : response_type,
-      response_trigger: response_trigger.blank? ? '{}' : response_trigger
-    }
+    self.attrs.merge!(id: id)
   end
 end
