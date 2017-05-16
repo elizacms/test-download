@@ -157,6 +157,9 @@ $(document).on('turbolinks:load', function(){
               $('#skill_retrieve_url').val( skillUrl + '.com/retrieve');
               $('#skill_format_url'  ).val( skillUrl + '.com/format');
 
+              if ($('.skill-retrieve').find('.requestCodeMirror').length > 0){
+                $('.skill-retrieve').find('.requestCodeMirror').remove();
+              }
               createAndPopulateCodeMirror(r, $('.skill-retrieve'), '.text-input-retrieve', false, true );
           } else if ( action === '/api/skill' ){
               var formatJSON = {};
