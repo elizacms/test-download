@@ -1,18 +1,18 @@
 describe Response do
-  let!( :skill    ){ create :skill                        }
-  let!( :intent   ){ create :intent, skill: skill         }
-  let!( :dialog   ){ create :dialog, intent_id: intent.id }
-  let!( :response ){ create :response, dialog: dialog     }
-  let( :expected ){{
+  let!( :skill    ){ create :skill                          }
+  let!( :intent   ){ create :intent, skill: skill           }
+  let!( :dialog   ){ create :dialog, intent_id: intent.id   }
+  let!( :response ){ create :response, dialog_id: dialog.id }
+  let(  :expected ){{
     id: BSON::ObjectId(response.id.to_s),
     response_type: 'some_type',
     response_value: {text: "where would you like to go?"}.to_json,
     response_trigger: 'some_trigger'
   }}
   let(  :response_from_db ){ Response.last }
-  let( :responses_path    ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/responses/*.json" }
+  let(  :responses_path   ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/responses/*.json" }
 
-  describe '#save', :focus do
+  describe '#save' do
     specify 'is idempotent' do
       expect( response.attrs[ :response_type ] ).to eq 'some_type'
 
@@ -21,7 +21,7 @@ describe Response do
     end
 
     specify 'does not save attribute in DB' do
-      expect( response.attrs[ :response_type ]).to eq 'some_type'
+      expect( response.attrs[ :response_type ] ).to eq 'some_type'
 
       response.save
       expect( response_from_db.response_type ).to be_nil

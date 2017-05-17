@@ -21,6 +21,22 @@ describe Field do
     expect( FactoryGirl.build( :field, intent: intent ) ).to_not be_valid
   end
 
+  describe '#save' do
+    specify 'is idempotent' do
+      expect( field.attrs[ :name ] ).to eq 'some name'
+
+      field.save
+      expect( field.attrs[ :name ] ).to eq 'some name'
+    end
+
+    specify 'does not save attribute in DB' do
+      expect( field.attrs[ :name ] ).to eq 'some name'
+
+      field.save
+      expect( field_from_db.name ).to be_nil
+    end
+  end
+
   describe '#create' do
     it 'should create a field' do
       expect(Field.count).to eq 1

@@ -16,7 +16,7 @@ module FileSystem
 
       super( validate: false )
 
-      file_data.each{|k,v| self[k] = v}
+      file_data.each {|k,v| self[k] = v}
     end
 
     def attrs

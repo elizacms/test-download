@@ -16,9 +16,9 @@ describe Dialog do
     'entity_values'  => ['beings'],
     'comments'       => 'say something'
   }}
-  let( :dialog_from_db ){ Dialog.last }
-  let( :dialogs_path   ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/dialogs/*.json" }
-  let!( :dialog        ){ intent.dialogs.create!(dialog_params) }
+  let(  :dialog_from_db ){ Dialog.last }
+  let(  :dialogs_path   ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/dialogs/*.json" }
+  let!( :dialog         ){ intent.dialogs.create!(dialog_params) }
 
 
   describe 'Dialogs' do
@@ -78,14 +78,38 @@ describe Dialog do
 
   describe '#save' do
     specify 'is idempotent' do
-      expect( dialog.attrs[ :priority ]).to eq 100
+      expect( dialog.attrs[ :priority ] ).to eq 100
 
       dialog.save
-      expect( dialog.attrs[ :priority ]).to eq 100
+      expect( dialog.attrs[ :priority ] ).to eq 100
+    end
+
+    specify 'is idempotent with accepts_nested_attributes', :focus do
+      field = FactoryGirl.create(:field, intent: intent)
+      dialog = Dialog.new({
+        intent_id:      intent.id.to_s,
+        priority:       90,
+        unresolved:     [ 'unresolved' ],
+        missing:        [ field.attrs[:name] ],
+        present:        [ 'present', 'value' ],
+        awaiting_field: [ field.attrs[:name] ],
+        entity_values:  [ 'some', 'value' ],
+        comments:       'some comments',
+        responses_attributes: [
+          response_value:   {text: 'some text'}.to_json,
+          response_trigger: 'some_trigger',
+          response_type:    'some_type'
+        ]
+      })
+
+      dialog.save
+      ap dialog.serialize
+      ap Response.count
+      expect( dialog.attrs[ :priority ] ).to eq 100
     end
 
     specify 'does not save attribute in DB' do
-      expect( dialog.attrs[ :priority ]).to eq nil
+      expect( dialog.attrs[ :priority ] ).to eq 100
 
       dialog.save
       expect( dialog_from_db.priority ).to be_nil

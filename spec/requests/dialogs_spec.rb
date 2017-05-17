@@ -66,7 +66,7 @@ describe 'Dialogs' do
       )
 
       header 'Content-Type', 'application/json'
-      put "/dialogue_api/response?response_id=#{Dialog.last.id.to_s}", update_params.to_json
+      put "/dialogue_api/response?id=#{Dialog.last.id.to_s}", update_params.to_json
 
       expect( last_response.status ).to eq 200
       expect( Dialog.count         ).to eq 1
@@ -94,7 +94,7 @@ describe 'Dialogs' do
 
       header 'Content-Type', 'application/json'
       expect(Response.count).to eq 1
-      put "/dialogue_api/response?response_id=#{Dialog.last.id}", update_params.to_json
+      put "/dialogue_api/response?id=#{Dialog.last.id}", update_params.to_json
 
       expect( last_response.status         ).to eq 200
       expect( Dialog.count                 ).to eq 1
@@ -107,7 +107,7 @@ describe 'Dialogs' do
       params.merge!( intent_id: nil )
 
       header 'Content-Type', 'application/json'
-      put "/dialogue_api/response?response_id=#{Dialog.last.id}", params.to_json
+      put "/dialogue_api/response?id=#{Dialog.last.id}", params.to_json
 
       expect( last_response.status ).to eq 422
       expect( last_response.headers[ 'Warning' ] ).to eq "Intent can't be blank\nIntent can't be blank"
@@ -136,14 +136,13 @@ describe 'Dialogs' do
       }]
 
       expect( last_response.status ).to eq 200
-      res = JSON.parse(last_response.body)
-      expect( res.count ).to eq 1
-      # expect( res[ 0 ][ :intent_id      ]).to eq intent.id
-      expect( res[ 0 ][ :missing        ]).to eq [ field.name ]
-      expect( res[ 0 ][ :unresolved     ]).to eq [ 'unresolved' ]
-      expect( res[ 0 ][ :present        ]).to eq [ 'present', 'value' ]
-      expect( res[ 0 ][ :awaiting_field ]).to eq params[ :awaiting_field ]
-      expect( res[ 0 ][ :responses      ]).to eq expected_responses
+      expect( parsed_response.count ).to eq 1
+      # expect( parsed_response[ 0 ][ :intent_id      ]).to eq intent.id
+      expect( parsed_response[ 0 ][ :missing        ]).to eq [ field.name ]
+      expect( parsed_response[ 0 ][ :unresolved     ]).to eq [ 'unresolved' ]
+      expect( parsed_response[ 0 ][ :present        ]).to eq [ 'present', 'value' ]
+      expect( parsed_response[ 0 ][ :awaiting_field ]).to eq [ field.name ]
+      expect( parsed_response[ 0 ][ :responses      ]).to eq expected_responses
     end
   end
 

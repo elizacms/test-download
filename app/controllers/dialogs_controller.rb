@@ -13,7 +13,7 @@ class DialogsController < ApplicationController
   # POST /dialogue_api/response
   def create
     dialog = Dialog.new( dialog_params )
-    
+
     if dialog.save
       render json: {}, status: :created
     else
@@ -23,7 +23,7 @@ class DialogsController < ApplicationController
   end
 
   def update
-    dialog = Dialog.find( id: dialog_params[ :response_id ] )
+    dialog = Dialog.find( id: dialog_params[ :id ] )
 
     if dialog.update(dialog_params.to_h)
       render json: {}, status: :ok
@@ -34,7 +34,7 @@ class DialogsController < ApplicationController
   end
 
   def delete
-    dialog = Dialog.find( id: dialog_params[ :response_id ] )
+    dialog = Dialog.find( id: dialog_params[ :id ] )
     dialog.delete
 
     render plain: "You deleted a Dialog.", status: :ok
@@ -74,8 +74,8 @@ class DialogsController < ApplicationController
 
   def dialog_params
     params.permit(
+      :id,
       :intent_id,
-      :response_id, #refactor
       :priority,
       :comments,
       responses_attributes: [

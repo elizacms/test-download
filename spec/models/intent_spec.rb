@@ -15,6 +15,22 @@ describe Intent do
     end
   end
 
+  describe '#save' do
+    specify 'is idempotent' do
+      expect( intent.attrs[ :name ] ).to eq 'valid_intent'
+
+      intent.save
+      expect( intent.attrs[ :name ] ).to eq 'valid_intent'
+    end
+
+    specify 'does not save attribute in DB' do
+      expect( intent.attrs[ :name ] ).to eq 'valid_intent'
+
+      intent.save
+      expect( intent_from_db.name ).to be_nil
+    end
+  end
+
   describe '#attrs' do
     it 'should return a hash of attributes' do
       expect(Intent.last.attrs[:name]).to eq 'valid_intent'
