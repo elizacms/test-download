@@ -87,6 +87,22 @@ describe Dialog do
     end
   end
 
+  describe '#save' do
+    specify 'is idempotent' do
+      expect( dialog.attrs[ :priority ]).to eq 100
+
+      dialog.save
+      expect( dialog.attrs[ :priority ]).to eq 100
+    end
+
+    specify 'does not save attribute in DB' do
+      expect( dialog.attrs[ :priority ]).to eq 100
+
+      dialog.save
+      expect( dialog_from_db.priority ).to be_nil
+    end
+  end
+
   describe '#attrs' do
     it 'should return a hash of attributes' do
       expect( Dialog.count ).to eq 1

@@ -1,6 +1,9 @@
 class Dialog
   include Mongoid::Document
+
+  # TODO remove?
   include Mongoid::Attributes::Dynamic
+  
   include FileSystem::CrudAble
 
   field :intent_id,      type:String

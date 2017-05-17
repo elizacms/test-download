@@ -24,7 +24,7 @@ describe 'Dialogs' do
   }
 
   describe 'Create' do
-    specify 'Success', :focus do
+    specify 'Success' do
       header 'Content-Type', 'application/json'
       post '/dialogue_api/response', params.to_json
 

@@ -13,7 +13,7 @@ class DialogsController < ApplicationController
   # POST /dialogue_api/response
   def create
     dialog = Dialog.new( dialog_params )
-
+    
     if dialog.save
       render json: {}, status: :created
     else
