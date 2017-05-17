@@ -5,8 +5,6 @@ module FileSystem
     end
 
     def save opts={}
-      # ap "#{:__SAVE__} -- CLASS: #{self.class}"
-      # ap attributes
       return unless valid?
 
       file_data = self.class.file_system_tracked_attributes
@@ -18,7 +16,7 @@ module FileSystem
 
       super( validate: false )
 
-      file_data.each{| k,v | self[ k ] = v }
+      file_data.each{|k,v| self[k] = v}
     end
 
     def attrs

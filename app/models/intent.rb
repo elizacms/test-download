@@ -14,16 +14,8 @@ class Intent
   validates_presence_of :name
   validate :unique_name
 
-  def self.file_system_tracked_attributes
-    %w(name description mturk_response)
-  end
-
   def unique_name
-    all_files = Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" ].delete_if do |f|
-      f =~ /#{self.id.to_s}/
-    end
-
-    all_names = all_files.map do |f|
+    all_names = Intent.all_files.delete_if { |f| f =~ /#{self.id.to_s}/ }.map do |f|
       JSON.parse( File.read(f), symbolize_names: true )[ :name ]
     end
 
@@ -32,16 +24,22 @@ class Intent
     end
   end
 
-  class << self
-    def find_by_name( name )
-      Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" ].each do |file|
-        if JSON.parse(File.read(file), symbolize_names: true)[:name] == name
-          id = file.split('/').last.split('.json').first
-          return Intent.find(id)
-        end
-      end
+  def self.file_system_tracked_attributes
+    %w(name description mturk_response)
+  end
 
-      return nil
+  def self.find_by_name( name )
+    Intent.all_files.each do |file|
+      if JSON.parse(File.read(file), symbolize_names: true)[:name] == name
+        id = File.basename(file, '.json')
+        return Intent.find(id)
+      end
     end
+
+    return nil
+  end
+
+  def self.all_files
+    Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json"]
   end
 end

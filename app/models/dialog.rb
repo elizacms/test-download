@@ -1,9 +1,6 @@
 class Dialog
   include Mongoid::Document
-
-  # TODO remove?
-  include Mongoid::Attributes::Dynamic
-  
+  include Mongoid::Timestamps
   include FileSystem::CrudAble
 
   field :intent_id,      type:String
@@ -17,7 +14,7 @@ class Dialog
 
   belongs_to :intent
   has_many :responses
-  accepts_nested_attributes_for :responses, dependent: :destory
+  accepts_nested_attributes_for :responses, dependent: :destroy
 
   validates_presence_of :intent_id
 

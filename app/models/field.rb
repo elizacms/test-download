@@ -21,16 +21,16 @@ class Field
   end
 
   def unique_name
-    all_files = Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/fields/*.json" ].delete_if do |f|
-      f =~ /#{self.id.to_s}/
-    end
-
-    all_names = all_files.map do |f|
-      JSON.parse( File.read(f), symbolize_names: true )[ :name ]
+    all_names = Field.all_files.delete_if { |f| f =~ /#{self.id.to_s}/ }.map do |f|
+      JSON.parse( File.read(f), symbolize_names: true )[:name]
     end
 
     if all_names.include? name
       errors.add :name, 'must be unique'
     end
+  end
+
+  def self.all_files
+    Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/fields/*.json"]
   end
 end

@@ -121,14 +121,12 @@ class DialogUploader
     private
 
     def field_value_for_dialog_exists?( intent_name, ary )
+      valid_ary = Intent.find_by_name(intent_name).entities.map{|i| i.attrs[:name]}
+
       ary.each do |a|
         next if a == 'None' || a == 'none'
 
-        valid_ary = Intent.find_by_name(intent_name).entities.map{|i| i.attrs[:name]}
-
-        if !valid_ary.include?(a)
-          return false
-        end
+        return false if !valid_ary.include?(a)
       end
 
       true

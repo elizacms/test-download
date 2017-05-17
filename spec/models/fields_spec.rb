@@ -26,6 +26,15 @@ describe Field do
       expect(Field.count).to eq 1
       expect(Dir[fields_path].count).to eq 1
     end
+
+    it 'with factory saves to file system' do
+      field = FactoryGirl.create(:field, intent: intent)
+
+      expect(field).to be_valid
+      expect(Field.count).to eq 2
+      expect(Dir[fields_path].count).to eq 2
+      expect(field.attrs[:name]).to eq 'destination'
+    end
   end
 
   describe '#update' do

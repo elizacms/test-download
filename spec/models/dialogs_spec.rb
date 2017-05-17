@@ -22,53 +22,42 @@ describe Dialog do
 
 
   describe 'Dialogs' do
+    specify 'Creating with factory saves to file system' do
+      dialog = FactoryGirl.create(:dialog, intent_id: intent.id)
+
+      expect(dialog).to be_valid
+      expect(Dialog.count).to eq 2
+      expect(Dir[dialogs_path].count).to eq 2
+      expect(dialog.attrs[:priority]).to eq 90
+    end
+
     specify 'Array with non-empty string should be valid' do
       expect(
-        FactoryGirl.build(
-          :dialog,
-          awaiting_field: ['abc'],
-          missing: ['abc'],
-          intent_id: intent.id
-        )
+        FactoryGirl.build( :dialog, awaiting_field: ['abc'], missing: ['abc'], intent_id: intent.id )
       ).to be_valid
     end
 
-    specify do
+    specify 'Success from missing' do
       expect(
-        FactoryGirl.build(
-          :dialog,
-          intent_id: intent.id,
-          missing: ['Something here.'] )
+        FactoryGirl.build( :dialog, intent_id: intent.id, missing: ['Something here.'] )
       ).to be_valid
     end
 
     specify 'Success from unresolved' do
       expect(
-        FactoryGirl.build(
-          :dialog,
-          intent_id: intent.id,
-          unresolved: ['Something here.']
-        )
+        FactoryGirl.build( :dialog, intent_id: intent.id, unresolved: ['Something here.'] )
       ).to be_valid
     end
 
     specify 'Success from present' do
       expect(
-        FactoryGirl.build(
-          :dialog,
-          intent_id: intent.id,
-          present: ['Something here.']
-        )
+        FactoryGirl.build( :dialog, intent_id: intent.id, present: ['Something here.'] )
       ).to be_valid
     end
 
     specify 'Success from entity_values' do
       expect(
-        FactoryGirl.build(
-          :dialog,
-          intent_id: intent.id,
-          entity_values: ['some','thing']
-        )
+        FactoryGirl.build( :dialog, intent_id: intent.id, entity_values: ['some','thing'] )
       ).to be_valid
     end
   end
@@ -96,7 +85,7 @@ describe Dialog do
     end
 
     specify 'does not save attribute in DB' do
-      expect( dialog.attrs[ :priority ]).to eq 100
+      expect( dialog.attrs[ :priority ]).to eq nil
 
       dialog.save
       expect( dialog_from_db.priority ).to be_nil

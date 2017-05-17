@@ -7,6 +7,7 @@ describe Intent do
   let(  :skill          ){ create :skill }
   let(  :intent_from_db ){ Intent.first  }
   let!( :intent         ){ skill.intents.create!(valid_intent) }
+  let(  :intents_path   ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" }
 
   describe '::find_by_name(name)' do
     it 'should find the intent by name' do
@@ -16,8 +17,6 @@ describe Intent do
 
   describe '#attrs' do
     it 'should return a hash of attributes' do
-
-
       expect(Intent.last.attrs[:name]).to eq 'valid_intent'
       expect(Intent.last.attrs[:description]).to eq 'some description'
       expect(Intent.last.attrs[:mturk_response]).to eq 'some response'
@@ -42,6 +41,15 @@ describe Intent do
 
       expect(Intent.count).to eq 1
     end
+
+    it 'with factory saves to file system' do
+      intent = FactoryGirl.create(:intent, skill: skill)
+
+      expect(intent).to be_valid
+      expect(Intent.count).to eq 2
+      expect(Dir[intents_path].count).to eq 2
+      expect(intent.attrs[:name]).to eq 'get_ride'
+    end
   end
 
   describe '#update' do
@@ -58,7 +66,7 @@ describe Intent do
       expect(Intent.last.attrs[:description]).to eq 'updated description'
       expect(Intent.last.attrs[:mturk_response]).to eq 'some response'
 
-      expect( Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents"].count ).to eq 1
+      expect( Dir[intents_path].count ).to eq 1
     end
   end
 
@@ -72,7 +80,7 @@ describe Intent do
 
       expect(Intent.count).to eq 0
       expect(File.exist?(intent_file(file_id))).to eq false
-      expect( Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json"].count ).to eq 0
+      expect( Dir[intents_path].count ).to eq 0
     end
   end
 end

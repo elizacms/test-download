@@ -15,7 +15,7 @@ class IntentUploader
         return 'You do not have permission to upload intents for that skill.'
       end
 
-      intent_names = Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" ].map do |file|
+      intent_names = Intent.all_files.map do |file|
         JSON.parse(File.read(file), symbolize_names: true)[:name]
       end
 

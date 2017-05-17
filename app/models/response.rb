@@ -13,6 +13,6 @@ class Response
   end
 
   def serialize
-    self.attrs.merge!(id: id)
+    { id: id }.merge!( self.attrs )
   end
 end
