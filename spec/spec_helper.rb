@@ -41,6 +41,8 @@ RSpec.configure do |config|
   ]
 
   config.before(:each) do
+    FileUtils.rm_rf( Dir.glob( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/*" ) )
+    
     I18n.default_locale = 'en'
     Mongoid.purge!
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents" )
@@ -51,7 +53,6 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    FileUtils.rm_rf( Dir.glob( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/*" ) )
   end
 end
 

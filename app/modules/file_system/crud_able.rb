@@ -20,12 +20,29 @@ module FileSystem
     end
 
     def attrs
-      File.exist?(file_url) ? JSON.parse(File.read(file_url), symbolize_names: true) : {}
+      attrs_from_file = File.exist?(file_url) ? 
+                          JSON.parse(File.read(file_url)) : 
+                          {}
+
+      attrs_from_file.compact!
+
+      attributes.merge( attrs_from_file ).with_indifferent_access
     end
 
-    def update attributes={}
-      existing = JSON.parse(File.read(file_url), symbolize_names: true)
-      self.attributes = existing.merge!( attributes )
+    def update update_attrs={}
+      # ap "#{ self.class } #{ __method__ }"
+      # ap self.attributes
+      
+      # file_attrs = JSON.parse(File.read(file_url), symbolize_names: true)
+      # self.attributes = attrs.merge( update_attrs )
+
+      all_attrs = attrs
+
+      self.class.file_system_tracked_attributes.each do | k |
+        self[ k ] = all_attrs[ k ]
+      end
+
+      # ap self.attributes
 
       super
     end

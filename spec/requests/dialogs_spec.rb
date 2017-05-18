@@ -94,6 +94,7 @@ describe 'Dialogs' do
 
       header 'Content-Type', 'application/json'
       expect(Response.count).to eq 1
+
       put "/dialogue_api/response?id=#{Dialog.last.id}", update_params.to_json
 
       expect( last_response.status         ).to eq 200

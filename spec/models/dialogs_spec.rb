@@ -84,9 +84,10 @@ describe Dialog do
       expect( dialog.attrs[ :priority ] ).to eq 100
     end
 
-    specify 'is idempotent with accepts_nested_attributes', :focus do
+    specify 'is idempotent with accepts_nested_attributes' do
       field = FactoryGirl.create(:field, intent: intent)
-      dialog = Dialog.new({
+      
+      dialog = Dialog.create({
         intent_id:      intent.id.to_s,
         priority:       90,
         unresolved:     [ 'unresolved' ],
@@ -96,16 +97,18 @@ describe Dialog do
         entity_values:  [ 'some', 'value' ],
         comments:       'some comments',
         responses_attributes: [
-          response_value:   {text: 'some text'}.to_json,
+          response_value:   {text: 'some text'},
           response_trigger: 'some_trigger',
           response_type:    'some_type'
         ]
       })
 
+      # puts dialog.id
+
+      expect( dialog.attrs[ :priority ] ).to eq 90
+
       dialog.save
-      ap dialog.serialize
-      ap Response.count
-      expect( dialog.attrs[ :priority ] ).to eq 100
+      expect( dialog.attrs[ :priority ] ).to eq 90
     end
 
     specify 'does not save attribute in DB' do
@@ -170,6 +173,16 @@ describe Dialog do
       expect( Dialog.count ).to eq 0
       expect( File.exist?("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/dialogs/#{dialog_id}.json") ).to eq false
       expect( Dir[dialogs_path].count ).to eq 0
+    end
+  end
+
+  describe 'long term persistence' do
+    before do
+      dialog.save
+    end
+
+    specify do
+      expect( dialog_from_db.attrs[:priority]).to eq 100
     end
   end
 end
