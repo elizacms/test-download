@@ -84,9 +84,9 @@ describe Dialog do
       expect( dialog.attrs[ :priority ] ).to eq 100
     end
 
-    specify 'is idempotent with accepts_nested_attributes' do
+    specify 'is idempotent with accepts_nested_attributes for #create' do
       field = FactoryGirl.create(:field, intent: intent)
-      
+
       dialog = Dialog.create({
         intent_id:      intent.id.to_s,
         priority:       90,
@@ -103,12 +103,60 @@ describe Dialog do
         ]
       })
 
-      # puts dialog.id
-
       expect( dialog.attrs[ :priority ] ).to eq 90
 
       dialog.save
       expect( dialog.attrs[ :priority ] ).to eq 90
+      expect( Response.last.attrs[:response_type] ).to eq 'some_type'
+    end
+
+    specify 'is idempotent with accepts_nested_attributes for #update' do
+      field = FactoryGirl.create(:field, intent: intent)
+
+      dialog = Dialog.create({
+        intent_id:      intent.id.to_s,
+        priority:       90,
+        unresolved:     [ 'unresolved' ],
+        missing:        [ field.attrs[:name] ],
+        present:        [ 'present', 'value' ],
+        awaiting_field: [ field.attrs[:name] ],
+        entity_values:  [ 'some', 'value' ],
+        comments:       'some comments',
+        responses_attributes: [
+          response_value:   {text: 'some text'},
+          response_trigger: 'some_trigger',
+          response_type:    'some_type'
+        ]
+      })
+
+      expect( Response.count ).to eq 1
+      expect( dialog.attrs[ :priority ] ).to eq 90
+      expect( Response.last.attrs[:response_type] ).to eq 'some_type'
+
+      dialog.update({
+        intent_id:            intent.id.to_s,
+        priority:             100,
+        responses_attributes: [
+          {
+            id:               Response.last.id.to_s,
+            response_value:   {text: 'updated value'},
+            response_trigger: 'updated trigger',
+            response_type:    'updated type'
+          },
+          {
+            response_value:   {text: 'new response'},
+            response_trigger: 'new trigger',
+            response_type:    'new type'
+          }
+        ]
+      })
+
+      expect( dialog.attrs[:priority]    ).to eq 100
+      expect( dialog.attrs[:missing]     ).to eq [ field.attrs[:name] ]
+      expect( dialog.attrs[:unresolved]  ).to eq [ 'unresolved' ]
+      expect( Response.count             ).to eq 2
+      expect( Response.first.attrs[:response_type] ).to eq 'updated type'
+      expect( Response.last.attrs[:response_type]  ).to eq 'new type'
     end
 
     specify 'does not save attribute in DB' do
@@ -123,16 +171,15 @@ describe Dialog do
     it 'should return a hash of attributes' do
       expect( Dialog.count ).to eq 1
 
-      # Need to investigate this
-      # expect( dialog.attrs[:intent_id]['$oid'] ).to eq dialog.id.to_s
-
-      expect( dialog.attrs[:priority]          ).to eq 100
-      expect( dialog.attrs[:awaiting_field]    ).to eq ['await']
-      expect( dialog.attrs[:missing]           ).to eq ['miss']
-      expect( dialog.attrs[:unresolved]        ).to eq ['no_resolve']
-      expect( dialog.attrs[:present]           ).to eq ['here i am']
-      expect( dialog.attrs[:entity_values]     ).to eq ['beings']
-      expect( dialog.attrs[:comments]          ).to eq 'say something'
+      expect( dialog.attrs[:_id]            ).to eq dialog._id
+      expect( dialog.attrs[:intent_id]      ).to eq BSON::ObjectId(intent.id.to_s)
+      expect( dialog.attrs[:priority]       ).to eq 100
+      expect( dialog.attrs[:awaiting_field] ).to eq ['await']
+      expect( dialog.attrs[:missing]        ).to eq ['miss']
+      expect( dialog.attrs[:unresolved]     ).to eq ['no_resolve']
+      expect( dialog.attrs[:present]        ).to eq ['here i am']
+      expect( dialog.attrs[:entity_values]  ).to eq ['beings']
+      expect( dialog.attrs[:comments]       ).to eq 'say something'
     end
   end
 

@@ -7,14 +7,16 @@ class DialogsController < ApplicationController
   #   intent_id=play_music
   def index
     dialogs = Dialog.where( intent_id: params[ :intent_id ] ).order('priority DESC')
-    render json: dialogs.map( &:serialize ).to_json
+
+    render json: dialogs.map(&:dialog_with_responses).to_json
   end
 
   # POST /dialogue_api/response
   def create
     dialog = Dialog.new( dialog_params )
 
-    if dialog.save
+    if dialog.valid?
+      Dialog.create!( dialog_params )
       render json: {}, status: :created
     else
       response.headers[ 'Warning' ] = dialog.errors.full_messages.join "\n"
@@ -23,9 +25,9 @@ class DialogsController < ApplicationController
   end
 
   def update
-    dialog = Dialog.find( id: dialog_params[ :id ] )
+    dialog = Dialog.find( id: params[ :id ] )
 
-    if dialog.update(dialog_params.to_h)
+    if dialog.update(dialog_params)
       render json: {}, status: :ok
     else
       response.headers[ 'Warning' ] = dialog.errors.full_messages.join "\n"

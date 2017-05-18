@@ -29,10 +29,10 @@ describe 'Dialogs' do
       post '/dialogue_api/response', params.to_json
 
       expect( last_response.status ).to eq 201
-      ap Dialog.first.attrs
-      ap Response.first.attrs
       expect( Dialog.count   ).to eq 1
       expect( Response.count ).to eq 1
+      expect( Response.first.attrs[:response_type] ).to eq 'some_type'
+      expect( Dialog.first.attrs[:priority] ).to eq 90
     end
 
     specify 'Failure' do
@@ -54,14 +54,21 @@ describe 'Dialogs' do
       post '/dialogue_api/response', params.to_json
     end
 
-    specify 'Success' do
+    specify 'Success', :focus do
       update_params = params.merge!(
         missing: ['Green Godess'],
         responses_attributes: [
-          id: Response.last.id.to_s,
-          response_value: {text: 'some text'}.to_json,
-          response_trigger: 'some_trigger',
-          response_type: 'some_type'
+          {
+            id: Response.last.id.to_s,
+            response_value: {text: 'some text'}.to_json,
+            response_trigger: 'some_trigger',
+            response_type: 'some_type'
+          },
+          # {
+          #   response_value: {text: 'some text'}.to_json,
+          #   response_trigger: 'some_trigger',
+          #   response_type: 'some_type'
+          # }
         ]
       )
 
@@ -74,12 +81,12 @@ describe 'Dialogs' do
       expect( Dialog.last.attrs[:missing] ).to eq ['Green Godess']
     end
 
-    specify 'Success with multiple responses_attributes update/create' do
-      update_params = params.merge!(
-        missing: ['Green Godess'],
+    specify 'Success with multiple responses_attributes update/create', :focus do
+      update_params = params.merge!({
+        missing:              ['Green Godess'],
         responses_attributes: [
           {
-            id: Response.last.id.to_s,
+            id:                Response.last.id.to_s,
             response_type:    'BA_LA_KE',
             response_value:   {text: 'some text'}.to_json,
             response_trigger: 'some_trigger'
@@ -90,17 +97,18 @@ describe 'Dialogs' do
             response_trigger: 'some_other_trigger'
           }
         ]
-      )
+      })
 
-      header 'Content-Type', 'application/json'
       expect(Response.count).to eq 1
 
-      put "/dialogue_api/response?id=#{Dialog.last.id}", update_params.to_json
+      header 'Content-Type', 'application/json'
+      put "/dialogue_api/response?id=#{Dialog.last.id.to_s}", update_params.to_json
 
       expect( last_response.status         ).to eq 200
       expect( Dialog.count                 ).to eq 1
       expect( Dialog.last.responses.count  ).to eq 2
       expect( Response.count               ).to eq 2
+
       expect( Dialog.first.attrs[:missing] ).to eq ['Green Godess']
     end
 
@@ -130,7 +138,8 @@ describe 'Dialogs' do
       get '/dialogue_api/all_scenarios', { intent_id: intent.id }
 
       expected_responses = [{
-        id:               { :$oid => Response.last.id.to_s  },
+        _id:              { :$oid => Response.last.id.to_s },
+        dialog_id:        { :$oid => Dialog.last.id.to_s },
         response_value:   "{\"text\":\"some text\"}",
         response_type:    "some_type",
         response_trigger: "some_trigger"
@@ -138,12 +147,12 @@ describe 'Dialogs' do
 
       expect( last_response.status ).to eq 200
       expect( parsed_response.count ).to eq 1
-      # expect( parsed_response[ 0 ][ :intent_id      ]).to eq intent.id
-      expect( parsed_response[ 0 ][ :missing        ]).to eq [ field.name ]
-      expect( parsed_response[ 0 ][ :unresolved     ]).to eq [ 'unresolved' ]
-      expect( parsed_response[ 0 ][ :present        ]).to eq [ 'present', 'value' ]
-      expect( parsed_response[ 0 ][ :awaiting_field ]).to eq [ field.name ]
-      expect( parsed_response[ 0 ][ :responses      ]).to eq expected_responses
+      expect( parsed_response[0][:intent_id][:$oid] ).to eq intent.id.to_s
+      expect( parsed_response[0][:missing         ] ).to eq [ field.name ]
+      expect( parsed_response[0][:unresolved      ] ).to eq [ 'unresolved' ]
+      expect( parsed_response[0][:present         ] ).to eq [ 'present', 'value' ]
+      expect( parsed_response[0][:awaiting_field  ] ).to eq [ field.name ]
+      expect( parsed_response[0][:responses       ] ).to eq expected_responses
     end
   end
 
@@ -166,7 +175,7 @@ describe 'Dialogs' do
     end
 
     specify 'Success' do
-      get '/dialogue_api/csv', { intent_id: intent.name }
+      get '/dialogue_api/csv', { intent_id: intent.id }
 
       expect( last_response.status ).to eq 200
       expect( last_response.headers[ 'Content-Type' ]).to eq 'text/csv'

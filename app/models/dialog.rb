@@ -22,8 +22,8 @@ class Dialog
     %w(priority awaiting_field missing unresolved present entity_values comments)
   end
 
-  def serialize
-    self.attrs.merge!( responses: responses.map(&:serialize) )
+  def dialog_with_responses
+    self.attrs.merge!(responses: self.responses.map(&:attrs))
   end
 
   def self.for intent

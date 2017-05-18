@@ -32,8 +32,8 @@ module FileSystem
     def update update_attrs={}
       all_attrs = attrs
 
-      self.class.file_system_tracked_attributes.each do | k |
-        self[ k ] = all_attrs[ k ]
+      self.class.file_system_tracked_attributes.each do |a|
+        self[a] = all_attrs[a]
       end
 
       super

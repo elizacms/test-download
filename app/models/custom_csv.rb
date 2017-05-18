@@ -6,7 +6,7 @@ class CustomCSV
       csv = dialogs.map do | d |
         first = ''
         if d == dialogs.first
-          first = d.intent_id
+          first = Intent.find(d.intent_id).attrs[:name]
         end
 
         [ first, row_for( d )].join ","
@@ -20,12 +20,12 @@ class CustomCSV
 
     def row_for( d )
       [
-        d.priority,
-        format( d.awaiting_field ),
-        format( d.unresolved     ),
-        format( d.missing        ),
-        format_present_field( d.present ),
-        format_entity_values( d.entity_values),
+        d.attrs[:priority],
+        format( d.attrs[:awaiting_field] ),
+        format( d.attrs[:unresolved]     ),
+        format( d.attrs[:missing]        ),
+        format_present_field( d.attrs[:present] ),
+        format_entity_values( d.attrs[:entity_values]),
         format_responses( d.responses ),
         d.comments
       ]
@@ -54,9 +54,9 @@ class CustomCSV
       else
         r = responses.map do |r|
           {
-            'ResponseType'    => r.response_type,
-            'ResponseValue'   => JSON.parse(r.response_value),
-            'ResponseTrigger' => r.response_trigger
+            'ResponseType'    => r.attrs[:response_type],
+            'ResponseValue'   => JSON.parse(r.attrs[:response_value]),
+            'ResponseTrigger' => r.attrs[:response_trigger]
           }
         end
 

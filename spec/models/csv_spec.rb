@@ -5,7 +5,7 @@ describe CustomCSV do
 
   before do
     @dialog = Dialog.create(
-      intent_id: intent.name,
+      intent_id: intent.id,
       present: ['a', 'b', 'c', 'd', 'efg', nil],
       priority: 90,
       unresolved: [],
@@ -16,7 +16,7 @@ describe CustomCSV do
     )
 
     @dialog2 = Dialog.create(
-      intent_id: intent.name,
+      intent_id: intent.id,
       missing: ['missing this', 'missing that'],
       unresolved: ['This is unresolved', 'That is unresolved too'],
       priority: 90,
@@ -25,7 +25,7 @@ describe CustomCSV do
     )
 
     @dialog3 = Dialog.create(
-      intent_id: intent.name,
+      intent_id: intent.id,
       missing: ['missing'],
       unresolved: [],
       awaiting_field: [],
