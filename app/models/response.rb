@@ -11,8 +11,4 @@ class Response
   def self.file_system_tracked_attributes
     %w(response_type response_trigger response_value)
   end
-
-  def serialize
-    { id: id }.merge!( self.attrs )
-  end
 end

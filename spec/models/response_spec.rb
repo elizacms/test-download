@@ -4,7 +4,8 @@ describe Response do
   let!( :dialog   ){ create :dialog, intent_id: intent.id   }
   let!( :response ){ create :response, dialog_id: dialog.id }
   let(  :expected ){{
-    id: BSON::ObjectId(response.id.to_s),
+    _id: BSON::ObjectId(response.id.to_s),
+    dialog_id: BSON::ObjectId(dialog.id.to_s),
     response_type: 'some_type',
     response_value: {text: "where would you like to go?"}.to_json,
     response_trigger: 'some_trigger'
@@ -28,8 +29,8 @@ describe Response do
     end
   end
 
-  specify '#serialize' do
-    expect(response.serialize).to eq expected
+  specify '#attrs' do
+    expect(response.attrs).to eq expected.with_indifferent_access
   end
 
   specify '#create with FactoryGirl saves to file system' do
