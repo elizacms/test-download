@@ -24,7 +24,7 @@ describe 'Dialogs' do
   }
 
   describe 'Create' do
-    specify 'Success' do
+    specify 'Success' ,:focus do
       header 'Content-Type', 'application/json'
       post '/dialogue_api/response', params.to_json
 
@@ -54,7 +54,7 @@ describe 'Dialogs' do
       post '/dialogue_api/response', params.to_json
     end
 
-    specify 'Success', :focus do
+    specify 'Success' do
       update_params = params.merge!(
         missing: ['Green Godess'],
         responses_attributes: [
@@ -81,7 +81,7 @@ describe 'Dialogs' do
       expect( Dialog.last.attrs[:missing] ).to eq ['Green Godess']
     end
 
-    specify 'Success with multiple responses_attributes update/create', :focus do
+    specify 'Success with multiple responses_attributes update/create' do
       update_params = params.merge!({
         missing:              ['Green Godess'],
         responses_attributes: [

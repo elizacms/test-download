@@ -12,11 +12,9 @@ module FileSystem
 
       File.write( file_url, file_data.to_json )
 
-      self.class.file_system_tracked_attributes.each {|a| self[a] = nil}
-
-      super( validate: false )
-
-      file_data.each {|k,v| self[k] = v}
+      super( validate: false ).tap do
+        self.class.file_system_tracked_attributes.each {|a| set a => nil}
+      end
     end
 
     def attrs
