@@ -7,7 +7,7 @@ class DialogsController < ApplicationController
   #   intent_id=play_music
   def index
     dialogs = Dialog.where( intent_id: params[ :intent_id ] ).order('priority DESC')
-    render json: dialogs.map( &:serialize ).to_json
+    render json: dialogs.map( &:dialog_with_responses ).to_json
   end
 
   # POST /dialogue_api/response

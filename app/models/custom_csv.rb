@@ -27,7 +27,7 @@ class CustomCSV
         format_present_field( d.attrs[:present] ),
         format_entity_values( d.attrs[:entity_values]),
         format_responses( d.responses ),
-        d.comments
+        d.attrs[:comments]
       ]
     end
 

@@ -55,7 +55,7 @@ describe CustomCSV do
 
   let( :expected ){
     "intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,aneeda_en,comments\n"\
-    "#{intent.name},90,destination,None,A missing rule,a && b && c && d && efg,"\
+    "#{intent.attrs[:name]},90,destination,None,A missing rule,a && b && c && d && efg,"\
     "\"[('some','thing'), ('another','wing')]\",\"[{\"\"ResponseType\"\":\"\"Card\"\","\
     "\"\"ResponseValue\"\":{\"\"text\"\":\"\"where would you like to go?\"\"},"\
     "\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
@@ -63,7 +63,7 @@ describe CustomCSV do
 
   let( :expected2 ){
     "intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,aneeda_en,comments\n"\
-    "#{intent.name},90,destination,This is unresolved && That is unresolved too,"\
+    "#{intent.attrs[:name]},90,destination,This is unresolved && That is unresolved too,"\
     "missing this && missing that,None,None,\"[{\"\"ResponseType\"\":\"\"Card\"\","\
     "\"\"ResponseValue\"\":{\"\"text\"\":\"\"where would you like to go?\"\"},"\
     "\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
@@ -71,7 +71,7 @@ describe CustomCSV do
 
   let( :expected3 ){
     "intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,aneeda_en,comments\n"\
-    "#{intent.name},90,None,None,missing,None,None,\"[{\"\"ResponseType\"\":\"\"Card\"\","\
+    "#{intent.attrs[:name]},90,None,None,missing,None,None,\"[{\"\"ResponseType\"\":\"\"Card\"\","\
     "\"\"ResponseValue\"\":{\"\"text\"\":\"\"where would you like to go?\"\"},"\
     "\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
   }
