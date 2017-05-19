@@ -168,11 +168,9 @@ describe Dialog do
   end
 
   describe '#attrs' do
-    it 'should return a hash of attributes' do
+    it 'should return a hash of file system attributes'do
       expect( Dialog.count ).to eq 1
 
-      expect( dialog.attrs[:_id]            ).to eq dialog._id
-      expect( dialog.attrs[:intent_id]      ).to eq BSON::ObjectId(intent.id.to_s)
       expect( dialog.attrs[:priority]       ).to eq 100
       expect( dialog.attrs[:awaiting_field] ).to eq ['await']
       expect( dialog.attrs[:missing]        ).to eq ['miss']

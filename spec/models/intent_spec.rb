@@ -61,7 +61,6 @@ describe Intent do
     it 'with factory saves to file system' do
       intent = FactoryGirl.create(:intent, skill: skill)
 
-      expect(Intent.new(intent.attrs)).to be_valid
       expect(Intent.count).to eq 2
       expect(Dir[intents_path].count).to eq 2
       expect(intent.attrs[:name]).to eq 'get_ride'

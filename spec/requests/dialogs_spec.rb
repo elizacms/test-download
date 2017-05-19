@@ -138,8 +138,6 @@ describe 'Dialogs' do
       get '/dialogue_api/all_scenarios', { intent_id: intent.id }
 
       expected_responses = [{
-        _id:              { :$oid => Response.last.id.to_s },
-        dialog_id:        { :$oid => Dialog.last.id.to_s },
         response_value:   "{\"text\":\"some text\"}",
         response_type:    "some_type",
         response_trigger: "some_trigger"
@@ -147,7 +145,6 @@ describe 'Dialogs' do
 
       expect( last_response.status ).to eq 200
       expect( parsed_response.count ).to eq 1
-      expect( parsed_response[0][:intent_id][:$oid] ).to eq intent.id.to_s
       expect( parsed_response[0][:missing         ] ).to eq [ 'destination' ]
       expect( parsed_response[0][:unresolved      ] ).to eq [ 'unresolved' ]
       expect( parsed_response[0][:present         ] ).to eq [ 'present', 'value' ]

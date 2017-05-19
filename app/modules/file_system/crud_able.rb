@@ -7,10 +7,7 @@ module FileSystem
     def save opts={}
       return unless valid?
 
-      file_data = self.class.file_system_tracked_attributes
-                            .map {|a| [a.to_sym, send(a.to_sym)]}.to_h
-
-      File.write( file_url, file_data.to_json )
+      File.write( file_url, attrs.to_json )
 
       super( validate: false ).tap do
         self.class.file_system_tracked_attributes.each {|a| set a => nil}
@@ -22,9 +19,13 @@ module FileSystem
                           JSON.parse(File.read(file_url)) :
                           {}
 
-      attrs_from_file.compact!
-
-      attributes.merge( attrs_from_file ).with_indifferent_access
+      self.class.file_system_tracked_attributes.map do | k |
+        if self[ k ]
+          [ k, self[ k ]]
+        else
+          [ k, attrs_from_file[ k ]]
+        end
+      end.to_h.with_indifferent_access
     end
 
     def update update_attrs={}
