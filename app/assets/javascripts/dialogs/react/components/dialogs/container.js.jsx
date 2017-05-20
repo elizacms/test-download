@@ -27,7 +27,7 @@ var Container = React.createClass({
 
   createOrUpdateDialog(data){
     if (this.state.isUpdate) {
-      var url = '/dialogue_api/response?response_id=' + this.state.currentDialogId.$oid;
+      var url = '/dialogue_api/response?id=' + this.state.currentDialogId.$oid;
     } else {
       var url = '/dialogue_api/response?';
     }
@@ -122,7 +122,7 @@ var Container = React.createClass({
 
     $.ajax({
       type: 'DELETE',
-      url: '/dialogue_api/response?response_id=' + dialogData.id.$oid
+      url: '/dialogue_api/response?id=' + dialogData.id.$oid
     })
     .done( function( data ){
       this.setState({

@@ -23,7 +23,7 @@ class Dialog
   end
 
   def dialog_with_responses
-    self.attrs.merge!(responses: self.responses.map(&:attrs))
+    self.attrs.merge!({id: self.id, responses: self.responses.map(&:attrs_with_ids)})
   end
 
   def self.for intent

@@ -68,7 +68,7 @@ class IntentsController < ApplicationController
   end
 
   def dialogs
-    @fields = @intent.entities.pluck( :name )
+    @fields = @intent.entities.map {|e| e.attrs[:name]}
   end
 
 

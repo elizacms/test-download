@@ -42,10 +42,11 @@ describe 'Dialog Upload' do
 
     expect( Dialog.count ).to eq 3
 
-    hw = Dialog.find_by(intent_id: 'something')
-    sl = Dialog.find_by(intent_id: 'la_passageways')
+    hw = Dialog.find_by(intent_id: intent.id)
+    sl = Dialog.find_by(intent_id: intent2.id)
 
     expect( hw.responses.first.response_value ).to eq 'Hello world'
+    expect( hw.intent_id                      ).to eq BSON::ObjectId(intent.id.to_s)
     expect( hw.priority                       ).to eq 100
     expect( hw.awaiting_field                 ).to eq ['hello']
     expect( hw.unresolved                     ).to eq ['goodbye', 'hello']
@@ -53,7 +54,7 @@ describe 'Dialog Upload' do
     expect( hw.present                        ).to eq ['goodbye', 'yo yo']
 
     expect( sl.responses.first.response_value ).to eq 'Drive down Silver Lake'
-    expect( sl.intent_id                      ).to eq 'la_passageways'
+    expect( sl.intent_id                      ).to eq BSON::ObjectId(intent2.id.to_s)
     expect( sl.priority                       ).to eq 100
     expect( sl.awaiting_field                 ).to eq ['virgil']
     expect( sl.unresolved                     ).to eq ['sdfsd']

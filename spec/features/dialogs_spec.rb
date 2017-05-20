@@ -1,4 +1,4 @@
-feature 'Dialogs', :js do
+feature 'Dialogs', :js, :focus do
   let!( :dev             ){ create :user                          }
   let!( :skill           ){ create :skill                         }
   let!( :role            ){ create :role, user: dev, skill: skill }
@@ -10,7 +10,7 @@ feature 'Dialogs', :js do
     stub_identity_token
     stub_identity_account_for dev.email
     visit '/login/success?code=0123abc'
-    click_link 'Intents'
+    click_link 'Manage Intents'
 
     click_link 'Edit Details'
     click_link 'Add Dialogs'
@@ -20,8 +20,8 @@ feature 'Dialogs', :js do
 
   specify 'Renders rule' do
     within '.dialog-form' do
-      select field.name, from: 'unresolved-field'
-      select field.name, from: 'awaiting-field'
+      select field.attrs[:name], from: 'unresolved-field'
+      select field.attrs[:name], from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'
@@ -33,8 +33,8 @@ feature 'Dialogs', :js do
 
   specify 'User can update a dialog' do
     within '.dialog-form' do
-      select field.name, from: 'unresolved-field'
-      select field.name, from: 'awaiting-field'
+      select field.attrs[:name], from: 'unresolved-field'
+      select field.attrs[:name], from: 'awaiting-field'
       fill_in :comments, with: 'Here are my comments'
     end
 
@@ -50,14 +50,14 @@ feature 'Dialogs', :js do
 
     expect( page ).to have_content 120
     expect( Dialog.count         ).to eq 1
-    expect( Dialog.last.priority ).to eq 120
-    expect( Dialog.last.comments ).to eq 'Here are my comments'
+    expect( Dialog.last.attrs[:priority] ).to eq 120
+    expect( Dialog.last.attrs[:comments] ).to eq 'Here are my comments'
   end
 
   specify 'User can cancel updating a dialog' do
     within '.dialog-form' do
-      select field.name, from: 'unresolved-field'
-      select field.name, from: 'awaiting-field'
+      select field.attrs[:name], from: 'unresolved-field'
+      select field.attrs[:name], from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'
@@ -82,8 +82,8 @@ feature 'Dialogs', :js do
 
   specify 'User can duplicate a dialog' do
     within '.dialog-form' do
-      select field.name, from: 'unresolved-field'
-      select field.name, from: 'awaiting-field'
+      select field.attrs[:name], from: 'unresolved-field'
+      select field.attrs[:name], from: 'awaiting-field'
       fill_in :priority, with: 120
     end
 
@@ -92,27 +92,27 @@ feature 'Dialogs', :js do
     find( '.fa-clone' ).click
 
     within '.dialog-form' do
-      select field.name, from: 'present-field'
+      select field.attrs[:name], from: 'present-field'
       select 'None',     from: 'awaiting-field'
 
       click_button 'Create Dialog'
     end
 
     expect( Dialog.count                ).to eq 2
-    expect( Dialog.first.priority       ).to eq 120
-    expect( Dialog.first.unresolved     ).to eq [field.name]
-    expect( Dialog.first.awaiting_field ).to eq [field.name]
-    expect( Dialog.first.present        ).to eq ['None', '']
-    expect( Dialog.last.priority        ).to eq 120
-    expect( Dialog.last.unresolved      ).to eq [field.name]
-    expect( Dialog.last.awaiting_field  ).to eq ['None']
-    expect( Dialog.last.present         ).to eq [field.name, '']
+    expect( Dialog.first.attrs[:priority]       ).to eq 120
+    expect( Dialog.first.attrs[:unresolved]     ).to eq [field.attrs[:name]]
+    expect( Dialog.first.attrs[:awaiting_field] ).to eq [field.attrs[:name]]
+    expect( Dialog.first.attrs[:present]        ).to eq ['None', '']
+    expect( Dialog.last.attrs[:priority]        ).to eq 120
+    expect( Dialog.last.attrs[:unresolved]      ).to eq [field.attrs[:name]]
+    expect( Dialog.last.attrs[:awaiting_field]  ).to eq ['None']
+    expect( Dialog.last.attrs[:present]         ).to eq [field.attrs[:name], '']
   end
 
   specify 'Deleting a dialog shows confirm' do
     within '.dialog-form' do
-      select field.name, from: 'missing-field'
-      select field.name, from: 'awaiting-field'
+      select field.attrs[:name], from: 'missing-field'
+      select field.attrs[:name], from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'
@@ -126,7 +126,7 @@ feature 'Dialogs', :js do
 
   specify 'User can add an entity and a value for the entity' do
     within '.dialog-form' do
-      select field.name, from: 'entity-value-field'
+      select field.attrs[:name], from: 'entity-value-field'
       fill_in 'entity-value', with: 'my wonderful value'
     end
 
@@ -134,7 +134,7 @@ feature 'Dialogs', :js do
 
     sleep 0.5
 
-    expect( Dialog.last.entity_values ).to eq( ['destination','my wonderful value'] )
+    expect( Dialog.last.attrs[:entity_values] ).to eq( ['destination','my wonderful value'] )
   end
 
   describe 'Responses Types' do
@@ -149,8 +149,8 @@ feature 'Dialogs', :js do
         select 'Time delay in seconds', from: 'trigger_type'
         fill_in 'timeDelayInSecs', with: '5'
 
-        select field.name, from: 'unresolved-field'
-        select field.name, from: 'awaiting-field'
+        select field.attrs[:name], from: 'unresolved-field'
+        select field.attrs[:name], from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -167,9 +167,9 @@ feature 'Dialogs', :js do
 
       expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
-      expect( Dialog.last.responses.first.response_type     ).to eq 'text'
-      expect( Dialog.last.responses.first.response_trigger  ).to eq expected_response_trigger
-      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
+      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq 'text'
+      expect( Dialog.last.responses.first.attrs[:response_trigger] ).to eq expected_response_trigger
+      expect( Dialog.last.responses.first.attrs[:response_value]   ).to eq expected_response_value
     end
 
     specify 'Can save mulitple responses of type text' do
@@ -195,8 +195,8 @@ feature 'Dialogs', :js do
         end
 
 
-        select field.name, from: 'unresolved-field'
-        select field.name, from: 'awaiting-field'
+        select field.attrs[:name], from: 'unresolved-field'
+        select field.attrs[:name], from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -218,12 +218,12 @@ feature 'Dialogs', :js do
       }.to_json
       expected_response_trigger_2 = {'timeDelayInSecs' => '6'}.to_json
 
-      expect( Dialog.last.responses.first.response_type     ).to eq 'text'
-      expect( Dialog.last.responses.first.response_trigger  ).to eq expected_response_trigger_1
-      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_1
-      expect( Dialog.last.responses.last.response_type      ).to eq 'text'
-      expect( Dialog.last.responses.last.response_trigger   ).to eq expected_response_trigger_2
-      expect( Dialog.last.responses.last.response_value     ).to eq expected_response_2
+      expect( Dialog.last.responses.first.attrs[:response_type]     ).to eq 'text'
+      expect( Dialog.last.responses.first.attrs[:response_trigger]  ).to eq expected_response_trigger_1
+      expect( Dialog.last.responses.first.attrs[:response_value]    ).to eq expected_response_1
+      expect( Dialog.last.responses.last.attrs[:response_type]      ).to eq 'text'
+      expect( Dialog.last.responses.last.attrs[:response_trigger]   ).to eq expected_response_trigger_2
+      expect( Dialog.last.responses.last.attrs[:response_value]     ).to eq expected_response_2
     end
 
     specify 'Can save a response of type text with options with muli options' do
@@ -264,9 +264,9 @@ feature 'Dialogs', :js do
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
-      expect( Dialog.last.responses.first.response_type     ).to eq 'text_with_option'
-      expect( Dialog.last.responses.first.response_trigger  ).to eq expected_response_trigger
-      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
+      expect( Dialog.last.responses.first.attrs[:response_type]     ).to eq 'text_with_option'
+      expect( Dialog.last.responses.first.attrs[:response_trigger]  ).to eq expected_response_trigger
+      expect( Dialog.last.responses.first.attrs[:response_value]    ).to eq expected_response_value
     end
 
     specify 'Can save a response of type video' do
@@ -282,8 +282,8 @@ feature 'Dialogs', :js do
           fill_in 'timeDelayInSecs', with: '5'
         end
 
-        select field.name, from: 'unresolved-field'
-        select field.name, from: 'awaiting-field'
+        select field.attrs[:name], from: 'unresolved-field'
+        select field.attrs[:name], from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -301,9 +301,9 @@ feature 'Dialogs', :js do
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
-      expect( Dialog.last.responses.first.response_type     ).to eq 'video'
-      expect( Dialog.last.responses.first.response_trigger  ).to eq expected_response_trigger
-      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
+      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq 'video'
+      expect( Dialog.last.responses.first.attrs[:response_trigger] ).to eq expected_response_trigger
+      expect( Dialog.last.responses.first.attrs[:response_value]   ).to eq expected_response_value
     end
 
     specify 'Can save mulitple responses of type video and text' do
@@ -314,8 +314,8 @@ feature 'Dialogs', :js do
           fill_in 'response_spokentext',            with: 'Speak out!'
           fill_in 'response_video_thumbnail_input', with: 'twin cats'
           fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
-          select 'Time delay in seconds', from: 'trigger_type'
-          fill_in 'timeDelayInSecs', with: '5'
+          select 'Time delay in seconds',           from: 'trigger_type'
+          fill_in 'timeDelayInSecs',                with: '5'
 
           find('.add-remove-response').click
         end
@@ -323,14 +323,14 @@ feature 'Dialogs', :js do
         within '.response-type-row-1' do
           select  'Text',                     from: 'response-type-select'
           fill_in 'response_text_input',      with: 'crazy dancing ninjas'
-          fill_in 'response_spokentext', with: 'Speak out!'
+          fill_in 'response_spokentext',      with: 'Speak out!'
 
           select 'Time delay in seconds', from: 'trigger_type'
-          fill_in 'timeDelayInSecs', with: '6'
+          fill_in 'timeDelayInSecs',      with: '6'
         end
 
-        select field.name, from: 'unresolved-field'
-        select field.name, from: 'awaiting-field'
+        select field.attrs[:name], from: 'unresolved-field'
+        select field.attrs[:name], from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -355,12 +355,12 @@ feature 'Dialogs', :js do
       expected_response_trigger_2 = {'timeDelayInSecs' => '6'}.to_json
 
 
-      expect( Dialog.last.responses.first.response_type     ).to eq 'video'
-      expect( Dialog.last.responses.first.response_trigger  ).to eq expected_response_trigger_1
-      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
-      expect( Dialog.last.responses.last.response_type      ).to eq 'text'
-      expect( Dialog.last.responses.last.response_trigger   ).to eq expected_response_trigger_2
-      expect( Dialog.last.responses.last.response_value     ).to eq expected_response_2
+      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq 'video'
+      expect( Dialog.last.responses.first.attrs[:response_trigger] ).to eq expected_response_trigger_1
+      expect( Dialog.last.responses.first.attrs[:response_value]   ).to eq expected_response_value
+      expect( Dialog.last.responses.last.attrs[:response_type]     ).to eq 'text'
+      expect( Dialog.last.responses.last.attrs[:response_trigger]  ).to eq expected_response_trigger_2
+      expect( Dialog.last.responses.last.attrs[:response_value]    ).to eq expected_response_2
     end
 
     specify 'Can save mulitple responses and update them' do
@@ -387,8 +387,8 @@ feature 'Dialogs', :js do
           fill_in 'timeDelayInSecs', with: '6'
         end
 
-        select field.name, from: 'unresolved-field'
-        select field.name, from: 'awaiting-field'
+        select field.attrs[:name], from: 'unresolved-field'
+        select field.attrs[:name], from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -410,8 +410,8 @@ feature 'Dialogs', :js do
           fill_in 'timeDelayInSecs', with: '7'
         end
 
-        select field.name, from: 'unresolved-field'
-        select field.name, from: 'awaiting-field'
+        select field.attrs[:name], from: 'unresolved-field'
+        select field.attrs[:name], from: 'awaiting-field'
 
         click_button 'Update Dialog'
       end
@@ -432,12 +432,12 @@ feature 'Dialogs', :js do
       }.to_json
       expected_response_trigger_2 = {'timeDelayInSecs' => '7'}.to_json
 
-      expect( Response.first.response_type     ).to eq 'video'
-      expect( Response.first.response_trigger  ).to eq expected_response_trigger_1
-      expect( Response.first.response_value    ).to eq expected_response_value
-      expect( Response.last.response_type      ).to eq 'text'
-      expect( Response.last.response_trigger   ).to eq expected_response_trigger_2
-      expect( Response.last.response_value     ).to eq expected_response_2
+      expect( Response.first.attrs[:response_type]    ).to eq 'video'
+      expect( Response.first.attrs[:response_trigger] ).to eq expected_response_trigger_1
+      expect( Response.first.attrs[:response_value]   ).to eq expected_response_value
+      expect( Response.last.attrs[:response_type]     ).to eq 'text'
+      expect( Response.last.attrs[:response_trigger]  ).to eq expected_response_trigger_2
+      expect( Response.last.attrs[:response_value]    ).to eq expected_response_2
     end
 
     specify 'Can save mulitple responses, then delete a response' do
@@ -460,11 +460,11 @@ feature 'Dialogs', :js do
           fill_in 'response_text_input', with: 'crazy dancing ninjas'
 
           select 'Time delay in seconds', from: 'trigger_type'
-          fill_in 'timeDelayInSecs', with: '6'
+          fill_in 'timeDelayInSecs',      with: '6'
         end
 
-        select field.name, from: 'unresolved-field'
-        select field.name, from: 'awaiting-field'
+        select field.attrs[:name], from: 'unresolved-field'
+        select field.attrs[:name], from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -483,7 +483,7 @@ feature 'Dialogs', :js do
 
         within '.response-type-row-0' do
           select 'Time delay in seconds', from: 'trigger_type'
-          fill_in 'timeDelayInSecs', with: '7'
+          fill_in 'timeDelayInSecs',      with: '7'
         end
 
         click_button 'Update Dialog'
@@ -498,9 +498,9 @@ feature 'Dialogs', :js do
       expected_response_trigger = {'timeDelayInSecs' => '7'}.to_json
 
       expect( Response.count ).to eq 1
-      expect( Response.first.response_type     ).to eq 'video'
-      expect( Response.first.response_trigger  ).to eq expected_response_trigger
-      expect( Response.first.response_value    ).to eq expected_response_value
+      expect( Response.first.attrs[:response_type]    ).to eq 'video'
+      expect( Response.first.attrs[:response_trigger] ).to eq expected_response_trigger
+      expect( Response.first.attrs[:response_value]   ).to eq expected_response_value
     end
 
     specify 'Can save mulitple card types' do
@@ -535,7 +535,7 @@ feature 'Dialogs', :js do
           option_inputs[5].set 'let him go'
 
           select 'Time delay in seconds', from: 'trigger_type'
-          fill_in 'timeDelayInSecs', with: '5'
+          fill_in 'timeDelayInSecs',      with: '5'
         end
       end
 
@@ -578,31 +578,31 @@ feature 'Dialogs', :js do
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
-      expect( Dialog.last.responses.first.response_type     ).to eq 'card'
-      expect( Dialog.last.responses.first.response_trigger  ).to eq expected_response_trigger
-      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
+      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq 'card'
+      expect( Dialog.last.responses.first.attrs[:response_trigger] ).to eq expected_response_trigger
+      expect( Dialog.last.responses.first.attrs[:response_value]   ).to eq expected_response_value
     end
 
     specify 'Can save a response of type Question and Answer' do
       within '.dialog-form' do
         within '.response-type-row-0'do
-          select  'Q & A',                          from: 'response-type-select'
-          fill_in 'response_spokentext',            with: 'Speak out!'
-          fill_in 'response_qna_question',          with: 'Lunch?'
-          fill_in 'response_qna_answers',           with: 'Hamburger'
-          fill_in 'response_qna_video_thumbnail',   with: 'Video thumbnail'
-          fill_in 'response_qna_video_url',         with: 'http://www.youtube.com/qna_video'
-          fill_in 'response_qna_image_thumbnail',   with: 'image thumbnail'
-          fill_in 'response_qna_image_url',         with: 'http://www.ig.com/qna_image'
-          fill_in 'response_qna_link_text',         with: 'link text'
-          fill_in 'response_qna_url',               with: 'qna url'
+          select  'Q & A',                        from: 'response-type-select'
+          fill_in 'response_spokentext',          with: 'Speak out!'
+          fill_in 'response_qna_question',        with: 'Lunch?'
+          fill_in 'response_qna_answers',         with: 'Hamburger'
+          fill_in 'response_qna_video_thumbnail', with: 'Video thumbnail'
+          fill_in 'response_qna_video_url',       with: 'http://www.youtube.com/qna_video'
+          fill_in 'response_qna_image_thumbnail', with: 'image thumbnail'
+          fill_in 'response_qna_image_url',       with: 'http://www.ig.com/qna_image'
+          fill_in 'response_qna_link_text',       with: 'link text'
+          fill_in 'response_qna_url',             with: 'qna url'
 
           select 'Time delay in seconds', from: 'trigger_type'
-          fill_in 'timeDelayInSecs', with: '4'
+          fill_in 'timeDelayInSecs',      with: '4'
         end
 
-        select field.name, from: 'unresolved-field'
-        select field.name, from: 'awaiting-field'
+        select field.attrs[:name], from: 'unresolved-field'
+        select field.attrs[:name], from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -626,17 +626,17 @@ feature 'Dialogs', :js do
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '4'}.to_json
 
-      expect( Dialog.last.responses.first.response_type     ).to eq 'qna'
-      expect( Dialog.last.responses.first.response_trigger  ).to eq expected_response_trigger
-      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
+      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq 'qna'
+      expect( Dialog.last.responses.first.attrs[:response_trigger] ).to eq expected_response_trigger
+      expect( Dialog.last.responses.first.attrs[:response_value]   ).to eq expected_response_value
     end
 
     specify 'Can save mulitple response-trigger-types' do
       within '.dialog-form' do
         within '.response-type-row-0' do
-          select  'Text',                     from: 'response-type-select'
-          fill_in 'response_text_input',      with: 'Hello Kitty'
-          fill_in 'response_spokentext',      with: 'So Cute!'
+          select  'Text',                from: 'response-type-select'
+          fill_in 'response_text_input', with: 'Hello Kitty'
+          fill_in 'response_spokentext', with: 'So Cute!'
 
           # Create 3 more Responses
           find('.add-remove-response').click
@@ -645,9 +645,9 @@ feature 'Dialogs', :js do
         end
 
         within '.response-type-row-1' do
-          select  'Text',                     from: 'response-type-select'
-          fill_in 'response_text_input',      with: 'Today is'
-          fill_in 'response_spokentext',      with: 'March 29th 2017'
+          select  'Text',                from: 'response-type-select'
+          fill_in 'response_text_input', with: 'Today is'
+          fill_in 'response_spokentext', with: 'March 29th 2017'
 
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs',      with: '8'
@@ -671,8 +671,8 @@ feature 'Dialogs', :js do
           page.all('input.dialog-input.response_trigger')[1].click
         end
 
-        select field.name, from: 'unresolved-field'
-        select field.name, from: 'awaiting-field'
+        select field.attrs[:name], from: 'unresolved-field'
+        select field.attrs[:name], from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -686,10 +686,10 @@ feature 'Dialogs', :js do
 
       expect( Dialog.count   ).to eq 1
       expect( Response.count ).to eq 4
-      expect( Dialog.last.responses[0].response_trigger ).to eq expected_response_trigger_1
-      expect( Dialog.last.responses[1].response_trigger ).to eq expected_response_trigger_2
-      expect( Dialog.last.responses[2].response_trigger ).to eq expected_response_trigger_3
-      expect( Dialog.last.responses[3].response_trigger ).to eq expected_response_trigger_4
+      expect( Dialog.last.responses[0].attrs[:response_trigger] ).to eq expected_response_trigger_1
+      expect( Dialog.last.responses[1].attrs[:response_trigger] ).to eq expected_response_trigger_2
+      expect( Dialog.last.responses[2].attrs[:response_trigger] ).to eq expected_response_trigger_3
+      expect( Dialog.last.responses[3].attrs[:response_trigger] ).to eq expected_response_trigger_4
     end
 
     specify 'Can edit and save mulitple response-trigger-types' do
@@ -715,8 +715,8 @@ feature 'Dialogs', :js do
           page.all('input.dialog-input.response_trigger')[1].click
         end
 
-        select field.name, from: 'unresolved-field'
-        select field.name, from: 'awaiting-field'
+        select field.attrs[:name], from: 'unresolved-field'
+        select field.attrs[:name], from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -743,8 +743,8 @@ feature 'Dialogs', :js do
 
       expect( Dialog.count   ).to eq 1
       expect( Response.count ).to eq 2
-      expect( Dialog.last.responses[0].response_trigger ).to eq expected_response_trigger_1
-      expect( Dialog.last.responses[1].response_trigger ).to eq expected_response_trigger_2
+      expect( Dialog.last.responses[0].attrs[:response_trigger] ).to eq expected_response_trigger_1
+      expect( Dialog.last.responses[1].attrs[:response_trigger] ).to eq expected_response_trigger_2
     end
   end
 end
