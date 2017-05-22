@@ -1,7 +1,14 @@
 describe CustomCSV do
-  let!(  :skill   ){ create :skill                }
-  let!(  :intent  ){ create :intent, skill: skill }
-  let!(  :text    ){ "{\"text\":\"where would you like to go?\"}" }
+  let!( :skill    ){ create :skill                         }
+  let!( :intent   ){ create :intent, skill: skill          }
+  let!( :text     ){{ text: 'Where would you like to go?' }.to_json }
+  let!( :response ){
+    [{
+      'ResponseType'    => 'Card',
+      'ResponseValue'   => { text: 'Where would you like to go?' },
+      'ResponseTrigger' => 'some_trigger'
+    }].to_json.gsub('"', '""')
+  }
 
   before do
     @dialog = Dialog.create(
@@ -55,25 +62,19 @@ describe CustomCSV do
 
   let( :expected ){
     "intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,aneeda_en,comments\n"\
-    "#{intent.attrs[:name]},90,destination,None,A missing rule,a && b && c && d && efg,"\
-    "\"[('some','thing'), ('another','wing')]\",\"[{\"\"ResponseType\"\":\"\"Card\"\","\
-    "\"\"ResponseValue\"\":{\"\"text\"\":\"\"where would you like to go?\"\"},"\
-    "\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
+    "get_ride,90,destination,None,A missing rule,a && b && c && d && efg,"\
+    "\"[('some','thing'), ('another','wing')]\",\"#{response}\",some comments"
   }
 
   let( :expected2 ){
     "intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,aneeda_en,comments\n"\
-    "#{intent.attrs[:name]},90,destination,This is unresolved && That is unresolved too,"\
-    "missing this && missing that,None,None,\"[{\"\"ResponseType\"\":\"\"Card\"\","\
-    "\"\"ResponseValue\"\":{\"\"text\"\":\"\"where would you like to go?\"\"},"\
-    "\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
+    "get_ride,90,destination,This is unresolved && That is unresolved too,"\
+    "missing this && missing that,None,None,\"#{response}\",some comments"
   }
 
   let( :expected3 ){
     "intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,aneeda_en,comments\n"\
-    "#{intent.attrs[:name]},90,None,None,missing,None,None,\"[{\"\"ResponseType\"\":\"\"Card\"\","\
-    "\"\"ResponseValue\"\":{\"\"text\"\":\"\"where would you like to go?\"\"},"\
-    "\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
+    "get_ride,90,None,None,missing,None,None,\"#{response}\",some comments"
   }
 
   specify 'Empty values' do

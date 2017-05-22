@@ -86,14 +86,7 @@ function initFields(){
         ],
         invalidMessage: "Alphanumeric characters only"
     });
-
-    // $('tr.jsgrid-insert-row td.jsgrid-control-field').html('<input value="Save" class="btn sm black pull-left" onclick="customInsert(this)" type="button" style="width: 30%" title="Insert"/>');
 }
-
-// function customInsert(item){
-//     console.log( item );
-//     debugger
-// }
 
 function getCustomInsertControls(gridId) {
     var grid = $(gridId).data('JSGrid');
@@ -132,8 +125,7 @@ function createJSON(){
     var newData = $.extend(true, [], data);
 
     $.each(newData, function(index, value){
-        delete value['name'];
-        delete value['_id'];
+        delete value['id'];
     });
 
     var top = {
