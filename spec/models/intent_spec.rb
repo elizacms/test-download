@@ -99,7 +99,7 @@ describe Intent do
     end
   end
 
-  describe 'Embeds a FileLock', :focus do
+  describe 'Intent > FileLock' do
     let!( :user      ){ create :user                                        }
     let!( :file_lock ){ create :file_lock, intent: intent, user_id: user.id }
     let!( :no_lock   ){ create :intent, skill: skill                        }
@@ -110,6 +110,17 @@ describe Intent do
 
     it 'can have no file_lock' do
       expect( no_lock.file_lock ).to eq nil
+    end
+
+    it 'can be removed' do
+      expect( intent.file_lock ).to eq file_lock
+      intent.file_lock = nil
+      expect( intent.file_lock ).to eq nil
+    end
+
+    it 'can be set' do
+      fl = FileLock.create(intent: no_lock, user_id: user.id)
+      expect( no_lock.file_lock ).to eq fl
     end
   end
 end

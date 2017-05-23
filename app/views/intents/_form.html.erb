@@ -16,7 +16,7 @@
           class: 'btn lg black'
         ) %>
         <%= link_to(
-          Dialog.where(intent_id: @intent.id).count > 0 ? 'Edit' : 'Add Dialogs',
+          Dialog.where(intent_id: @intent.id).count > 0 ? 'Edit Dialogs' : 'Add Dialogs',
           dialogs_page_path( @skill, @intent ),
           class: 'btn lg black'
         ) %>

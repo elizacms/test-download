@@ -1,4 +1,4 @@
-describe FileLock, :focus do
+describe FileLock do
   let!( :skill     ){ create :skill                                       }
   let!( :intent    ){ create :intent, skill: skill                        }
   let!( :intent2   ){ create :intent, skill: skill, name: 'new'           }
