@@ -122,5 +122,10 @@ describe Intent do
       fl = FileLock.create(intent: no_lock, user_id: user.id)
       expect( no_lock.file_lock ).to eq fl
     end
+
+    it '#has_file_lock?' do
+      expect( intent.has_file_lock?  ).to eq true
+      expect( no_lock.has_file_lock? ).to eq false
+    end
   end
 end

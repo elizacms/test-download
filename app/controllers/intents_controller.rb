@@ -28,6 +28,11 @@ class IntentsController < ApplicationController
   end
 
   def edit
+    if @intent.has_file_lock?
+      @file_lock = @intent.file_lock
+    else
+      @file_lock = FileLock.create(intent: @intent, user_id: current_user.id.to_s)
+    end
   end
 
   def update
