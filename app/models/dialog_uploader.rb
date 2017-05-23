@@ -19,24 +19,23 @@ class DialogUploader
       }
 
       data.each do |d|
+        if d['intent_id'].blank? && last_values['intent_id'].blank?
+          blank_intent_id += 1
+          next
+        end
+
         if d['intent_id'].blank?
-          if last_values['intent_id'].blank?
-            blank_intent_id += 1
-            next
-          else
-            d['intent_id'] = last_values['intent_id']
-          end
+          d['intent_id'] = last_values['intent_id']
         end
 
         last_values['intent_id'] = d['intent_id']
 
-        unless user.has_role?('admin')
+        if !user.has_role?('admin')
           no_permissions += 1
           next
         end
 
-        last_values.each_key do |k|
-          next if k == 'intent_id'
+        last_values.reject {|k| k == 'intent_id'}.each_key do |k|
           check_and_set_last_value(d, k, last_values[k])
         end
 

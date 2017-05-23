@@ -1,4 +1,4 @@
-describe DialogUploader do
+describe DialogUploader, :focus do
   let!( :user    ){ create :user                                           }
   let!( :admin   ){ create :user, email: 'admin@iamplus.com'               }
   let!( :skill   ){ create :skill                                          }
