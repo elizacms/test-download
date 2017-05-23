@@ -98,4 +98,18 @@ describe Intent do
       expect( Dir[intents_path].count ).to eq 0
     end
   end
+
+  describe 'Embeds a FileLock', :focus do
+    let!( :user      ){ create :user                                        }
+    let!( :file_lock ){ create :file_lock, intent: intent, user_id: user.id }
+    let!( :no_lock   ){ create :intent, skill: skill                        }
+
+    it 'associates' do
+      expect( intent.file_lock.id ).to eq file_lock.id
+    end
+
+    it 'can have no file_lock' do
+      expect( no_lock.file_lock ).to eq nil
+    end
+  end
 end

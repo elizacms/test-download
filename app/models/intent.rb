@@ -6,6 +6,7 @@ class Intent
   belongs_to :skill
   has_many :entities, class_name:'Field'
   has_many :dialogs
+  embeds_one :file_lock
 
   field :name,           type:String
   field :description,    type:String
