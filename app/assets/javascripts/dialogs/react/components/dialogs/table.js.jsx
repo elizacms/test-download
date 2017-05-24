@@ -9,6 +9,20 @@ var Table = React.createClass({
     $('.exportCSV').hide();
   },
 
+  displayCreateOrUpdateBtn(){
+    if (!this.props.locked){
+      return(
+          <button
+            className='btn lg ghost pull-right'
+            onClick={this.showDialogForm}
+          >
+            Create a Dialog
+          </button>
+      );
+    }
+  },
+
+
   render() {
     return (
       <div className='dialogTable'>
@@ -38,12 +52,7 @@ var Table = React.createClass({
             }
           </tbody>
         </table>
-        <button
-          className='btn lg ghost pull-right'
-          onClick={this.showDialogForm}
-        >
-          Create a Dialog
-        </button>
+        {this.displayCreateOrUpdateBtn()}
       </div>
     );
   }

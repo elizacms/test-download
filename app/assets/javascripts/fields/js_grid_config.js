@@ -88,14 +88,14 @@ function initFields(){
     });
 }
 
-function intentIsNotLocked(){
+function intentIsLocked(){
     filter = { id: intent._id.$oid };
 
     return ajaxCall( 'GET', '/file_lock', filter )['file_lock'];
 }
 
 function getCustomInsertControls(gridId) {
-    if ( intentIsNotLocked() ){
+    if ( !intentIsLocked() ){
         var grid = $(gridId).data('JSGrid');
         return $("<input>").addClass('btn sm black pull-left')
                           .attr({ type: 'button', value: 'Save' })

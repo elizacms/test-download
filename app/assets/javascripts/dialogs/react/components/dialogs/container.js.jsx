@@ -142,6 +142,7 @@ var Container = React.createClass({
         </ExportCSV>
 
         <Table
+          locked={this.props.file_lock}
           sendData={this.sendData}
           copyData={this.copyData}
           deleteRow={this.deleteRow}
