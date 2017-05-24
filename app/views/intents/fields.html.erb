@@ -5,6 +5,8 @@
 ) %>
 <br><br>
 
+<%= render partial: 'lock' %><br>
+
 <div class='row'>
   <div class='col-xs-3'>
     <strong>Skill:</strong> <%= @skill.name %>
@@ -27,7 +29,9 @@
     Training Data Response Fields<br>
     <%= text_field_tag :mturk_response, @intent.attrs[:mturk_response] %>
 
-    <%= submit_tag 'Submit', class: 'btn md ghost' %><span id='submit-result'></span>
+    <% if !locked_by_other_user? %>
+      <%= submit_tag 'Submit', class: 'btn md ghost' %><span id='submit-result'></span>
+    <% end %>
   <% end %>
 </div>
 

@@ -88,16 +88,24 @@ function initFields(){
     });
 }
 
+function intentIsNotLocked(){
+    filter = { id: intent._id.$oid };
+
+    return ajaxCall( 'GET', '/file_lock', filter )['file_lock'];
+}
+
 function getCustomInsertControls(gridId) {
-    var grid = $(gridId).data('JSGrid');
-    return $("<input>").addClass('btn sm black pull-left')
-                      .attr({ type: 'button', value: 'Save' })
-                      .css('width', '30%')
-                      .on('click', function () {
-                          grid.insertItem().done(function () {
-                              grid.option("inserting", false)
-                          });
-                      })
+    if ( intentIsNotLocked() ){
+        var grid = $(gridId).data('JSGrid');
+        return $("<input>").addClass('btn sm black pull-left')
+                          .attr({ type: 'button', value: 'Save' })
+                          .css('width', '30%')
+                          .on('click', function () {
+                              grid.insertItem().done(function () {
+                                  grid.option("inserting", false)
+                              });
+                          })
+    }
 }
 
 function initJSON(){
@@ -129,9 +137,9 @@ function createJSON(){
     });
 
     var top = {
-                id: intent.name,
-                fields: newData,
-                mturk_response_fields:[ mturkResponseFields() ]
+        id: intent.name,
+        fields: newData,
+        mturk_response_fields:[ mturkResponseFields() ]
     };
 
   return JSON.stringify( top, null, 2 );

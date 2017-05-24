@@ -115,6 +115,10 @@ Rails.application.routes.draw do
     to: 'intents#fields',
     as: :fields_page
 
+  get '/file_lock',
+    to: 'intents#api_file_lock',
+    as: :api_file_lock
+
   get '/skills/:skill_id/intents/:id/dialogs',
     to: 'intents#dialogs',
     as: :dialogs_page
