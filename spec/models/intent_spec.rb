@@ -1,4 +1,4 @@
-describe Intent do
+describe Intent, :focus do
   let(:valid_intent){{
     "name"           => "valid_intent",
     "description"    => "some description",
@@ -126,6 +126,21 @@ describe Intent do
     it '#has_file_lock?' do
       expect( intent.has_file_lock?  ).to eq true
       expect( no_lock.has_file_lock? ).to eq false
+    end
+
+    it '#lock saves a file_lock on an intent' do
+      new_intent = Intent.new( name: 'new_name' )
+      new_intent.lock( user.id )
+
+      expect( new_intent.has_file_lock?    ).to eq true
+      expect( new_intent.file_lock.user_id ).to eq user.id.to_s
+    end
+
+    it '#unlock removes a file_lock from an intent' do
+      intent.unlock
+
+      expect( intent.has_file_lock? ).to eq false
+      expect( intent.file_lock      ).to eq nil
     end
   end
 end

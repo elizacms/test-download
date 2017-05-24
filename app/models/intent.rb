@@ -15,6 +15,14 @@ class Intent
   validates_presence_of :name
   validate :unique_name
 
+  def lock( user_id )
+    FileLock.create( intent: self, user_id: user_id)
+  end
+
+  def unlock
+    self.file_lock = nil
+  end
+
   def unique_name
     all_names = Intent.all_files.delete_if { |f| f =~ /#{self.id.to_s}/ }.map do |f|
       JSON.parse( File.read(f), symbolize_names: true )[ :name ]
