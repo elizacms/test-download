@@ -12,4 +12,8 @@ module UsersHelper
   def user_owns_skill_or_is_admin?( user, skill )
     user.has_role?('owner', skill.name) || user.has_role?( 'admin' )
   end
+
+  def locked_by_other_user?
+    User.find(@file_lock.user_id) != @current_user
+  end
 end

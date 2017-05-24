@@ -1,4 +1,4 @@
-describe Intent, :focus do
+describe Intent do
   let(:valid_intent){{
     "name"           => "valid_intent",
     "description"    => "some description",
