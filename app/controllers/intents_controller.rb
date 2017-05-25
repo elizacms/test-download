@@ -1,9 +1,10 @@
 class IntentsController < ApplicationController
   before_action :validate_current_user, except: [:api_file_lock]
   before_action :validate_permissions_for_skill, except: [:api_file_lock]
-  before_action :find_skill
+  before_action :find_skill, except: [:api_file_lock]
   before_action :find_intent,
-                only: [ :edit, :update, :destroy, :fields, :dialogs, :submit_mturk_response ]
+                only: [ :edit, :update, :destroy, :fields, :dialogs,
+                        :submit_mturk_response, :api_file_lock ]
   before_action :find_or_set_file_lock,
                 only: [ :edit, :fields, :dialogs, :api_file_lock ]
 
@@ -74,8 +75,9 @@ class IntentsController < ApplicationController
   end
 
   def api_file_lock
-    lock = @intent.has_file_lock?
-    render json: {file_lock: lock}.to_json, status: 200
+    locked_for_user = @intent.has_file_lock? ? @file_lock.user_id != current_user.id.to_s : false
+
+    render json: {file_lock: locked_for_user}.to_json, status: 200
   end
 
 

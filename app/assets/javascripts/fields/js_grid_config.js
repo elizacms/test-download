@@ -5,7 +5,10 @@ function initFieldDataTypes(){
         url: '/types/field-data-types',
         data: null
     }).done(function(){
-        initFields()
+        var filter = { id: intent._id.$oid };
+        locked = ajaxCall( 'GET', '/file_lock', filter ).done(function(){
+            initFields()
+        })
     });
 }
 
@@ -88,14 +91,8 @@ function initFields(){
     });
 }
 
-function intentIsLocked(){
-    filter = { id: intent._id.$oid };
-
-    return ajaxCall( 'GET', '/file_lock', filter )['file_lock'];
-}
-
 function getCustomInsertControls(gridId) {
-    if ( !intentIsLocked() ){
+    if ( !locked.responseJSON.file_lock ){
         var grid = $(gridId).data('JSGrid');
         return $("<input>").addClass('btn sm black pull-left')
                           .attr({ type: 'button', value: 'Save' })
