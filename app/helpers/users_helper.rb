@@ -14,6 +14,7 @@ module UsersHelper
   end
 
   def locked_by_other_user?
+    return false if @file_lock.nil?
     User.find(@file_lock.user_id) != @current_user
   end
 end

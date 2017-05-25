@@ -1,4 +1,4 @@
-describe 'File Lock Spec', :focus do
+describe 'File Lock Spec' do
   let!( :user   ){ create :user                                         }
   let!( :admin  ){ create :user, email: 'admin@iamplus.com'             }
   let!( :skill  ){ create :skill                                        }
