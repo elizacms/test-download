@@ -67,6 +67,19 @@ var TableRow = React.createClass({
     }
   },
 
+  displayControlOptions(){
+    console.log(this.props.locked);
+    if (!this.props.locked) {
+      return(
+        <div>
+          <a onClick={this.editRow} className='fa fa-pencil control-icon' href='#' title='Edit'></a>
+          <a onClick={this.copyRow} className='fa fa-clone  control-icon' href='#' title='Copy'></a>
+          <a onClick={this.deleteRow} className='fa fa-trash control-icon' rel='38' href='#' title='Delete'></a>
+        </div>
+      );
+    }
+  },
+
   render() {
     let data = this.props.data;
     return (
@@ -116,9 +129,7 @@ var TableRow = React.createClass({
           })}
         </td>
         <td>
-          <a onClick={this.editRow} className='fa fa-pencil' href='#' title='Edit'></a>&nbsp;&nbsp;
-          <a onClick={this.copyRow} className='fa fa-clone'  href='#' title='Copy'></a>&nbsp;&nbsp;
-          <a onClick={this.deleteRow} className='fa fa-trash' rel='38' href='#' title='Delete'></a>
+          {this.displayControlOptions()}
         </td>
       </tr>
     );

@@ -12,12 +12,12 @@ var Table = React.createClass({
   displayCreateOrUpdateBtn(){
     if (!this.props.locked){
       return(
-          <button
-            className='btn lg ghost pull-right'
-            onClick={this.showDialogForm}
-          >
-            Create a Dialog
-          </button>
+        <button
+          className='btn lg ghost pull-right'
+          onClick={this.showDialogForm}
+        >
+          Create a Dialog
+        </button>
       );
     }
   },
@@ -41,6 +41,7 @@ var Table = React.createClass({
             {
               this.props.data.map(function(dialog, index){
                 return <TableRow
+                          locked={this.props.locked}
                           sendData={this.props.sendData}
                           copyData={this.props.copyData}
                           deleteRow={this.props.deleteRow}
