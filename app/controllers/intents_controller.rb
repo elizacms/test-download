@@ -6,7 +6,7 @@ class IntentsController < ApplicationController
                 only: [ :edit, :update, :destroy, :fields, :dialogs,
                         :submit_mturk_response, :api_file_lock ]
   before_action :find_or_set_file_lock,
-                only: [ :edit, :fields, :dialogs, :api_file_lock ]
+                only: [ :edit, :fields, :dialogs ]
 
   def index
     @intents = Intent.all.map { |intent| intent.attrs.merge!(id: intent.id) }
@@ -75,7 +75,7 @@ class IntentsController < ApplicationController
   end
 
   def api_file_lock
-    locked_for_user = @intent.has_file_lock? ? @file_lock.user_id != current_user.id.to_s : false
+    locked_for_user = @intent.has_file_lock? ? @intent.file_lock.user_id != current_user.id.to_s : false
 
     render json: {file_lock: locked_for_user}.to_json, status: 200
   end
