@@ -11,7 +11,7 @@ var DialogForm = React.createClass({
       'missing-field':        [{id: 0, value: '', inputValue: ''}],
       'present-field':        [{id: 0, value: 'None', inputValue: ''}],
       'awaiting-field':       [{id: 0, value: '', inputValue: ''}],
-      'responses_attributes': [{id: 0, value: '', inputValue: '',
+      'responses_attributes': [{id: 0, value: 'text', inputValue: '',
                                 response_trigger: '', response_id: ''}],
       'entity-value-field':   [{id: 0, value: 'None', inputValue: ''}],
       priority: '',
@@ -141,7 +141,9 @@ var DialogForm = React.createClass({
   },
 
   updateState(name, obj){
-    if ( obj.inputValue && Object.keys(obj.inputValue).length === 0 ){
+    if (this.state.responses_attributes[obj.id].value != obj.value) { // Response Type Changed
+      this.state[name][obj.id] = obj;
+    } else if ( obj.inputValue && Object.keys(obj.inputValue).length === 0 ) {
       // Update response_trigger only
       this.state[name][obj.id].response_trigger = obj.response_trigger;
     } else {
@@ -204,6 +206,21 @@ var DialogForm = React.createClass({
     data[ 'comments'       ] = this.state.comments;
 
     data[ 'responses_attributes' ] = this.state.responses_attributes.map( (e) => {
+      // Delete all msId's from data object before Ajax
+      if (Array.isArray( Object.values(e.inputValue)[0] )) {
+        [].concat.apply( [], Object.values(e.inputValue) ).forEach( (fe) => {
+          delete fe.msId;
+
+          for (var prop in fe){
+            if (Array.isArray(fe[prop]) ){
+              fe[prop].forEach( (f) => {
+                delete f.msId;
+              })
+            }
+          }
+        })
+      }
+
       if ( e.response_id ){
         return ({ id: e.response_id,
                   response_type: e.value,
