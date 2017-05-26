@@ -34,21 +34,31 @@ var Option = React.createClass({
   render() {
     return(
       <div>
-        Option Text:
+        <label>
+          <span className='dialog-label'>Option</span>
+        </label>
         <input
+          className='dialog-input response-option-input'
+          type='text'
           name='text'
+          placeholder="Text"
           value={this.state.text}
           onChange={this.handleInputChange}
         />
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        Entity Value:
+        <label>
+          <span className='dialog-label option-label-right'>Entity</span>
+        </label>
         <input
+          className='dialog-input response-option-input abs-position'
+          type='text'
           name='entity'
+          placeholder="Entity Value"
           value={this.state.entity}
           onChange={this.handleInputChange}
         />
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="#" onClick={(e)=>this.props.removeItem(e, this.state.msId)}>X</a>
+        <a href="#" onClick={(e)=>this.props.removeItem(e, this.state.msId)}>
+          <span className='fa fa-trash option-trash-position'></span>
+        </a>
       </div>
     );
   }

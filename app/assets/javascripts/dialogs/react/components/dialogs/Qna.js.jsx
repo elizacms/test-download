@@ -69,7 +69,6 @@ var Qna = React.createClass({
     if (stateKey === 'qnaFaq') {
       data = event.target.checked;
     } else if (stateKey === 'qnaAnswers') {
-      //this.state[name][index].answer = event.target.value;
       data = this.state.qnaAnswers.map((m,i) => {
         if (index == i) {
           m.answer = event.target.value;
@@ -88,123 +87,120 @@ var Qna = React.createClass({
   },
 
   render() {
-      return(
-        <div>
-          <label>
-            <span className='dialog-label'>Spoken Text</span>
-          </label>
-          <input
-            className='dialog-input response-input'
-            type='text'
-            name='qnaSpokenText'
-            value={this.state.qnaSpokenText}
-            onChange={this.handleInputChange}
-          />
+    return(
+      <div>
+        <label>
+          <span className='dialog-label'>Spoken Text</span>
+        </label>
+        <input
+          className='dialog-input'
+          type='text'
+          name='qnaSpokenText'
+          value={this.state.qnaSpokenText}
+          onChange={this.handleInputChange}
+        />
+        <br />
+        <label><span className='dialog-label'>Question</span></label>
+        <input
+          className='dialog-input'
+          type='text'
+          name='qnaQuestion'
+          value={this.state.qnaQuestion}
+          onChange={this.handleInputChange}
+        />
+        <br />
+        <label>
+          <span className='dialog-label'>Include in FAQ</span>
+        </label>
+        <input
+          className='response-qna-faq'
+          type="checkbox"
+          name='qnaFaq'
+          checked={this.state.qnaFaq}
+          onChange={this.handleInputChange}
+        />
+        <br />
+        <label>
+          <span className='dialog-label'>Answer</span>
+        </label>
+        <a onClick={this.addAnswer} href='#' className='pull-right'>
+          <span className='add-answer'>Add Answer</span>
+        </a>
+        <br />
+        {this.state.qnaAnswers.map((answer, index) => (
+          <div key={index}>
+            <label>
+              <textarea
+                name='qnaAnswers'
+                className='response-qna-answer-input'
+                value={answer.answer}
+                onChange={ (e) => this.handleInputChange(e, index) }
+              />
+              &nbsp;&nbsp;
+              <a onClick={this.deleteAnswer.bind(this, index)} href='#'>
+                <i className='fa fa-trash answer-delete'></i>
+              </a>
+            </label>
+          </div>
+        ))}
+        <br />
+        <div className="qna-inputs">
+          <div className="abs-position">
+            <label>
+              <span className='dialog-label'>Video Thumbnail</span>
+            </label>
+            <input
+              className='dialog-input'
+              type='text'
+              name='qnaVideoThumbnail'
+              value={this.state.qnaVideoThumbnail}
+              onChange={this.handleInputChange}
+            />
+            <label><span className='dialog-label qna-label-right'>Video Url</span></label>
+            <input
+              className='dialog-input'
+              type='text'
+              name='qnaVideoUrl'
+              value={this.state.qnaVideoUrl}
+              onChange={this.handleInputChange}
+            />
           <br />
-
-          <label><span className='dialog-label'>Question</span></label>
-          <input
-            className='dialog-input response-input'
-            type='text'
-            name='qnaQuestion'
-            value={this.state.qnaQuestion}
-            onChange={this.handleInputChange}
-          />
+            <label><span className='dialog-label'>Image Thumbnail</span></label>
+            <input
+              className='dialog-input'
+              type='text'
+              name='qnaImageThumbnail'
+              value={this.state.qnaImageThumbnail}
+              onChange={this.handleInputChange}
+            />
+            <label><span className='dialog-label qna-label-right'>Image Url</span></label>
+            <input
+              className='dialog-input'
+              type='text'
+              name='qnaImageUrl'
+              value={this.state.qnaImageUrl}
+              onChange={this.handleInputChange}
+            />
           <br />
-
-          <label>
-            <span className='dialog-label'>Include in FAQ</span>
-          </label>
-          <input
-            className='response-qna-faq'
-            type="checkbox"
-            name='qnaFaq'
-            checked={this.state.qnaFaq}
-            onChange={this.handleInputChange}
-          />
-          <br />
-
-          <label>
-            <span className='dialog-label'>Answer</span>
-          </label>
-          <a onClick={this.addAnswer} href='#' className='pull-right'>
-            <span className='add-answer'>Add Answer</span>
-          </a>
-          <br />
-          {this.state.qnaAnswers.map((answer, index) => (
-            <div key={index}>
-              <label>
-                <textarea
-                  name='qnaAnswers'
-                  className='response-qna-answer-input'
-                  value={answer.answer}
-                  onChange={ (e) => this.handleInputChange(e, index) }
-                />
-                &nbsp;&nbsp;
-                <a onClick={this.deleteAnswer.bind(this, index)} href='#'>
-                  <i className='fa fa-trash answer-delete'></i>
-                </a>
-              </label>
-            </div>
-          ))}
-          <br />
-          <div className="qna-inputs">
-            <div className="abs-position">
-              <label>
-                <span className='dialog-label'>Video Thumbnail</span>
-              </label>
-              <input
-                className='dialog-input response-input'
-                type='text'
-                name='qnaVideoThumbnail'
-                value={this.state.qnaVideoThumbnail}
-                onChange={this.handleInputChange}
-              />
-              <label><span className='dialog-label qna-label-right'>Video Url</span></label>
-              <input
-                className='dialog-input response-input'
-                type='text'
-                name='qnaVideoUrl'
-                value={this.state.qnaVideoUrl}
-                onChange={this.handleInputChange}
-              />
-            <br />
-              <label><span className='dialog-label'>Image Thumbnail</span></label>
-              <input
-                className='dialog-input response-input'
-                type='text'
-                name='qnaImageThumbnail'
-                value={this.state.qnaImageThumbnail}
-                onChange={this.handleInputChange}
-              />
-              <label><span className='dialog-label qna-label-right'>Image Url</span></label>
-              <input
-                className='dialog-input response-input'
-                type='text'
-                name='qnaImageUrl'
-                value={this.state.qnaImageUrl}
-                onChange={this.handleInputChange}
-              />
-            <br />
-              <label><span className='dialog-label'>Link Text</span></label>
-              <input
-                className='dialog-input response-input'
-                type='text'
-                name='qnaLinkText'
-                value={this.state.qnaLinkText}
-                onChange={this.handleInputChange}
-              />
-              <label><span className='dialog-label qna-label-right'>Url</span></label>
-              <input
-                className='dialog-input response-input'
-                type='text'
-                name='qnaUrl'
-                value={this.state.qnaUrl}
-                onChange={this.handleInputChange}
-              />
-            </div>
+            <label><span className='dialog-label'>Link Text</span></label>
+            <input
+              className='dialog-input'
+              type='text'
+              name='qnaLinkText'
+              value={this.state.qnaLinkText}
+              onChange={this.handleInputChange}
+            />
+            <label><span className='dialog-label qna-label-right'>Url</span></label>
+            <input
+              className='dialog-input'
+              type='text'
+              name='qnaUrl'
+              value={this.state.qnaUrl}
+              onChange={this.handleInputChange}
+            />
           </div>
         </div>
-      )
+      </div>
+    );
   }
 });

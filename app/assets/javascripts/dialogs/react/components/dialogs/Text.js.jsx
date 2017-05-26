@@ -33,17 +33,22 @@ var Text = React.createClass({
   render() {
     return(
       <div>
-        Text:
+        <label>
+          <span className='dialog-label'>Text</span>
+        </label>
         <input
+          className='dialog-input'
           type='text'
           name='textValue'
           value={this.state.textValue}
           onChange={this.handleInputChange}
         />
         <br />
-
-        Spoken Text:
+        <label>
+          <span className='dialog-label'>Spoken Text</span>
+        </label>
         <input
+          className='dialog-input'
           type='text'
           name='spokenTextValue'
           value={this.state.spokenTextValue}

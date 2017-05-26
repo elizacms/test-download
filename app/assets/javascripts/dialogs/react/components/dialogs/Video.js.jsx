@@ -33,17 +33,22 @@ var Video = React.createClass({
   render() {
     return(
       <div>
-        Video: 
+        <label>
+          <span className='dialog-label'>Video</span>
+        </label>
         <input
+          className='dialog-input'
           type='text'
           name='videoThumbnail'
           placeholder="Thumbnail"
           value={this.state.videoThumbnail}
           onChange={this.handleInputChange}
         />
-        <br />
-        Entity Value 
+        <label>
+          <span className='dialog-label video-label-right'>Entity Value</span>
+        </label>
         <input
+          className='dialog-input abs-position'
           type='text'
           name='videoEntity'
           placeholder="Link"

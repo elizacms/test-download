@@ -207,19 +207,21 @@ var DialogForm = React.createClass({
 
     data[ 'responses_attributes' ] = this.state.responses_attributes.map( (e) => {
       // Delete all msId's from data object before Ajax
-      if (Array.isArray( Object.values(e.inputValue)[0] )) {
-        [].concat.apply( [], Object.values(e.inputValue) ).forEach( (fe) => {
-          delete fe.msId;
+      for (var property in e.inputValue) {
+        if ( Array.isArray(e.inputValue[property]) ) {
+          e.inputValue[property].forEach( (object) => {
+            delete object.msId;
 
-          for (var prop in fe){
-            if (Array.isArray(fe[prop]) ){
-              fe[prop].forEach( (f) => {
-                delete f.msId;
-              })
+            for (var prop in object) {
+              if ( Array.isArray(object[prop]) ){
+                object[prop].forEach( (obj) => {
+                  delete obj.msId;
+                })
+              }
             }
-          }
-        })
-      }
+          });
+        }
+      };
 
       if ( e.response_id ){
         return ({ id: e.response_id,
@@ -253,7 +255,6 @@ var DialogForm = React.createClass({
         <h4 className='inline'>Responses</h4>
         <a href={this.props.field_path} className='addField btn md grey pull-right'>Manage fields</a>
         <a href='#' onClick={this.resetForm} className='btn md grey pull-right'>Reset</a>
-        {/*<form className='dialog' method='post' action='/dialogue_api/response'>*/}
         <div className='dialog-form'>
           <input type='hidden' name='intent-id' value={this.props.intent_id} />
           <hr className='margin50220'></hr>
@@ -268,7 +269,6 @@ var DialogForm = React.createClass({
               onChange={this.priorityHandleChange} />
           </div>
           <br /><br />
-
           <Message message={this.props.response} name='aneeda-says-error'>
           </Message>
           <hr className='margin0'></hr>
@@ -408,7 +408,6 @@ var DialogForm = React.createClass({
           >
             Cancel
           </a>
-        {/*</form>*/}
         </div>
       </div>
     );
