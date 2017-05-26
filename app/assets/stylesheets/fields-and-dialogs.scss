@@ -151,7 +151,13 @@ textarea.comments-input {
   float: right;
 }
 
-.add-option, .add-card, .add-answer {
+.add-option {
+  position: absolute;
+  right: 30px;
+  margin-top: -43px;
+}
+
+.add-card, .add-answer {
   position: absolute;
   right: 30px;
 }
@@ -285,5 +291,5 @@ table.dialogs{
   background: #EFEFEF;
   padding: 12px;
   margin-bottom: 6px;
-  width: 160%;
+  width: 162%;
 }

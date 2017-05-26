@@ -60,25 +60,33 @@ var Card = React.createClass({
   render() {
     return(
       <div>
-        <Text
-          value={ {textValue, spokenTextValue}=this.state }
-          componentData={this.handleDataFromChild}
-        />
-
-        Icon URL: 
-        <input
-          name="iconUrl"
-          value={this.state.iconUrl}
-          onChange={this.handleInputChange}
-        />
-
-        <Template
-          templateType="options"
-          value={{options: this.state.options}}
-          componentData={this.handleDataFromChild}
-        />
-
-        <a href="#" onClick={(e)=>this.props.removeItem(e, this.state.msId)}>X</a>
+        <label>
+          <span className='dialog-label card-label'>Cards</span>
+        </label>
+        <div className='card-bg'>
+          <a href="#" onClick={(e)=>this.props.removeItem(e, this.state.msId)}>
+            <span className='fa fa-trash option-trash-position'></span>
+          </a>
+          <Text
+            value={ {textValue, spokenTextValue}=this.state }
+            componentData={this.handleDataFromChild}
+          />
+          <label>
+            <span className='dialog-label'>Icon URL</span>
+          </label>
+          <input
+            className='dialog-input'
+            type='text'
+            name="iconUrl"
+            value={this.state.iconUrl}
+            onChange={this.handleInputChange}
+          />
+          <Template
+            templateType="options"
+            value={{options: this.state.options}}
+            componentData={this.handleDataFromChild}
+          />
+        </div>
       </div>
     );
   }

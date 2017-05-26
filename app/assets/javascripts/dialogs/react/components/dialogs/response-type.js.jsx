@@ -111,7 +111,6 @@ var ResponseType = React.createClass({
     });
   },
 
-  // NEW Stuffs !!!!!!!
   handleDataFromChild(newValue) {
     const tmpStateValues = this.state.newInputValues;
 
@@ -184,7 +183,7 @@ var ResponseType = React.createClass({
         {attachment}
       </div>
     );
-  }, // End New Stuffs !!!
+  },
 
   // Render Response Trigger type ////////////////////////////////////////
   renderTriggerType() {
@@ -313,7 +312,7 @@ var ResponseType = React.createClass({
             <option key='1' value='textWithOption'>Text With Option</option>
             <option key='2' value='video'>Video</option>
             <option key='3' value='card'>Card</option>
-            <option key='4' value='qna'>Q&A</option>
+            <option key='4' value='qna'>Q & A</option>
           </select>
           <br /><br />
           { this.renderComponents() }

@@ -2,7 +2,7 @@ var Template = React.createClass({
   getInitialState() {
     return {
       templateType: null,
-      childrenDataArray: []
+      childrenDataArray: [{msId: null}]
     };
   },
 
@@ -24,7 +24,6 @@ var Template = React.createClass({
         this.assignIds();
       });
     }
-
   },
 
   componentWillReceiveProps(nextProps) {
@@ -113,20 +112,24 @@ var Template = React.createClass({
 
     switch(this.state.templateType) {
       case 'options':
-        partial = <div >
-                    <a href="#" onClick={e=>this.onAddItem(e,"options")}>Add Options</a>
+        partial = <div>
+                    <a href="#" className='pull-right' onClick={e=>this.onAddItem(e,"options")}>
+                      <span className='add-option'>Add Option</span>
+                    </a>
                   </div>
         break;
       case 'cards':
         partial = <div>
-                    <a href="#" onClick={e=>this.onAddItem(e,"cards")}>Add Cards</a>
+                    <a href="#" onClick={e=>this.onAddItem(e,"cards")}>
+                      <span className='add-card'>Add Card</span>
+                    </a>
                   </div>
         break;
       default:
         partial = <div >
-                    <a href="#" onClick={e=>this.onAddItem(e,"options")}>Add Options</a>
+                    <a href="#" onClick={e=>this.onAddItem(e,"options")}>Add Option</a>
                     &nbsp;or&nbsp;
-                    <a href="#" onClick={e=>this.onAddItem(e,"cards")}>Add Cards</a>
+                    <a href="#" onClick={e=>this.onAddItem(e,"cards")}>Add Card</a>
                   </div>
         break;
     };
