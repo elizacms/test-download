@@ -20,15 +20,15 @@ pipeline {
       }
     }
 
-    stage('Update App') {
+    stage('Update App - Eliza-CMS') {
       steps {
         sh "BRANCH=${env.BRANCH_NAME} bash ./pipeline/update_app.sh"
       }
     }
 
-    stage('Deploy to heroku nlu-cms') {
+    stage('Update App - NLU-CMS') {
       steps {
-        sh "BRANCH=${env.BRANCH_NAME} bash ./pipeline/deploy_to_heroku.sh"
+        sh "BRANCH=${env.BRANCH_NAME} bash ./pipeline/update_app_nlu.sh"
       }
     }
   }
