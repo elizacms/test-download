@@ -18,6 +18,8 @@ Rails.application.routes.draw do
 
   resources :users
 
+  resources :releases
+
   match '/ajax-developers',
     to: 'roles#ajax_set_or_unset_developers',
     as: :ajax_set_or_unset_developers,
