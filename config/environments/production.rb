@@ -72,18 +72,7 @@ Rails.application.configure do
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
-  if ENV['ELIZA_CMS'] == 'true'
-    config.logger = RemoteSyslogLogger.new( '127.0.0.1', 514, program: "nlu-cms-#{Rails.env}" )
-  else
-    if ENV["RAILS_LOG_TO_STDOUT"].present?
-      logger           = ActiveSupport::Logger.new(STDOUT)
-      logger.formatter = config.log_formatter
-      config.logger = ActiveSupport::TaggedLogging.new(logger)
-    end
-
-    # Use default logging formatter so that PID and timestamp are not suppressed.
-    config.log_formatter = ::Logger::Formatter.new
-  end
+  config.logger = RemoteSyslogLogger.new( '127.0.0.1', 514, program: "nlu-cms-#{Rails.env}" )
 
   # Do not dump schema after migrations.
   # config.active_record.dump_schema_after_migration = false
