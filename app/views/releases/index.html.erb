@@ -1,1 +1,19 @@
-<h1>Releases Index</h1>
+<h1>
+  Releases Index
+  <%= link_to 'Create a Release', new_release_path, class: 'btn lg black pull-right' %>
+</h1>
+
+<table class='table table-hover'>
+  <thead class='thead-default'>
+    <th>No. Files Changed</th>
+    <th>Message</th>
+  </thead>
+  <tbody>
+    <tr>
+      <% @releases.each do |release| %>
+        <td><%= %></td>
+        <td><%= release.commit_message_from_sha %></td>
+      <% end %>
+    </tr>
+  </tbody>
+</table>

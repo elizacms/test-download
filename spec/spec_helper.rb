@@ -48,6 +48,7 @@ RSpec.configure do |config|
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/fields" )
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/dialogs" )
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/responses" )
+    # Rugged::Repository.init_at("#{ENV['NLU_CMS_PERSISTENCE_PATH']}")
     ActionMailer::Base.deliveries = []
   end
 end

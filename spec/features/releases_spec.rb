@@ -1,4 +1,4 @@
-describe 'Release Feature Specs', :focus do
+describe 'Release Feature Specs' do
   let!( :user    ){ create :user                           }
   let!( :skill   ){ create :skill                          }
   let!( :role    ){ create :role, skill: skill, user: user }
