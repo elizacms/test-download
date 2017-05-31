@@ -14,12 +14,9 @@ pipeline {
     }
 
     stage('UnitTest') {
-      when {
-        expression { env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'staging'}
-      }
       steps {
-          sh 'bash ./pipeline/run-unit-tests.sh'
-          step([$class: 'JUnitResultArchiver', testResults: 'junit.xml'])
+        sh 'bash ./pipeline/run-unit-tests.sh'
+        step([$class: 'JUnitResultArchiver', testResults: 'junit.xml'])
       }
     }
 
