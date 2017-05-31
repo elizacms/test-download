@@ -206,23 +206,6 @@ var DialogForm = React.createClass({
     data[ 'comments'       ] = this.state.comments;
 
     data[ 'responses_attributes' ] = this.state.responses_attributes.map( (e) => {
-      // Delete all msId's from data object before Ajax
-      for (var property in e.inputValue) {
-        if ( Array.isArray(e.inputValue[property]) ) {
-          e.inputValue[property].forEach( (object) => {
-            delete object.msId;
-
-            for (var prop in object) {
-              if ( Array.isArray(object[prop]) ){
-                object[prop].forEach( (obj) => {
-                  delete obj.msId;
-                })
-              }
-            }
-          });
-        }
-      };
-
       if ( e.response_id ){
         return ({ id: e.response_id,
                   response_type: e.value,

@@ -1,7 +1,7 @@
 var Option = React.createClass({
   getInitialState() {
     return {
-      msId: "",
+      id: "",
       text: "",
       entity: ""
     };
@@ -9,7 +9,7 @@ var Option = React.createClass({
 
   componentDidMount() {
     this.setState({
-      msId: this.props.value.msId,
+      id: this.props.index,
       text: this.props.value.text || "",
       entity: this.props.value.entity || ""
     });
@@ -17,7 +17,7 @@ var Option = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      msId: nextProps.value.msId,
+      id: nextProps.index,
       text: nextProps.value.text || "",
       entity: nextProps.value.entity || ""
     });
@@ -56,7 +56,7 @@ var Option = React.createClass({
           value={this.state.entity}
           onChange={this.handleInputChange}
         />
-        <a href="#" onClick={(e)=>this.props.removeItem(e, this.state.msId)}>
+        <a href="#" onClick={(e)=>this.props.removeItem(e, this.state.id)}>
           <span className='fa fa-trash option-trash-position'></span>
         </a>
       </div>

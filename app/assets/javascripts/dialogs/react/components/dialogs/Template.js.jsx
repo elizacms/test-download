@@ -2,7 +2,7 @@ var Template = React.createClass({
   getInitialState() {
     return {
       templateType: null,
-      childrenDataArray: [{msId: null}]
+      childrenDataArray: [{}]
     };
   },
 
@@ -20,8 +20,6 @@ var Template = React.createClass({
     if (this.props.value[tType].length > 0){
       this.setState({
         childrenDataArray: this.props.value[tType]
-      }, () => {
-        this.assignIds();
       });
     }
   },
@@ -40,34 +38,16 @@ var Template = React.createClass({
     if (nextProps.value[tType].length > 0){
       this.setState({
         childrenDataArray: nextProps.value[tType]
-      }, () => {
-        this.assignIds();
       });
     }
   },
 
-  assignIds() {
-    const tmpChildrenDataArray = this.state.childrenDataArray;
-
-    tmpChildrenDataArray.map((childData, index) => {
-      if ( !childData['msId'] ) {
-        childData['msId'] = new Date().getUTCMilliseconds() + index;
-      }
-      return childData;
-    });
-
-    this.setState({
-      childrenDataArray: tmpChildrenDataArray
-    });
-  },
-
   onAddItem(event, tType) {
     event.preventDefault();
-    const uid = new Date().getUTCMilliseconds();
 
     this.setState({
       templateType: tType,
-      childrenDataArray: this.state.childrenDataArray.concat( [{msId:uid}] )
+      childrenDataArray: this.state.childrenDataArray.concat([{}])
     });
   },
 
@@ -75,7 +55,7 @@ var Template = React.createClass({
     event.preventDefault();
 
     this.setState({
-      childrenDataArray: this.state.childrenDataArray.filter((c) => c.msId != id)
+      childrenDataArray: this.state.childrenDataArray.filter((f, index) => index != id)
     }, () => {
       if (this.state.childrenDataArray.length === 0) {
         this.setState( this.getInitialState() );
@@ -86,18 +66,20 @@ var Template = React.createClass({
 
 
   handleChildUpdate(data) {
-    const tmpChildrenDataArray = this.state.childrenDataArray;
+    const tmpChildrenData = this.state.childrenDataArray;
 
-    tmpChildrenDataArray.map((tmpChildData, index) => {
-      if (tmpChildData.msId === data.msId) {
-        for (var prop in data) {
-          tmpChildData[prop] = data[prop];
+    tmpChildrenData.map((m, index) => {
+      if ( index == data.id ){
+        for (var prop in data){
+          if (prop != "id"){ // remove id
+            m[prop] = data[prop];
+          }
         }
       }
-    });
+   });
 
     this.setState({
-      childrenDataArray: tmpChildrenDataArray
+      childrenDataArray: tmpChildrenData
     }, () => {
       this.updateParent();
     });
@@ -144,6 +126,7 @@ var Template = React.createClass({
             return(
               <Option
                 key={index}
+                index={index}
                 value={childData}
                 updateParent={this.handleChildUpdate}
                 removeItem={this.onRemoveItem}
@@ -155,6 +138,7 @@ var Template = React.createClass({
             return(
               <Card
                 key={index}
+                index={index}
                 value={childData}
                 updateParent={this.handleChildUpdate}
                 removeItem={this.onRemoveItem}
