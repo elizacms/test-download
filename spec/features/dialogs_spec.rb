@@ -518,7 +518,7 @@ sleep 3
           icon_url      = page.all( 'input[name=iconUrl]' )
           option_inputs = page.all( 'input.response-option-input' )
 
-          card_text[0].set ' twin cats'
+          card_text[0].set 'twin cats'
           card_text[1].set 'twin humans!?!'
 
           spoken_text[0].set 'Speak out!'

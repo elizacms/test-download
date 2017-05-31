@@ -1,7 +1,7 @@
 var Card = React.createClass({
   getInitialState() {
     return {
-      msId: "",
+      id: "",
       textValue: "",
       spokenTextValue: "",
       iconUrl: "",
@@ -10,22 +10,18 @@ var Card = React.createClass({
   },
 
   componentDidMount() {
-    this.setState({ ...this.state, ...this.props.value });
-
-    // this.setState({
-    //   msId: this.props.value.msId || "",
-    //   textValue: this.props.value.textValue || "",
-    //   spokenTextValue: this.props.value.spokenTextValue || "",
-    //   iconUrl: this.props.value.iconUrl || "",
-    //   options: this.props.value.options || []
-    // }, () => {
-    //   console.log(this.state);
-    // });
+    this.setState({
+      id: this.props.index,
+      textValue: this.props.value.textValue || "",
+      spokenTextValue: this.props.value.spokenTextValue || "",
+      iconUrl: this.props.value.iconUrl || "",
+      options: this.props.value.options || []
+    });
   },
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      msId: nextProps.value.msId || "",
+      id: nextProps.index,
       textValue: nextProps.value.textValue || "",
       spokenTextValue: nextProps.value.spokenTextValue || "",
       iconUrl: nextProps.value.iconUrl || "",
@@ -64,7 +60,7 @@ var Card = React.createClass({
           <span className='dialog-label card-label'>Cards</span>
         </label>
         <div className='card-bg'>
-          <a href="#" onClick={(e)=>this.props.removeItem(e, this.state.msId)}>
+          <a href="#" onClick={(e)=>this.props.removeItem(e, this.state.id)}>
             <span className='fa fa-trash option-trash-position'></span>
           </a>
           <Text
