@@ -26,8 +26,8 @@ feature 'Dialogs', :js do
 
     click_button 'Create Dialog'
 
-    sleep 0.5
-
+    # sleep 0.5
+sleep 3
     expect( page ).to have_content 'destination'
   end
 
@@ -141,9 +141,9 @@ feature 'Dialogs', :js do
     specify 'Can save a response of type text' do
       within '.dialog-form' do
         within '.response-type-row-0'do
-          select  'Text',                from: 'response-type-select'
-          fill_in 'response_text_input', with: 'abc def 123 10 9 8'
-          fill_in 'response_spokentext', with: 'Speak out!'
+          select  'Text',             from: 'response-type-select'
+          fill_in 'textValue',        with: 'abc def 123 10 9 8'
+          fill_in 'spokenTextValue',  with: 'Speak out!'
         end
 
         select 'Time delay in seconds', from: 'trigger_type'
@@ -161,8 +161,8 @@ feature 'Dialogs', :js do
       expect( Response.count ).to eq 1
 
       expected_response_value = {
-        'response_text_input'      => 'abc def 123 10 9 8',
-        'response_spokentext' => 'Speak out!'
+        'textValue'       => 'abc def 123 10 9 8',
+        'spokenTextValue' => 'Speak out!'
       }.to_json
 
       expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
@@ -175,9 +175,9 @@ feature 'Dialogs', :js do
     specify 'Can save mulitple responses of type text' do
       within '.dialog-form' do
         within '.response-type-row-0'do
-          select  'Text',                   from: 'response-type-select'
-          fill_in 'response_text_input',    with: 'abc def 123 10 9 8'
-          fill_in 'response_spokentext',    with: 'Speak out!'
+          select  'Text',             from: 'response-type-select'
+          fill_in 'textValue',        with: 'abc def 123 10 9 8'
+          fill_in 'spokenTextValue',  with: 'Speak out!'
 
           find('.add-remove-response').click
 
@@ -187,8 +187,8 @@ feature 'Dialogs', :js do
 
 
         within '.response-type-row-1' do
-          select  'Text',                   from: 'response-type-select'
-          fill_in 'response_text_input',    with: 'crazy dancing ninjas'
+          select  'Text',       from: 'response-type-select'
+          fill_in 'textValue',  with: 'crazy dancing ninjas'
 
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs', with: '6'
@@ -207,14 +207,14 @@ feature 'Dialogs', :js do
       expect( Response.count ).to eq 2
 
       expected_response_1 = {
-        'response_text_input'      => 'abc def 123 10 9 8',
-        'response_spokentext' => 'Speak out!'
+        'textValue'       => 'abc def 123 10 9 8',
+        'spokenTextValue' => 'Speak out!'
       }.to_json
       expected_response_trigger_1 = {'timeDelayInSecs' => '5'}.to_json
 
       expected_response_2 = {
-        'response_text_input' => 'crazy dancing ninjas',
-        'response_spokentext' => ''
+        'textValue'       => 'crazy dancing ninjas',
+        'spokenTextValue' => ''
       }.to_json
       expected_response_trigger_2 = {'timeDelayInSecs' => '6'}.to_json
 
@@ -229,9 +229,9 @@ feature 'Dialogs', :js do
     specify 'Can save a response of type text with options with muli options' do
       within '.dialog-form' do
         within '.response-type-row-0'do
-          select  'Text With Option',                     from: 'response-type-select'
-          fill_in 'response_text_with_option_text_input', with: 'abc def 123 10 9 8'
-          fill_in 'response_spokentext', with: 'Speak out!'
+          select  'Text With Option', from: 'response-type-select'
+          fill_in 'textValue',        with: 'abc def 123 10 9 8'
+          fill_in 'spokenTextValue',  with: 'Speak out!'
 
           find('.add-option').click
 
@@ -255,8 +255,8 @@ feature 'Dialogs', :js do
       expect( Response.count ).to eq 1
 
       expected_response_value = {
-        'response_text_with_option_text_input'   => 'abc def 123 10 9 8',
-        'response_spokentext' => 'Speak out!',
+        'textValue'       => 'abc def 123 10 9 8',
+        'spokenTextValue' => 'Speak out!',
         'options' => [
           { 'text' => 'twin cats', 'entity' => 'Jenny or Luna or Lady' },
           { 'text' => 'twin dogs', 'entity' => 'Lady Luna Reina'       }
@@ -264,7 +264,7 @@ feature 'Dialogs', :js do
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
-      expect( Dialog.last.responses.first.attrs[:response_type]     ).to eq 'text_with_option'
+      expect( Dialog.last.responses.first.attrs[:response_type]     ).to eq 'textWithOption'
       expect( Dialog.last.responses.first.attrs[:response_trigger]  ).to eq expected_response_trigger
       expect( Dialog.last.responses.first.attrs[:response_value]    ).to eq expected_response_value
     end
@@ -272,11 +272,11 @@ feature 'Dialogs', :js do
     specify 'Can save a response of type video' do
       within '.dialog-form' do
         within '.response-type-row-0'do
-          select  'Video',                          from: 'response-type-select'
-          fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
-          fill_in 'response_spokentext',            with: 'Speak out!'
-          fill_in 'response_video_thumbnail_input', with: 'twin cats'
-          fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
+          select  'Video',            from: 'response-type-select'
+          fill_in 'textValue',        with: 'abc def 123 10 9 8'
+          fill_in 'spokenTextValue',  with: 'Speak out!'
+          fill_in 'videoThumbnail',   with: 'twin cats'
+          fill_in 'videoEntity',      with: 'Jenny or Luna or Lady'
 
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs', with: '5'
@@ -294,10 +294,10 @@ feature 'Dialogs', :js do
       expect( Response.count ).to eq 1
 
       expected_response_value = {
-        'response_video_text_input'      => 'abc def 123 10 9 8',
-        'response_spokentext' => 'Speak out!',
-        'response_video_thumbnail_input' => 'twin cats',
-        'response_video_entity_input'    => 'Jenny or Luna or Lady'
+        'textValue'       => 'abc def 123 10 9 8',
+        'spokenTextValue' => 'Speak out!',
+        'videoThumbnail'  => 'twin cats',
+        'videoEntity'     => 'Jenny or Luna or Lady'
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
@@ -309,21 +309,21 @@ feature 'Dialogs', :js do
     specify 'Can save mulitple responses of type video and text' do
       within '.dialog-form' do
         within '.response-type-row-0' do
-          select  'Video',                          from: 'response-type-select'
-          fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
-          fill_in 'response_spokentext',            with: 'Speak out!'
-          fill_in 'response_video_thumbnail_input', with: 'twin cats'
-          fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
-          select 'Time delay in seconds',           from: 'trigger_type'
-          fill_in 'timeDelayInSecs',                with: '5'
+          select  'Video',                 from: 'response-type-select'
+          fill_in 'textValue',             with: 'abc def 123 10 9 8'
+          fill_in 'spokenTextValue',       with: 'Speak out!'
+          fill_in 'videoThumbnail',        with: 'twin cats'
+          fill_in 'videoEntity',           with: 'Jenny or Luna or Lady'
+          select  'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs',       with: '5'
 
           find('.add-remove-response').click
         end
 
         within '.response-type-row-1' do
-          select  'Text',                     from: 'response-type-select'
-          fill_in 'response_text_input',      with: 'crazy dancing ninjas'
-          fill_in 'response_spokentext',      with: 'Speak out!'
+          select  'Text',                 from: 'response-type-select'
+          fill_in 'textValue',            with: 'crazy dancing ninjas'
+          fill_in 'spokenTextValue',      with: 'Speak out!'
 
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs',      with: '6'
@@ -341,16 +341,16 @@ feature 'Dialogs', :js do
       expect( Response.count ).to eq 2
 
       expected_response_value = {
-        'response_video_text_input'      => 'abc def 123 10 9 8',
-        'response_spokentext'            => 'Speak out!',
-        'response_video_thumbnail_input' => 'twin cats',
-        'response_video_entity_input'    => 'Jenny or Luna or Lady'
+        'textValue'       => 'abc def 123 10 9 8',
+        'spokenTextValue' => 'Speak out!',
+        'videoThumbnail'  => 'twin cats',
+        'videoEntity'     => 'Jenny or Luna or Lady'
       }.to_json
       expected_response_trigger_1 = {'timeDelayInSecs' => '5'}.to_json
 
       expected_response_2 = {
-        'response_text_input'      => 'crazy dancing ninjas',
-        'response_spokentext' => 'Speak out!'
+        'textValue'       => 'crazy dancing ninjas',
+        'spokenTextValue' => 'Speak out!'
       }.to_json
       expected_response_trigger_2 = {'timeDelayInSecs' => '6'}.to_json
 
@@ -366,25 +366,25 @@ feature 'Dialogs', :js do
     specify 'Can save mulitple responses and update them' do
       within '.dialog-form' do
         within '.response-type-row-0'do
-          select  'Video',                          from: 'response-type-select'
-          fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
-          fill_in 'response_spokentext',            with: 'Speak out!'
-          fill_in 'response_video_thumbnail_input', with: 'twin cats'
-          fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
+          select  'Video',                from: 'response-type-select'
+          fill_in 'textValue',            with: 'abc def 123 10 9 8'
+          fill_in 'spokenTextValue',      with: 'Speak out!'
+          fill_in 'videoThumbnail',       with: 'twin cats'
+          fill_in 'videoEntity',          with: 'Jenny or Luna or Lady'
 
           select 'Time delay in seconds', from: 'trigger_type'
-          fill_in 'timeDelayInSecs', with: '5'
+          fill_in 'timeDelayInSecs',      with: '5'
 
           find('.add-remove-response').click
         end
 
         within '.response-type-row-1' do
-          select  'Text',                   from: 'response-type-select'
-          fill_in 'response_spokentext',    with: 'Speak out!'
-          fill_in 'response_text_input',    with: 'crazy dancing ninjas'
+          select  'Text',                 from: 'response-type-select'
+          fill_in 'textValue',            with: 'crazy dancing ninjas'
+          fill_in 'spokenTextValue',      with: 'Speak out!'
 
           select 'Time delay in seconds', from: 'trigger_type'
-          fill_in 'timeDelayInSecs', with: '6'
+          fill_in 'timeDelayInSecs',      with: '6'
         end
 
         select field.attrs[:name], from: 'unresolved-field'
@@ -402,12 +402,12 @@ feature 'Dialogs', :js do
 
       within '.dialog-form' do
         within '.response-type-row-1' do
-          select  'Text',                from: 'response-type-select'
-          fill_in 'response_text_input', with: 'crazy dancing BARBIES'
-          fill_in 'response_spokentext',    with: 'Speak up!'
+          select  'Text',                 from: 'response-type-select'
+          fill_in 'textValue',            with: 'crazy dancing BARBIES'
+          fill_in 'spokenTextValue',      with: 'Speak up!'
 
           select 'Time delay in seconds', from: 'trigger_type'
-          fill_in 'timeDelayInSecs', with: '7'
+          fill_in 'timeDelayInSecs',      with: '7'
         end
 
         select field.attrs[:name], from: 'unresolved-field'
@@ -419,16 +419,16 @@ feature 'Dialogs', :js do
       sleep 0.5
 
       expected_response_value = {
-        'response_video_text_input'      => 'abc def 123 10 9 8',
-        'response_spokentext' => 'Speak out!',
-        'response_video_thumbnail_input' => 'twin cats',
-        'response_video_entity_input'    => 'Jenny or Luna or Lady'
+        'textValue'       => 'abc def 123 10 9 8',
+        'spokenTextValue' => 'Speak out!',
+        'videoThumbnail'  => 'twin cats',
+        'videoEntity'     => 'Jenny or Luna or Lady'
       }.to_json
       expected_response_trigger_1 = {'timeDelayInSecs' => '5'}.to_json
 
       expected_response_2 = {
-        'response_text_input'      => 'crazy dancing BARBIES',
-        'response_spokentext' => 'Speak up!'
+        'textValue'       => 'crazy dancing BARBIES',
+        'spokenTextValue' => 'Speak up!'
       }.to_json
       expected_response_trigger_2 = {'timeDelayInSecs' => '7'}.to_json
 
@@ -444,10 +444,10 @@ feature 'Dialogs', :js do
       within '.dialog-form' do
         within '.response-type-row-0'do
           select  'Video',                          from: 'response-type-select'
-          fill_in 'response_video_text_input',      with: 'abc def 123 10 9 8'
-          fill_in 'response_spokentext',            with: 'Speak out!'
-          fill_in 'response_video_thumbnail_input', with: 'twin cats'
-          fill_in 'response_video_entity_input',    with: 'Jenny or Luna or Lady'
+          fill_in 'textValue',      with: 'abc def 123 10 9 8'
+          fill_in 'spokenTextValue',            with: 'Speak out!'
+          fill_in 'videoThumbnail', with: 'twin cats'
+          fill_in 'videoEntity',    with: 'Jenny or Luna or Lady'
 
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs', with: '5'
@@ -457,7 +457,7 @@ feature 'Dialogs', :js do
 
         within '.response-type-row-1' do
           select  'Text',                from: 'response-type-select'
-          fill_in 'response_text_input', with: 'crazy dancing ninjas'
+          fill_in 'textValue', with: 'crazy dancing ninjas'
 
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs',      with: '6'
@@ -490,10 +490,10 @@ feature 'Dialogs', :js do
       end
 
       expected_response_value = {
-        'response_video_text_input'      => 'abc def 123 10 9 8',
-        'response_spokentext'            => 'Speak out!',
-        'response_video_thumbnail_input' => 'twin cats',
-        'response_video_entity_input'    => 'Jenny or Luna or Lady'
+        'textValue'      => 'abc def 123 10 9 8',
+        'spokenTextValue'            => 'Speak out!',
+        'videoThumbnail' => 'twin cats',
+        'videoEntity'    => 'Jenny or Luna or Lady'
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '7'}.to_json
 
@@ -513,10 +513,10 @@ feature 'Dialogs', :js do
 
           find('.add-card' ).click
 
-          card_text     = page.all( 'input.response-card-text-input'     )
-          spoken_text   = page.all( 'input.response-card-spoken-text'    )
-          icon_url      = page.all( 'input.response-card-icon-url-input' )
-          option_inputs = page.all( 'input.response-cards-input'         )
+          card_text     = page.all( 'input[name=textValue]' )
+          spoken_text   = page.all( 'input[name=spokenTextValue]' )
+          icon_url      = page.all( 'input[name=iconUrl]' )
+          option_inputs = page.all( 'input.response-option-input' )
 
           card_text[0].set 'twin cats'
           card_text[1].set 'twin humans!?!'
@@ -549,9 +549,9 @@ feature 'Dialogs', :js do
       expected_response_value = {
         "cards" => [
           {
-            "text" => "twin cats",
-            "spokentext" => "Speak out!",
-            "iconurl" => "Hello or Goodbye?",
+            "textValue" => "twin cats",
+            "spokenTextValue" => "Speak out!",
+            "iconUrl" => "Hello or Goodbye?",
             "options" => [
               {
                 "text" => "yes",
@@ -564,9 +564,9 @@ feature 'Dialogs', :js do
             ]
           },
           {
-            "text" => "twin humans!?!",
-            "spokentext" => "Speak up!",
-            "iconurl" => "Bad Dreams",
+            "textValue" => "twin humans!?!",
+            "spokenTextValue" => "Speak up!",
+            "iconUrl" => "Bad Dreams",
             "options" => [
               {
                 "text" => "if he",
@@ -586,16 +586,16 @@ feature 'Dialogs', :js do
     specify 'Can save a response of type Question and Answer' do
       within '.dialog-form' do
         within '.response-type-row-0'do
-          select  'Q & A',                        from: 'response-type-select'
-          fill_in 'response_spokentext',          with: 'Speak out!'
-          fill_in 'response_qna_question',        with: 'Lunch?'
-          fill_in 'response_qna_answers',         with: 'Hamburger'
-          fill_in 'response_qna_video_thumbnail', with: 'Video thumbnail'
-          fill_in 'response_qna_video_url',       with: 'http://www.youtube.com/qna_video'
-          fill_in 'response_qna_image_thumbnail', with: 'image thumbnail'
-          fill_in 'response_qna_image_url',       with: 'http://www.ig.com/qna_image'
-          fill_in 'response_qna_link_text',       with: 'link text'
-          fill_in 'response_qna_url',             with: 'qna url'
+          select  'Q & A',              from: 'response-type-select'
+          fill_in 'qnaSpokenText',      with: 'Speak out!'
+          fill_in 'qnaQuestion',        with: 'Lunch?'
+          fill_in 'qnaAnswers',         with: 'Hamburger'
+          fill_in 'qnaVideoThumbnail',  with: 'Video thumbnail'
+          fill_in 'qnaVideoUrl',        with: 'http://www.youtube.com/qna_video'
+          fill_in 'qnaImageThumbnail',  with: 'image thumbnail'
+          fill_in 'qnaImageUrl',        with: 'http://www.ig.com/qna_image'
+          fill_in 'qnaLinkText',        with: 'link text'
+          fill_in 'qnaUrl',             with: 'qna url'
 
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs',      with: '4'
@@ -613,16 +613,16 @@ feature 'Dialogs', :js do
       expect( Response.count ).to eq 1
 
       expected_response_value = {
-        'response_spokentext'           => 'Speak out!',
-        'response_qna_question'         => 'Lunch?',
-        'response_qna_faq'              => false,
-        'response_qna_answers'          => [{answer:'Hamburger'}],
-        'response_qna_video_thumbnail'  => 'Video thumbnail',
-        'response_qna_video_url'        => 'http://www.youtube.com/qna_video',
-        'response_qna_image_thumbnail'  => 'image thumbnail',
-        'response_qna_image_url'        => 'http://www.ig.com/qna_image',
-        'response_qna_link_text'        => 'link text',
-        'response_qna_url'              => 'qna url'
+        'qnaSpokenText'     => 'Speak out!',
+        'qnaQuestion'       => 'Lunch?',
+        'qnaFaq'            => false,
+        'qnaAnswers'        => [{answer:'Hamburger'}],
+        'qnaVideoThumbnail' => 'Video thumbnail',
+        'qnaVideoUrl'       => 'http://www.youtube.com/qna_video',
+        'qnaImageThumbnail' => 'image thumbnail',
+        'qnaImageUrl'       => 'http://www.ig.com/qna_image',
+        'qnaLinkText'       => 'link text',
+        'qnaUrl'            => 'qna url'
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '4'}.to_json
 
@@ -634,9 +634,9 @@ feature 'Dialogs', :js do
     specify 'Can save mulitple response-trigger-types' do
       within '.dialog-form' do
         within '.response-type-row-0' do
-          select  'Text',                from: 'response-type-select'
-          fill_in 'response_text_input', with: 'Hello Kitty'
-          fill_in 'response_spokentext', with: 'So Cute!'
+          select  'Text',                 from: 'response-type-select'
+          fill_in 'textValue',            with: 'Hello Kitty'
+          fill_in 'spokenTextValue',      with: 'So Cute!'
 
           # Create 3 more Responses
           find('.add-remove-response').click
@@ -645,29 +645,29 @@ feature 'Dialogs', :js do
         end
 
         within '.response-type-row-1' do
-          select  'Text',                from: 'response-type-select'
-          fill_in 'response_text_input', with: 'Today is'
-          fill_in 'response_spokentext', with: 'March 29th 2017'
+          select  'Text',                 from: 'response-type-select'
+          fill_in 'textValue',            with: 'Today is'
+          fill_in 'spokenTextValue',      with: 'March 29th 2017'
 
           select 'Time delay in seconds', from: 'trigger_type'
           fill_in 'timeDelayInSecs',      with: '8'
         end
 
         within '.response-type-row-2' do
-          select  'Text',                     from: 'response-type-select'
-          fill_in 'response_text_input',      with: 'Coffee'
-          fill_in 'response_spokentext',      with: 'Extra dark'
+          select  'Text',                 from: 'response-type-select'
+          fill_in 'textValue',            with: 'Coffee'
+          fill_in 'spokenTextValue',      with: 'Extra dark'
 
-          select 'Video closed', from: 'trigger_type'
+          select 'Video closed',          from: 'trigger_type'
           page.all('input.dialog-input.response_trigger')[0].click
         end
 
         within '.response-type-row-3' do
-          select  'Text',                     from: 'response-type-select'
-          fill_in 'response_text_input',      with: 'Panda Express'
-          fill_in 'response_spokentext',      with: 'Chinese Kitchen'
+          select  'Text',                 from: 'response-type-select'
+          fill_in 'textValue',            with: 'Panda Express'
+          fill_in 'spokenTextValue',      with: 'Chinese Kitchen'
 
-          select 'Customer service', from: 'trigger_type'
+          select 'Customer service',      from: 'trigger_type'
           page.all('input.dialog-input.response_trigger')[1].click
         end
 
@@ -696,22 +696,22 @@ feature 'Dialogs', :js do
       within '.dialog-form' do
         fill_in 'priority', with: '1'
         within '.response-type-row-0' do
-          select  'Text',                     from: 'response-type-select'
-          fill_in 'response_text_input',      with: 'Hello Kitty'
-          fill_in 'response_spokentext', with: 'So Cute!'
+          select  'Text',                 from: 'response-type-select'
+          fill_in 'textValue',            with: 'Hello Kitty'
+          fill_in 'spokenTextValue',      with: 'So Cute!'
 
           select 'Time delay in seconds', from: 'trigger_type'
-          fill_in 'timeDelayInSecs', with: '9'
+          fill_in 'timeDelayInSecs',      with: '9'
 
           find('.add-remove-response').click
         end
 
         within '.response-type-row-1' do
-          select  'Text',                     from: 'response-type-select'
-          fill_in 'response_text_input',      with: 'Today is'
-          fill_in 'response_spokentext', with: 'March 29th 2017'
+          select  'Text',                 from: 'response-type-select'
+          fill_in 'textValue',            with: 'Today is'
+          fill_in 'spokenTextValue',      with: 'March 29th 2017'
 
-          select 'Video closed', from: 'trigger_type'
+          select 'Video closed',          from: 'trigger_type'
           page.all('input.dialog-input.response_trigger')[1].click
         end
 

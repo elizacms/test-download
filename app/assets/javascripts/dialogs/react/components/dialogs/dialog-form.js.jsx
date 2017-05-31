@@ -11,7 +11,7 @@ var DialogForm = React.createClass({
       'missing-field':        [{id: 0, value: '', inputValue: ''}],
       'present-field':        [{id: 0, value: 'None', inputValue: ''}],
       'awaiting-field':       [{id: 0, value: '', inputValue: ''}],
-      'responses_attributes': [{id: 0, value: '', inputValue: '',
+      'responses_attributes': [{id: 0, value: 'text', inputValue: '',
                                 response_trigger: '', response_id: ''}],
       'entity-value-field':   [{id: 0, value: 'None', inputValue: ''}],
       priority: '',
@@ -141,7 +141,9 @@ var DialogForm = React.createClass({
   },
 
   updateState(name, obj){
-    if ( obj.inputValue && Object.keys(obj.inputValue).length === 0 ){
+    if (this.state.responses_attributes[obj.id].value != obj.value) { // Response Type Changed
+      this.state[name][obj.id] = obj;
+    } else if ( obj.inputValue && Object.keys(obj.inputValue).length === 0 ) {
       // Update response_trigger only
       this.state[name][obj.id].response_trigger = obj.response_trigger;
     } else {
@@ -236,7 +238,6 @@ var DialogForm = React.createClass({
         <h4 className='inline'>Responses</h4>
         <a href={this.props.field_path} className='addField btn md grey pull-right'>Manage fields</a>
         <a href='#' onClick={this.resetForm} className='btn md grey pull-right'>Reset</a>
-        {/*<form className='dialog' method='post' action='/dialogue_api/response'>*/}
         <div className='dialog-form'>
           <input type='hidden' name='intent-id' value={this.props.intent_id} />
           <hr className='margin50220'></hr>
@@ -251,7 +252,6 @@ var DialogForm = React.createClass({
               onChange={this.priorityHandleChange} />
           </div>
           <br /><br />
-
           <Message message={this.props.response} name='aneeda-says-error'>
           </Message>
           <hr className='margin0'></hr>
@@ -391,7 +391,6 @@ var DialogForm = React.createClass({
           >
             Cancel
           </a>
-        {/*</form>*/}
         </div>
       </div>
     );
