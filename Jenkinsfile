@@ -15,8 +15,10 @@ pipeline {
 
     stage('UnitTest') {
       steps {
-        sh 'bash ./pipeline/run-unit-tests.sh'
-        step([$class: 'JUnitResultArchiver', testResults: 'junit.xml'])
+        if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "staging") {
+          sh 'bash ./pipeline/run-unit-tests.sh'
+          step([$class: 'JUnitResultArchiver', testResults: 'junit.xml'])
+        }
       }
     }
 
@@ -34,7 +36,12 @@ pipeline {
   }
   post {
     always {
-      junit 'junit.xml'
+      if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "staging") {
+        junit 'junit.xml'
+      } else {
+        println "no unit tests run for branch."
+      }
+
     }
     failure {
       slackSend (channel: '#nlu-cms_dev', color: '#FF0000', message: "FAILED: Job (${env.BUILD_URL}) \n" + getCommitAuthor() + " " + getCommitId() + "\n" + getCommitMessage())
