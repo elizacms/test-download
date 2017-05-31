@@ -6,7 +6,7 @@ class IntentsController < ApplicationController
                 only: [ :edit, :update, :destroy, :fields, :dialogs, :submit_mturk_response ]
 
   def index
-    @intents = @skill.intents
+    @intents = Intent.all.map { |intent| intent.attrs.merge!(id: intent.id) }
   end
 
   def new
@@ -14,12 +14,12 @@ class IntentsController < ApplicationController
   end
 
   def create
-    @intent = @skill.intents.create( intent_params )
+    @intent = @skill.intents.create(intent_params)
 
     if @intent.persisted?
       redirect_to(
-        fields_page_path(skill_id: @skill, id: @intent),
-        flash: { success: "Intent #{ @intent.name } created." }
+        fields_page_path(skill_id: @skill, id: @intent.id),
+          flash: { success: "Intent #{ params[:name] } created." }
       )
     else
       flash.now[ :alert ] = @intent.errors.full_messages.join( "\n" )
@@ -28,14 +28,19 @@ class IntentsController < ApplicationController
   end
 
   def edit
+    if @intent.has_file_lock?
+      @file_lock = @intent.file_lock
+    else
+      @file_lock = FileLock.create(intent: @intent, user_id: current_user.id.to_s)
+    end
   end
 
   def update
-    if @intent.update( intent_params )
+    if @skill.intents.find(@intent.id).update( intent_params )
       redirect_to(
         edit_skill_intent_path( @skill, @intent ),
         flash: {
-          success: "Intent #{@intent.name} updated."
+          success: "Intent #{intent_params[:name]} updated."
         }
       )
     else
@@ -45,7 +50,7 @@ class IntentsController < ApplicationController
   end
 
   def destroy
-    name = @intent.name
+    name = @intent.attrs[:name]
     @intent.destroy
 
     redirect_to(
@@ -60,7 +65,7 @@ class IntentsController < ApplicationController
   end
 
   def submit_mturk_response
-    if @intent.update mturk_response:params[ :mturk_response ]
+    if @intent.update mturk_response: params[ :mturk_response ]
       head 200
     else
       head 422
@@ -68,7 +73,7 @@ class IntentsController < ApplicationController
   end
 
   def dialogs
-    @fields = @intent.entities.pluck( :name )
+    @fields = @intent.entities.map {|e| e.attrs[:name]}
   end
 
 
@@ -81,10 +86,10 @@ class IntentsController < ApplicationController
   end
 
   def find_intent
-    @intent = @skill.intents.find( params[ :id ] )
+    @intent = Intent.find( params[:id] )
   end
 
   def intent_params
-    params.require( :intent ).permit( :name, :description, :web_hook, :mturk_response )
+    params.permit( :id, :name, :description, :web_hook, :mturk_response )
   end
 end

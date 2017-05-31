@@ -1,21 +1,22 @@
 describe DialogUploader do
-  let!( :user    ){ create :user                                         }
-  let!( :admin   ){ create :user, email: 'admin@iamplus.com'             }
-  let!( :skill   ){ create :skill                                        }
-  let!( :intent  ){ create :intent, skill: skill, name: 'something'      }
-  let!( :intent2 ){ create :intent, skill: skill, name: 'la_passageways' }
-  let!( :role    ){ create :role, name: 'admin', skill: nil, user: admin }
-  let!( :field   ){ create :field, name: 'hello', intent: intent         }
-  let!( :field2  ){ create :field, name: 'goodbye', intent: intent       }
-  let!( :field3  ){ create :field, name: 'virgil', intent: intent2       }
-  let!( :field4  ){ create :field, name: 'heliotrope', intent: intent2   }
-  let!( :field5  ){ create :field, name: '1000_oaks', intent: intent2    }
-  let!( :field6  ){ create :field, name: 'sdfsd', intent: intent2        }
+  let!( :user    ){ create :user                                           }
+  let!( :admin   ){ create :user, email: 'admin@iamplus.com'               }
+  let!( :skill   ){ create :skill                                          }
+  let!( :intent  ){ create :intent, skill: skill, name: 'something'        }
+  let!( :intent2 ){ create :intent, skill: skill, name: 'la_passageways'   }
+  let!( :intent3 ){ create :intent, skill: skill, name: 'filter_profanity' }
+  let!( :role    ){ create :role, name: 'admin', skill: nil, user: admin   }
+  let!( :field   ){ create :field, name: 'hello', intent: intent           }
+  let!( :field2  ){ create :field, name: 'goodbye', intent: intent         }
+  let!( :field3  ){ create :field, name: 'virgil', intent: intent2         }
+  let!( :field4  ){ create :field, name: 'heliotrope', intent: intent2     }
+  let!( :field5  ){ create :field, name: '1000_oaks', intent: intent2      }
+  let!( :field6  ){ create :field, name: 'sdfsd', intent: intent2          }
 
   specify 'should create proper dialogs with suitable data' do
     DialogUploader.create_for( dialog_data, admin )
 
-    expect( Dialog.last.intent_id ).to eq 'something'
+    expect( Dialog.last.intent.attrs[:name] ).to eq 'something'
     expect( Dialog.last.responses.first.response_value  ).to eq 'Hello world'
   end
 

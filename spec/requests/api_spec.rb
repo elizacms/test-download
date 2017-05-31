@@ -4,7 +4,7 @@ describe 'API' do
   let!( :intent    ){ create :intent, skill: skill }
   let!( :role      ){ create :role, user: developer, skill: skill }
 
-  let( :params ){{ intent:intent.name }}
+  let( :params ){{ intent_id: intent.id }}
 
   describe 'Get webhook from Intent' do
     let( :expected ){{ webhook: skill.web_hook }}

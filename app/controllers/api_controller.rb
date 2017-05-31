@@ -3,7 +3,7 @@ class ApiController < ApplicationController
   before_action :validate_api_auth, only: [ :get_webhook ]
 
   def get_webhook
-    skill = Intent.find_by( name:params[ :intent ] ).try :skill
+    skill = Intent.find_by( id: params[ :intent_id ] ).try :skill
 
     if skill.nil?
       render status:404, json:{}.to_json

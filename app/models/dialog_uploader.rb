@@ -9,59 +9,35 @@ class DialogUploader
       not_valid = 0
       success = 0
 
-      last_intent_id = ''
-      last_priority = ''
-      last_awaiting_field = ''
-      last_missing = ''
-      last_unresolved = ''
-      last_present = ''
+      last_values = {
+        'intent_id'      => '',
+        'priority'       => '',
+        'awaiting_field' => '',
+        'missing'        => '',
+        'unresolved'     => '',
+        'present'        => ''
+      }
 
       data.each do |d|
-        if d['intent_id'].blank?
-          if last_intent_id.blank?
-            blank_intent_id += 1
-            next
-          else
-            d['intent_id'] = last_intent_id
-          end
+        if d['intent_id'].blank? && last_values['intent_id'].blank?
+          blank_intent_id += 1
+          next
         end
 
-        last_intent_id = d['intent_id']
+        if d['intent_id'].blank?
+          d['intent_id'] = last_values['intent_id']
+        end
 
-        unless user.has_role?('admin')
+        last_values['intent_id'] = d['intent_id']
+
+        if !user.has_role?('admin')
           no_permissions += 1
           next
         end
 
-        if d['priority'].blank?
-          d['priority'] = last_priority
+        last_values.reject {|k| k == 'intent_id'}.each_key do |k|
+          check_and_set_last_value(d, k, last_values[k])
         end
-
-        last_priority = d['priority']
-
-        if d['awaiting_field'].blank?
-          d['awaiting_field'] = last_awaiting_field
-        end
-
-        last_awaiting_field = d['awaiting_field']
-
-        if d['missing'].blank?
-          d['missing'] = last_missing
-        end
-
-        last_missing = d['missing']
-
-        if d['unresolved'].blank?
-          d['unresolved'] = last_unresolved
-        end
-
-        last_unresolved = d['unresolved']
-
-        if d['present'].blank?
-          d['present'] = last_present
-        end
-
-        last_present = d['present']
 
         if !field_value_for_dialog_exists?( d['intent_id'], value_for(d, 'awaiting_field') ) ||
         !field_value_for_dialog_exists?( d['intent_id'], value_for(d, 'missing') ) ||
@@ -71,12 +47,14 @@ class DialogUploader
 
         begin
           dialog = Dialog.create!(
-            intent_id: d['intent_id'],
+            intent_id: Intent.find_by_name(d['intent_id']).try(:id),
             priority: d['priority'].to_i,
             awaiting_field: value_for(d, 'awaiting_field'),
             missing: value_for(d, 'missing'),
             unresolved: value_for(d, 'unresolved'),
-            present: value_for(d, 'present')
+            present: value_for(d, 'present'),
+            comments: d['comments'],
+            entity_values: d['entity_values']
           )
           Response.create!(
             dialog_id: dialog.id,
@@ -94,23 +72,23 @@ class DialogUploader
       return_message = "#{success} dialog(s) created."
 
       if blank_intent_id > 0
-        return_message += " #{blank_intent_id} dialog(s) failed to create "\
+        return_message.concat " #{blank_intent_id} dialog(s) failed to create "\
                          "because intent_id was blank."
       end
 
       if no_permissions > 0
-        return_message += " #{no_permissions} dialog(s) failed to create "\
+        return_message.concat " #{no_permissions} dialog(s) failed to create "\
                           "because you do not have permissions."
       end
 
       if no_field > 0
-        return_message += " #{no_field} dialog(s) created "\
+        return_message.concat " #{no_field} dialog(s) created "\
                           "that contained unassociated field values. "\
                           "Please make sure to upload needed intents."
       end
 
       if not_valid > 0
-        return_message += " #{not_valid} dialog(s) failed to create "\
+        return_message.concat " #{not_valid} dialog(s) failed to create "\
                           "because the validations did not pass."
       end
 
@@ -120,18 +98,17 @@ class DialogUploader
 
     private
 
-    def field_value_for_dialog_exists?( intent_id, ary )
-      ary.each do |a|
-        next if a == 'None' || a == 'none'
-
-        valid_ary = Intent.find_by(name: intent_id).entities.map{|i| i[:name]}
-
-        if !valid_ary.include?(a)
-          return false
-        end
+    def check_and_set_last_value( data, field, last_value )
+      if data[field].blank?
+        data[field] = last_value
       end
 
-      true
+      last_value = data[field]
+    end
+
+    def field_value_for_dialog_exists?( intent_name, ary )
+      valid_ary = Intent.find_by_name(intent_name).entities.map{|i| i.attrs[:name]}
+      ary.reject {|a| a == 'None' || a == 'none'}.all? {|a| valid_ary.include?(a)}
     end
 
     def value_for( d, field )

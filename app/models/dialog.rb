@@ -1,6 +1,7 @@
 class Dialog
   include Mongoid::Document
-  include Mongoid::Attributes::Dynamic
+  include Mongoid::Timestamps
+  include FileSystem::CrudAble
 
   field :intent_id,      type:String
   field :priority,       type:Integer
@@ -11,24 +12,18 @@ class Dialog
   field :entity_values,  type:Array, default:[]
   field :comments,       type:String
 
+  belongs_to :intent
   has_many :responses
-  accepts_nested_attributes_for :responses, dependent: :destory
+  accepts_nested_attributes_for :responses, dependent: :destroy
 
   validates_presence_of :intent_id
 
-  def serialize
-    {
-      id: id,
-      intent_id: intent_id,
-      priority: priority,
-      comments: comments,
-      unresolved: unresolved,
-      missing: missing,
-      present: present,
-      awaiting_field: awaiting_field,
-      entity_values: entity_values,
-      responses: responses.map(&:serialize)
-    }
+  def self.file_system_tracked_attributes
+    %w(priority awaiting_field missing unresolved present entity_values comments)
+  end
+
+  def dialog_with_responses
+    self.attrs.merge!({id: self.id, responses: self.responses.map(&:attrs_with_ids)})
   end
 
   def self.for intent

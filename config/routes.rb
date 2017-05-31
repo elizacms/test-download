@@ -57,8 +57,6 @@ Rails.application.routes.draw do
 
     put '/intents/:id/mturk_response',
       to: 'intents#submit_mturk_response'
-
-
   end
 
   resources :fields

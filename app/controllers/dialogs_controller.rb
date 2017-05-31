@@ -6,9 +6,8 @@ class DialogsController < ApplicationController
   # GET /dialogue_api/all_scenarios?
   #   intent_id=play_music
   def index
-    dialogs = Dialog.where( intent_id:params[ :intent_id ] ).order('priority DESC')
-
-    render json: dialogs.map( &:serialize ).to_json
+    dialogs = Dialog.where( intent_id: params[ :intent_id ] ).order('priority DESC')
+    render json: dialogs.map( &:dialog_with_responses ).to_json
   end
 
   # POST /dialogue_api/response
@@ -24,9 +23,9 @@ class DialogsController < ApplicationController
   end
 
   def update
-    dialog = Dialog.find( params[ :response_id ] )
+    dialog = Dialog.find( id: dialog_params[ :id ] )
 
-    if dialog.update(dialog_params)
+    if dialog.update(dialog_params.to_h)
       render json: {}, status: :ok
     else
       response.headers[ 'Warning' ] = dialog.errors.full_messages.join "\n"
@@ -35,7 +34,7 @@ class DialogsController < ApplicationController
   end
 
   def delete
-    dialog = Dialog.find( params[ :response_id ] )
+    dialog = Dialog.find( id: dialog_params[ :id ] )
     dialog.delete
 
     render plain: "You deleted a Dialog.", status: :ok
@@ -62,7 +61,7 @@ class DialogsController < ApplicationController
   private
 
   def set_intent
-    @intent = Intent.find_by( name: params[ :intent_id ] )
+    @intent = Intent.find_by( id: params[ :intent_id ] )
   end
 
   def set_field
@@ -75,8 +74,8 @@ class DialogsController < ApplicationController
 
   def dialog_params
     params.permit(
+      :id,
       :intent_id,
-      :response_id, #refactor
       :priority,
       :comments,
       responses_attributes: [

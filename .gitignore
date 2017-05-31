@@ -24,3 +24,5 @@
 
 # Yes, we use MACs.
 .DS_Store
+
+/spec/nlu-cms-persistence

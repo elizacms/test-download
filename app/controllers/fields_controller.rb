@@ -7,7 +7,7 @@ class FieldsController < ApplicationController
     intent = Intent.find( params[ :intent_id ])
     fields = intent.entities.map( &:serialize )
 
-    render json:fields.to_json
+    render json: fields.to_json
   end
 
   def create

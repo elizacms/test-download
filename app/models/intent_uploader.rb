@@ -4,7 +4,7 @@ class IntentUploader
 
     def parse_and_create( data, user )
       if data['id'].blank?
-        return 'Cannot create an Intent without an ID.'
+        return 'Cannot create an Intent without a name.'
       end
 
       if data['skill_id'].blank? || !Skill.find_by(id: data['skill_id'])
@@ -15,26 +15,28 @@ class IntentUploader
         return 'You do not have permission to upload intents for that skill.'
       end
 
-      if Intent.find_by(name: data['id'])
+      intent_names = Intent.all_files.map do |file|
+        JSON.parse(File.read(file), symbolize_names: true)[:name]
+      end
+
+      if intent_names.include? data['id']
         return 'Intent already exists.'
       end
 
-      intent = Intent.create(
+      intent = Skill.find(id: data['skill_id']).intents.create(
         name: data['id'],
-        skill_id: data['skill_id'],
         mturk_response: data['mturk_response_fields']
       )
 
       data['fields'].try(:each_pair) do |k,v|
-        Field.create(
+        intent.entities.create(
           name: v['id'],
           type: v['type'],
-          mturk_field: v['mturk_field'],
-          intent_id: intent.id
+          mturk_field: v['mturk_field']
         )
       end
 
-      return "Intent '#{intent.name}' has been uploaded."
+      return "Intent '#{intent.attrs[:name]}' has been uploaded."
     end
   end
 end

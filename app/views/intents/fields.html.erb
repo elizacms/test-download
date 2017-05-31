@@ -10,24 +10,24 @@
     <strong>Skill:</strong> <%= @skill.name %>
   </div>
   <div class='col-xs-9'>
-    <strong>Intent:</strong> <%= @intent.name %>
+    <strong>Intent:</strong> <%= @intent.attrs[:name] %>
   </div>
 </div>
 
 <div id='jsGrid'></div>
 <br>
 <%= link_to(
-  'Next: Create Dialogs',
+  'Dialogs',
   dialogs_page_path( @skill, @intent ),
   class: 'btn lg black pull-right'
 ) %>
 
 <div id='mturk-response-field'>
-  <%= form_for [ @skill, @intent ] do | f | %>
+  <%= form_for([@skill, @intent]) do |f| %>
     Training Data Response Fields<br>
-    <%= f.text_field :mturk_response %>
+    <%= text_field_tag :mturk_response, @intent.attrs[:mturk_response] %>
 
-    <%= f.submit 'Submit', class: 'btn md ghost' %><span id='submit-result'></span>
+    <%= submit_tag 'Submit', class: 'btn md ghost' %><span id='submit-result'></span>
   <% end %>
 </div>
 

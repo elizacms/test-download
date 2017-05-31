@@ -1,22 +1,22 @@
-<%= form_for [ @skill, @intent ] do |f|%>
+<%= form_for( [@skill, @intent] ) do |f| %>
   <div class="row">
     <div class="col-xs-12 col-md-6">
-      <%= f.label :name %>
-      <%= f.text_field :name %><br><br>
+      <%= label_tag :name %>
+      <%= text_field_tag :name, @intent.attrs.try(:[], :name) %><br><br>
 
-      <%= f.label :description %><br>
-      <%= f.text_area :description %><br><br>
+      <%= label_tag :description %><br>
+      <%= text_area_tag :description, @intent.attrs.try(:[], :description) %><br><br>
     </div>
-    <% if !@intent.new_record? %>
+    <% if Intent.find_by( id: @intent.id ) %>
       <div class="col-xs-12 col-md-6">
         <br>
         <%= link_to(
-          @intent.entities.any? ? 'Edit Fields' : 'Add Fields',
+          @intent.entities.count > 0 ? 'Edit Fields' : 'Add Fields',
           fields_page_path( @skill, @intent ),
           class: 'btn lg black'
         ) %>
         <%= link_to(
-          Dialog.for( @intent ).any? ? 'Edit Dialogs' : 'Add Dialogs',
+          Dialog.where(intent_id: @intent.id).count > 0 ? 'Edit Dialogs' : 'Add Dialogs',
           dialogs_page_path( @skill, @intent ),
           class: 'btn lg black'
         ) %>
@@ -25,7 +25,9 @@
   </div>
   <div class="row">
     <div class="col-xs-12 col-md-6">
-      <%= f.submit @intent.new_record? ? 'Create' : 'Update', class: 'btn md black' %>
+      <%= submit_tag(
+        Intent.find_by( id: @intent.id ) ? 'Update' : 'Create' , class: 'btn md black'
+      ) %>
     </div>
   </div>
 <% end %>

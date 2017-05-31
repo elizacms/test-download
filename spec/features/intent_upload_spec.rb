@@ -16,7 +16,7 @@ describe 'Intent Upload', :js do
 
     execute_script("$('#files').show();")
 
-    attach_file( 'files', File.absolute_path('spec/shared/test.json')   )
+    attach_file( 'files', File.absolute_path('spec/shared/test.json') )
 
     click_button 'Upload'
 
@@ -25,11 +25,9 @@ describe 'Intent Upload', :js do
     expect( Field.count  ).to eq 3
     expect( Intent.count ).to eq 2
 
-    some = Intent.find_by(name: 'something')
+    expect( Field.where(intent_id: Intent.last.id.to_s ).count ).to eq 3
 
-    expect( Field.where(intent_id: some.id ).count ).to eq 3
-
-    expect( some.mturk_response ).to eq "[\"crazy_town\"]"
+    expect( Intent.last.attrs[:mturk_response] ).to eq "[\"crazy_town\"]"
   end
 
   describe 'Admin can see uploader' do
