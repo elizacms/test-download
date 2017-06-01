@@ -1,4 +1,6 @@
 class ReleasesController < ApplicationController
+  before_action :validate_current_user
+
   def index
     @releases = Release.all
   end
