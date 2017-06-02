@@ -9,11 +9,11 @@
     <th>Message</th>
   </thead>
   <tbody>
-    <tr>
-      <% @releases.each do |release| %>
+    <% @releases.each do |release| %>
+      <tr>
         <td><%= %></td>
-        <td><%= release.commit_message_from_sha %></td>
-      <% end %>
-    </tr>
+        <td><%= release.commit_message %></td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
