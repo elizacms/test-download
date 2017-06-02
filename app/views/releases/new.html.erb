@@ -30,7 +30,7 @@
 <%= form_for @release, html: {class: "text-center"} do |f| %>
   <b>Commit Message:</b>
   <br>
-  <%= f.text_area :commit_message %>
+  <%= f.text_area :commit_sha %>
   <br>
   <%= f.submit class: "btn xxl" %>
 <% end %>
