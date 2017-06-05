@@ -16,6 +16,10 @@ class GitControls
     pretty_diff( obj1.diff(obj2) )
   end
 
+  def git_diff_workdir
+    pretty_diff( repo.diff_workdir( repo.last_commit ) )
+  end
+
   def pretty_diff diff
     return '' if diff.size == 0
     diff.patches.first.hunks.first.each_line.map do |l|

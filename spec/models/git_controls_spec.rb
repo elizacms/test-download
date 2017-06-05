@@ -1,4 +1,4 @@
-describe GitControls, :focus do
+describe GitControls do
   let!( :repo     ){ Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH']) }
   let!( :skill    ){ create :skill                                           }
   let!( :intent   ){ create :intent, skill: skill                            }
@@ -23,6 +23,22 @@ describe GitControls, :focus do
        :line_number=>1,
        :content=>"\n\\ No newline at end of file\n"}
     ]
+  }
+  let!( :expected2 ){
+    [{:line_origin=>:deletion,
+      :line_number=>-1,
+      :content=>
+       "{\"priority\":90,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}"},
+     {:line_origin=>:eof_newline_added,
+      :line_number=>-1,
+      :content=>"\n\\ No newline at end of file\n"},
+     {:line_origin=>:addition,
+      :line_number=>1,
+      :content=>
+       "{\"priority\":42,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}"},
+     {:line_origin=>:eof_newline_removed,
+      :line_number=>1,
+      :content=>"\n\\ No newline at end of file\n"}]
   }
 
   describe '#new' do
@@ -55,7 +71,7 @@ describe GitControls, :focus do
     end
   end
 
-  describe '#git_diff' do
+  describe '#git_diff obj1, obj2' do
     it 'returns the proper diff' do
       gc = GitControls.new
       dialog2 = Dialog.create(priority: 35, intent_id: intent.id)
@@ -64,6 +80,15 @@ describe GitControls, :focus do
       gc.git_commit(user, 'This is my great message')
 
       expect( gc.git_diff( repo.lookup(release.commit_sha), repo.last_commit ) ).to eq expected
+    end
+  end
+
+  describe '#git_diff_workdir' do
+    it 'returns the changes between HEAD and the working directory' do
+      gc = GitControls.new
+      Dialog.first.update(priority: 42, intent_id: intent.id)
+
+      expect( gc.git_diff_workdir ).to eq expected2
     end
   end
 end
