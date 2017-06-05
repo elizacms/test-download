@@ -5,10 +5,11 @@ class Release
 
   field :commit_sha, type:String
 
+  belongs_to :user
+
   before_create do |attributes|
-    git_controls = GitControls.new
-    git_controls.git_add( attributes[:files] )
-    commit = git_controls.git_commit( attributes[:user], attributes[:message] )
+    user.git_add( attributes[:files] )
+    commit = user.git_commit( attributes[:message] )
     self.files      = nil
     self.message    = nil
     self.user       = nil

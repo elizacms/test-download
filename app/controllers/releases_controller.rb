@@ -45,6 +45,6 @@ class ReleasesController < ApplicationController
   end
 
   def release_params
-     params.permit(:commit_sha)
+     params.permit(:message, :files, :user)
   end
 end

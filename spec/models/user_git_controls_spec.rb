@@ -1,12 +1,12 @@
-describe GitControls do
+describe 'User git controls' do
+  let!( :user     ){ create :user                                            }
+  let!( :role     ){ create :role, skill: skill, user: user                  }
   let!( :repo     ){ Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH']) }
   let!( :skill    ){ create :skill                                           }
   let!( :intent   ){ create :intent, skill: skill                            }
   let!( :dialog   ){ create :dialog, intent: intent                          }
   let!( :field    ){ create :field, intent: intent                           }
   let!( :response ){ create :response, dialog: dialog                        }
-  let!( :user     ){ create :user                                            }
-  let!( :role     ){ create :role, skill: skill, user: user                  }
   let!( :release  ){ Release.create(message: 'My First Commit',
                                     user: user,
                                     files: [ "dialogs/#{dialog.id}.json",
@@ -41,9 +41,9 @@ describe GitControls do
       :content=>"\n\\ No newline at end of file\n"}]
   }
 
-  describe '#new' do
+  describe '#repo' do
     it 'creates a Rugged::Repository repository' do
-      expect( GitControls.new.instance_variable_get( :@repo ).path ).to eq( repo.path )
+      expect( user.repo.path ).to eq( repo.path )
     end
   end
 
@@ -51,7 +51,7 @@ describe GitControls do
     it 'adds files to index' do
       dialog2 = Dialog.create(priority: 35, intent_id: intent.id)
 
-      GitControls.new.git_add( ["dialogs/#{dialog2.id}.json"] )
+      user.git_add( ["dialogs/#{dialog2.id}.json"] )
       repo.status do |file, status_data|
         expect(file).to eq "dialogs/#{dialog2.id}.json"
         expect(status_data).to eq [:index_new]
@@ -61,11 +61,10 @@ describe GitControls do
 
   describe '#git_commit' do
     it 'commits the files in the index' do
-      gc = GitControls.new
       dialog2 = Dialog.create(priority: 35, intent_id: intent.id)
-      gc.git_add( ["dialogs/#{dialog2.id}.json"] )
+      user.git_add( ["dialogs/#{dialog2.id}.json"] )
 
-      gc.git_commit(user, 'This is my great message')
+      user.git_commit( 'This is my great message' )
 
       expect( repo.last_commit.message ).to eq 'This is my great message'
     end
@@ -73,22 +72,20 @@ describe GitControls do
 
   describe '#git_diff obj1, obj2' do
     it 'returns the proper diff' do
-      gc = GitControls.new
       dialog2 = Dialog.create(priority: 35, intent_id: intent.id)
-      gc.git_add( ["dialogs/#{dialog2.id}.json"] )
+      user.git_add( ["dialogs/#{dialog2.id}.json"] )
 
-      gc.git_commit(user, 'This is my great message')
+      user.git_commit( 'This is my great message' )
 
-      expect( gc.git_diff( repo.lookup(release.commit_sha), repo.last_commit ) ).to eq expected
+      expect( user.git_diff( repo.lookup(release.commit_sha), repo.last_commit ) ).to eq expected
     end
   end
 
   describe '#git_diff_workdir' do
     it 'returns the changes between HEAD and the working directory' do
-      gc = GitControls.new
       Dialog.first.update(priority: 42, intent_id: intent.id)
 
-      expect( gc.git_diff_workdir ).to eq expected2
+      expect( user.git_diff_workdir ).to eq expected2
     end
   end
 end

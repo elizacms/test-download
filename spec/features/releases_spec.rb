@@ -1,10 +1,18 @@
 describe 'Release Feature Specs' do
-  let!( :user    ){ create :user                           }
-  let!( :skill   ){ create :skill                          }
-  let!( :role    ){ create :role, skill: skill, user: user }
-  let!( :intent  ){ create :intent, skill: skill           }
-  let!( :dialog  ){ create :dialog, intent: intent         }
-  let!( :release ){ create :release                        }
+  let!( :user     ){ create :user                           }
+  let!( :skill    ){ create :skill                          }
+  let!( :role     ){ create :role, skill: skill, user: user }
+  let!( :intent   ){ create :intent, skill: skill           }
+  let!( :field    ){ create :field, intent: intent          }
+  let!( :dialog   ){ create :dialog, intent: intent         }
+  let!( :response ){ create :response, dialog: dialog       }
+  let!( :release  ){ Release.create(message: 'My First Commit',
+                                    user: user,
+                                    files: [ "dialogs/#{dialog.id}.json",
+                                             "intents/#{intent.id}.json",
+                                             "fields/#{field.id}.json",
+                                             "responses/#{response.id}.json"]
+                                    )}
 
   before do
     stub_identity_token

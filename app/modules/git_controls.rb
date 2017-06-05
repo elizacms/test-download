@@ -1,6 +1,6 @@
-class GitControls
-  def initialize
-    @repo = Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH'])
+module GitControls
+  def repo
+    @repo ||= Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH'])
   end
 
   def git_add files
@@ -8,8 +8,8 @@ class GitControls
     repo.index.write
   end
 
-  def git_commit user, message
-    Rugged::Commit.create( repo, commit_options( user, message ) )
+  def git_commit message
+    Rugged::Commit.create( repo, commit_options( message ) )
   end
 
   def git_diff obj1, obj2
@@ -31,8 +31,8 @@ class GitControls
     end
   end
 
-  def commit_options user, message
-    committer = {email: user.email, name: user.email.split('@')[0], time: Time.now}
+  def commit_options message
+    committer = {email: self.email, name: self.email.split('@')[0], time: Time.now}
 
     {
       tree:       repo.index.write_tree( repo ),
@@ -42,12 +42,5 @@ class GitControls
       parents:    repo.empty? ? [] : [repo.head.target].compact,
       update_ref: 'HEAD'
     }
-  end
-
-
-  private
-
-  def repo
-    @repo
   end
 end

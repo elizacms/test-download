@@ -2,6 +2,7 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
   include Rollable
+  include GitControls
 
   field :email, type:String
 
