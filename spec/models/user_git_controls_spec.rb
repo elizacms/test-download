@@ -1,20 +1,24 @@
 describe 'User git controls' do
-  let!( :user     ){ create :user                                            }
-  let!( :role     ){ create :role, skill: skill, user: user                  }
-  let!( :repo     ){ Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH']) }
-  let!( :skill    ){ create :skill                                           }
-  let!( :intent   ){ create :intent, skill: skill                            }
-  let!( :dialog   ){ create :dialog, intent: intent                          }
-  let!( :field    ){ create :field, intent: intent                           }
-  let!( :response ){ create :response, dialog: dialog                        }
-  let!( :release  ){ Release.create(message: 'My First Commit',
-                                    user: user,
-                                    files: [ "dialogs/#{dialog.id}.json",
-                                             "intents/#{intent.id}.json",
-                                             "fields/#{field.id}.json",
-                                             "responses/#{response.id}.json"]
-                                    )}
-  let!( :expected ){
+  let!( :user       ){ create :user                                            }
+  let!( :user2      ){ create :user, email: 'something@iamplus.com'            }
+  let!( :role       ){ create :role, skill: skill, user: user                  }
+  let!( :repo       ){ Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH']) }
+  let!( :skill      ){ create :skill                                           }
+  let!( :intent     ){ create :intent, skill: skill                            }
+  let!( :intent2    ){ create :intent, skill: skill, name: 'New Name'          }
+  let!( :file_lock  ){ create :file_lock, intent: intent, user_id: user.id     }
+  let!( :file_lock2 ){ create :file_lock, intent: intent2, user_id: user2.id   }
+  let!( :dialog     ){ create :dialog, intent: intent                          }
+  let!( :dialog2    ){ create :dialog, intent: intent2, priority: 100_000      }
+  let!( :field      ){ create :field, intent: intent                           }
+  let!( :response   ){ create :response, dialog: dialog                        }
+  let!( :release    ){ Release.create(message: 'My First Commit',
+                                      user: user,
+                                      files: ["dialogs/#{dialog.id}.json",
+                                              "intents/#{intent.id}.json",
+                                              "responses/#{response.id}.json",
+                                              "fields/#{field.id}.json"])      }
+  let!( :expected   ){
     [
       {:line_origin=>:addition,
        :line_number=>1,
@@ -24,7 +28,7 @@ describe 'User git controls' do
        :content=>"\n\\ No newline at end of file\n"}
     ]
   }
-  let!( :expected2 ){
+  let!( :expected2  ){
     [{:line_origin=>:deletion,
       :line_number=>-1,
       :content=>
@@ -49,11 +53,11 @@ describe 'User git controls' do
 
   describe '#git_add files' do
     it 'adds files to index' do
-      dialog2 = Dialog.create(priority: 35, intent_id: intent.id)
+      dialog3 = Dialog.create(priority: 35, intent_id: intent.id)
 
-      user.git_add( ["dialogs/#{dialog2.id}.json"] )
+      user.git_add( ["dialogs/#{dialog3.id}.json"] )
       repo.status do |file, status_data|
-        expect(file).to eq "dialogs/#{dialog2.id}.json"
+        expect(file).to eq "dialogs/#{dialog3.id}.json"
         expect(status_data).to eq [:index_new]
       end
     end
@@ -61,8 +65,8 @@ describe 'User git controls' do
 
   describe '#git_commit' do
     it 'commits the files in the index' do
-      dialog2 = Dialog.create(priority: 35, intent_id: intent.id)
-      user.git_add( ["dialogs/#{dialog2.id}.json"] )
+      dialog3 = Dialog.create(priority: 35, intent_id: intent.id)
+      user.git_add( ["dialogs/#{dialog3.id}.json"] )
 
       user.git_commit( 'This is my great message' )
 
@@ -72,8 +76,8 @@ describe 'User git controls' do
 
   describe '#git_diff obj1, obj2' do
     it 'returns the proper diff' do
-      dialog2 = Dialog.create(priority: 35, intent_id: intent.id)
-      user.git_add( ["dialogs/#{dialog2.id}.json"] )
+      dialog3 = Dialog.create(priority: 35, intent_id: intent.id)
+      user.git_add( ["dialogs/#{dialog3.id}.json"] )
 
       user.git_commit( 'This is my great message' )
 
@@ -81,11 +85,12 @@ describe 'User git controls' do
     end
   end
 
-  describe '#git_diff_workdir' do
+  describe '#git_diff_workdir', :focus do
     it 'returns the changes between HEAD and the working directory' do
-      Dialog.first.update(priority: 42, intent_id: intent.id)
+      dialog.update(priority: 42, intent_id: intent.id)
 
-      expect( user.git_diff_workdir ).to eq expected2
+      expect( user.git_diff_workdir  ).to eq expected2
+      expect( user2.git_diff_workdir ).to eq nil
     end
   end
 end
