@@ -25,10 +25,39 @@ class User
     user_roles( 'owner' ).any?
   end
 
+  def locked_files
+    {
+      intents: strify_ids(locked_intents),
+      fields: strify_ids(locked_fields),
+      dialogs: strify_ids(locked_dialogs),
+      responses: strify_ids(locked_responses)
+    }
+  end
+
 
   private
 
   def user_roles type
     self.roles.select{ |r| r.name == type }
+  end
+
+  def locked_intents
+    Intent.all.select{|i| i.file_lock != nil && i.file_lock.user_id == self.id.to_s}
+  end
+
+  def locked_fields
+    locked_intents.map{|i| i.entities}
+  end
+
+  def locked_dialogs
+    locked_intents.map{|i| i.dialogs}
+  end
+
+  def locked_responses
+    locked_dialogs.flatten.map{|d| d.responses}
+  end
+
+  def strify_ids ary
+    ary.flatten.map {|ob| ob.id.to_s}
   end
 end

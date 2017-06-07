@@ -1,8 +1,13 @@
 describe User do
-  let!( :user   ){ create :user                                            }
-  let!( :user2  ){ create :user, email: 'another_user@imaplus.com'         }
-  let!( :skill  ){ create :skill                                           }
-  let!( :skill2 ){ create :skill, name: 'Other Skill', web_hook: 'bite.me' }
+  let!( :user      ){ create :user                                             }
+  let!( :user2     ){ create :user, email: 'another_user@imaplus.com'          }
+  let!( :skill     ){ create :skill                                            }
+  let!( :skill2    ){ create :skill, name: 'Other Skill', web_hook: 'bite.me'  }
+  let!( :intent    ){ create :intent, skill: skill                             }
+  let!( :file_lock ){ create :file_lock, intent: intent, user_id: user.id.to_s }
+  let!( :field     ){ create :field, intent: intent                            }
+  let!( :dialog    ){ create :dialog, intent: intent                           }
+  let!( :response  ){ create :response, dialog: dialog                         }
 
   specify '#set_role admin creates Role' do
     user.set_role :admin
@@ -88,5 +93,12 @@ describe User do
     user.set_role :developer, skill.name
 
     expect( user.is_a_skill_owner? ).to eq false
+  end
+
+  specify '#locked_files' do
+    expect( user.locked_files ).to eq({ intents: [intent.id.to_s],
+                                        fields: [field.id.to_s],
+                                        dialogs: [dialog.id.to_s],
+                                        responses: [response.id.to_s] })
   end
 end

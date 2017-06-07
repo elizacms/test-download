@@ -1,23 +1,30 @@
 describe 'User git controls' do
-  let!( :user       ){ create :user                                            }
-  let!( :user2      ){ create :user, email: 'something@iamplus.com'            }
-  let!( :role       ){ create :role, skill: skill, user: user                  }
-  let!( :repo       ){ Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH']) }
-  let!( :skill      ){ create :skill                                           }
-  let!( :intent     ){ create :intent, skill: skill                            }
-  let!( :intent2    ){ create :intent, skill: skill, name: 'New Name'          }
-  let!( :file_lock  ){ create :file_lock, intent: intent, user_id: user.id     }
-  let!( :file_lock2 ){ create :file_lock, intent: intent2, user_id: user2.id   }
-  let!( :dialog     ){ create :dialog, intent: intent                          }
-  let!( :dialog2    ){ create :dialog, intent: intent2, priority: 100_000      }
-  let!( :field      ){ create :field, intent: intent                           }
-  let!( :response   ){ create :response, dialog: dialog                        }
-  let!( :release    ){ Release.create(message: 'My First Commit',
-                                      user: user,
-                                      files: ["dialogs/#{dialog.id}.json",
-                                              "intents/#{intent.id}.json",
-                                              "responses/#{response.id}.json",
-                                              "fields/#{field.id}.json"])      }
+  let!( :user       ){ create :user                                               }
+  let!( :user2      ){ create :user, email: 'something@iamplus.com'               }
+  let!( :user3      ){ create :user, email: 'me_num_3@iamplus.com'                }
+  let!( :role       ){ create :role, skill: skill, user: user                     }
+  let!( :role2      ){ create :role, skill: skill, user: user2                    }
+  let!( :repo       ){ Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH'])    }
+  let!( :skill      ){ create :skill                                              }
+  let!( :intent     ){ create :intent, skill: skill                               }
+  let!( :intent2    ){ create :intent, skill: skill, name: 'New Name'             }
+  let!( :file_lock  ){ create :file_lock, intent: intent,  user_id: user.id.to_s  }
+  let!( :file_lock2 ){ create :file_lock, intent: intent2, user_id: user2.id.to_s }
+  let!( :dialog     ){ create :dialog, intent: intent                             }
+  let!( :dialog2    ){ create :dialog, intent: intent2, priority: 100_000         }
+  let!( :field      ){ create :field, intent: intent                              }
+  let!( :response   ){ create :response, dialog: dialog                           }
+  let!( :release    ){ Release.create( message: 'My First Commit',
+                                       user: user,
+                                       files: ["dialogs/#{dialog.id}.json",
+                                               "intents/#{intent.id}.json",
+                                               "responses/#{response.id}.json",
+                                               "fields/#{field.id}.json"] )       }
+  let!( :release2   ){ Release.create( message: 'Second Commit',
+                                       user: user2,
+                                       files: ["dialogs/#{dialog2.id}.json",
+                                               "intents/#{intent2.id}.json"] )    }
+
   let!( :expected   ){
     [
       {:line_origin=>:addition,
@@ -44,6 +51,22 @@ describe 'User git controls' do
       :line_number=>1,
       :content=>"\n\\ No newline at end of file\n"}]
   }
+  let!( :expected3  ){
+    [{:line_origin=>:deletion,
+      :line_number=>-1,
+      :content=>
+       "{\"priority\":100000,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}"},
+     {:line_origin=>:eof_newline_added,
+      :line_number=>-1,
+      :content=>"\n\\ No newline at end of file\n"},
+     {:line_origin=>:addition,
+      :line_number=>1,
+      :content=>
+       "{\"priority\":666,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}"},
+     {:line_origin=>:eof_newline_removed,
+      :line_number=>1,
+      :content=>"\n\\ No newline at end of file\n"}]
+  }
 
   describe '#repo' do
     it 'creates a Rugged::Repository repository' do
@@ -55,9 +78,10 @@ describe 'User git controls' do
     it 'adds files to index' do
       dialog3 = Dialog.create(priority: 35, intent_id: intent.id)
 
-      user.git_add( ["dialogs/#{dialog3.id}.json"] )
+      user.git_add( ["dialogs/#{dialog3.id }.json"] )
       repo.status do |file, status_data|
-        expect(file).to eq "dialogs/#{dialog3.id}.json"
+        next if file != "dialogs/#{dialog3}.json"
+
         expect(status_data).to eq [:index_new]
       end
     end
@@ -85,12 +109,14 @@ describe 'User git controls' do
     end
   end
 
-  describe '#git_diff_workdir', :focus do
+  describe '#git_diff_workdir' do
     it 'returns the changes between HEAD and the working directory' do
-      dialog.update(priority: 42, intent_id: intent.id)
+      dialog.update(priority: 42)
+      dialog2.update(priority: 666)
 
       expect( user.git_diff_workdir  ).to eq expected2
-      expect( user2.git_diff_workdir ).to eq nil
+      expect( user2.git_diff_workdir ).to eq expected3
+      expect( user3.git_diff_workdir ).to eq []
     end
   end
 end

@@ -17,11 +17,20 @@ module GitControls
   end
 
   def git_diff_workdir
-    pretty_diff( repo.diff_workdir( repo.last_commit ) )
+    files = []
+    self.locked_files.each_pair { |k,v| v.each { |w| files << "#{k}/#{w}.json" } }
+
+    git_add( files )
+
+    diff = pretty_diff( repo.last_commit.diff(repo.index) )
+
+    repo.reset( repo.last_commit, :mixed )
+
+    return diff
   end
 
   def pretty_diff diff
-    return '' if diff.size == 0
+    return [] if diff.size == 0
     diff.patches.first.hunks.first.each_line.map do |l|
       {
         line_origin: l.line_origin,
