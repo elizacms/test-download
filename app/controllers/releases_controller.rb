@@ -2,11 +2,13 @@ class ReleasesController < ApplicationController
   before_action :validate_current_user
 
   def index
+    @repo = Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH'])
     @releases = Release.all
   end
 
   def new
     @release = Release.new
+    @diff = current_user.git_diff_workdir
   end
 
   def create
@@ -40,11 +42,11 @@ class ReleasesController < ApplicationController
 
   private
 
-  def find_release
-    @release = Release.find( params[:id] )
+  def release_params
+    {message: params[:message], files: @current_user.list_locked_files, user: @current_user}
   end
 
-  def release_params
-     params.permit(:message, :files, :user)
+  def find_release
+    @release = Release.find( params[:id] )
   end
 end

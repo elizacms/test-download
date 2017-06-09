@@ -27,10 +27,11 @@
 </div>
 
 <hr>
-<%= form_for @release, html: {class: "text-center"} do |f| %>
+<%= form_tag '/releases', html: {class: "text-center"} do %>
+  <%= @diff %>
   <b>Commit Message:</b>
   <br>
-  <%= f.text_area :commit_sha %>
+  <%= text_area_tag :message %>
   <br>
-  <%= f.submit class: "btn xxl" %>
+  <%= submit_tag 'Create Release', class: "btn xxl" %>
 <% end %>

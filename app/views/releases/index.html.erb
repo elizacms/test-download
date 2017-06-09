@@ -5,14 +5,16 @@
 
 <table class='table table-hover'>
   <thead class='thead-default'>
-    <th>No. Files Changed</th>
     <th>Message</th>
+    <th>Status</th>
+    <th>No. Files Changed</th>
   </thead>
   <tbody>
     <% @releases.each do |release| %>
       <tr>
-        <td><%= %></td>
-        <td><%= %></td>
+        <td><%= @repo.lookup(release.commit_sha).message %></td>
+        <td><%=  %></td>
+        <td><%=  %></td>
       </tr>
     <% end %>
   </tbody>

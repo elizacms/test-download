@@ -25,13 +25,12 @@ class User
     user_roles( 'owner' ).any?
   end
 
-  def locked_files
-    {
-      intents: strify_ids(locked_intents),
-      fields: strify_ids(locked_fields),
-      dialogs: strify_ids(locked_dialogs),
-      responses: strify_ids(locked_responses)
-    }
+  def list_locked_files
+    [ strify_files(:intents, locked_intents),
+      strify_files(:fields, locked_fields),
+      strify_files(:dialogs, locked_dialogs),
+      strify_files(:responses, locked_responses)
+    ].flatten
   end
 
 
@@ -42,7 +41,7 @@ class User
   end
 
   def locked_intents
-    Intent.all.select{|i| i.file_lock != nil && i.file_lock.user_id == self.id.to_s}
+    Intent.all.select{|i| i.file_lock.try(:user_id) == self.id.to_s}
   end
 
   def locked_fields
@@ -57,7 +56,7 @@ class User
     locked_dialogs.flatten.map{|d| d.responses}
   end
 
-  def strify_ids ary
-    ary.flatten.map {|ob| ob.id.to_s}
+  def strify_files type, ary
+    ary.flatten.map {|ob| "#{type}/#{ob.id}.json"}
   end
 end

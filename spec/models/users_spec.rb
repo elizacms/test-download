@@ -95,10 +95,10 @@ describe User do
     expect( user.is_a_skill_owner? ).to eq false
   end
 
-  specify '#locked_files' do
-    expect( user.locked_files ).to eq({ intents: [intent.id.to_s],
-                                        fields: [field.id.to_s],
-                                        dialogs: [dialog.id.to_s],
-                                        responses: [response.id.to_s] })
+  specify '#list_locked_files' do
+    expect( user.list_locked_files ).to eq([ "intents/#{intent.id}.json",
+                                             "fields/#{field.id}.json",
+                                             "dialogs/#{dialog.id}.json",
+                                             "responses/#{response.id}.json" ])
   end
 end

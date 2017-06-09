@@ -17,31 +17,21 @@ module GitControls
   end
 
   def git_diff_workdir
-    files = []
-    self.locked_files.each_pair { |k,v| v.each { |w| files << "#{k}/#{w}.json" } }
+    git_add( list_locked_files )
 
-    git_add( files )
-
-    diff = pretty_diff( repo.last_commit.diff(repo.index) )
-
-    repo.reset( repo.last_commit, :mixed )
-
-    return diff
+    pretty_diff( repo.last_commit.diff(repo.index) ).tap do
+      repo.reset( repo.last_commit, :mixed )
+    end
   end
 
   def pretty_diff diff
-    return [] if diff.size == 0
-    diff.patches.first.hunks.first.each_line.map do |l|
-      {
-        line_origin: l.line_origin,
-        line_number: l.new_lineno,
-        content:     l.content
-      }
+    diff.each_line.select { |l| l.line_origin == :addition || l.line_origin == :deletion}.map do |l|
+      { line_origin: l.line_origin, line_number: l.new_lineno, content: l.content }
     end
   end
 
   def commit_options message
-    committer = {email: self.email, name: self.email.split('@')[0], time: Time.now}
+    committer = {email: email, name: email, time: Time.now}
 
     {
       tree:       repo.index.write_tree( repo ),
@@ -51,5 +41,13 @@ module GitControls
       parents:    repo.empty? ? [] : [repo.head.target].compact,
       update_ref: 'HEAD'
     }
+  end
+
+  def git_branch name, target
+    repo.create_branch( name, target )
+  end
+
+  def git_checkout name
+    repo.checkout( name )
   end
 end
