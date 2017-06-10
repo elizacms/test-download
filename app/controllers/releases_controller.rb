@@ -9,6 +9,10 @@ class ReleasesController < ApplicationController
   def new
     @release = Release.new
     @diff = current_user.git_diff_workdir
+
+    if @diff.empty?
+      redirect_to releases_path, notice: "You haven't made any changes."
+    end
   end
 
   def create

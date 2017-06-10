@@ -9,7 +9,8 @@ class IntentsController < ApplicationController
                 only: [ :edit, :fields, :dialogs ]
 
   def index
-    @intents = Intent.all.map { |intent| intent.attrs.merge!(id: intent.id) }
+    @intents = Intent.all.select{|intent| intent.in_review == false}
+                         .map{|intent| intent.attrs.merge!(id: intent.id)}
   end
 
   def new

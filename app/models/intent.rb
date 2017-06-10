@@ -11,6 +11,7 @@ class Intent
   field :name,           type:String
   field :description,    type:String
   field :mturk_response, type:String
+  field :in_review,      type:Mongoid::Boolean, default:false
 
   validates_presence_of :name
   validate :unique_name

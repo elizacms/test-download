@@ -17,7 +17,13 @@ module GitControls
   end
 
   def git_diff_workdir
-    git_add( list_locked_files )
+    user_files = list_locked_files
+    repo.status do |file, status_data|
+      if user_files.include?(file)
+        git_add([file])
+      end
+    end
+
 
     pretty_diff( repo.last_commit.diff(repo.index) ).tap do
       repo.reset( repo.last_commit, :mixed )

@@ -33,15 +33,15 @@ class User
     ].flatten
   end
 
+  def locked_intents
+    Intent.all.select{|i| i.file_lock.try(:user_id) == id.to_s }
+  end
+
 
   private
 
   def user_roles type
     self.roles.select{ |r| r.name == type }
-  end
-
-  def locked_intents
-    Intent.all.select{|i| i.file_lock.try(:user_id) == self.id.to_s}
   end
 
   def locked_fields
