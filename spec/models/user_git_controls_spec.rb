@@ -70,8 +70,8 @@ describe 'User git controls' do
       expect(status).to eq [:index_modified]
     end
 
-    xit 'adds created files to index' do
-      dialog4 = Dialog.create(priority: 15)
+    it 'adds created files to index' do
+      dialog4 = Dialog.create(priority: 15, intent_id: intent.id)
       path = "dialogs/#{dialog4.id}.json"
       user.git_add([path])
       status = repo.status(path)

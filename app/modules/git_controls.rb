@@ -24,7 +24,6 @@ module GitControls
       end
     end
 
-
     pretty_diff( repo.last_commit.diff(repo.index) ).tap do
       repo.reset( repo.last_commit, :mixed )
     end
