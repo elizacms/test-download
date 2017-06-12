@@ -1,5 +1,8 @@
-.external-apps-list label {
-  display: inline !important;
+.file-locked {
+  border: 1px solid black;
+  background-color: #DE2627;
+  padding: 5px;
+  color: white;
 }
 
 textarea#intent_description {

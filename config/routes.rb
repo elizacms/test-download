@@ -18,6 +18,8 @@ Rails.application.routes.draw do
 
   resources :users
 
+  resources :releases
+
   match '/ajax-developers',
     to: 'roles#ajax_set_or_unset_developers',
     as: :ajax_set_or_unset_developers,
@@ -114,6 +116,10 @@ Rails.application.routes.draw do
   get '/skills/:skill_id/intents/:id/fields',
     to: 'intents#fields',
     as: :fields_page
+
+  get '/file_lock',
+    to: 'intents#api_file_lock',
+    as: :api_file_lock
 
   get '/skills/:skill_id/intents/:id/dialogs',
     to: 'intents#dialogs',

@@ -1,12 +1,16 @@
 class IntentsController < ApplicationController
-  before_action :validate_current_user
-  before_action :validate_permissions_for_skill
-  before_action :find_skill
+  before_action :validate_current_user, except: [:api_file_lock]
+  before_action :validate_permissions_for_skill, except: [:api_file_lock]
+  before_action :find_skill, except: [:api_file_lock]
   before_action :find_intent,
-                only: [ :edit, :update, :destroy, :fields, :dialogs, :submit_mturk_response ]
+                only: [ :edit, :update, :destroy, :fields, :dialogs,
+                        :submit_mturk_response, :api_file_lock ]
+  before_action :find_or_set_file_lock,
+                only: [ :edit, :fields, :dialogs ]
 
   def index
-    @intents = Intent.all.map { |intent| intent.attrs.merge!(id: intent.id) }
+    @intents = Intent.all.select{|intent| intent.in_review == false}
+                         .map{|intent| intent.attrs.merge!(id: intent.id)}
   end
 
   def new
@@ -28,11 +32,6 @@ class IntentsController < ApplicationController
   end
 
   def edit
-    if @intent.has_file_lock?
-      @file_lock = @intent.file_lock
-    else
-      @file_lock = FileLock.create(intent: @intent, user_id: current_user.id.to_s)
-    end
   end
 
   def update
@@ -76,8 +75,22 @@ class IntentsController < ApplicationController
     @fields = @intent.entities.map {|e| e.attrs[:name]}
   end
 
+  def api_file_lock
+    locked_for_user = @intent.has_file_lock? ? @intent.file_lock.user_id != current_user.id.to_s : false
+
+    render json: {file_lock: locked_for_user}.to_json, status: 200
+  end
+
 
   private
+
+  def find_or_set_file_lock
+    if @intent.has_file_lock?
+      @file_lock = @intent.file_lock
+    else
+      @file_lock = FileLock.create(intent: @intent, user_id: current_user.id.to_s)
+    end
+  end
 
   def find_skill
     @skill = Skill.find_by( id: params[ :skill_id ] )

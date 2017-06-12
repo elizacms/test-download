@@ -1,0 +1,37 @@
+<h1>Release New</h1>
+
+<div class="flex-container">
+  <div class="flex-column pink">
+    L<br>
+    E<br>
+    F<br>
+    T<br>
+     <br>
+    S<br>
+    I<br>
+    D<br>
+    E
+  </div>
+  <div class="flex-column green">
+    R<br>
+    I<br>
+    G<br>
+    H<br>
+    T<br>
+     <br>
+    S<br>
+    I<br>
+    D<br>
+    E
+  </div>
+</div>
+
+<hr>
+<%= form_tag '/releases', html: {class: "text-center"} do %>
+  <%= @diff %>
+  <b>Commit Message:</b>
+  <br>
+  <%= text_area_tag :message %>
+  <br>
+  <%= submit_tag 'Create Release', class: "btn xxl" %>
+<% end %>

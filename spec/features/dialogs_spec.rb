@@ -309,13 +309,13 @@ sleep 3
     specify 'Can save mulitple responses of type video and text' do
       within '.dialog-form' do
         within '.response-type-row-0' do
-          select  'Video',                 from: 'response-type-select'
-          fill_in 'textValue',             with: 'abc def 123 10 9 8'
-          fill_in 'spokenTextValue',       with: 'Speak out!'
-          fill_in 'videoThumbnail',        with: 'twin cats'
-          fill_in 'videoEntity',           with: 'Jenny or Luna or Lady'
-          select  'Time delay in seconds', from: 'trigger_type'
-          fill_in 'timeDelayInSecs',       with: '5'
+          select  'Video',                from: 'response-type-select'
+          fill_in 'textValue',            with: 'abc def 123 10 9 8'
+          fill_in 'spokenTextValue',      with: 'Speak out!'
+          fill_in 'videoThumbnail',       with: 'twin cats'
+          fill_in 'videoEntity',          with: 'Jenny or Luna or Lady'
+          select 'Time delay in seconds', from: 'trigger_type'
+          fill_in 'timeDelayInSecs',      with: '5'
 
           find('.add-remove-response').click
         end

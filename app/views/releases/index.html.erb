@@ -1,0 +1,21 @@
+<h1>
+  Releases Index
+  <%= link_to 'Create a Release', new_release_path, class: 'btn lg black pull-right' %>
+</h1>
+
+<table class='table table-hover'>
+  <thead class='thead-default'>
+    <th>Message</th>
+    <th>Status</th>
+    <th>No. Files Changed</th>
+  </thead>
+  <tbody>
+    <% @releases.each do |release| %>
+      <tr>
+        <td><%= @repo.lookup(release.commit_sha).message %></td>
+        <td><%=  %></td>
+        <td><%=  %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -254,6 +254,10 @@ a.cancelCreate {
 table.dialogs{
   tr:nth-child(odd) {background: #f6f6f6};
   tr:not(:first-child) {background: #fff};
+
+  .control-icon {
+    padding: 3px;
+  }
 }
 
 .margin0{

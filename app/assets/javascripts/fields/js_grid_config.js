@@ -5,7 +5,10 @@ function initFieldDataTypes(){
         url: '/types/field-data-types',
         data: null
     }).done(function(){
-        initFields()
+        var filter = { id: intent._id.$oid };
+        locked = ajaxCall( 'GET', '/file_lock', filter ).done(function(){
+            initFields()
+        })
     });
 }
 
@@ -89,15 +92,17 @@ function initFields(){
 }
 
 function getCustomInsertControls(gridId) {
-    var grid = $(gridId).data('JSGrid');
-    return $("<input>").addClass('btn sm black pull-left')
-                      .attr({ type: 'button', value: 'Save' })
-                      .css('width', '30%')
-                      .on('click', function () {
-                          grid.insertItem().done(function () {
-                              grid.option("inserting", false)
-                          });
-                      })
+    if ( !locked.responseJSON.file_lock ){
+        var grid = $(gridId).data('JSGrid');
+        return $("<input>").addClass('btn sm black pull-left')
+                          .attr({ type: 'button', value: 'Save' })
+                          .css('width', '30%')
+                          .on('click', function () {
+                              grid.insertItem().done(function () {
+                                  grid.option("inserting", false)
+                              });
+                          })
+    }
 }
 
 function initJSON(){
@@ -129,9 +134,9 @@ function createJSON(){
     });
 
     var top = {
-                id: intent.name,
-                fields: newData,
-                mturk_response_fields:[ mturkResponseFields() ]
+        id: intent.name,
+        fields: newData,
+        mturk_response_fields:[ mturkResponseFields() ]
     };
 
   return JSON.stringify( top, null, 2 );

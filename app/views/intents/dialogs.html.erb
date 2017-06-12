@@ -5,6 +5,8 @@
 ) %>
 <br><br>
 
+<%= render partial: 'lock' %><br>
+
 <%= react_component(
   'Container',
   {
@@ -12,7 +14,8 @@
     skill_name: @skill.name,
     web_hook: @skill.web_hook,
     field_path: fields_page_path(@skill, @intent),
-    fields: @fields
+    fields: @fields,
+    file_lock: locked_by_other_user?
   },
   class: 'dialogs-container'
 ) %>
