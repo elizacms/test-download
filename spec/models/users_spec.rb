@@ -1,13 +1,20 @@
 describe User do
-  let!( :user      ){ create :user                                             }
-  let!( :user2     ){ create :user, email: 'another_user@imaplus.com'          }
-  let!( :skill     ){ create :skill                                            }
-  let!( :skill2    ){ create :skill, name: 'Other Skill', web_hook: 'bite.me'  }
-  let!( :intent    ){ create :intent, skill: skill                             }
-  let!( :file_lock ){ create :file_lock, intent: intent, user_id: user.id.to_s }
-  let!( :field     ){ create :field, intent: intent                            }
-  let!( :dialog    ){ create :dialog, intent: intent                           }
-  let!( :response  ){ create :response, dialog: dialog                         }
+  let!( :user        ){ create :user                                             }
+  let!( :user2       ){ create :user, email: 'another_user@imaplus.com'          }
+  let!( :skill       ){ create :skill                                            }
+  let!( :skill2      ){ create :skill, name: 'Other Skill', web_hook: 'bite.me'  }
+  let!( :intent      ){ create :intent, skill: skill                             }
+  let!( :intent2     ){ create :intent, skill: skill, name: 'some other intent'  }
+  let!( :file_lock   ){ create :file_lock, intent: intent, user_id: user.id.to_s }
+  let!( :field       ){ create :field, intent: intent                            }
+  let!( :dialog      ){ create :dialog, intent: intent                           }
+  let!( :dialog2     ){ create :dialog, intent: intent2                          }
+  let!( :response    ){ create :response, dialog: dialog                         }
+  let!( :init_add    ){ user.git_add(["dialogs/#{dialog.id}.json",
+                                      "intents/#{intent.id}.json",
+                                      "responses/#{response.id}.json",
+                                      "fields/#{field.id}.json"])                }
+  let!( :init_commit ){ user.git_commit('Initial Commit')                        }
 
   specify '#set_role admin creates Role' do
     user.set_role :admin
@@ -100,5 +107,12 @@ describe User do
                                              "fields/#{field.id}.json",
                                              "dialogs/#{dialog.id}.json",
                                              "responses/#{response.id}.json" ])
+  end
+
+  specify '#changed_files' do
+    dialog.update(priority: 454545 )
+    dialog2.update(priority: 252525 )
+
+    expect( user.changed_files ).to eq(["dialogs/#{dialog.id}.json"])
   end
 end

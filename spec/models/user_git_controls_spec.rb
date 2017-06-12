@@ -105,8 +105,8 @@ describe 'User git controls' do
       dialog.update(priority: 42)
       dialog2.update(priority: 666)
 
-      expect( user.git_diff_workdir  ).to eq pretty_diff_2
-      expect( user2.git_diff_workdir ).to eq pretty_diff_3
+      expect( user.git_diff_workdir.reject{|c| c[:line_origin] == :file_header}  ).to eq pretty_diff_2
+      expect( user2.git_diff_workdir.reject{|c| c[:line_origin] == :file_header} ).to eq pretty_diff_3
       expect( user3.git_diff_workdir ).to eq []
     end
   end

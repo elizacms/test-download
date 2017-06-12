@@ -17,12 +17,7 @@ module GitControls
   end
 
   def git_diff_workdir
-    user_files = list_locked_files
-    repo.status do |file, status_data|
-      if user_files.include?(file)
-        git_add([file])
-      end
-    end
+    git_add(changed_files)
 
     pretty_diff( repo.last_commit.diff(repo.index) ).tap do
       repo.reset( repo.last_commit, :mixed )
@@ -30,7 +25,9 @@ module GitControls
   end
 
   def pretty_diff diff
-    diff.each_line.select { |l| l.line_origin == :addition || l.line_origin == :deletion}.map do |l|
+    diff.each_line.select do |l|
+      l.line_origin == :addition || l.line_origin == :deletion || l.line_origin == :file_header
+    end.map do |l|
       { line_origin: l.line_origin, line_number: l.new_lineno, content: l.content }
     end
   end
