@@ -19,6 +19,7 @@ gem 'codemirror-rails', '~> 5.11'
 gem 'font-awesome-rails', '~> 4.7'
 gem 'remote_syslog_logger', '~> 1.0'
 gem 'rugged', '~> 0.24.0'
+gem 'diffy', '>= 3.2.0'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'

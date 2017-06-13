@@ -71,6 +71,7 @@ GEM
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     diff-lcs (1.2.5)
+    diffy (3.2.0)
     erubis (2.7.0)
     execjs (2.7.0)
     factory_girl (4.7.0)
@@ -279,6 +280,7 @@ DEPENDENCIES
   bootstrap (~> 4.0.0.alpha4)
   capybara (~> 2.8)
   codemirror-rails (~> 5.11)
+  diffy (>= 3.2.0)
   factory_girl_rails (~> 4.7)
   font-awesome-rails (~> 4.7)
   guard-rspec (~> 4.7)
@@ -309,4 +311,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.13.6
+   1.15.0
