@@ -35,24 +35,14 @@ describe 'User git controls' do
     ]
   }
   let!( :pretty_diff_2 ){
-    [{:line_origin=>:deletion,
-      :line_number=>-1,
-      :content=>
-       "{\"priority\":90,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}"},
-     {:line_origin=>:addition,
-      :line_number=>1,
-      :content=>
-       "{\"priority\":42,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}"}]
+    [{ :old=>"{\"priority\":90,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
+        :new=>"{\"priority\":42,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
+        :filename=>"dialogs/#{dialog.id}.json"}]
   }
   let!( :pretty_diff_3 ){
-    [{:line_origin=>:deletion,
-      :line_number=>-1,
-      :content=>
-       "{\"priority\":100000,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}"},
-     {:line_origin=>:addition,
-      :line_number=>1,
-      :content=>
-       "{\"priority\":666,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}"}]
+    [{ :old=>"{\"priority\":100000,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
+        :new=>"{\"priority\":666,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
+        :filename=>"dialogs/#{dialog2.id}.json"}]
   }
 
   describe '#repo' do
@@ -105,8 +95,8 @@ describe 'User git controls' do
       dialog.update(priority: 42)
       dialog2.update(priority: 666)
 
-      expect( user.git_diff_workdir.reject{|c| c[:line_origin] == :file_header}  ).to eq pretty_diff_2
-      expect( user2.git_diff_workdir.reject{|c| c[:line_origin] == :file_header} ).to eq pretty_diff_3
+      expect( user.git_diff_workdir  ).to eq pretty_diff_2
+      expect( user2.git_diff_workdir ).to eq pretty_diff_3
       expect( user3.git_diff_workdir ).to eq []
     end
   end

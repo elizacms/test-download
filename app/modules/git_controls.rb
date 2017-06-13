@@ -19,9 +19,20 @@ module GitControls
   def git_diff_workdir
     git_add(changed_files)
 
-    pretty_diff( repo.last_commit.diff(repo.index) ).tap do
-      repo.reset( repo.last_commit, :mixed )
+    deltas = repo.last_commit.diff(repo.index).deltas
+
+    diffs = deltas.map do |d|
+      oid = d.old_file[:oid]
+      file = repo.lookup( oid )
+      old_content = file.content
+      current = File.read("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/#{d.old_file[:path]}")
+
+      {old: old_content, new: current, filename: d.old_file[:path]}
     end
+
+    repo.reset( repo.last_commit, :mixed )
+
+    return diffs
   end
 
   def pretty_diff diff
