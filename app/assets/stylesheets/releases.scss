@@ -18,6 +18,14 @@
   overflow-wrap: break-word;
 }
 
+.flex-column ul {
+  list-style-type: none;
+}
+
+.flex-column ins {
+  text-decoration: none !important;
+}
+
 .text-center{
   text-align: center;
 }
