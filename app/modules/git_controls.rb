@@ -19,9 +19,10 @@ module GitControls
     diffs = deltas.map do |d|
       oid = d.old_file[:oid]
       old_content = d.status == :added ? '' : repo.lookup( oid ).content
-      current = File.read("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/#{d.new_file[:path]}")
+      file = d.new_file[:path]
+      current = File.read("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/#{file}")
 
-      {old: old_content, new: current, filename: d.old_file[:path]}
+      {old: old_content, new: current, file_type: file_type_for(file), name:name_for(file)}
     end
 
     repo.reset( repo.last_commit, :mixed )
@@ -56,5 +57,20 @@ module GitControls
 
   def git_checkout name
     repo.checkout( name )
+  end
+
+
+  private
+
+  def file_type_for file
+    file.split("/").first.singularize.capitalize
+  end
+
+  def name_for file
+    if ['Field', 'Intent' ].include? file_type_for( file )
+      Object.const_get( file_type_for( file )).find( File.basename( file, '.*' )).attrs[ :name ]
+    else
+      ''
+    end
   end
 end
