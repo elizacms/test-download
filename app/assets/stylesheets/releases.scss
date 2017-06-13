@@ -15,10 +15,15 @@
   width: 49.8%;
   padding: 6px;
   border: 1px #A0A0A0 solid;
+  overflow-wrap: break-word;
 }
 
 .text-center{
   text-align: center;
+}
+
+.code-font{
+  font-family: Courier !important;
 }
 
 .pink {
