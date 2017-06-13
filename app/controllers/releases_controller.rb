@@ -1,5 +1,6 @@
 class ReleasesController < ApplicationController
   before_action :validate_current_user
+  before_action :find_release, only: [:show, :edit, :update, :destroy]
 
   def index
     @repo = Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH'])
@@ -24,6 +25,8 @@ class ReleasesController < ApplicationController
   end
 
   def show
+    commit = current_user.repo.lookup( @release.commit_sha )
+    @diff = commit.parents.first.diff(commit).patch
   end
 
   def edit

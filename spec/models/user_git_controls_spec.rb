@@ -80,20 +80,11 @@ describe 'User git controls' do
     end
   end
 
-  describe '#git_diff obj1, obj2' do
-    xit 'returns the proper diff' do
-      user.git_add( [dialog3_path] )
-
-      user.git_commit( 'This is my great message' )
-
-      expect( user.git_diff( repo.lookup(release.commit_sha), repo.last_commit ) ).to eq expected
-    end
-  end
-
-  describe '#git_diff_workdir' do
+  describe '#git_diff_workdir', :focus do
     it 'returns the changes between HEAD and the working directory' do
       dialog.update(priority: 42)
       dialog2.update(priority: 666)
+      field.destroy
 
       expect( user.git_diff_workdir  ).to eq pretty_diff_2
       expect( user2.git_diff_workdir ).to eq pretty_diff_3

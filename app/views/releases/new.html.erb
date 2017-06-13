@@ -1,16 +1,20 @@
 <h1>Release New</h1>
 
-<div>
-  <%= @diff[:filename] %>
-</div>
-<div class="flex-container">
-  <div class="flex-column ">
-    <%= raw diff.left %>
+
+<% @diff.each do |d| %>
+  <div>
+    <%= d[:filename] %>
   </div>
-  <div class="flex-column ">
-    <%= raw diff.right %>
+  <div class="flex-container">
+    <div class="flex-column pink">
+      <%= raw diff_format( d ).left %>
+    </div>
+    <div class="flex-column green">
+      <%= raw diff_format( d ).right %>
+    </div>
   </div>
-</div>
+  </br>
+<% end %>
 
 <hr>
 <div class="text-center">

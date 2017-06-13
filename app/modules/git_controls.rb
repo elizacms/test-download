@@ -12,20 +12,14 @@ module GitControls
     Rugged::Commit.create( repo, commit_options( message ) )
   end
 
-  def git_diff obj1, obj2
-    pretty_diff( obj1.diff(obj2) )
-  end
-
   def git_diff_workdir
     git_add(changed_files)
 
     deltas = repo.last_commit.diff(repo.index).deltas
-
     diffs = deltas.map do |d|
       oid = d.old_file[:oid]
-      file = repo.lookup( oid )
-      old_content = file.content
-      current = File.read("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/#{d.old_file[:path]}")
+      old_content = d.status == :added ? '' : repo.lookup( oid ).content
+      current = File.read("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/#{d.new_file[:path]}")
 
       {old: old_content, new: current, filename: d.old_file[:path]}
     end

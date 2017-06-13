@@ -12,7 +12,7 @@
   <tbody>
     <% @releases.each do |release| %>
       <tr>
-        <td><%= @repo.lookup(release.commit_sha).message %></td>
+        <td><%= link_to @repo.lookup(release.commit_sha).message, release_path( release ) %></td>
         <td><%=  %></td>
         <td><%=  %></td>
       </tr>
