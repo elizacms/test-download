@@ -40,7 +40,6 @@ module FileSystem
 
     def destroy
       File.delete(file_url)
-      super
     end
   end
 end

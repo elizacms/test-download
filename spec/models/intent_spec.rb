@@ -93,7 +93,7 @@ describe Intent do
 
       Intent.last.destroy
 
-      expect(Intent.count).to eq 0
+      expect(Intent.count).to eq 1
       expect(File.exist?(intent_file(file_id))).to eq false
       expect( Dir[intents_path].count ).to eq 0
     end

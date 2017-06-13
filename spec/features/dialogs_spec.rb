@@ -497,7 +497,10 @@ sleep 3
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '7'}.to_json
 
-      expect( Response.count ).to eq 1
+      expect( Response.count ).to eq 2
+      expect(
+        File.exist?("#{ENV['NLU_PERSISTENCE_PATH']}/responses/#{Response.last.id}.json")
+      ).to eq false
       expect( Response.first.attrs[:response_type]    ).to eq 'video'
       expect( Response.first.attrs[:response_trigger] ).to eq expected_response_trigger
       expect( Response.first.attrs[:response_value]   ).to eq expected_response_value

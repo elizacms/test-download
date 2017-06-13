@@ -190,7 +190,10 @@ describe 'Dialogs' do
 
       expect( last_response.status ).to eq 202
       expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 0
+      expect( Response.count ).to eq 1
+      expect(
+        File.exist?("#{ENV['NLU_PERSISTENCE_PATH']}/responses/#{Response.last.id}.json")
+      ).to eq false
     end
   end
 end

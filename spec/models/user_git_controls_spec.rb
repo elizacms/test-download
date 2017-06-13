@@ -26,20 +26,15 @@ describe 'User git controls' do
                                       "fields/#{field.id}.json",
                                       "intents/#{intent3.id}.json"])               }
   let!( :init_commit ){ user.git_commit('Initial Commit')                          }
-
   let!( :pretty_diff ){
-    [
-      {:line_origin=>:addition,
-       :line_number=>1,
-       :content=>"{\"priority\":35,\"awaiting_field\":[],\"missing\":[],\"unresolved\":[],\"present\":[],\"entity_values\":[],\"comments\":null}"}
-    ]
+    [{:old=>"{\"priority\":90,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
+      :new=>"{\"priority\":42,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
+      :filename=>"dialogs/#{dialog.id}.json"},
+     {:old=>"{\"name\":\"destination\",\"type\":\"Text\",\"mturk_field\":\"Uber.Destination\"}",
+      :new=>"",
+      :filename=>"fields/#{field.id}.json"}]
   }
-  let!( :pretty_diff_2 ){
-    [{ :old=>"{\"priority\":90,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
-        :new=>"{\"priority\":42,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
-        :filename=>"dialogs/#{dialog.id}.json"}]
-  }
-  let!( :pretty_diff_3 ){
+  let!( :pretty_diff2 ){
     [{ :old=>"{\"priority\":100000,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
         :new=>"{\"priority\":666,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
         :filename=>"dialogs/#{dialog2.id}.json"}]
@@ -80,14 +75,14 @@ describe 'User git controls' do
     end
   end
 
-  describe '#git_diff_workdir', :focus do
+  describe '#git_diff_workdir' do
     it 'returns the changes between HEAD and the working directory' do
       dialog.update(priority: 42)
       dialog2.update(priority: 666)
       field.destroy
 
-      expect( user.git_diff_workdir  ).to eq pretty_diff_2
-      expect( user2.git_diff_workdir ).to eq pretty_diff_3
+      expect( user.git_diff_workdir  ).to eq pretty_diff
+      expect( user2.git_diff_workdir ).to eq pretty_diff2
       expect( user3.git_diff_workdir ).to eq []
     end
   end

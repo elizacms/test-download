@@ -215,7 +215,7 @@ describe Dialog do
 
       dialog.destroy
 
-      expect( Dialog.count ).to eq 0
+      expect( Dialog.count ).to eq 1
       expect( File.exist?("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/dialogs/#{dialog_id}.json") ).to eq false
       expect( Dir[dialogs_path].count ).to eq 0
     end

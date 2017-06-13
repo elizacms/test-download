@@ -77,7 +77,7 @@ describe Field do
 
       field.destroy
 
-      expect(Field.count).to eq 0
+      expect(Field.count).to eq 1
       expect(File.exist?(intent_file(file_id))).to eq false
       expect( Dir[fields_path].count ).to eq 0
     end

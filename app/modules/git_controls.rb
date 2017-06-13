@@ -3,8 +3,15 @@ module GitControls
     @repo ||= Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH'])
   end
 
+  def persistence_path_for file
+    "#{ ENV['NLU_CMS_PERSISTENCE_PATH']}/#{file}"
+  end
+
   def git_add files
-    files.each { |file| repo.index.add(file) }
+    files.each do |file|
+      File.exist?(persistence_path_for( file )) ? repo.index.add(file) : repo.index.remove(file)
+    end
+
     repo.index.write
   end
 
@@ -20,7 +27,9 @@ module GitControls
       oid = d.old_file[:oid]
       old_content = d.status == :added ? '' : repo.lookup( oid ).content
       file = d.new_file[:path]
-      current = File.read("#{ENV['NLU_CMS_PERSISTENCE_PATH']}/#{file}")
+
+      path = persistence_path_for( d.new_file[:path] )
+      current = File.exist?(path) ? File.read(path) : ''
 
       {old: old_content, new: current, file_type: file_type_for(file), name:name_for(file)}
     end

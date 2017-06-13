@@ -14,11 +14,6 @@ describe 'Release Feature Specs' do
                                      "responses/#{response.id}.json",
                                      "fields/#{field.id}.json"])                  }
   let!( :init_commit ){ user.git_commit('Initial Commit')                        }
-  let!( :expect_diff ){{
-    :old=>"{\"priority\":90,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
-    :new=>"{\"priority\":5,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
-    :filename=>"dialogs/#{dialog.id}.json"
-  }}
 
   before do
     stub_identity_token
@@ -36,7 +31,7 @@ describe 'Release Feature Specs' do
     dialog.update(priority: 5)
     visit '/releases/new'
 
-    expect( page ).to have_content expect_diff
+    expect( page ).to have_content "\"priority\": 90, \"priority\": 5"
   end
 
   specify 'User can create a release' do
