@@ -15,14 +15,9 @@ describe 'Release Feature Specs' do
                                      "fields/#{field.id}.json"])                  }
   let!( :init_commit ){ user.git_commit('Initial Commit')                        }
   let!( :expect_diff ){{
-    :line_origin=>:deletion,
-    :line_number=>-1,
-    :content=>"{\"priority\":90,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}"
-  }}
-  let!( :expect_diff2 ){{
-    :line_origin=>:addition,
-    :line_number=>1,
-    :content=>"{\"priority\":5,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}"
+    :old=>"{\"priority\":90,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
+    :new=>"{\"priority\":5,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
+    :filename=>"dialogs/#{dialog.id}.json"
   }}
 
   before do
@@ -37,12 +32,11 @@ describe 'Release Feature Specs' do
     expect(page).to have_content 'Releases Index'
   end
 
-  specify 'User can visit releases new page', :focus do
+  specify 'User can visit releases new page' do
     dialog.update(priority: 5)
     visit '/releases/new'
 
     expect( page ).to have_content expect_diff
-    expect( page ).to have_content expect_diff2
   end
 
   specify 'User can create a release' do
