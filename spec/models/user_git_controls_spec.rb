@@ -29,15 +29,18 @@ describe 'User git controls' do
   let!( :pretty_diff ){
     [{:old=>"{\"priority\":90,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
       :new=>"{\"priority\":42,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
-      :filename=>"dialogs/#{dialog.id}.json"},
+      :file_type=>"Dialog",
+      :name=>""},
      {:old=>"{\"name\":\"destination\",\"type\":\"Text\",\"mturk_field\":\"Uber.Destination\"}",
       :new=>"",
-      :filename=>"fields/#{field.id}.json"}]
+      :file_type=>"Field",
+      :name=>nil}]
   }
   let!( :pretty_diff2 ){
     [{ :old=>"{\"priority\":100000,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
         :new=>"{\"priority\":666,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
-        :filename=>"dialogs/#{dialog2.id}.json"}]
+        :file_type=>"Dialog",
+        :name=>""}]
   }
 
   describe '#repo' do

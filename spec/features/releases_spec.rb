@@ -31,7 +31,7 @@ describe 'Release Feature Specs' do
     dialog.update(priority: 5)
     visit '/releases/new'
 
-    expect( page ).to have_content "\"priority\": 90, \"priority\": 5"
+    expect( page ).to have_content "- \"priority\": 90, + \"priority\": 5"
   end
 
   specify 'User can create a release' do
