@@ -37,7 +37,7 @@ pipeline {
   }
   post {
     always {
-      junit 'junit.xml'
+      junit allowEmptyResults: true, 'junit.xml'
     }
     failure {
       slackSend (channel: '#nlu-cms_dev', color: '#FF0000', message: "FAILED: Job (${env.BUILD_URL}) \n" + getCommitAuthor() + " " + getCommitId() + "\n" + getCommitMessage())
