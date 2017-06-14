@@ -136,7 +136,7 @@ var Container = React.createClass({
       <div>
         <ExportCSV
           skill_name={this.props.skill_name}
-          intent_id={this.props.intent_id}
+          intent_name={this.props.intent_name}
           web_hook={this.props.web_hook}
           >
         </ExportCSV>

@@ -10,7 +10,7 @@
 <%= react_component(
   'Container',
   {
-    intent_id: @intent.id.to_s,
+    intent_name: @intent.attrs[:name],
     skill_name: @skill.name,
     web_hook: @skill.web_hook,
     field_path: fields_page_path(@skill, @intent),
