@@ -29,6 +29,10 @@ class Field
     }
   end
 
+  def attrs
+    attributes
+  end
+
   def save_to_file
     IntentFileManager.new.save(intent.reload)
   end

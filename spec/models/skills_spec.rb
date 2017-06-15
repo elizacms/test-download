@@ -6,13 +6,13 @@ describe Skill do
     expect( Intent.count ).to eq 1
     expect( Skill.count ).to eq 1
 
+    file_path = IntentFileManager.new.file_url( intent )
+
     skill.destroy
 
     expect( Skill.count ).to eq 0
-    expect( Intent.count ).to eq 1
-    expect(
-      File.exist?("#{ENV['NLU_PERSISTENCE_PATH']}/intents/#{Intent.last.id}.json")
-    ).to eq false
+    expect( Intent.count ).to eq 0
+    expect( File.exist?( file_path ) ).to eq false
   end
 
   specify 'Name should be unique' do

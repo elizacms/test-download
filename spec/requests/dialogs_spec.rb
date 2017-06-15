@@ -10,9 +10,9 @@ describe 'Dialogs' do
       intent_id:      intent.id.to_s,
       priority:       90,
       unresolved:     [ 'unresolved' ],
-      missing:        [ field.attrs[:name] ],
+      missing:        [ field.name ],
       present:        [ 'present', 'value' ],
-      awaiting_field: [ field.attrs[:name] ],
+      awaiting_field: [ field.name ],
       entity_values:  [ 'some', 'value' ],
       comments:       'some comments',
       responses_attributes: [
@@ -132,20 +132,12 @@ describe 'Dialogs' do
       header 'Content-Type', 'application/json'
       get '/dialogue_api/all_scenarios', { intent_id: intent.id }
 
-      expected_responses = [{
-        id:               { :$oid => Response.last.id.to_s },
-        response_value:   "{\"text\":\"some text\"}",
-        response_type:    "some_type",
-        response_trigger: "some_trigger"
-      }]
-
       expect( last_response.status ).to eq 200
       expect( parsed_response.count ).to eq 1
-      expect( parsed_response[0][:missing         ] ).to eq [ 'destination' ]
-      expect( parsed_response[0][:unresolved      ] ).to eq [ 'unresolved' ]
-      expect( parsed_response[0][:present         ] ).to eq [ 'present', 'value' ]
-      expect( parsed_response[0][:awaiting_field  ] ).to eq [ 'destination' ]
-      expect( parsed_response[0][:responses       ] ).to eq expected_responses
+      expect( parsed_response[0][:missing         ] ).to eq [ 'billing_invoicequestion' ]
+      expect( parsed_response[0][:unresolved      ] ).to eq [ 'None' ]
+      expect( parsed_response[0][:present         ] ).to eq [ 'None' ]
+      expect( parsed_response[0][:awaiting_field  ] ).to eq [ 'billing_invoicequestion' ]
     end
   end
 
@@ -154,7 +146,7 @@ describe 'Dialogs' do
       "intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,aneeda_en,comments\n"
     }
     let( :data_row   ){
-      "#{ intent.attrs[:name] },90,destination,unresolved,destination,present && value,\"[('some','value')]\","\
+      "#{ intent.name },90,destination,unresolved,destination,present && value,\"[('some','value')]\","\
       "\"[{\"\"ResponseType\"\":\"\"some_type\"\",\"\"ResponseValue\"\""\
       ":{\"\"text\"\":\"\"some text\"\"},\"\"ResponseTrigger\"\":\"\"some_trigger\"\"}]\",some comments"
     }
@@ -190,10 +182,7 @@ describe 'Dialogs' do
 
       expect( last_response.status ).to eq 202
       expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 1
-      expect(
-        File.exist?("#{ENV['NLU_PERSISTENCE_PATH']}/responses/#{Response.last.id}.json")
-      ).to eq false
+      expect( Response.count ).to eq 0
     end
   end
 end

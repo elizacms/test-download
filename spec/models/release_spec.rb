@@ -5,15 +5,16 @@ describe Release do
   let!( :dialog      ){ create :dialog, intent: intent                          }
   let!( :user        ){ create :user                                            }
   let!( :role        ){ create :role, skill: skill, user: user                  }
-  let!( :init_add    ){ user.git_add(["dialogs/#{dialog.id}.json",
-                                      "intents/#{intent.id}.json"])             }
+  let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name}.csv",
+                                      "actions/#{skill.name.downcase}_#{intent.name.downcase}"])}
   let!( :init_commit ){ user.git_commit('Initial Commit')                       }
 
   describe '#create, also creates a commit' do
     it 'should succeed' do
       dialog.update(priority: 777)
       release = Release.create( user: user,
-                                files: ["dialogs/#{dialog.id}.json"],
+                                files: ["intent_responses_csv/#{intent.name}.csv",
+                                        "actions/#{skill.name.downcase}_#{intent.name.downcase}"],
                                 message: '2nd Commit')
 
       expect( Release.count ).to eq 1

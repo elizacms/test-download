@@ -9,12 +9,11 @@ feature 'Dialogs', :js do
   before do
     stub_identity_token
     stub_identity_account_for dev.email
+
     visit '/login/success?code=0123abc'
     click_link 'Manage Intents'
-
     click_link 'Edit Details'
     click_link 'Add Dialogs'
-
     click_button 'Create a Dialog'
   end
 

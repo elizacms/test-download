@@ -1,4 +1,4 @@
-feature 'Fields', :js do
+feature 'Fields', :js, :focus do
   let(  :developer       ){ create :user                                }
   let!( :skill           ){ create :skill                               }
   let!( :intent          ){ create :intent, skill: skill                }
@@ -9,16 +9,15 @@ feature 'Fields', :js do
   before do
     stub_identity_token
     stub_identity_account_for developer.email
+
+    visit '/login/success?code=0123abc'
+    click_link 'Intents'
+    click_link 'Edit Details'
+    click_link 'Add Fields'
   end
 
   describe 'Read Fields and Intent values' do
     specify 'Developer can see Fields' do
-      visit '/login/success?code=0123abc'
-
-      click_link 'Intents'
-      click_link 'Edit Details'
-      click_link 'Edit Fields'
-
       expect( page ).to have_content field.name
       expect( page ).to have_content field.type
       expect( page ).to have_content skill.name
@@ -40,12 +39,6 @@ feature 'Fields', :js do
     }
 
     specify do
-      visit '/login/success?code=0123abc'
-
-      click_link 'Intents'
-      click_link 'Edit Details'
-      click_link 'Edit Fields'
-
       click_button 'JSON'
 
       sleep 0.5
@@ -57,14 +50,6 @@ feature 'Fields', :js do
   end
 
   describe 'Field ID/Name must be alphanumeric and underbars' do
-    before do
-      visit '/login/success?code=0123abc'
-
-      click_link 'Intents'
-      click_link 'Edit Details'
-      click_link 'Edit Fields'
-    end
-
     specify 'Valid should succeed' do
       sleep 0.5
       execute_script('$("tr.jsgrid-insert-row td input").val("abc_123");')

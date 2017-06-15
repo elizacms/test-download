@@ -7,8 +7,8 @@ describe 'User git controls' do
   let!( :repo        ){ Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH'])    }
   let!( :skill       ){ create :skill                                              }
   let!( :intent      ){ create :intent, skill: skill                               }
-  let!( :intent2     ){ create :intent, skill: skill, name: 'New Name'             }
-  let!( :intent3     ){ create :intent, skill: skill, name: 'Another Name'         }
+  let!( :intent2     ){ create :intent, skill: skill, name: 'newname'              }
+  let!( :intent3     ){ create :intent, skill: skill, name: 'newanothername'       }
   let!( :file_lock   ){ create :file_lock, intent: intent,  user_id: user.id.to_s  }
   let!( :file_lock2  ){ create :file_lock, intent: intent2, user_id: user2.id.to_s }
   let!( :dialog      ){ create :dialog, intent: intent                             }
@@ -17,14 +17,12 @@ describe 'User git controls' do
   let!( :dialog3_path){ "dialogs/#{dialog3.id}.json"                               }
   let!( :field       ){ create :field, intent: intent                              }
   let!( :response    ){ create :response, dialog: dialog                           }
-  let!( :init_add    ){ user.git_add(["dialogs/#{dialog.id}.json",
-                                      "dialogs/#{dialog2.id}.json",
-                                      dialog3_path,
-                                      "intents/#{intent.id}.json",
-                                      "intents/#{intent2.id}.json",
-                                      "responses/#{response.id}.json",
-                                      "fields/#{field.id}.json",
-                                      "intents/#{intent3.id}.json"])               }
+  let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name}.csv",
+                                      "intent_responses_csv/#{intent2.name}.csv",
+                                      "intent_responses_csv/#{intent3.name}.csv",
+                                      "actions/#{skill.name}_#{intent.name}.json",
+                                      "actions/#{skill.name}_#{intent2.name}.json",
+                                      "actions/#{skill.name}_#{intent2.name}.json"])}
   let!( :init_commit ){ user.git_commit('Initial Commit')                          }
   let!( :pretty_diff ){
     [{:old=>"{\"priority\":90,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",

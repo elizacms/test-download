@@ -26,20 +26,25 @@ class User
   end
 
   def list_locked_files
-    [ strify_files(:intents, locked_intents),
-      strify_files(:fields, locked_fields),
-      strify_files(:dialogs, locked_dialogs),
-      strify_files(:responses, locked_responses)
-    ].flatten
+    [ locked_intents.map{|i| file_name_for_intent( i )},
+      locked_intent_responses].flatten
   end
 
   def locked_intents
     Intent.all.select{|i| i.file_lock.try(:user_id) == id.to_s }
   end
 
+  def locked_intent_responses
+    files = Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intent_responses_csv/*.csv"]
+    intents = locked_intents
+
+    files.select { |file| intents.map(&:name).include?( File.basename(file) ) }
+  end
+
   def changed_files
     files = []
     user_files = list_locked_files
+    ap list_locked_files
     repo.status do |file, status_data|
       if user_files.include?(file)
         files << file
@@ -56,19 +61,7 @@ class User
     self.roles.select{ |r| r.name == type }
   end
 
-  def locked_fields
-    locked_intents.map{|i| i.entities}
-  end
-
-  def locked_dialogs
-    locked_intents.map{|i| i.dialogs}
-  end
-
-  def locked_responses
-    locked_dialogs.flatten.map{|d| d.responses}
-  end
-
-  def strify_files type, ary
-    ary.flatten.map {|ob| "#{type}/#{ob.id}.json"}
+  def file_name_for_intent intent
+    "/actions/#{intent.skill.name.downcase}_#{intent.name.downcase}.action"
   end
 end

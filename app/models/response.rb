@@ -11,10 +11,6 @@ class Response
     attributes
   end
 
-  def self.file_system_tracked_attributes
-    %w(response_type response_trigger response_value)
-  end
-
   def attrs_with_ids
     self.attrs.merge!(id: self.id)
   end

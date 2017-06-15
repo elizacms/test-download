@@ -23,7 +23,7 @@ class CustomCSV
         d.priority,
         format( d.awaiting_field ),
         format( d.unresolved     ),
-        format( d:missing        ),
+        format( d.missing        ),
         format_present_field( d.present ),
         format_entity_values( d.entity_values),
         format_responses( d.responses ),
