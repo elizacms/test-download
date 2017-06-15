@@ -7,9 +7,14 @@ describe User do
   let!( :intent2     ){ create :intent, skill: skill, name: 'some other intent'   }
   let!( :file_lock   ){ create :file_lock, intent: intent, user_id: user.id.to_s  }
   let!( :field       ){ create :field, intent: intent                             }
-  let!( :dialog      ){ create :dialog, intent: intent                            }
-  let!( :dialog2     ){ create :dialog, intent: intent2                           }
+  let!( :dialog      ){ build :dialog, intent: intent                             }
+  let!( :dialog2     ){ build :dialog, intent: intent2                            }
   let!( :response    ){ create :response, dialog: dialog                          }
+
+  before do
+    DialogFileManager.new.save([dialog, dialog2])
+  end
+
   let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name}.csv"]) }
   let!( :init_commit ){ user.git_commit('Initial Commit')                         }
 
@@ -100,13 +105,6 @@ describe User do
   end
 
   specify '#list_locked_files' do
-    expect( user.list_locked_files ).to eq(["/actions/#{skill.name.downcase}_#{intent.name.downcase}.action"])
-  end
-
-  specify '#changed_files' do
-    dialog.update(priority: 454545 )
-    dialog2.update(priority: 252525 )
-
-    expect( user.changed_files ).to eq(["/intent_responses_csv/#{intent.name}.csv"])
+    expect( user.list_locked_files ).to eq(["actions/#{skill.name.downcase}_#{intent.name.downcase}.action", "intent_responses_csv/#{intent.name}.csv"])
   end
 end

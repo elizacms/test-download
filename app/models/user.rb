@@ -26,32 +26,14 @@ class User
   end
 
   def list_locked_files
-    [ locked_intents.map{|i| file_name_for_intent( i )},
-      locked_intent_responses].flatten
+    locked_intents.map{ |i|
+      [action_file_for_intent( i ),
+      dialog_file_for_intent( i )]
+    }.flatten
   end
 
   def locked_intents
     Intent.all.select{|i| i.file_lock.try(:user_id) == id.to_s }
-  end
-
-  def locked_intent_responses
-    files = Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intent_responses_csv/*.csv"]
-    intents = locked_intents
-
-    files.select { |file| intents.map(&:name).include?( File.basename(file) ) }
-  end
-
-  def changed_files
-    files = []
-    user_files = list_locked_files
-    ap list_locked_files
-    repo.status do |file, status_data|
-      if user_files.include?(file)
-        files << file
-      end
-    end
-
-    files
   end
 
 
@@ -61,7 +43,11 @@ class User
     self.roles.select{ |r| r.name == type }
   end
 
-  def file_name_for_intent intent
-    "/actions/#{intent.skill.name.downcase}_#{intent.name.downcase}.action"
+  def action_file_for_intent intent
+    "actions/#{intent.skill.name.downcase}_#{intent.name.downcase}.action"
+  end
+
+  def dialog_file_for_intent intent
+    "intent_responses_csv/#{intent.name.downcase}.csv"
   end
 end

@@ -27,6 +27,13 @@ class DialogFileManager
     end.flatten
   end
 
+  def save dialogs
+    name = dialogs.first.intent.name
+    filename = "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/#{ name }.csv"
+
+    File.write filename, serialize( dialogs )
+  end
+
 
   private
 

@@ -1,4 +1,4 @@
-feature 'Fields', :js, :focus do
+feature 'Fields', :js do
   let(  :developer       ){ create :user                                }
   let!( :skill           ){ create :skill                               }
   let!( :intent          ){ create :intent, skill: skill                }

@@ -14,30 +14,38 @@ describe 'User git controls' do
   let!( :dialog      ){ create :dialog, intent: intent                             }
   let!( :dialog2     ){ create :dialog, intent: intent2, priority: 100_000         }
   let!( :dialog3     ){ create :dialog, intent: intent3                            }
-  let!( :dialog3_path){ "dialogs/#{dialog3.id}.json"                               }
+  let!( :dialog3_path){ "intent_responses_csv/#{intent3.name.downcase}.csv"                 }
   let!( :field       ){ create :field, intent: intent                              }
   let!( :response    ){ create :response, dialog: dialog                           }
-  let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name}.csv",
-                                      "intent_responses_csv/#{intent2.name}.csv",
-                                      "intent_responses_csv/#{intent3.name}.csv",
-                                      "actions/#{skill.name}_#{intent.name}.json",
-                                      "actions/#{skill.name}_#{intent2.name}.json",
-                                      "actions/#{skill.name}_#{intent2.name}.json"])}
+
+  before do
+    IntentFileManager.new.save( intent  )
+    IntentFileManager.new.save( intent2 )
+    IntentFileManager.new.save( intent3 )
+    DialogFileManager.new.save([dialog] )
+    DialogFileManager.new.save([dialog2])
+    DialogFileManager.new.save([dialog3])
+  end
+
+  let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name.downcase}.csv",
+                                      "intent_responses_csv/#{intent2.name.downcase}.csv",
+                                      "intent_responses_csv/#{intent3.name.downcase}.csv",
+                                      "actions/#{skill.name.downcase}_#{intent.name.downcase}.action",
+                                      "actions/#{skill.name.downcase}_#{intent2.name.downcase}.action",
+                                      "actions/#{skill.name.downcase}_#{intent2.name.downcase}.action"])}
   let!( :init_commit ){ user.git_commit('Initial Commit')                          }
   let!( :pretty_diff ){
-    [{:old=>"{\"priority\":90,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
-      :new=>"{\"priority\":42,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
-      :file_type=>"Dialog",
-      :name=>""},
-     {:old=>"{\"name\":\"destination\",\"type\":\"Text\",\"mturk_field\":\"Uber.Destination\"}",
-      :new=>"",
-      :file_type=>"Field",
-      :name=>nil}]
+    [
+      {:old=>"{\"id\":\"get_ride\",\"fields\":[{\"name\":\"destination\",\"type\":\"Text\",\"must_resolve\":false,\"mturk_field\":\"Uber.Destination\"}],\"mturk_response_fields\":\"uber.get.ride\"}", :new=>"{\"id\":\"get_ride\",\"fields\":[],\"mturk_response_fields\":\"uber.get.ride\"}", :file_type=>"Action", :name=>""},
+      {:old=>"intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra\nget_ride,90,destination,,A missing rule,,some,thing,\"[\n  {\n    \"\"ResponseType\"\": 0,\n    \"\"ResponseValue\"\": {\n      \"\"text\"\": \"\"where would you like to go?\"\"\n    },\n    \"\"ResponseTrigger\"\": {\n      \"\"trigger\"\": \"\"some_trigger\"\"\n    }\n  }\n]\",",
+      :new=>"intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra\nget_ride,42,destination,,A missing rule,,some,thing,\"[\n  {\n    \"\"ResponseType\"\": 0,\n    \"\"ResponseValue\"\": {\n      \"\"text\"\": \"\"where would you like to go?\"\"\n    },\n    \"\"ResponseTrigger\"\": {\n      \"\"trigger\"\": \"\"some_trigger\"\"\n    }\n  }\n]\",",
+      :file_type=>"Intent_responses_csv",
+      :name=>""}]
   }
   let!( :pretty_diff2 ){
-    [{ :old=>"{\"priority\":100000,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
-        :new=>"{\"priority\":666,\"awaiting_field\":[\"destination\"],\"missing\":[\"A missing rule\"],\"unresolved\":[],\"present\":[],\"entity_values\":[\"some\",\"thing\"],\"comments\":\"some comment\"}",
-        :file_type=>"Dialog",
+    [{ :old=>%Q/intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra\nnewname,100000,destination,,A missing rule,,some,thing,"[\n\n]",/,
+        :new=>%Q/intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra\nnewname,666,destination,,A missing rule,,some,thing,"[\n\n]",/,
+        :file_type=>"Intent_responses_csv",
         :name=>""}]
   }
 
@@ -50,19 +58,11 @@ describe 'User git controls' do
   describe '#git_add files' do
     it 'adds updated files to index' do
       dialog3.update(priority: 25)
+      DialogFileManager.new.save([dialog3])
       user.git_add( [dialog3_path] )
       status = repo.status(dialog3_path)
 
       expect(status).to eq [:index_modified]
-    end
-
-    it 'adds created files to index' do
-      dialog4 = Dialog.create(priority: 15, intent_id: intent.id)
-      path = "dialogs/#{dialog4.id}.json"
-      user.git_add([path])
-      status = repo.status(path)
-
-      expect(status).to eq [:index_new]
     end
   end
 
@@ -80,6 +80,8 @@ describe 'User git controls' do
     it 'returns the changes between HEAD and the working directory' do
       dialog.update(priority: 42)
       dialog2.update(priority: 666)
+      DialogFileManager.new.save([dialog])
+      DialogFileManager.new.save([dialog2])
       field.destroy
 
       expect( user.git_diff_workdir  ).to eq pretty_diff

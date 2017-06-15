@@ -22,10 +22,6 @@ class Dialog
     attributes
   end
 
-  def self.file_system_tracked_attributes
-    %w(priority awaiting_field missing unresolved present entity_values comments)
-  end
-
   def dialog_with_responses
     self.attrs.merge!({id: self.id, responses: self.responses.map(&:attrs_with_ids)})
   end
