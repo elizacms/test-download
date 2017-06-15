@@ -1,8 +1,7 @@
 class Intent
   include Mongoid::Document
   include Mongoid::Timestamps
-  include FileSystem::CrudAble
-
+  
   belongs_to :skill
   has_many :entities, class_name:'Field'
   has_many :dialogs
@@ -15,6 +14,10 @@ class Intent
 
   validates_presence_of :name
   validate :unique_name
+
+  def attrs
+    attributes
+  end
 
   def lock( user_id )
     FileLock.create( intent: self, user_id: user_id)

@@ -1,8 +1,7 @@
 class Dialog
   include Mongoid::Document
   include Mongoid::Timestamps
-  include FileSystem::CrudAble
-
+  
   field :intent_id,      type:String
   field :priority,       type:Integer
   field :awaiting_field, type:Array, default:[]
@@ -10,6 +9,7 @@ class Dialog
   field :unresolved,     type:Array, default:[]
   field :present,        type:Array, default:[]
   field :entity_values,  type:Array, default:[]
+  field :extra,          type:String
   field :comments,       type:String
 
   belongs_to :intent
@@ -17,6 +17,10 @@ class Dialog
   accepts_nested_attributes_for :responses, dependent: :destroy
 
   validates_presence_of :intent_id
+
+  def attrs
+    attributes
+  end
 
   def self.file_system_tracked_attributes
     %w(priority awaiting_field missing unresolved present entity_values comments)

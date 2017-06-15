@@ -44,11 +44,16 @@ RSpec.configure do |config|
     FileUtils.rm_rf( ENV['NLU_CMS_PERSISTENCE_PATH'] )
     I18n.default_locale = 'en'
     Mongoid.purge!
+    
     Dir.mkdir( ENV['NLU_CMS_PERSISTENCE_PATH'] )
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents" )
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/fields" )
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/dialogs" )
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/responses" )
+
+    Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intent_responses_csv" )
+    FileUtils.cp( 'spec/data-files/get_ride.csv', "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intent_responses_csv/get_ride.csv" )
+
     Rugged::Repository.init_at("#{ENV['NLU_CMS_PERSISTENCE_PATH']}")
     ActionMailer::Base.deliveries = []
   end

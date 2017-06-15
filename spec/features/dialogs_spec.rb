@@ -26,9 +26,30 @@ feature 'Dialogs', :js do
 
     click_button 'Create Dialog'
 
-    # sleep 0.5
-sleep 3
+    sleep 0.1
     expect( page ).to have_content 'destination'
+  end
+
+  specify 'Shows Dialog from CSV' ,:skip do
+    click_link 'Cancel'
+
+    binding.pry
+    expect( page ).to have_content 'billing_invoicequestion'
+    # expect( page ).to have_content 'Das beantworte ich gern'
+  end
+
+  specify 'Saves Dialog to CSV' ,:skip do
+    within '.dialog-form' do
+      select field.attrs[:name], from: 'unresolved-field'
+      select field.attrs[:name], from: 'awaiting-field'
+    end
+
+    click_button 'Create Dialog'
+
+    sleep 0.1
+    # expect( page ).to have_content 'destination'
+    # check for CSV creation
+    # If no CSV with the skill name, then create it
   end
 
   specify 'User can update a dialog' do

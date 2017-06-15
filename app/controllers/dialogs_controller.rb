@@ -6,7 +6,14 @@ class DialogsController < ApplicationController
   # GET /dialogue_api/all_scenarios?
   #   intent_id=play_music
   def index
-    dialogs = Dialog.where( intent_id: params[ :intent_id ] ).order('priority DESC')
+    # dialogs = Dialog.where( intent_id: params[ :intent_id ] ).order('priority DESC')
+    # Find CSV
+    # Load using Dialog Uploader
+    intent = Intent.find( params[ :intent_id ])
+    csv_file = "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intent_responses_csv/#{ intent.name }.csv"
+
+    dialogs = DialogFileManager.new.load( csv_file )
+
     render json: dialogs.map( &:dialog_with_responses ).to_json
   end
 

@@ -1,0 +1,1554 @@
+intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra
+billing_mybill,100,billing_invoicequestion,None,billing_invoicequestion,None,,"[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Wenn Sie Fragen zur Rechnung haben, kann ich Ihnen damit behilflich sein."",
+      ""spokenText"": ""Wenn Sie Fragen zur Rechnung haben, kann ich Ihnen damit behilflich sein."",
+      ""options"": [
+        {
+          ""text"": ""Rechnung einfach erklärt"",
+          ""spokenText"": ""Rechnung einfach erklärt"",
+          ""nluentityvalue"": ""Rechnung einfach erklärt""
+        },
+        {
+          ""text"": ""Warum ist meine Rechnung so hoch?"",
+          ""spokenText"": ""Warum ist meine Rechnung so hoch?"",
+          ""nluentityvalue"": ""Warum ist meine Rechnung so hoch""
+        },
+        {
+          ""text"": ""Mehr zum Thema Rechnung"",
+          ""spokenText"": ""Mehr zum Thema Rechnung"",
+          ""nluentityvalue"": ""Mehr zum Thema Rechnung""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Sie können unter Mein T-Mobile Ihre Rechnung jederzeit einsehen."",
+      ""spokenText"": ""Sie können unter Mein T-Mobile Ihre Rechnung jederzeit einsehen."",
+      ""options"": [
+        {
+          ""text"": ""Meine Rechnung einsehen"",
+          ""spokenText"": ""Meine Rechnung einsehen"",
+          ""url"": ""https://mein.t-mobile.at/myTNT/application.html?menu_id=1011&portlet_id=24""
+        }
+      ]
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  }
+]",BILL-001
+,90,billing_invoicequestion,billing_invoicequestion,None,None,,"[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Wenn Sie Fragen zur Rechnung haben, kann ich Ihnen damit behilflich sein."",
+      ""spokenText"": ""Wenn Sie Fragen zur Rechnung haben, kann ich Ihnen damit behilflich sein."",
+      ""options"": [
+        {
+          ""text"": ""Rechnung einfach erklärt"",
+          ""spokenText"": ""Rechnung einfach erklärt"",
+          ""nluentityvalue"": ""Rechnung einfach erklärt""
+        },
+        {
+          ""text"": ""Warum ist meine Rechnung so hoch?"",
+          ""spokenText"": ""Warum ist meine Rechnung so hoch?"",
+          ""nluentityvalue"": ""Warum ist meine Rechnung so hoch""
+        },
+        {
+          ""text"": ""Mehr zum Thema Rechnung"",
+          ""spokenText"": ""Mehr zum Thema Rechnung"",
+          ""nluentityvalue"": ""Mehr zum Thema Rechnung""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Sie können unter Mein T-Mobile Ihre Rechnung jederzeit einsehen."",
+      ""spokenText"": ""Sie können unter Mein T-Mobile Ihre Rechnung jederzeit einsehen."",
+      ""options"": [
+        {
+          ""text"": ""Meine Rechnung einsehen"",
+          ""spokenText"": ""Meine Rechnung einsehen"",
+          ""url"": ""https://mein.t-mobile.at/myTNT/application.html?menu_id=1011&portlet_id=24""
+        }
+      ]
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  }
+]",BILL-001
+,90,none,None,None,billing_invoicequestion,"[('billing_invoicequestion', 'billexplain')]",{{intent:billing_explain}},
+,90,none,None,None,billing_invoicequestion,"[('billing_invoicequestion', 'billhigh')]",{{intent:billing_high}},
+,90,none,None,None,billing_invoicequestion,"[('billing_invoicequestion', 'moreaboutinvoice')]",{{intent:billing_moreaboutinvoice}},
+billing_explain,100,billing_moreoptions,None,billing_moreoptions,None,,"[
+  {
+    ""ResponseType"": 2,
+    ""ResponseValue"": {
+      ""text"": ""Hier werden die häufigsten Fragen zum Thema Rechnung erklärt."",
+      ""spokenText"": ""Hier werden die häufigsten Fragen zum Thema Rechnung erklärt."",
+      ""video"": {
+        ""thumbnail"": ""https://www.t-mobile.at/images/Haeufige_Fragen_zur_Rechnung_thumb.JPG"",
+        ""url"": ""https://youtu.be/d7DPT9Fywt4""
+      }
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Bestehen weiterhin noch offene Fragen?"",
+      ""spokenText"": ""Bestehen weiterhin noch offene Fragen?"",
+      ""options"": [
+        {
+          ""text"": ""Warum ist meine Rechnung so hoch?"",
+          ""spokenText"": ""Warum ist meine Rechnung so hoch?"",
+          ""nluentityvalue"": ""Warum ist meine Rechnung so hoch""
+        },
+        {
+          ""text"": ""Mehr zum Thema Rechnung"",
+          ""spokenText"": ""Mehr zum Thema Rechnung"",
+          ""nluentityvalue"": ""Mehr zum Thema Rechnung""
+        }
+      ]
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  }
+]",BILL-002
+,100,billing_moreoptions,billing_moreoptions,None,None,,"[
+  {
+    ""ResponseType"": 2,
+    ""ResponseValue"": {
+      ""text"": ""Hier werden die häufigsten Fragen zum Thema Rechnung erklärt."",
+      ""spokenText"": ""Hier werden die häufigsten Fragen zum Thema Rechnung erklärt."",
+      ""video"": {
+        ""thumbnail"": ""https://www.t-mobile.at/images/Haeufige_Fragen_zur_Rechnung_thumb.JPG"",
+        ""url"": ""https://youtu.be/d7DPT9Fywt4""
+      }
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Bestehen weiterhin noch offene Fragen?"",
+      ""spokenText"": ""Bestehen weiterhin noch offene Fragen?"",
+      ""options"": [
+        {
+          ""text"": ""Warum ist meine Rechnung so hoch?"",
+          ""spokenText"": ""Warum ist meine Rechnung so hoch?"",
+          ""nluentityvalue"": ""Warum ist meine Rechnung so hoch""
+        },
+        {
+          ""text"": ""Mehr zum Thema Rechnung"",
+          ""spokenText"": ""Mehr zum Thema Rechnung"",
+          ""nluentityvalue"": ""Mehr zum Thema Rechnung""
+        }
+      ]
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  }
+]",BILL-002
+,90,none,None,None,billing_moreoptions,"[('billing_moreoptions', 'billhigh')]",{{intent:billing_high}},
+,90,none,None,None,billing_moreoptions,"[('billing_moreoptions', 'moreaboutinvoice')]",{{intent:billing_moreaboutinvoice}},
+billing_high,100,billing_newcontract_yesno,None,billing_newcontract_yesno,None,,"[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Haben Sie vielleicht einen neuen Vertrag abgeschlossen?"",
+      ""spokenText"": ""Haben Sie vielleicht einen neuen Vertrag abgeschlossen?"",
+      ""options"": [
+        {
+          ""text"": ""Ja"",
+          ""spokenText"": ""Ja"",
+          ""nluentityvalue"": ""yes""
+        },
+        {
+          ""text"": ""Nein"",
+          ""spokenText"": ""Nein"",
+          ""nluentityvalue"": ""no""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-006
+,90,billing_newcontract_yesno,billing_newcontract_yesno,None,None,,"[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Haben Sie vielleicht einen neuen Vertrag abgeschlossen?"",
+      ""spokenText"": ""Haben Sie vielleicht einen neuen Vertrag abgeschlossen?"",
+      ""options"": [
+        {
+          ""text"": ""Ja"",
+          ""spokenText"": ""Ja"",
+          ""nluentityvalue"": ""yes""
+        },
+        {
+          ""text"": ""Nein"",
+          ""spokenText"": ""Nein"",
+          ""nluentityvalue"": ""no""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-006
+,90,billing_helpsuccess,None,billing_helpsuccess,billing_newcontract_yesno,"[('billing_newcontract_yesno', 'yes')]","[
+  {
+    ""ResponseType"": 2,
+    ""ResponseValue"": {
+      ""text"": ""Ok. Hier mal kurz erklärt was Sie bei Ihrer ersten Rechnung beachten müssen."",
+      ""spokenText"": ""Ok. Hier mal kurz erklärt was Sie bei Ihrer ersten Rechnung beachten müssen."",
+      ""video"": {
+        ""thumbnail"": ""https://www.t-mobile.at/images/Die_erste_T-Mobile_Rechnung_thumb.JPG"",
+        ""url"": ""https://www.youtube.com/watch?v=Opx39BZZH1o""
+      }
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Hier nochmal zum nachlesen."",
+      ""spokenText"": ""Hier nochmal zum nachlesen."",
+      ""options"": [
+        {
+          ""text"": ""Die erste Rechnung"",
+          ""spokenText"": ""Die erste Rechnung"",
+          ""url"": ""http://www.t-mobile.at/rechnung/#ersterechnung""
+        }
+      ]
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Konnte ich Ihnen weiterhelfen?"",
+      ""spokenText"": ""Konnte ich Ihnen weiterhelfen?"",
+      ""options"": [
+        {
+          ""text"": ""Ja"",
+          ""spokenText"": ""Ja"",
+          ""nluentityvalue"": ""yes""
+        },
+        {
+          ""text"": ""Nein"",
+          ""spokenText"": ""Nein"",
+          ""nluentityvalue"": ""no""
+        }
+      ]
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  }
+]",BILL-007
+,90,billing_helpsuccess,billing_helpsuccess,None,billing_newcontract_yesno,"[('billing_newcontract_yesno', 'yes')]","[
+  {
+    ""ResponseType"": 2,
+    ""ResponseValue"": {
+      ""text"": ""Ok. Hier mal kurz erklärt was Sie bei Ihrer ersten Rechnung beachten müssen."",
+      ""spokenText"": ""Ok. Hier mal kurz erklärt was Sie bei Ihrer ersten Rechnung beachten müssen."",
+      ""video"": {
+        ""thumbnail"": ""https://www.t-mobile.at/images/Die_erste_T-Mobile_Rechnung_thumb.JPG"",
+        ""url"": ""https://www.youtube.com/watch?v=Opx39BZZH1o""
+      }
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Hier nochmal zum nachlesen."",
+      ""spokenText"": ""Hier nochmal zum nachlesen."",
+      ""options"": [
+        {
+          ""text"": ""Die erste Rechnung"",
+          ""spokenText"": ""Die erste Rechnung"",
+          ""url"": ""http://www.t-mobile.at/rechnung/#ersterechnung""
+        }
+      ]
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Konnte ich Ihnen weiterhelfen?"",
+      ""spokenText"": ""Konnte ich Ihnen weiterhelfen?"",
+      ""options"": [
+        {
+          ""text"": ""Ja"",
+          ""spokenText"": ""Ja"",
+          ""nluentityvalue"": ""yes""
+        },
+        {
+          ""text"": ""Nein"",
+          ""spokenText"": ""Nein"",
+          ""nluentityvalue"": ""no""
+        }
+      ]
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  }
+]",BILL-007
+,90,billing_tariffchange_yesno,None,billing_tariffchange_yesno,billing_newcontract_yesno,"[('billing_newcontract_yesno', 'no')]","[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Haben Sie vielleicht Ihren Tarif gewechselt?"",
+      ""spokenText"": ""Haben Sie vielleicht Ihren Tarif gewechselt?"",
+      ""options"": [
+        {
+          ""text"": ""Ja"",
+          ""spokenText"": ""Ja"",
+          ""nluentityvalue"":""Ja""
+        },
+        {
+          ""text"": ""Nein"",
+          ""spokenText"": ""Nein"",
+          ""nluentityvalue"":""Nein""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-032
+,90,billing_tariffchange_yesno,billing_tariffchange_yesno,None,billing_newcontract_yesno,"[('billing_newcontract_yesno', 'no')]","[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Haben Sie vielleicht Ihren Tarif gewechselt?"",
+      ""spokenText"": ""Haben Sie vielleicht Ihren Tarif gewechselt?"",
+      ""options"": [
+        {
+          ""text"": ""Ja"",
+          ""spokenText"": ""Ja"",
+          ""nluentityvalue"":""Ja""
+        },
+        {
+          ""text"": ""Nein"",
+          ""spokenText"": ""Nein"",
+          ""nluentityvalue"":""Nein""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-032
+,90,none,None,None,billing_tariffchange_yesno,"[('billing_tariffchange_yesno', 'yes')]",{{intent:billing_tariffchange}},Bill-17
+,90,none,None,None,billing_tariffchange_yesno,"[('billing_tariffchange_yesno', 'no')]",{{intent:billing_high_morereasons}},Bill-10
+,80,none,None,None,billing_helpsuccess,"[('billing_helpsuccess', 'yes')]","[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Juhu. Ich helfe Ihnen gerne jederzeit wieder."",
+      ""spokenText"": ""Juhu. Ich helfe Ihnen gerne jederzeit wieder.""
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-008
+,80,billing_moretopics,None,billing_moretopics,billing_helpsuccess,"[('billing_helpsuccess', 'no')]","[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Hmm, schade… vielleicht hilft Ihnen ja eines dieser Themen weiter?"",
+      ""spokenText"": ""Wenn Sie Fragen zur Rechnung haben, kann ich Ihnen damit behilflich sein."",
+      ""options"": [
+        {
+          ""text"": ""Rechnung einfach erklärt"",
+          ""spokenText"": ""Rechnung einfach erklärt"",
+          ""nluentityvalue"": ""Rechnung einfach erklärt""
+        },
+        {
+          ""text"": ""Weitere Gründe hoher Rechnung"",
+          ""spokenText"": ""Weitere Gründe hoher Rechnung"",
+          ""nluentityvalue"": ""Weitere Grunde hoher Rechnung""
+        },
+        {
+          ""text"": ""Mehr zum Thema Rechnung"",
+          ""spokenText"": ""Mehr zum Thema Rechnung"",
+          ""nluentityvalue"": ""Mehr zum Thema Rechnung""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-009
+,80,billing_moretopics,billing_moretopics,None,billing_helpsuccess,"[('billing_helpsuccess', 'no')]","[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Hmm, schade… vielleicht hilft Ihnen ja eines dieser Themen weiter?"",
+      ""spokenText"": ""Wenn Sie Fragen zur Rechnung haben, kann ich Ihnen damit behilflich sein."",
+      ""options"": [
+        {
+          ""text"": ""Rechnung einfach erklärt"",
+          ""spokenText"": ""Rechnung einfach erklärt"",
+          ""nluentityvalue"": ""Rechnung einfach erklärt""
+        },
+        {
+          ""text"": ""Weitere Gründe hoher Rechnung"",
+          ""spokenText"": ""Weitere Gründe hoher Rechnung"",
+          ""nluentityvalue"": ""Weitere Gründe hoher Rechnung""
+        },
+        {
+          ""text"": ""Mehr zum Thema Rechnung"",
+          ""spokenText"": ""Mehr zum Thema Rechnung"",
+          ""nluentityvalue"": ""Mehr zum Thema Rechnung""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-009
+,70,none,None,None,billing_moretopics,"[('billing_moretopics', 'billexplain')]",{{intent:billing_explain}},BILL-002
+,70,none,None,None,billing_moretopics,"[('billing_moretopics', 'billhighmorereasons')]",{{intent:billing_high_morereasons}},BILL-010
+,70,none,None,None,billing_moretopics,"[('billing_moretopics', 'moreaboutinvoice')]",{{intent:billing_moreaboutinvoice}},BILL-004
+billing_moreaboutinvoice,100,billing_invoiceoptions,None,billing_invoiceoptions,None,,"[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Zu welchem dieser Themen kann ich Ihnen weiterhelfen?"",
+      ""spokenText"": ""Zu welchem dieser Themen kann ich Ihnen weiterhelfen?""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 3,
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    },
+    ""ResponseValue"": {
+      ""cards"": [
+        {
+          ""text"": ""Möchten Sie mehr zum Thema Online-Rechnung erfahren?"",
+          ""spokenText"": ""Möchten Sie mehr zum Thema Online-Rechnung erfahren?"",
+          ""options"": [
+            {
+              ""text"": ""Online Rechnung"",
+              ""spokenText"": ""Online Rechnung"",
+              ""nluentityvalue"": ""Online Rechnung""
+            }
+          ]
+        },
+        {
+          ""text"": ""Haben Sie Fragen zum Thema  Zahlung und Gebühren?"",
+          ""spokenText"": ""Haben Sie Fragen zum Thema  Zahlung und Gebühren?"",
+          ""options"": [
+            {
+              ""text"": ""Zahlung und Gebühren"",
+              ""spokenText"": ""Zahlung und Gebühren"",
+              ""nluentityvalue"": ""Zahlung und Gebuhren""
+            }
+          ]
+        },
+        {
+          ""text"": ""Sie können auch zwischen E-Mail- oder Papierrechnung wählen."",
+          ""spokenText"": ""Sie können auch zwischen E-Mail- oder Papierrechnung wählen."",
+          ""options"": [
+            {
+              ""text"": ""E-Mail- oder Papierrechnung aktivieren"",
+              ""spokenText"": ""E-Mail- oder Papierrechnung aktivieren"",
+              ""nluentityvalue"": ""E-Mail- oder Papierrechnung aktivieren""
+            }
+          ]
+        },
+        {
+          ""text"": ""Oder möchten Sie sich zu Ihren Tarifdetails auf der Rechnung informieren?"",
+          ""spokenText"": ""Oder möchten Sie sich zu Ihren Tarifdetails auf der Rechnung informieren?"",
+          ""options"": [
+            {
+              ""text"": ""Alle Fragen zur Rechnung"",
+              ""spokenText"": ""Alle Fragen zur Rechnung"",
+              ""nluentityvalue"": ""Alle Fragen zur Rechnung""
+            }
+          ]
+        }
+      ]
+    }
+  }
+]",BILL-004
+,90,billing_invoiceoptions,billing_invoiceoptions,None,None,,"[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Zu welchem dieser Themen kann ich Ihnen weiterhelfen?"",
+      ""spokenText"": ""Zu welchem dieser Themen kann ich Ihnen weiterhelfen?""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 3,
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    },
+    ""ResponseValue"": {
+      ""cards"": [
+        {
+          ""text"": ""Möchten Sie mehr zum Thema Online-Rechnung erfahren?"",
+          ""spokenText"": ""Möchten Sie mehr zum Thema Online-Rechnung erfahren?"",
+          ""options"": [
+            {
+              ""text"": ""Online Rechnung"",
+              ""spokenText"": ""Online Rechnung"",
+              ""nluentityvalue"": ""Online Rechnung""
+            }
+          ]
+        },
+        {
+          ""text"": ""Haben Sie Fragen zum Thema  Zahlung und Gebühren?"",
+          ""spokenText"": ""Haben Sie Fragen zum Thema  Zahlung und Gebühren?"",
+          ""options"": [
+            {
+              ""text"": ""Zahlung und Gebühren"",
+              ""spokenText"": ""Zahlung und Gebühren"",
+              ""nluentityvalue"": ""Zahlung und Gebuhren""
+            }
+          ]
+        },
+        {
+          ""text"": ""Sie können auch zwischen E-Mail- oder Papierrechnung wählen."",
+          ""spokenText"": ""Sie können auch zwischen E-Mail- oder Papierrechnung wählen."",
+          ""options"": [
+            {
+              ""text"": ""E-Mail- oder Papierrechnung aktivieren"",
+              ""spokenText"": ""E-Mail- oder Papierrechnung aktivieren"",
+              ""nluentityvalue"": ""E-Mail- oder Papierrechnung aktivieren""
+            }
+          ]
+        },
+        {
+          ""text"": ""Oder möchten Sie sich zu Ihren Tarifdetails auf der Rechnung informieren?"",
+          ""spokenText"": ""Oder möchten Sie sich zu Ihren Tarifdetails auf der Rechnung informieren?"",
+          ""options"": [
+            {
+              ""text"": ""Alle Fragen zur Rechnung"",
+              ""spokenText"": ""Alle Fragen zur Rechnung"",
+              ""nluentityvalue"": ""Alle Fragen zur Rechnung""
+            }
+          ]
+        }
+      ]
+    }
+  }
+]",BILL-004
+,90,none,None,None,billing_invoiceoptions,"[('billing_invoiceoptions', 'onlineInvoice')]","[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""In Ihrer Online Rechnung können Sie Ihre letzten sechs Rechnungen und Einzelgesprächsnachweise einsehen, abspeichern und auch ausdrucken."",
+      ""spokenText"": ""In Ihrer Online Rechnung können Sie Ihre letzten sechs Rechnungen und Einzelgesprächsnachweise einsehen, abspeichern und auch ausdrucken."",
+      ""options"": [
+        {
+          ""text"": ""Zur Online Rechnung "",
+          ""spokenText"": ""Zur Online Rechnung "",
+          ""url"": ""https://mein.t-mobile.at/myTNT/portlet.page?shortcut=ebill""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-026
+,90,none,None,None,billing_invoiceoptions,"[('billing_invoiceoptions', 'payment')]",{{intent:billing_payment}},
+,90,none,None,None,billing_invoiceoptions,"[('billing_invoiceoptions', 'billemailorpaper')]",{{intent:billing_activatebill}},
+,90,none,None,None,billing_invoiceoptions,"[('billing_invoiceoptions', 'allquestions')]",{{intent:billing_invoice_allquestions}},
+billing_payment,100,none,None,None,None,,"[
+  {
+    ""ResponseType"": 3,
+    ""ResponseTrigger"": null,
+    ""ResponseValue"": {
+      ""cards"": [
+        {
+          ""text"": ""In unseren FAQs haben wir die verschiedenen Zahlungsarten aufgelistet, die Ihnen bei T-Mobile zur Verfügung stehen."",
+          ""spokenText"": ""In unseren FAQs haben wir die verschiedenen Zahlungsarten aufgelistet, die Ihnen bei T-Mobile zur Verfügung stehen."",
+          ""options"": [
+            {
+              ""text"": ""Zu den FAQs"",
+              ""spokenText"": ""Zu den FAQs"",
+              ""url"": ""http://www.t-mobile.at/faq/#!rechnung/zahlung/frage/5121""
+            }
+          ]
+        },
+        {
+          ""text"": ""Für die Zahlungsart Bankeinzug können Sie in Mein T-Mobile Ihre Kontodaten eingeben oder ändern."",
+          ""spokenText"": ""Für die Zahlungsart Bankeinzug können Sie in Mein T-Mobile Ihre Kontodaten eingeben oder ändern."",
+          ""options"": [
+            {
+              ""text"": ""Zahlungsart ändern"",
+              ""spokenText"": ""Zahlungsart ändern"",
+              ""url"": ""https://mein.t-mobile.at/myTNT/portlet.page?shortcut=payment""
+            }
+          ]
+        },
+        {
+          ""text"": ""Für die Umstellung auf eine andere Zahlungsart kontaktieren Sie am besten unseren LiveChat."",
+          ""spokenText"": ""Für die Umstellung auf eine andere Zahlungsart kontaktieren Sie am besten unseren LiveChat."",
+          ""options"": [
+            {
+              ""text"": ""LiveChat kontaktieren"",
+              ""spokenText"": ""LiveChat kontaktieren"",
+              ""url"": ""https://www.t-mobile.at/service/#livechat""
+            }
+          ]
+        }
+      ]
+    }
+  }
+]",BILL-027
+billing_high_morereasons,100,billing_morereason,None,billing_morereason,None,,"[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Dies können weitere Gründe dafür sein, dass Ihre Rechnung höher ausgefallen ist, als erwartet:"",
+      ""spokenText"": ""Dies können weitere Gründe dafür sein, dass Ihre Rechnung höher ausgefallen ist, als erwartet:""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 3,
+    ""ResponseTrigger"": null,
+    ""ResponseValue"": {
+      ""cards"": [
+        {
+          ""text"": ""Sie haben Ihre Freiminuten überschritten"",
+          ""spokenText"": ""Sie haben Ihre Freiminuten überschritten"",
+          ""options"": [
+            {
+              ""text"": ""Freiminuten"",
+              ""spokenText"": ""Freiminuten"",
+              ""nluentityvalue"": ""Freiminuten""
+            }
+          ]
+        },
+        {
+          ""text"": ""Mehrwertdienste gewählt: SMS, MMS, Sonderrufnummer"",
+          ""spokenText"": ""Mehrwertdienste gewählt: SMS, MMS, Sonderrufnummer"",
+          ""options"": [
+            {
+              ""text"": ""Mehrwertdienste"",
+              ""spokenText"": ""Mehrwertdienste"",
+              ""nluentityvalue"": ""Mehrwertdienste""
+            }
+          ]
+        },
+        {
+          ""text"": ""Es handelt sich um eine Nachverrechnung"",
+          ""spokenText"": ""Es handelt sich um eine Nachverrechnung"",
+          ""options"": [
+            {
+              ""text"": ""Nachverrechnung"",
+              ""spokenText"": ""Nachverrechnung"",
+              ""nluentityvalue"": ""Nachverrechnung""
+            }
+          ]
+        },
+        {
+          ""text"": ""Die jährliche Servicepauschale wurde verrechnet"",
+          ""spokenText"": ""Die jährliche Servicepauschale wurde verrechnet"",
+          ""options"": [
+            {
+              ""text"": ""Servicepauschale"",
+              ""spokenText"": ""Servicepauschale"",
+              ""nluentityvalue"": ""Servicepauschale""
+            }
+          ]
+        },
+        {
+          ""text"": ""Es handelt sich um Auslandsgebühren"",
+          ""spokenText"": ""Es handelt sich um Auslandsgebühren"",
+          ""options"": [
+            {
+              ""text"": ""Auslandsgebühren"",
+              ""spokenText"": ""Auslandsgebühren"",
+              ""nluentityvalue"": ""Auslandsgebuhren""
+            }
+          ]
+        }
+      ]
+    }
+  }
+]",BILL-010
+,90,billing_morereason,billing_morereason,None,None,,"[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Dies können weitere Gründe dafür sein, dass Ihre Rechnung höher ausgefallen ist, als erwartet:"",
+      ""spokenText"": ""Dies können weitere Gründe dafür sein, dass Ihre Rechnung höher ausgefallen ist, als erwartet:""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 3,
+    ""ResponseTrigger"": null,
+    ""ResponseValue"": {
+      ""cards"": [
+        {
+          ""text"": ""Sie haben Ihre Freiminuten überschritten"",
+          ""spokenText"": ""Sie haben Ihre Freiminuten überschritten"",
+          ""options"": [
+            {
+              ""text"": ""Freiminuten"",
+              ""spokenText"": ""Freiminuten"",
+              ""nluentityvalue"": ""Freiminuten""
+            }
+          ]
+        },
+        {
+          ""text"": ""Mehrwertdienste gewählt: SMS, MMS, Sonderrufnummer"",
+          ""spokenText"": ""Mehrwertdienste gewählt: SMS, MMS, Sonderrufnummer"",
+          ""options"": [
+            {
+              ""text"": ""Mehrwertdienste"",
+              ""spokenText"": ""Mehrwertdienste"",
+              ""nluentityvalue"": ""Mehrwertdienste""
+            }
+          ]
+        },
+        {
+          ""text"": ""Es handelt sich um eine Nachverrechnung"",
+          ""spokenText"": ""Es handelt sich um eine Nachverrechnung"",
+          ""options"": [
+            {
+              ""text"": ""Nachverrechnung"",
+              ""spokenText"": ""Nachverrechnung"",
+              ""nluentityvalue"": ""Nachverrechnung""
+            }
+          ]
+        },
+        {
+          ""text"": ""Die jährliche Servicepauschale wurde verrechnet"",
+          ""spokenText"": ""Die jährliche Servicepauschale wurde verrechnet"",
+          ""options"": [
+            {
+              ""text"": ""Servicepauschale"",
+              ""spokenText"": ""Servicepauschale"",
+              ""nluentityvalue"": ""Servicepauschale""
+            }
+          ]
+        },
+        {
+          ""text"": ""Es handelt sich um Auslandsgebühren"",
+          ""spokenText"": ""Es handelt sich um Auslandsgebühren"",
+          ""options"": [
+            {
+              ""text"": ""Auslandsgebühren"",
+              ""spokenText"": ""Auslandsgebühren"",
+              ""nluentityvalue"": ""Auslandsgebuhren""
+            }
+          ]
+        }
+      ]
+    }
+  }
+]",BILL-010
+,90,none,None,None,billing_morereason,"[('billing_morereason', 'freeminutes')]","[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""In Ihrem persönlichen Kundenportal Mein T-Mobile, die My T-Mobile App oder per SMS können Sie Ihre Freieinheiten jederzeit selbst abfragen."",
+      ""spokenText"": ""In Ihrem persönlichen Kundenportal Mein T-Mobile, die My T-Mobile App oder per SMS können Sie Ihre Freieinheiten jederzeit selbst abfragen."",
+      ""options"": [
+        {
+          ""text"": ""Zu Mein T-Mobile"",
+          ""spokenText"": ""Zu Mein T-Mobile"",
+          ""url"": ""https://mein.t-mobile.at/myTNT/portlet.page?shortcut=freieinheiten""
+        },
+        {
+          ""text"": ""Zur My T-Mobile App"",
+          ""spokenText"": ""Zur My T-Mobile App"",
+          ""url"": ""https://www.t-mobile.at/Mein-t-Mobile/tApps/myT_app.php""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Per SMS senden Sie bitte den Text mit 'MIN', 'SMS' oder 'WEB' an die 2323. Im Anschluss erhalten Sie von uns den jeweiligen Freieinheitenstand."",
+      ""spokenText"": ""Per SMS senden Sie bitte den Text mit 'MIN', 'SMS' oder 'WEB' an die 2323. Im Anschluss erhalten Sie von uns den jeweiligen Freieinheitenstand.""
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Falls Sie mit Ihren aktuellen Freieinheiten nicht auskommen, prüfen Sie am besten, ob ein Tarifwechsel auf unsere aktuellen Tarife für Sie Sinn macht oder nutzen Sie eines unserer vielen Zusatzpakete."",
+      ""spokenText"": ""Falls Sie mit Ihren aktuellen Freieinheiten nicht auskommen, prüfen Sie am besten, ob ein Tarifwechsel auf unsere aktuellen Tarife für Sie Sinn macht oder nutzen Sie eines unserer vielen Zusatzpakete."",
+      ""options"": [
+        {
+          ""text"": ""Tarifwechsel"",
+          ""spokenText"": ""Tarifwechsel"",
+          ""url"": ""https://mein.t-mobile.at/myTNT/product.page""
+        },
+        {
+          ""text"": ""Tarife"",
+          ""spokenText"": ""Tarife"",
+          ""url"": ""http://shop.t-mobile.at/tarife/voice""
+        },
+        {
+          ""text"": ""Zusatzpakete"",
+          ""spokenText"": ""Zusatzpakete"",
+          ""url"": ""http://www.t-mobile.at/tarife/zusatzpakete/""
+        }
+      ]
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  }
+]",BILL-011
+,90,none,None,None,billing_morereason,"[('billing_morereason', 'valueaddedservices')]",{{intent:billing_valueaddedservices}},
+,90,none,None,None,billing_morereason,"[('billing_morereason', 'accounts')]","[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Wenn Sie kurz vor Ende des Abrechnungszeitraumes Datenverbindungen herstellen oder im Ausland telefonieren sollten, kann es passieren, dass diese Kosten erst in der nachfolgenden Rechnung abgerechnet werden."",
+      ""spokenText"": ""Wenn Sie kurz vor Ende des Abrechnungszeitraumes Datenverbindungen herstellen oder im Ausland telefonieren sollten, kann es passieren, dass diese Kosten erst in der nachfolgenden Rechnung abgerechnet werden.""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Unser Tipp: Auf Ihrem Einzelgesprächsnachweis werden alle genutzten Leistungen im Detail aufgeschlüsselt. Hier können Sie eventuelle Nachverrechnungen anhand des Datums erkennen."",
+      ""spokenText"": ""Unser Tipp: Auf Ihrem Einzelgesprächsnachweis werden alle genutzten Leistungen im Detail aufgeschlüsselt. Hier können Sie eventuelle Nachverrechnungen anhand des Datums erkennen.""
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  }
+]",BILL-013
+,90,billing_listservices,None,billing_listservices,billing_morereason,"[('billing_morereason', 'servicepackage')]","[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""In der Servicepauschale, für 22 € brutto im Jahr, werden häufig in Anspruch genommene, kostenpflichtige Leistungen zusammengefasst."",
+      ""spokenText"": ""In der Servicepauschale, für 22 euro brutto im Jahr, werden häufig in Anspruch genommene, kostenpflichtige Leistungen zusammengefasst.""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""T-Mobile KundInnen, die ab 01.07.2011 einen Vertragsabschluss oder einen Tarifwechsel in einen neuen Tarif durchgeführt haben, wird jährlich die Servicepauschale in der Höhe von 22,- € in Rechnung gestellt."",
+      ""spokenText"": ""T-Mobile KundInnen, die ab 01.07.2011 einen Vertragsabschluss oder einen Tarifwechsel in einen neuen Tarif durchgeführt haben, wird jährlich die Servicepauschale in der Höhe von 22,- € in Rechnung gestellt.""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Eine Übersicht, der inkludierten Leistungen, finden Sie in unserer Auflistung."",
+      ""spokenText"": ""Eine Übersicht, der inkludierten Leistungen, finden Sie in unserer Auflistung."",
+      ""options"": [
+        {
+          ""text"": ""Alle Leistungen"",
+          ""spokenText"": ""Alle Leistungen"",
+          ""nluentityvalue"": ""Alle Leistungen""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-014
+,90,billing_listservices,billing_listservices,None,billing_morereason,"[('billing_morereason', 'servicepackage')]","[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""In der Servicepauschale, für 22 € brutto im Jahr, werden häufig in Anspruch genommene, kostenpflichtige Leistungen zusammengefasst."",
+      ""spokenText"": ""In der Servicepauschale, für 22 euro brutto im Jahr, werden häufig in Anspruch genommene, kostenpflichtige Leistungen zusammengefasst.""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""T-Mobile KundInnen, die ab 01.07.2011 einen Vertragsabschluss oder einen Tarifwechsel in einen neuen Tarif durchgeführt haben, wird jährlich die Servicepauschale in der Höhe von 22,- € in Rechnung gestellt."",
+      ""spokenText"": ""T-Mobile KundInnen, die ab 01.07.2011 einen Vertragsabschluss oder einen Tarifwechsel in einen neuen Tarif durchgeführt haben, wird jährlich die Servicepauschale in der Höhe von 22,- € in Rechnung gestellt.""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Eine Übersicht, der inkludierten Leistungen, finden Sie in unserer Auflistung."",
+      ""spokenText"": ""Eine Übersicht, der inkludierten Leistungen, finden Sie in unserer Auflistung."",
+      ""options"": [
+        {
+          ""text"": ""Alle Leistungen"",
+          ""spokenText"": ""Alle Leistungen"",
+          ""nluentityvalue"": ""Alle Leistungen""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-014
+,80,none,None,None,billing_listservices,"[('billing_listservices', 'listservices')]","[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""In Ihrer Servicepauschale sind folgende Leistungen inkludiert: * SIM-Karte Vertragsabschluss * Sperre Diebstahl * Sperre Mehrwertnummern * Beauskunftung Freieinheiten/laufende Kosten * Änderung Kundenkennwort * Entsperrung Serviceportal * Deaktivierung Sprachbox * Sperre Zahlungsdienste * GPRS-Sperre durch den Kundenservice * PUK-Beauskunftung Serviceline/im Shop * Adressänderung "",
+      ""spokenText"": ""In Ihrer Servicepauschale sind folgende Leistungen inkludiert: * SIM-Karte Vertragsabschluss * Sperre Diebstahl * Sperre Mehrwertnummern * Beauskunftung Freieinheiten/laufende Kosten * Änderung Kundenkennwort * Entsperrung Serviceportal * Deaktivierung Sprachbox * Sperre Zahlungsdienste * GPRS-Sperre durch den Kundenservice * PUK-Beauskunftung Serviceline/im Shop * Adressänderung ""
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-025
+,90,none,None,None,billing_morereason,"[('billing_morereason', 'foreigncharges')]","[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Wenn Sie ins Ausland telefonieren oder unsere Dienste außerhalb Österreichs nutzen, können dafür je nach Tarif Zusatzkosten entstehen."",
+      ""spokenText"": ""Wenn Sie ins Ausland telefonieren oder unsere Dienste außerhalb Österreichs nutzen, können dafür je nach Tarif Zusatzkosten entstehen.""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Weitere Informationen dazu finden in unserem Reiseplaner."",
+      ""spokenText"": ""Weitere Informationen dazu finden in unserem Reiseplaner."",
+      ""options"": [
+        {
+          ""text"": ""Reiseplaner"",
+          ""spokenText"": ""Reiseplaner"",
+          ""url"": ""http://www.t-mobile.at/roaming/""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-015
+billing_valueaddedservices,100,none,None,None,None,,"[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Mehrwertdienste können Rufnummern mit speziellen Vorwahlen sein, wie z.B. 0900er Nummern. Auch SMS oder MMS Dienste können durch eingehende oder ausgehende Nachrichten Kosten verursachen."",
+      ""spokenText"": ""Mehrwertdienste können Rufnummern mit speziellen Vorwahlen sein, wie z.B. 0900er Nummern. Auch SMS oder MMS Dienste können durch eingehende oder ausgehende Nachrichten Kosten verursachen.""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Falls Sie diese Dienste auf Ihrer Rechnung haben, finden Sie die genauen Details dazu in Ihrem Einzelgesprächsnachweis. Diese Die können Sie auch jederzeit über Mein T-Mobile selbst sperren."",
+      ""spokenText"": ""Falls Sie diese Dienste auf Ihrer Rechnung haben, finden Sie die genauen Details dazu in Ihrem Einzelgesprächsnachweis. Diese Die können Sie auch jederzeit über Mein T-Mobile selbst sperren."",
+      ""options"": [
+        {
+          ""text"": ""Einzelgesprächsnachweis"",
+          ""spokenText"": ""Einzelgesprächsnachweis"",
+          ""url"": ""https://mein.t-mobile.at/myTNT/portlet.page?shortcut=egn""
+        },
+        {
+          ""text"": ""Dienste sperren"",
+          ""spokenText"": ""Dienste sperren"",
+          ""url"": ""https://mein.t-mobile.at/myTNT/portlet.page?shortcut=barrings""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-012
+billing_tariffchange,100,billing_tariffchangehelp,None,billing_tariffchangehelp,None,,"[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Ok. Dann kann ich Ihnen gerne folgende Fragen dazu beantworten:"",
+      ""spokenText"": ""Ok. Dann kann ich Ihnen gerne folgende Fragen dazu beantworten:"",
+      ""options"": [
+        {
+          ""text"": ""Was passiert mit der Grundgebühr?"",
+          ""spokenText"": ""Was passiert mit der Grundgebühr?"",
+          ""nluentityvalue"": ""Was passiert mit der Grundgebuhr?""
+        },
+        {
+          ""text"": ""Wie verrechnen sich Freieinheiten?"",
+          ""spokenText"": ""Wie verrechnen sich Freieinheiten?"",
+          ""nluentityvalue"": ""Wie verrechnen sich Freieinheiten?""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-017
+,90,billing_tariffchangehelp,billing_tariffchangehelp,None,None,,"[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Ok. Dann kann ich Ihnen gerne folgende Fragen dazu beantworten:"",
+      ""spokenText"": ""Ok. Dann kann ich Ihnen gerne folgende Fragen dazu beantworten:"",
+      ""options"": [
+        {
+          ""text"": ""Was passiert mit der Grundgebühr?"",
+          ""spokenText"": ""Was passiert mit der Grundgebühr?"",
+          ""nluentityvalue"": ""Was passiert mit der Grundgebuhr?""
+        },
+        {
+          ""text"": ""Wie verrechnen sich Freieinheiten?"",
+          ""spokenText"": ""Wie verrechnen sich Freieinheiten"",
+          ""nluentityvalue"": ""Wie verrechnen sich Freieinheiten""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-017
+,90,billing_adviceoptions,None,billing_adviceoptions,billing_tariffchangehelp,"[('billing_tariffchangehelp', 'basicfeequery')]","[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Eine genaue Erklärung dazu finden Sie hier:"",
+      ""spokenText"": ""Eine genaue Erklärung dazu finden Sie hier:"",
+      ""options"": [
+        {
+          ""text"": ""Gebühren bei Wechsel"",
+          ""spokenText"": ""Gebühren bei Wechsel"",
+          ""url"": ""https://www.t-mobile.at/faq/#!rechnung/erste+rechnung/frage/2759""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Immer noch Fragen? Weitere Hilfe bekommen Sie hier…"",
+      ""spokenText"": ""Immer noch Fragen? Weitere Hilfe bekommen Sie hier…"",
+      ""options"": [
+        {
+          ""text"": ""Häufige Fragen zur Rechnung"",
+          ""spokenText"": ""Häufige Fragen zur Rechnung"",
+          ""nluentityvalue"": ""Häufige Fragen zur Rechnung""
+        },
+        {
+          ""text"": ""Frage unsere Community"",
+          ""spokenText"": ""Frage unsere Community"",
+          ""nluentityvalue"": ""Frage unsere Community""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-018
+,90,billing_adviceoptions,billing_adviceoptions,None,billing_tariffchangehelp,"[('billing_tariffchangehelp', 'basicfeequery')]","[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Eine genaue Erklärung dazu finden Sie hier:"",
+      ""spokenText"": ""Eine genaue Erklärung dazu finden Sie hier:"",
+      ""options"": [
+        {
+          ""text"": ""Gebühren bei Wechsel"",
+          ""spokenText"": ""Gebühren bei Wechsel"",
+          ""url"": ""https://www.t-mobile.at/faq/#!rechnung/erste+rechnung/frage/2759""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Immer noch Fragen? Weitere Hilfe bekommen Sie hier…"",
+      ""spokenText"": ""Immer noch Fragen? Weitere Hilfe bekommen Sie hier…"",
+      ""options"": [
+        {
+          ""text"": ""Häufige Fragen zur Rechnung"",
+          ""spokenText"": ""Häufige Fragen zur Rechnung"",
+          ""nluentityvalue"": ""Häufige Fragen zur Rechnung""
+        },
+        {
+          ""text"": ""Frage unsere Community"",
+          ""spokenText"": ""Frage unsere Community"",
+          ""nluentityvalue"": ""Frage unsere Community""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-018
+,90,none,None,None,billing_tariffchangehelp,"[('billing_tariffchangehelp', 'freeunitsquery')]",{{intent:billing_freeunits}},
+,80,none,None,None,billing_adviceoptions,"[('billing_adviceoptions', 'community')]","[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Stellen Sie jetzt ihre Frage an die Community."",
+      ""spokenText"": ""Stellen Sie jetzt ihre Frage an die Community."",
+      ""options"": [
+        {
+          ""text"": ""Zur T-Mobile Community"",
+          ""spokenText"": ""Zur T-Mobile Community"",
+          ""url"": ""https://community.t-mobile.at/""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-019
+,80,none,None,None,billing_adviceoptions,"[('billing_adviceoptions', 'faq')]",{{intent:billing_invoice_allquestions}},
+billing_freeunits,100,billing_contractcondition_yesno,None,billing_contractcondition_yesno,None,,"[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Haben Sie Ihren Handy-Vertrag nach dem 15.09.2015 bei uns abgeschlossen?"",
+      ""spokenText"": ""Haben Sie Ihren Handy-Vertrag nach dem 15.09.2015 bei uns abgeschlossen?"",
+      ""options"": [
+        {
+          ""text"": ""Ja"",
+          ""spokenText"": ""Ja"",
+          ""nluentityvalue"": ""yes""
+        },
+        {
+          ""text"": ""Nein"",
+          ""spokenText"": ""Nein"",
+          ""nluentityvalue"": ""no""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-020
+,90,billing_contractcondition_yesno,billing_contractcondition_yesno,None,None,,"[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Haben Sie Ihren Handy-Vertrag nach dem 15.09.2015 bei uns abgeschlossen?"",
+      ""spokenText"": ""Haben Sie Ihren Handy-Vertrag nach dem 15.09.2015 bei uns abgeschlossen?"",
+      ""options"": [
+        {
+          ""text"": ""Ja"",
+          ""spokenText"": ""Ja"",
+          ""nluentityvalue"": ""yes""
+        },
+        {
+          ""text"": ""Nein"",
+          ""spokenText"": ""Nein"",
+          ""nluentityvalue"": ""no""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-020
+,90,billing_helpful_yesno,None,billing_helpful_yesno,billing_contractcondition_yesno,"[('billing_contractcondition_yesno', 'yes')]","[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Dann haben Sie einen neuen Vertrag. Seit 15.09.2014 gibt es bei T-Mobile neue Tarife, bei welchen Freiminuten und SMS unlimitiert sind."",
+      ""spokenText"": ""Dann haben Sie einen neuen Vertrag. Seit 15.09.2014 gibt es bei T-Mobile neue Tarife, bei welchen Freiminuten und SMS unlimitiert sind.""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Konnte ich Ihnen damit helfen?"",
+      ""spokenText"": ""Konnte ich Ihnen damit helfen?"",
+      ""options"": [
+        {
+          ""text"": ""Ja"",
+          ""spokenText"": ""Ja"",
+          ""nluentityvalue"": ""yes""
+        },
+        {
+          ""text"": ""Nein"",
+          ""spokenText"": ""Nein"",
+          ""nluentityvalue"": ""no""
+        }
+      ]
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  }
+]",BILL-021
+,90,billing_helpful_yesno,billing_helpful_yesno,None,billing_contractcondition_yesno,"[('billing_contractcondition_yesno', 'yes')]","[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Dann haben Sie einen neuen Vertrag. Seit 15.09.2014 gibt es bei T-Mobile neue Tarife, bei welchen Freiminuten und SMS unlimitiert sind."",
+      ""spokenText"": ""Dann haben Sie einen neuen Vertrag. Seit 15.09.2014 gibt es bei T-Mobile neue Tarife, bei welchen Freiminuten und SMS unlimitiert sind.""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Konnte ich Ihnen damit helfen?"",
+      ""spokenText"": ""Konnte ich Ihnen damit helfen?"",
+      ""options"": [
+        {
+          ""text"": ""Ja"",
+          ""spokenText"": ""Ja"",
+          ""nluentityvalue"": ""yes""
+        },
+        {
+          ""text"": ""Nein"",
+          ""spokenText"": ""Nein"",
+          ""nluentityvalue"": ""no""
+        }
+      ]
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  }
+]",BILL-021
+,90,billing_helpful_yesno,None,billing_helpful_yesno,billing_contractcondition_yesno,"[('billing_contractcondition_yesno', 'no')]","[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Anscheinend haben Sie einen alten Vertrag. Im alten Tarifmodell kann es bei Freiminuten und Frei-SMS zu Limitüberschreitungen kommen, da bei einem verkürzten Abrechnungszeitraum auch die Freieinheiten des Tarifs nur anteilsmäßig verfügbar sind. Sollten Sie noch einen Daten-Tarif oder  eine Daten-Option verwenden, müssen Sie auch hier auf Ihren Verbrauch achten."",
+      ""spokenText"": ""Anscheinend haben Sie einen alten Vertrag. Im alten Tarifmodell kann es bei Freiminuten und Frei-SMS zu Limitüberschreitungen kommen, da bei einem verkürzten Abrechnungszeitraum auch die Freieinheiten des Tarifs nur anteilsmäßig verfügbar sind. Sollten Sie noch einen Daten-Tarif oder  eine Daten-Option verwenden, müssen Sie auch hier auf Ihren Verbrauch achten.""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Konnte ich Ihnen weiterhelfen?"",
+      ""spokenText"": ""Konnte ich Ihnen weiterhelfen?"",
+      ""options"": [
+        {
+          ""text"": ""Ja"",
+          ""spokenText"": ""Ja"",
+          ""nluentityvalue"": ""yes""
+        },
+        {
+          ""text"": ""Nein"",
+          ""spokenText"": ""Nein"",
+          ""nluentityvalue"": ""no""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-022
+,90,billing_helpful_yesno,billing_helpful_yesno,None,billing_contractcondition_yesno,"[('billing_contractcondition_yesno', 'no')]","[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Anscheinend haben Sie einen alten Vertrag. Im alten Tarifmodell kann es bei Freiminuten und Frei-SMS zu Limitüberschreitungen kommen, da bei einem verkürzten Abrechnungszeitraum auch die Freieinheiten des Tarifs nur anteilsmäßig verfügbar sind. Sollten Sie noch einen Daten-Tarif oder  eine Daten-Option verwenden, müssen Sie auch hier auf Ihren Verbrauch achten."",
+      ""spokenText"": ""Anscheinend haben Sie einen alten Vertrag. Im alten Tarifmodell kann es bei Freiminuten und Frei-SMS zu Limitüberschreitungen kommen, da bei einem verkürzten Abrechnungszeitraum auch die Freieinheiten des Tarifs nur anteilsmäßig verfügbar sind. Sollten Sie noch einen Daten-Tarif oder  eine Daten-Option verwenden, müssen Sie auch hier auf Ihren Verbrauch achten.""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Konnte ich Ihnen weiterhelfen?"",
+      ""spokenText"": ""Konnte ich Ihnen weiterhelfen?"",
+      ""options"": [
+        {
+          ""text"": ""Ja"",
+          ""spokenText"": ""Ja"",
+          ""nluentityvalue"": ""yes""
+        },
+        {
+          ""text"": ""Nein"",
+          ""spokenText"": ""Nein"",
+          ""nluentityvalue"": ""no""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-022
+,80,none,None,None,billing_helpful_yesno,"[('billing_helpful_yesno', 'yes')]","[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Juhu. Ich helfe Ihnen gerne jederzeit wieder."",
+      ""spokenText"": ""Juhu. Ich helfe Ihnen gerne jederzeit wieder.""
+    },
+    ""ResponseTrigger"": null
+  }
+]
+",BILL-008
+,80,billing_moretopics,None,billing_moretopics,billing_helpful_yesno,"[('billing_helpful_yesno', 'no')]","[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Hmm, schade… vielleicht hilft Ihnen ja eines dieser Themen weiter?"",
+      ""spokenText"": ""Hmm, schade… vielleicht hilft Ihnen ja eines dieser Themen weiter?"",
+      ""options"": [
+        {
+          ""text"": ""Weitere Kostenfaktoren"",
+          ""spokenText"": ""Weitere Kostenfaktoren"",
+          ""nluentityvalue"": ""Weitere Kostenfaktoren""
+        },
+        {
+          ""text"": ""Mehr zum Thema Rechnung"",
+          ""spokenText"": ""Mehr zum Thema Rechnung"",
+          ""nluentityvalue"": ""Mehr zum Thema Rechnung""
+        },
+        {
+          ""text"": ""Kundenservice kontaktieren"",
+          ""spokenText"": ""Kundenservice kontaktieren"",
+          ""nluentityvalue"": ""Kundenservice kontaktieren""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-024
+,80,billing_moretopics,billing_moretopics,None,billing_helpful_yesno,"[('billing_helpful_yesno', 'no')]","[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Hmm, schade… vielleicht hilft Ihnen ja eines dieser Themen weiter?"",
+      ""spokenText"": ""Hmm, schade… vielleicht hilft Ihnen ja eines dieser Themen weiter?"",
+      ""options"": [
+        {
+          ""text"": ""Weitere Kostenfaktoren"",
+          ""spokenText"": ""Weitere Kostenfaktoren"",
+          ""nluentityvalue"": ""Weitere Kostenfaktoren""
+        },
+        {
+          ""text"": ""Mehr zum Thema Rechnung"",
+          ""spokenText"": ""Mehr zum Thema Rechnung"",
+          ""nluentityvalue"": ""Mehr zum Thema Rechnung""
+        },
+        {
+          ""text"": ""Kundenservice kontaktieren"",
+          ""spokenText"": ""Kundenservice kontaktieren"",
+          ""nluentityvalue"": ""Kundenservice kontaktieren""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-024
+,70,none,None,None,billing_moretopics,"[('billing_moretopics', 'billhighmorereasons')]",{{intent:billing_high}},
+,70,none,None,None,billing_moretopics,"[('billing_moretopics', 'moreaboutinvoice')]",{{intent:billing_moreaboutinvoice}},
+,70,none,None,None,billing_moretopics,"[('billing_moretopics', 'customerservice')]",{{intent:generic_customerservice}},
+billing_activatebill,100,none,None,None,None,,"[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Gerne senden wir Ihnen Ihre Rechnung monatlich per E-Mail zu. Zusätzlich erhalten Sie Ihre Rechnung als elektronisch signiertes PDF, welches auch für eine Vorlage beim Finanzamt gültig ist."",
+      ""spokenText"": ""Gerne senden wir Ihnen Ihre Rechnung monatlich per E-Mail zu. Zusätzlich erhalten Sie Ihre Rechnung als elektronisch signiertes PDF, welches auch für eine Vorlage beim Finanzamt gültig ist.""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Alternativ können Sie sich auch für eine Papierrechnung entscheiden, die Umstellung erfolgt in jedem Fall ganz einfach über Mein T-Mobile."",
+      ""spokenText"": ""Alternativ können Sie sich auch für eine Papierrechnung entscheiden, die Umstellung erfolgt in jedem Fall ganz einfach über Mein T-Mobile."",
+      ""options"": [
+        {
+          ""text"": ""Zu Mein T-Mobile"",
+          ""spokenText"": ""Zu Mein T-Mobile"",
+          ""url"": ""https://mein.t-mobile.at/myTNT/portlet.page?shortcut=ebill""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-028
+billing_invoice_allquestions,90,billing_moreoptions1,None,billing_moreoptions1,None,,"[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Kann ich Ihnen vielleicht mit einem dieser Themen weiterhelfen?"",
+      ""spokenText"": ""Kann ich Ihnen vielleicht mit einem dieser Themen weiterhelfen?""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 3,
+    ""ResponseTrigger"": null,
+    ""ResponseValue"": {
+      ""cards"": [
+        {
+          ""text"": ""Zu wenige Freiminuten?"",
+          ""spokenText"": ""Zu wenige Freiminuten?"",
+          ""options"": [
+            {
+              ""text"": ""Freiminuten"",
+              ""spokenText"": ""Freiminuten"",
+              ""nluentityvalue"": ""Freiminuten""
+            }
+          ]
+        },
+        {
+          ""text"": ""Was sind Nachverrechnungen?"",
+          ""spokenText"": ""Was sind Nachverrechnungen?"",
+          ""options"": [
+            {
+              ""text"": ""Nachverrechnungen"",
+              ""spokenText"": ""Nachverrechnungen"",
+              ""nluentityvalue"": ""Nachverrechnungen""
+            }
+          ]
+        },
+        {
+          ""text"": ""Was sind Mehrwertdienste?"",
+          ""spokenText"": ""Was sind Mehrwertdienste?"",
+          ""options"": [
+            {
+              ""text"": ""Mehrwertdienste"",
+              ""spokenText"": ""Mehrwertdienste"",
+              ""nluentityvalue"": ""Mehrwertdienste""
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Immer noch Fragen offen geblieben? Hier stehen Ihnen noch weitere Infos zur Verfügung."",
+      ""spokenText"": ""Immer noch Fragen offen geblieben? Hier stehen Ihnen noch weitere Infos zur Verfügung."",
+      ""options"": [
+        {
+          ""text"": ""Alles zur Rechnung"",
+          ""spokenText"": ""Alles zur Rechnung"",
+          ""url"": ""http://www.t-mobile.at/rechnung/""
+        }
+      ]
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  }
+]
+",BILL-005
+,80,billing_moreoptions1,billing_moreoptions1,None,None,,"[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Kann ich Ihnen vielleicht mit einem dieser Themen weiterhelfen?"",
+      ""spokenText"": ""Kann ich Ihnen vielleicht mit einem dieser Themen weiterhelfen?""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 3,
+    ""ResponseTrigger"": null,
+    ""ResponseValue"": {
+      ""cards"": [
+        {
+          ""text"": ""Zu wenige Freiminuten?"",
+          ""spokenText"": ""Zu wenige Freiminuten?"",
+          ""options"": [
+            {
+              ""text"": ""Freiminuten"",
+              ""spokenText"": ""Freiminuten"",
+              ""nluentityvalue"": ""Freiminuten""
+            }
+          ]
+        },
+        {
+          ""text"": ""Was sind Nachverrechnungen?"",
+          ""spokenText"": ""Was sind Nachverrechnungen?"",
+          ""options"": [
+            {
+              ""text"": ""Nachverrechnungen"",
+              ""spokenText"": ""Nachverrechnungen"",
+              ""nluentityvalue"": ""Nachverrechnungen""
+            }
+          ]
+        },
+        {
+          ""text"": ""Was sind Mehrwertdienste?"",
+          ""spokenText"": ""Was sind Mehrwertdienste?"",
+          ""options"": [
+            {
+              ""text"": ""Mehrwertdienste"",
+              ""spokenText"": ""Mehrwertdienste"",
+              ""nluentityvalue"": ""Mehrwertdienste""
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Immer noch Fragen offen geblieben? Hier stehen Ihnen noch weitere Infos zur Verfügung."",
+      ""spokenText"": ""Immer noch Fragen offen geblieben? Hier stehen Ihnen noch weitere Infos zur Verfügung."",
+      ""options"": [
+        {
+          ""text"": ""Alles zur Rechnung"",
+          ""spokenText"": ""Alles zur Rechnung"",
+          ""url"": ""http://www.t-mobile.at/rechnung/""
+        }
+      ]
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  }
+]
+",BILL-005
+,70,none,None,None,billing_moreoptions1,"[('billing_moreoptions1','freeminutes')]","[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Im Monat Ihrer Anmeldung oder bei einem Tarifwechsel werden die Freiminuten anteilsmäßig ab dem Datum Ihrer Anmeldung bzw. Ihres Tarifwechsels berechnet. Selbstverständlich bezahlen Sie auch die monatliche Grundgebühr nur anteilsmäßig. Im Folgemonat werden Ihre Freiminuten zur Gänze berücksichtigt."",
+      ""spokenText"": ""Im Monat Ihrer Anmeldung oder bei einem Tarifwechsel werden die Freiminuten anteilsmäßig ab dem Datum Ihrer Anmeldung bzw. Ihres Tarifwechsels berechnet. Selbstverständlich bezahlen Sie auch die monatliche Grundgebühr nur anteilsmäßig. Im Folgemonat werden Ihre Freiminuten zur Gänze berücksichtigt.""
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-029
+,70,none,None,None,billing_moreoptions1,"[('billing_moreoptions1', 'reconciliation')]",{{intent:billing_afterbills}},
+,70,none,None,None,billing_moreoptions1,"[('billing_moreoptions1', 'valueaddedservices')]","[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Mehrwertdienste sind Dienste, die mit einer speziellen Gebühr abgerechnet werden. Ein Beispiel für eine Mehrwertnummer ist die T-Mobile Technik Hotline unter 0900 676 676 - hier kostet eine Gesprächsminute € 0,88. Anbieter von Mehrwertdiensten sind dazu verpflichtet, die Gebühr für den jeweiligen Dienst bekannt zu machen - die Höhe der Gebühr, erkennen Sie an der jeweiligen Vorwahl."",
+      ""spokenText"": ""Mehrwertdienste sind Dienste, die mit einer speziellen Gebühr abgerechnet werden. Ein Beispiel für eine Mehrwertnummer ist die T-Mobile Technik Hotline unter 0900 676 676 - hier kostet eine Gesprächsminute € 0,88. Anbieter von Mehrwertdiensten sind dazu verpflichtet, die Gebühr für den jeweiligen Dienst bekannt zu machen - die Höhe der Gebühr, erkennen Sie an der jeweiligen Vorwahl.""
+    },
+    ""ResponseTrigger"": null
+  }
+]",BILL-031
+billing_afterbills,100,none,None,None,None,,"[
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Wenn Sie zum Beispiel im Ausland telefoniert haben (Roaming) - kann es sein, dass die Gesprächsdaten zeitverzögert an uns weitergegeben werden. Diese Leistungen werden dann nicht auf Ihrer aktuellen, sondern erst auf einer kommenden Rechnung vergebührt. Telefonate im Ausland können bis zu drei Monate im Nachhinein vergebührt werden."",
+      ""spokenText"": ""Wenn Sie zum Beispiel im Ausland telefoniert haben (Roaming) - kann es sein, dass die Gesprächsdaten zeitverzögert an uns weitergegeben werden. Diese Leistungen werden dann nicht auf Ihrer aktuellen, sondern erst auf einer kommenden Rechnung vergebührt. Telefonate im Ausland können bis zu drei Monate im Nachhinein vergebührt werden.""
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 0,
+    ""ResponseValue"": {
+      ""text"": ""Unser Tipp: Auf Ihrem Einzelgesprächsnachweis werden alle genutzten Leistungen im Detail aufgeschlüsselt. Hier können Sie eventuelle Nachverrechnungen anhand des Datums erkennen."",
+      ""spokenText"": ""Unser Tipp: Auf Ihrem Einzelgesprächsnachweis werden alle genutzten Leistungen im Detail aufgeschlüsselt. Hier können Sie eventuelle Nachverrechnungen anhand des Datums erkennen.""
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  }
+]",BILL-030
