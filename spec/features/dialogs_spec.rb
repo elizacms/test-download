@@ -26,8 +26,8 @@ feature 'Dialogs', :js do
 
     click_button 'Create Dialog'
 
-    # sleep 0.5
-sleep 3
+    sleep 0.5
+
     expect( page ).to have_content 'destination'
   end
 
