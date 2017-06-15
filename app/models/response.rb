@@ -1,6 +1,6 @@
 class Response
   include Mongoid::Document
-  
+
   field :response_type,    type:String
   field :response_trigger, type:String
   field :response_value,   type:String

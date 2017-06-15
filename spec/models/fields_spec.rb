@@ -11,9 +11,25 @@ describe Field do
     'mturk_field' => 'Turkey Field'
   }}
   let(:fields_path  ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/fields/*.json" }
-  let(:field_from_db){ Field.last }
+  let(:field_from_db){ Field.last                     }
   let!(:intent){ skill.intents.create!(intent_params) }
   let!(:field ){ intent.entities.create!(valid_field) }
+  let!(:intent2){ create :intent, skill: skill        }
+  let( :action_file_url ){ IntentFileManager.new.file_url( intent2 ) }
+  let(  :file_data       ){{
+    id: 'get_ride',
+    fields:[
+      {name: 'destination', type: 'Text', must_resolve: false , mturk_field: 'Uber.Destination'}
+    ],
+    mturk_response_fields: 'uber.get.ride'
+  }}
+  let!(:serialized_field){{
+    id: field.id,
+    name: 'some name',
+    type: 'some type',
+    mturk_field: 'Turkey Field',
+    must_resolve: false
+  }}
 
   specify 'id(name) should be unique' do
     FactoryGirl.create( :field, intent: intent )
@@ -80,6 +96,25 @@ describe Field do
       expect(Field.count).to eq 1
       expect(File.exist?(intent_file(file_id))).to eq false
       expect( Dir[fields_path].count ).to eq 0
+    end
+  end
+
+  describe '#serialize' do
+    it 'works' do
+      expect(field.serialize).to eq( serialized_field )
+    end
+  end
+
+  describe 'Action File' do
+    specify 'create a field and it should update the action file' do
+      FactoryGirl.create( :field, intent: intent2 )
+      expect( File.read( action_file_url ) ).to eq( file_data.to_json )
+    end
+
+    specify 'destroy a field and it should update the action file' do
+      field = FactoryGirl.create( :field, intent: intent2 )
+      field.destroy
+      expect( File.read( action_file_url )).to eq( file_data.merge!(fields: []).to_json )
     end
   end
 end

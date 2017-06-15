@@ -3,5 +3,6 @@ FactoryGirl.define do
     name 'destination'
     type 'Text'
     mturk_field 'Uber.Destination'
+    intent
   end
 end

@@ -9,8 +9,7 @@ class IntentsController < ApplicationController
                 only: [ :edit, :fields, :dialogs ]
 
   def index
-    @intents = Intent.all.select{|intent| intent.in_review == false}
-                         .map{|intent| intent.attrs.merge!(id: intent.id)}
+    @intents = Intent.all_files.map { |file| IntentFileManager.new.load_from( file ) }
   end
 
   def new
@@ -49,7 +48,7 @@ class IntentsController < ApplicationController
   end
 
   def destroy
-    name = @intent.attrs[:name]
+    name = @intent.name
     @intent.destroy
 
     redirect_to(
@@ -72,7 +71,7 @@ class IntentsController < ApplicationController
   end
 
   def dialogs
-    @fields = @intent.entities.map {|e| e.attrs[:name]}
+    @fields = @intent.entities.map {|e| e.name}
   end
 
   def api_file_lock

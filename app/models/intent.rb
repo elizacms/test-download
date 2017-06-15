@@ -1,7 +1,7 @@
 class Intent
   include Mongoid::Document
   include Mongoid::Timestamps
-  
+
   belongs_to :skill
   has_many :entities, class_name:'Field'
   has_many :dialogs
@@ -18,6 +18,10 @@ class Intent
   def attrs
     attributes
   end
+
+  after_save -> { IntentFileManager.new.save( self ) }
+
+  after_destroy -> { IntentFileManager.new.delete_file( self ) }
 
   def lock( user_id )
     FileLock.create( intent: self, user_id: user_id)
@@ -37,10 +41,6 @@ class Intent
     end
   end
 
-  def self.file_system_tracked_attributes
-    %w(name description mturk_response)
-  end
-
   def self.find_by_name( name )
     Intent.all_files.each do |file|
       if JSON.parse(File.read(file), symbolize_names: true)[:name] == name
@@ -52,7 +52,15 @@ class Intent
     return nil
   end
 
+  def action_file
+    fields = entities.map do |e|
+      {name: e.name, type: e.type, must_resolve: e.must_resolve, mturk_field: e.mturk_field}
+    end
+
+    { id: name, fields: fields, mturk_response_fields: mturk_response }.to_json
+  end
+
   def self.all_files
-    Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json"]
+    Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/actions/*.action"]
   end
 end

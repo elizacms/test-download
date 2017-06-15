@@ -1,36 +1,35 @@
 class Field
   include Mongoid::Document
   include Mongoid::Timestamps
-  include FileSystem::CrudAble
 
-  field :name,        type: String
-  field :type,        type: String
-  field :mturk_field, type: String
+  field :name,         type: String
+  field :type,         type: String
+  field :mturk_field,  type: String
+  field :must_resolve, type:Mongoid::Boolean, default:false
 
   belongs_to :intent
-  validate :unique_name
 
   default_scope -> { order( name: :ASC ) }
 
-  def self.file_system_tracked_attributes
-    %w(name type mturk_field)
+  after_save -> { save_to_file }
+
+  after_destroy -> { save_to_file }
+
+  def field_url
+    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/actions/#{intent.skill.name}_#{intent.name}.action"
   end
 
   def serialize
-    self.attrs.merge!(id: self.id)
+    {
+      id: id,
+      name: name,
+      type: type,
+      mturk_field: mturk_field,
+      must_resolve: must_resolve
+    }
   end
 
-  def unique_name
-    all_names = Field.all_files.delete_if { |f| f =~ /#{self.id.to_s}/ }.map do |f|
-      JSON.parse( File.read(f), symbolize_names: true )[:name]
-    end
-
-    if all_names.include? name
-      errors.add :name, 'must be unique'
-    end
-  end
-
-  def self.all_files
-    Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/fields/*.json"]
+  def save_to_file
+    IntentFileManager.new.save(intent.reload)
   end
 end

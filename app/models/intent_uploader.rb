@@ -36,7 +36,7 @@ class IntentUploader
         )
       end
 
-      return "Intent '#{intent.attrs[:name]}' has been uploaded."
+      return "Intent '#{intent.name}' has been uploaded."
     end
   end
 end

@@ -4,10 +4,11 @@ describe Intent do
     "description"    => "some description",
     "mturk_response" => "some response"
   }}
-  let(  :skill          ){ create :skill }
-  let(  :intent_from_db ){ Intent.first  }
-  let!( :intent         ){ skill.intents.create!(valid_intent) }
-  let(  :intents_path   ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" }
+  let(  :skill           ){ create :skill                                       }
+  let(  :intent_from_db  ){ Intent.first                                        }
+  let!( :intent          ){ skill.intents.create!(valid_intent)                 }
+  let(  :intents_path    ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" }
+  let(  :action_file_url ){ IntentFileManager.new.file_url( intent )                }
 
   describe '::find_by_name(name)' do
     it 'should find the intent by name' do
@@ -141,6 +142,24 @@ describe Intent do
 
       expect( intent.has_file_lock? ).to eq false
       expect( intent.file_lock      ).to eq nil
+    end
+  end
+
+  describe 'Action File' do
+    specify 'create intent should create action file' do
+      expect( File.exist?(action_file_url) ).to eq true
+    end
+
+    specify 'update intent should update action file' do
+      intent.update(name: 'James Intent')
+
+      expect( JSON.parse( File.read(action_file_url), symbolize_names: true )[:id])
+      .to eq 'James Intent'
+    end
+
+    specify 'destroy intent should update action file' do
+      intent.destroy
+      expect( File.exist?(action_file_url) ).to eq false
     end
   end
 end

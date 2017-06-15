@@ -10,5 +10,5 @@ class Skill
 
   validates_presence_of   :name
   validates_uniqueness_of :name, case_sensetive:false
-  validates_uniqueness_of :web_hook
+  # validates_uniqueness_of :web_hook
 end

@@ -1,7 +1,7 @@
 class Dialog
   include Mongoid::Document
   include Mongoid::Timestamps
-  
+
   field :intent_id,      type:String
   field :priority,       type:Integer
   field :awaiting_field, type:Array, default:[]
