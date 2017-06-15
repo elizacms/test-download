@@ -23,6 +23,10 @@ class Intent
 
   after_destroy -> { IntentFileManager.new.delete_file( self ) }
 
+  def attrs
+    attributes
+  end
+
   def lock( user_id )
     FileLock.create( intent: self, user_id: user_id)
   end

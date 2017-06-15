@@ -1,6 +1,6 @@
 describe DialogFileManager do
   let( :dialogs ){ DialogFileManager.new.load file }
-  
+
   let!( :skill   ){ create :skill }
   let!( :intent  ){ create :intent, skill: skill, name: 'billing_mybill' }
 
@@ -61,7 +61,7 @@ describe DialogFileManager do
   describe '#save' do
     let( :file ){ 'spec/data-files/billing_1.csv' }
     let( :output_file ){ "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/billing.csv" }
-    
+
     specify 'success' do
       DialogFileManager.new.save dialogs
 
@@ -72,7 +72,7 @@ describe DialogFileManager do
   describe '#save overwrites existing file' do
     let( :file ){ 'spec/data-files/billing_1.csv' }
     let( :output_file ){ "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/billing.csv" }
-    
+
     before do
       File.write output_file, 'old data'
       expect( File.read output_file ).to eq 'old data'

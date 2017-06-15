@@ -13,7 +13,7 @@ class DialogFileManager
       next d1 if row2.nil?
 
       hash2 = row2.to_hash.symbolize_keys
-      hash2 = Hash[ 
+      hash2 = Hash[
         hash2.map do | k,v |
           value = v.present? ? v : hash1[ k ]
           [ k, value ]
@@ -27,12 +27,6 @@ class DialogFileManager
     end.flatten
   end
 
-  def save dialogs
-    name = dialogs.first.intent.name.split( '_' ).first
-    filename = "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/#{ name }.csv"
-    
-    File.write filename, serialize( dialogs )
-  end
 
   private
 
@@ -44,19 +38,18 @@ class DialogFileManager
       attrs = d.attributes.dup.symbolize_keys
       attrs[ :intent_id ] = d.intent.name
       attrs[ :eliza_de  ] = %Q/"#{ formatted }"/
-      
+
       fields.map{| k | attrs[ k ]}.join ','
     end
 
     header_row + rows.join( "\n" )
   end
 
-
   def serialize_response r
     response_trigger = r[ :response_trigger ].present? ?
           JSON.parse( r[ :response_trigger ]) :
           r[ :response_trigger ]
-        
+
     { ResponseType:    r[ :response_type ].to_i            ,
       ResponseValue:   JSON.parse( r[ :response_value ])   ,
       ResponseTrigger: response_trigger }
@@ -82,15 +75,15 @@ class DialogFileManager
     dup[ :missing        ] = Array( hash[ :missing        ])
     dup[ :unresolved     ] = Array( hash[ :unresolved     ])
     dup[ :present        ] = Array( hash[ :present        ])
-    
+
     dup[ :responses ] = JSON.parse( hash[ :eliza_de ]).map do | r |
       r.symbolize_keys!
 
-      response_trigger = r[ :ResponseTrigger ].present? ? 
+      response_trigger = r[ :ResponseTrigger ].present? ?
         JSON.pretty_generate( r[ :ResponseTrigger ]) :
         nil
 
-      Response.new( 
+      Response.new(
         response_type:    r[ :ResponseType ],
         response_value:   JSON.pretty_generate( r[ :ResponseValue ]),
         response_trigger: response_trigger
@@ -98,7 +91,7 @@ class DialogFileManager
     end
 
     dup.delete :eliza_de
-    
+
     dup
   end
 end
