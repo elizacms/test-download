@@ -27,6 +27,14 @@ class DialogFileManager
     end.flatten
   end
 
+  def save dialogs
+    name = dialogs.first.intent.name.split( '_' ).first
+    filename = "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/#{ name }.csv"
+    
+    File.write filename, serialize( dialogs )
+  end
+
+  private
 
   def serialize dialogs
     rows = dialogs.map do | d |
@@ -43,8 +51,6 @@ class DialogFileManager
     header_row + rows.join( "\n" )
   end
 
-
-  private
 
   def serialize_response r
     response_trigger = r[ :response_trigger ].present? ?

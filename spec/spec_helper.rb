@@ -52,7 +52,7 @@ RSpec.configure do |config|
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/responses" )
 
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intent_responses_csv" )
-    FileUtils.cp( 'spec/data-files/get_ride.csv', "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intent_responses_csv/get_ride.csv" )
+    # FileUtils.cp( 'spec/data-files/get_ride.csv', "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intent_responses_csv/get_ride.csv" )
 
     Rugged::Repository.init_at("#{ENV['NLU_CMS_PERSISTENCE_PATH']}")
     ActionMailer::Base.deliveries = []
