@@ -1,3 +1,5 @@
+<%= render partial: 'lock' %>
+
 <%= link_to(
   "&larr; Skills".html_safe,
   skill_intents_path( @skill ),
@@ -11,7 +13,7 @@
   data: {
     confirm: "Are you sure you want to delete this intent?"
   },
-  class: "btn sm red pull-right"
+  class: "btn md red pull-right"
 ) %>
 
 <h1>Edit <%= @intent.attrs[:name] %> Details</h1>
