@@ -23,7 +23,7 @@ describe 'File Lock Spec' do
     expect(Intent.first.file_lock.user_id).to eq admin.id.to_s
   end
 
-  it 'should show the "Show only view" card when there is a file lock' do
+  it 'should show the "Another user is currently editing this Intent" card when there is a file lock' do
     stub_identity_token
     stub_identity_account_for user.email
     visit '/login/success?code=0123abc'
@@ -34,6 +34,6 @@ describe 'File Lock Spec' do
 
     sleep 0.5
 
-    expect( page ).to have_content 'Show only view'
+    expect( page ).to have_content 'Another user is currently editing this Intent'
   end
 end
