@@ -43,8 +43,9 @@ class DialogFileManager
       formatted = JSON.pretty_generate( responses ).gsub( '"', '""' )
 
       attrs = d.attributes.dup.symbolize_keys
-      attrs[ :intent_id ] = d.intent.name
-      attrs[ :eliza_de  ] = %Q/"#{ formatted }"/
+      attrs[ :intent_id     ] = d.intent.name
+      attrs[ :entity_values ] = %Q/"#{ attrs[ :entity_values ].join ',' }"/
+      attrs[ :eliza_de      ] = %Q/"#{ formatted }"/
 
       fields.map{| k | attrs[ k ]}.join ','
     end
@@ -82,6 +83,7 @@ class DialogFileManager
     dup[ :missing        ] = Array( hash[ :missing        ])
     dup[ :unresolved     ] = Array( hash[ :unresolved     ])
     dup[ :present        ] = Array( hash[ :present        ])
+    dup[ :entity_values  ] = Array( hash[ :entity_values  ])
 
     dup[ :responses ] = JSON.parse( hash[ :eliza_de ]).map do | r |
       r.symbolize_keys!
