@@ -3,24 +3,25 @@ feature 'Dialogs', :js do
   let!( :skill           ){ create :skill                         }
   let!( :role            ){ create :role, user: dev, skill: skill }
   let!( :intent          ){ create :intent, skill: skill          }
-  let!( :field           ){ create :field,  intent: intent        }
+  let!( :field           ){ build  :field                         }
   let!( :field_data_type ){ create :field_data_type               }
 
   before do
+    IntentFileManager.new.save( intent, [field] )
     stub_identity_token
     stub_identity_account_for dev.email
 
     visit '/login/success?code=0123abc'
     click_link 'Manage Intents'
     click_link 'Edit Details'
-    click_link 'Add Dialogs'
+    click_link 'Edit Dialogs'
     click_button 'Create a Dialog'
   end
 
   specify 'Renders rule' do
     within '.dialog-form' do
-      select field.attrs[:name], from: 'unresolved-field'
-      select field.attrs[:name], from: 'awaiting-field'
+      select 'destination', from: 'unresolved-field'
+      select 'destination', from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'
@@ -39,8 +40,8 @@ feature 'Dialogs', :js do
 
   specify 'Saves Dialog to CSV' ,:skip do
     within '.dialog-form' do
-      select field.attrs[:name], from: 'unresolved-field'
-      select field.attrs[:name], from: 'awaiting-field'
+      select 'destination', from: 'unresolved-field'
+      select 'destination', from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'
@@ -53,8 +54,8 @@ feature 'Dialogs', :js do
 
   specify 'User can update a dialog' do
     within '.dialog-form' do
-      select field.attrs[:name], from: 'unresolved-field'
-      select field.attrs[:name], from: 'awaiting-field'
+      select 'destination', from: 'unresolved-field'
+      select 'destination', from: 'awaiting-field'
       fill_in :comments, with: 'Here are my comments'
     end
 
@@ -76,8 +77,8 @@ feature 'Dialogs', :js do
 
   specify 'User can cancel updating a dialog' do
     within '.dialog-form' do
-      select field.attrs[:name], from: 'unresolved-field'
-      select field.attrs[:name], from: 'awaiting-field'
+      select 'destination', from: 'unresolved-field'
+      select 'destination', from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'
@@ -102,8 +103,8 @@ feature 'Dialogs', :js do
 
   specify 'User can duplicate a dialog' do
     within '.dialog-form' do
-      select field.attrs[:name], from: 'unresolved-field'
-      select field.attrs[:name], from: 'awaiting-field'
+      select 'destination', from: 'unresolved-field'
+      select 'destination', from: 'awaiting-field'
       fill_in :priority, with: 120
     end
 
@@ -112,7 +113,7 @@ feature 'Dialogs', :js do
     find( '.fa-clone' ).click
 
     within '.dialog-form' do
-      select field.attrs[:name], from: 'present-field'
+      select 'destination', from: 'present-field'
       select 'None',     from: 'awaiting-field'
 
       click_button 'Create Dialog'
@@ -120,19 +121,19 @@ feature 'Dialogs', :js do
 
     expect( Dialog.count                ).to eq 2
     expect( Dialog.first.attrs[:priority]       ).to eq 120
-    expect( Dialog.first.attrs[:unresolved]     ).to eq [field.attrs[:name]]
-    expect( Dialog.first.attrs[:awaiting_field] ).to eq [field.attrs[:name]]
+    expect( Dialog.first.attrs[:unresolved]     ).to eq ['destination']
+    expect( Dialog.first.attrs[:awaiting_field] ).to eq ['destination']
     expect( Dialog.first.attrs[:present]        ).to eq ['None', '']
     expect( Dialog.last.attrs[:priority]        ).to eq 120
-    expect( Dialog.last.attrs[:unresolved]      ).to eq [field.attrs[:name]]
+    expect( Dialog.last.attrs[:unresolved]      ).to eq ['destination']
     expect( Dialog.last.attrs[:awaiting_field]  ).to eq ['None']
-    expect( Dialog.last.attrs[:present]         ).to eq [field.attrs[:name], '']
+    expect( Dialog.last.attrs[:present]         ).to eq ['destination', '']
   end
 
   specify 'Deleting a dialog shows confirm' do
     within '.dialog-form' do
-      select field.attrs[:name], from: 'missing-field'
-      select field.attrs[:name], from: 'awaiting-field'
+      select 'destination', from: 'missing-field'
+      select 'destination', from: 'awaiting-field'
     end
 
     click_button 'Create Dialog'
@@ -146,7 +147,7 @@ feature 'Dialogs', :js do
 
   specify 'User can add an entity and a value for the entity' do
     within '.dialog-form' do
-      select field.attrs[:name], from: 'entity-value-field'
+      select 'destination', from: 'entity-value-field'
       fill_in 'entity-value', with: 'my wonderful value'
     end
 
@@ -169,8 +170,8 @@ feature 'Dialogs', :js do
         select 'Time delay in seconds', from: 'trigger_type'
         fill_in 'timeDelayInSecs', with: '5'
 
-        select field.attrs[:name], from: 'unresolved-field'
-        select field.attrs[:name], from: 'awaiting-field'
+        select 'destination', from: 'unresolved-field'
+        select 'destination', from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -215,8 +216,8 @@ feature 'Dialogs', :js do
         end
 
 
-        select field.attrs[:name], from: 'unresolved-field'
-        select field.attrs[:name], from: 'awaiting-field'
+        select 'destination', from: 'unresolved-field'
+        select 'destination', from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -302,8 +303,8 @@ feature 'Dialogs', :js do
           fill_in 'timeDelayInSecs', with: '5'
         end
 
-        select field.attrs[:name], from: 'unresolved-field'
-        select field.attrs[:name], from: 'awaiting-field'
+        select 'destination', from: 'unresolved-field'
+        select 'destination', from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -349,8 +350,8 @@ feature 'Dialogs', :js do
           fill_in 'timeDelayInSecs',      with: '6'
         end
 
-        select field.attrs[:name], from: 'unresolved-field'
-        select field.attrs[:name], from: 'awaiting-field'
+        select 'destination', from: 'unresolved-field'
+        select 'destination', from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -407,8 +408,8 @@ feature 'Dialogs', :js do
           fill_in 'timeDelayInSecs',      with: '6'
         end
 
-        select field.attrs[:name], from: 'unresolved-field'
-        select field.attrs[:name], from: 'awaiting-field'
+        select 'destination', from: 'unresolved-field'
+        select 'destination', from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -430,8 +431,8 @@ feature 'Dialogs', :js do
           fill_in 'timeDelayInSecs',      with: '7'
         end
 
-        select field.attrs[:name], from: 'unresolved-field'
-        select field.attrs[:name], from: 'awaiting-field'
+        select 'destination', from: 'unresolved-field'
+        select 'destination', from: 'awaiting-field'
 
         click_button 'Update Dialog'
       end
@@ -483,8 +484,8 @@ feature 'Dialogs', :js do
           fill_in 'timeDelayInSecs',      with: '6'
         end
 
-        select field.attrs[:name], from: 'unresolved-field'
-        select field.attrs[:name], from: 'awaiting-field'
+        select 'destination', from: 'unresolved-field'
+        select 'destination', from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -624,8 +625,8 @@ feature 'Dialogs', :js do
           fill_in 'timeDelayInSecs',      with: '4'
         end
 
-        select field.attrs[:name], from: 'unresolved-field'
-        select field.attrs[:name], from: 'awaiting-field'
+        select 'destination', from: 'unresolved-field'
+        select 'destination', from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -694,8 +695,8 @@ feature 'Dialogs', :js do
           page.all('input.dialog-input.response_trigger')[1].click
         end
 
-        select field.attrs[:name], from: 'unresolved-field'
-        select field.attrs[:name], from: 'awaiting-field'
+        select 'destination', from: 'unresolved-field'
+        select 'destination', from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'
@@ -738,8 +739,8 @@ feature 'Dialogs', :js do
           page.all('input.dialog-input.response_trigger')[1].click
         end
 
-        select field.attrs[:name], from: 'unresolved-field'
-        select field.attrs[:name], from: 'awaiting-field'
+        select 'destination', from: 'unresolved-field'
+        select 'destination', from: 'awaiting-field'
       end
 
       click_button 'Create Dialog'

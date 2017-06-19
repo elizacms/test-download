@@ -6,6 +6,11 @@ describe 'api_file_lock' do
   let!( :intent2   ){ create :intent, skill: skill, name: 'other skill'   }
   let!( :file_lock ){ create :file_lock, intent: intent, user_id: user.id }
 
+  before do
+    IntentFileManager.new.save( intent, []  )
+    IntentFileManager.new.save( intent2, [] )
+  end
+
   describe 'when file_lock exists' do
     it 'should return true when current_user is not attached to the lock' do
       allow_any_instance_of( IntentsController ).to receive(:current_user).and_return(user2)

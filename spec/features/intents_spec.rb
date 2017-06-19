@@ -2,8 +2,10 @@ feature 'Intents pages' do
   let(  :developer ){ create :user                                }
   let!( :skill     ){ create :skill                               }
   let!( :role      ){ create :role, user: developer, skill: skill }
+  let!( :intent    ){ create :intent, skill: skill                }
 
   before do
+    IntentFileManager.new.save( intent, [] )
     stub_identity_token
     stub_identity_account_for developer.email
   end
@@ -14,12 +16,11 @@ feature 'Intents pages' do
 
     click_link 'Intents'
 
-    expect( page ).to have_content '0 Intents'
+    expect( page ).to have_content '1 Intent'
   end
 
   describe "Admin can see Intents even when they don't own the skill" do
     let(  :admin   ){ create :user, email: 'admin@iamplus.com' }
-    let!( :intent  ){ create :intent, skill: skill             }
     let!( :role    ){ create :role, user: admin, skill: skill  }
 
     before do
@@ -100,21 +101,18 @@ feature 'Intents pages' do
   end
 
   describe 'Developer can visit the edit page' do
-    let!( :intent ){ create :intent, skill: skill }
-
     specify do
       visit '/login/success?code=0123abc'
       click_link 'Intents'
 
       click_link 'Edit Details'
 
-      expect( current_path ).to eq "/skills/#{skill.id}/intents/#{intent.id}/edit"
+      expect( current_path ).to eq edit_skill_intent_path(skill, Intent.last)
       expect( page ).to have_content "Edit #{intent.name}"
     end
   end
 
-  describe "Developer can update the Intent's name" do
-    let!( :intent       ){ create :intent, skill: skill }
+  describe "Developer can update the Intent's description" do
     let(  :updated_name ){ "get_ride_now" }
 
     specify do
@@ -124,18 +122,16 @@ feature 'Intents pages' do
       click_link 'Edit Details'
 
       within 'form' do
-        fill_in :name, with: updated_name
+        fill_in :description, with: 'New Awesome!'
         click_button 'Update'
       end
 
-      expect( page ).to have_content "Intent #{updated_name} updated."
-      expect( Intent.first.attrs[:name] ).to eq updated_name
+      expect( page ).to have_content "Intent #{intent.name} updated."
+      expect( Intent.first.description ).to eq 'New Awesome!'
     end
   end
 
   describe 'Developer can delete an intent' do
-    let!( :intent ){ create :intent, skill: skill }
-
     specify do
       visit '/login/success?code=0123abc'
       click_link 'Intents'
@@ -143,7 +139,7 @@ feature 'Intents pages' do
       click_link 'Edit Details'
       click_link 'Delete this intent'
 
-      expect( Intent.count ).to eq 1
+      expect( Intent.count ).to eq 2
       expect( page ).to have_content "Destroyed intent with name: #{ intent.name }"
       expect(
         File.exist?("#{ENV['NLU_PERSISTENCE_PATH']}/intents/#{intent.id}.json")
@@ -152,7 +148,6 @@ feature 'Intents pages' do
   end
 
   describe 'Developer cannot see another developers intents' do
-    let!( :intent      ){ create :intent, skill: skill            }
     let!( :developer_2 ){ create :user, email: "dev2@iamplus.com" }
 
     before do

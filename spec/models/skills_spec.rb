@@ -2,11 +2,15 @@ describe Skill do
   let!( :skill  ){ create :skill }
   let!( :intent ){ create :intent, skill: skill }
 
+  before do
+    IntentFileManager.new.save( intent, [] )
+  end
+
   specify 'Destroy callbacks for intents' do
     expect( Intent.count ).to eq 1
     expect( Skill.count ).to eq 1
 
-    file_path = IntentFileManager.new.file_url( intent )
+    file_path = IntentFileManager.new.file_path( intent )
 
     skill.destroy
 

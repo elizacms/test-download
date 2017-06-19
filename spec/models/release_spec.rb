@@ -8,7 +8,7 @@ describe Release do
 
   before do
     DialogFileManager.new.save([dialog])
-    IntentFileManager.new.save( intent )
+    IntentFileManager.new.save( intent, [] )
   end
 
   let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name}.csv",

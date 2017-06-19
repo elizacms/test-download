@@ -11,16 +11,8 @@
     <% if Intent.find_by( id: @intent.id ) %>
       <div class="col-xs-12 col-md-6">
         <br>
-        <%= link_to(
-          @intent.entities.count > 0 ? 'Edit Fields' : 'Add Fields',
-          fields_page_path( @skill, @intent ),
-          class: 'btn lg black'
-        ) %>
-        <%= link_to(
-          Dialog.where(intent_id: @intent.id).count > 0 ? 'Edit Dialogs' : 'Add Dialogs',
-          dialogs_page_path( @skill, @intent ),
-          class: 'btn lg black'
-        ) %>
+        <%= link_to( 'Edit Fields', fields_page_path( @skill, @intent ), class: 'btn lg black' ) %>
+        <%= link_to( 'Edit Dialogs', dialogs_page_path( @skill, @intent ), class: 'btn lg black' ) %>
       </div>
     <% end %>
   </div>

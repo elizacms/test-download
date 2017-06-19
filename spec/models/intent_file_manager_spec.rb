@@ -1,25 +1,48 @@
 describe IntentFileManager do
-  let!( :skill           ){ create :skill                            }
-  let!( :intent          ){ create :intent, skill: skill             }
-  let(  :action_file_url ){ IntentFileManager.new.file_url( intent ) }
-  let(  :file_data       ){{
+  let!( :skill            ){ create :skill                             }
+  let!( :intent           ){ create :intent, skill: skill              }
+  let(  :field            ){ build :field                              }
+  let(  :action_file_path ){ IntentFileManager.new.file_path( intent ) }
+  let(  :file_data        ){{
     id: 'get_ride',
     fields:[
-      {name: 'destination', type: 'Text', must_resolve: false , mturk_field: 'Uber.Destination'}
+      {id: 'destination', type: 'Text', must_resolve: false , mturk_field: 'Uber.Destination'}
     ],
     mturk_response_fields: 'uber.get.ride'
   }}
 
-  describe '::load_from file' do
+  describe '::load_intent_from file' do
     specify 'should return the data parsed into a ruby hash' do
-      expect( IntentFileManager.new.load_from( action_file_url ) ).to eq( Intent.last )
+      IntentFileManager.new.save( intent, [field] )
+
+      expect( IntentFileManager.new.load_intent_from( action_file_path )[:intent].name )
+      .to eq( 'get_ride' )
+      expect( IntentFileManager.new.load_intent_from( action_file_path )[:intent].mturk_response )
+      .to eq( 'uber.get.ride' )
+      expect( IntentFileManager.new.load_intent_from( action_file_path )[:fields].first.name )
+      .to eq( 'destination' )
+      expect( IntentFileManager.new.load_intent_from( action_file_path )[:fields].first.type )
+      .to eq( 'Text' )
+      expect( IntentFileManager.new.load_intent_from( action_file_path )[:fields].first.mturk_field )
+      .to eq( 'Uber.Destination' )
     end
   end
 
   describe '::save' do
     specify do
-      IntentFileManager.new.save( intent )
-      expect( File.read( action_file_url ) ).to eq( file_data.merge!(fields: []).to_json )
+      IntentFileManager.new.save( intent, [field] )
+
+      expect( File.read( action_file_path ) ).to eq( file_data.to_json )
+    end
+  end
+
+  describe 'Does not save multipule copies of same intent' do
+    specify do
+      IntentFileManager.new.save( intent, [field] )
+
+      sleep 1
+      expect( Skill.count  ).to eq 1
+      expect( Intent.count ).to eq 1
     end
   end
 end

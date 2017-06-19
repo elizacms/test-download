@@ -9,6 +9,8 @@ class Skill
   field :web_hook, type:String
 
   validates_presence_of   :name
-  validates_uniqueness_of :name, case_sensetive:false
+  validates_uniqueness_of :name, case_sensetive: false
   validates_uniqueness_of :web_hook
+
+  after_destroy -> { intents.each {|intent| IntentFileManager.new.delete_file(intent)} }
 end

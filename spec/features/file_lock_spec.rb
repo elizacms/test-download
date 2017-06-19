@@ -8,6 +8,7 @@ describe 'File Lock Spec' do
 
 
   before do
+    IntentFileManager.new.save( intent, [] )
     stub_identity_token
     stub_identity_account_for admin.email
     visit '/login/success?code=0123abc'
@@ -20,7 +21,7 @@ describe 'File Lock Spec' do
   end
 
   it 'should lock the intent when the Edit Details button is clicked' do
-    expect(Intent.first.file_lock.user_id).to eq admin.id.to_s
+    expect(intent.reload.file_lock.user_id).to eq admin.id.to_s
   end
 
   it 'should show the "Show only view" card when there is a file lock' do

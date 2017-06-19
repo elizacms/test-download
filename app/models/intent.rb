@@ -3,7 +3,6 @@ class Intent
   include Mongoid::Timestamps
 
   belongs_to :skill
-  has_many :entities, class_name:'Field'
   has_many :dialogs
   embeds_one :file_lock
 
@@ -14,14 +13,6 @@ class Intent
 
   validates_presence_of :name
   validate :unique_name
-
-  def attrs
-    attributes
-  end
-
-  after_save -> { IntentFileManager.new.save( self ) }
-
-  after_destroy -> { IntentFileManager.new.delete_file( self ) }
 
   def attrs
     attributes
@@ -56,9 +47,9 @@ class Intent
     return nil
   end
 
-  def action_file
+  def action_file entities
     fields = entities.map do |e|
-      {name: e.name, type: e.type, must_resolve: e.must_resolve, mturk_field: e.mturk_field}
+      {id: e.name, type: e.type, must_resolve: e.must_resolve, mturk_field: e.mturk_field}
     end
 
     { id: name, fields: fields, mturk_response_fields: mturk_response }.to_json

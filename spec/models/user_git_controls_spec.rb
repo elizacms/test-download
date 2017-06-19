@@ -14,14 +14,14 @@ describe 'User git controls' do
   let!( :dialog      ){ create :dialog, intent: intent                             }
   let!( :dialog2     ){ create :dialog, intent: intent2, priority: 100_000         }
   let!( :dialog3     ){ create :dialog, intent: intent3                            }
-  let!( :dialog3_path){ "intent_responses_csv/#{intent3.name.downcase}.csv"                 }
-  let!( :field       ){ create :field, intent: intent                              }
+  let!( :dialog3_path){ "intent_responses_csv/#{intent3.name.downcase}.csv"        }
+  let!( :field       ){ build  :field                                              }
   let!( :response    ){ create :response, dialog: dialog                           }
 
   before do
-    IntentFileManager.new.save( intent  )
-    IntentFileManager.new.save( intent2 )
-    IntentFileManager.new.save( intent3 )
+    IntentFileManager.new.save( intent, [field]  )
+    IntentFileManager.new.save( intent2, [field]  )
+    IntentFileManager.new.save( intent3, [field]  )
     DialogFileManager.new.save([dialog] )
     DialogFileManager.new.save([dialog2])
     DialogFileManager.new.save([dialog3])
@@ -36,7 +36,7 @@ describe 'User git controls' do
   let!( :init_commit ){ user.git_commit('Initial Commit')                          }
   let!( :pretty_diff ){
     [
-      {:old=>"{\"id\":\"get_ride\",\"fields\":[{\"name\":\"destination\",\"type\":\"Text\",\"must_resolve\":false,\"mturk_field\":\"Uber.Destination\"}],\"mturk_response_fields\":\"uber.get.ride\"}", :new=>"{\"id\":\"get_ride\",\"fields\":[],\"mturk_response_fields\":\"uber.get.ride\"}", :file_type=>"Action", :name=>""},
+      {:old=>"{\"id\":\"get_ride\",\"fields\":[{\"id\":\"destination\",\"type\":\"Text\",\"must_resolve\":false,\"mturk_field\":\"Uber.Destination\"}],\"mturk_response_fields\":\"uber.get.ride\"}", :new=>"{\"id\":\"get_ride\",\"fields\":[],\"mturk_response_fields\":\"uber.get.ride\"}", :file_type=>"Action", :name=>""},
       {:old=>"intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra\nget_ride,90,destination,,A missing rule,,some,thing,\"[\n  {\n    \"\"ResponseType\"\": 0,\n    \"\"ResponseValue\"\": {\n      \"\"text\"\": \"\"where would you like to go?\"\"\n    },\n    \"\"ResponseTrigger\"\": {\n      \"\"trigger\"\": \"\"some_trigger\"\"\n    }\n  }\n]\",",
       :new=>"intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra\nget_ride,42,destination,,A missing rule,,some,thing,\"[\n  {\n    \"\"ResponseType\"\": 0,\n    \"\"ResponseValue\"\": {\n      \"\"text\"\": \"\"where would you like to go?\"\"\n    },\n    \"\"ResponseTrigger\"\": {\n      \"\"trigger\"\": \"\"some_trigger\"\"\n    }\n  }\n]\",",
       :file_type=>"Intent_responses_csv",
@@ -83,6 +83,7 @@ describe 'User git controls' do
       DialogFileManager.new.save([dialog])
       DialogFileManager.new.save([dialog2])
       field.destroy
+      IntentFileManager.new.save(intent, [])
 
       expect( user.git_diff_workdir  ).to eq pretty_diff
       expect( user2.git_diff_workdir ).to eq pretty_diff2

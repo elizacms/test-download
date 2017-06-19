@@ -22,6 +22,7 @@ class DialogsController < ApplicationController
     dialog = Dialog.new( dialog_params )
 
     if dialog.save
+      DialogFileManager.new.save([dialog])
       render json: {}, status: :created
     else
       response.headers[ 'Warning' ] = dialog.errors.full_messages.join "\n"
@@ -33,6 +34,7 @@ class DialogsController < ApplicationController
     dialog = Dialog.find( id: dialog_params[ :id ] )
 
     if dialog.update(dialog_params.to_h)
+      DialogFileManager.new.save([dialog])
       render json: {}, status: :ok
     else
       response.headers[ 'Warning' ] = dialog.errors.full_messages.join "\n"

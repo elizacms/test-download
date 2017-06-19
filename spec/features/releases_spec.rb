@@ -5,21 +5,23 @@ describe 'Release Feature Specs' do
   let!( :role        ){ create :role, skill: skill, user: user                   }
   let!( :intent      ){ create :intent, skill: skill                             }
   let!( :file_lock   ){ create :file_lock, user_id: user.id.to_s, intent: intent }
-  let!( :field       ){ create :field, intent: intent                            }
+  let!( :field       ){ build  :field                                            }
   let!( :dialog      ){ create :dialog, intent: intent                           }
   let!( :response    ){ create :response, dialog: dialog                         }
   let(  :message     ){ "Crazy Commit"                                           }
-  let!( :init_add    ){ user.git_add(["dialogs/#{dialog.id}.json",
-                                     "intents/#{intent.id}.json",
-                                     "responses/#{response.id}.json",
-                                     "fields/#{field.id}.json"])                  }
-  let!( :init_commit ){ user.git_commit('Initial Commit')                        }
 
   before do
+    IntentFileManager.new.save( intent, [field] )
+    DialogFileManager.new.save( [dialog] )
+
     stub_identity_token
     stub_identity_account_for user.email
     visit '/login/success?code=0123abc'
   end
+
+  let!( :init_add    ){ user.git_add(["actions/#{skill.name.downcase}_#{intent.name.downcase}.action",
+                                      "intent_responses_csv/#{intent.name}.csv"]) }
+  let!( :init_commit ){ user.git_commit('Initial Commit')                        }
 
   specify 'User can visit releases index page' do
     visit '/releases'
@@ -29,6 +31,8 @@ describe 'Release Feature Specs' do
 
   specify 'User can visit releases new page' do
     dialog.update(priority: 5)
+    DialogFileManager.new.save( [dialog] )
+
     visit '/releases/new'
 
     expect( page ).to have_content "- \"priority\": 90, + \"priority\": 5"
@@ -36,6 +40,8 @@ describe 'Release Feature Specs' do
 
   specify 'User can create a release' do
     dialog.update(priority: 5)
+    DialogFileManager.new.save( [dialog] )
+
     visit '/releases/new'
     fill_in :message, with: message
     click_button 'Create Release'
@@ -49,6 +55,8 @@ describe 'Release Feature Specs' do
 
   specify 'User can visit releases edit page' do
     dialog.update(priority: 5)
+    DialogFileManager.new.save( [dialog] )
+
     visit '/releases/new'
     fill_in :message, with: message
     click_button 'Create Release'
@@ -60,6 +68,8 @@ describe 'Release Feature Specs' do
 
   specify 'User can visit releases show page' do
     dialog.update(priority: 5)
+    DialogFileManager.new.save( [dialog] )
+
     visit '/releases/new'
     fill_in :message, with: message
     click_button 'Create Release'

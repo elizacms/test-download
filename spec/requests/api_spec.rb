@@ -1,10 +1,13 @@
 describe 'API' do
-  let!( :developer ){ create :user                 }
-  let!( :skill     ){ create :skill                }
-  let!( :intent    ){ create :intent, skill: skill }
+  let!( :developer ){ create :user                                }
+  let!( :skill     ){ create :skill                               }
+  let!( :intent    ){ create :intent, skill: skill                }
   let!( :role      ){ create :role, user: developer, skill: skill }
+  let(  :params    ){{ intent_id: intent.id                      }}
 
-  let( :params ){{ intent_id: intent.id }}
+  before do
+    IntentFileManager.new.save( intent, [] )
+  end
 
   describe 'Get webhook from Intent' do
     let( :expected ){{ webhook: skill.web_hook }}

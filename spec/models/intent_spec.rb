@@ -8,13 +8,16 @@ describe Intent do
   let(  :intent_from_db  ){ Intent.first                                        }
   let!( :intent          ){ skill.intents.create!(valid_intent)                 }
   let(  :intents_path    ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" }
-  let(  :action_file_url ){ IntentFileManager.new.file_url( intent )                }
+  let(  :action_file_url ){ IntentFileManager.new.file_path( intent )           }
+  let!( :user            ){ create :user                                        }
+  let!( :file_lock       ){ create :file_lock, intent: intent, user_id: user.id }
+  let!( :no_lock         ){ create :intent, skill: skill                        }
+
+  before do
+    IntentFileManager.new.save( intent, [] )
+  end
 
   describe 'Intent > FileLock' do
-    let!( :user      ){ create :user                                        }
-    let!( :file_lock ){ create :file_lock, intent: intent, user_id: user.id }
-    let!( :no_lock   ){ create :intent, skill: skill                        }
-
     it 'associates' do
       expect( intent.file_lock.id ).to eq file_lock.id
     end
@@ -62,13 +65,16 @@ describe Intent do
 
     specify 'update intent should update action file' do
       intent.update(name: 'James Intent')
+      IntentFileManager.new.save( intent, [] )
 
       expect( JSON.parse( File.read(action_file_url), symbolize_names: true )[:id])
       .to eq 'James Intent'
     end
 
-    specify 'destroy intent should update action file' do
+    specify 'destroy intent should delete action file' do
       intent.destroy
+      IntentFileManager.new.delete_file( intent )
+
       expect( File.exist?(action_file_url) ).to eq false
     end
   end

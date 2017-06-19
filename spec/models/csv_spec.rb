@@ -2,11 +2,12 @@ describe CustomCSV do
   let!( :skill    ){ create :skill                         }
   let!( :intent   ){ create :intent, skill: skill          }
   let!( :text     ){{ text: 'Where would you like to go?' }.to_json }
+  let!( :trig     ){{ trigger: 'some_trigger'}.to_json }
   let!( :response ){
     [{
       'ResponseType'    => 'Card',
       'ResponseValue'   => { text: 'Where would you like to go?' },
-      'ResponseTrigger' => 'some_trigger'
+      'ResponseTrigger' => { trigger: 'some_trigger'}
     }].to_json.gsub('"', '""')
   }
 
@@ -40,24 +41,9 @@ describe CustomCSV do
       comments: 'some comments'
     )
 
-    Response.create(
-      response_type: 'Card',
-      response_value: text,
-      response_trigger: 'some_trigger',
-      dialog: @dialog
-    )
-    Response.create(
-      response_type: 'Card',
-      response_value: text,
-      response_trigger: 'some_trigger',
-      dialog: @dialog2
-    )
-    Response.create(
-      response_type: 'Card',
-      response_value: text,
-      response_trigger: 'some_trigger',
-      dialog: @dialog3
-    )
+    Response.create(response_type: 'Card', response_value: text, response_trigger: trig, dialog: @dialog )
+    Response.create(response_type: 'Card', response_value: text, response_trigger: trig, dialog: @dialog2)
+    Response.create(response_type: 'Card', response_value: text, response_trigger: trig, dialog: @dialog3)
   end
 
   let( :expected ){

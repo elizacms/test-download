@@ -1,5 +1,7 @@
 class DialogFileManager
   def load csv_file
+    return [] unless File.exist?( csv_file )
+
     rows = CSV.open( csv_file, headers: true ).each_slice( 2 ).with_index.map do | rows, i |
       row1, row2 = rows
       hash1 = row1.to_hash.symbolize_keys
@@ -69,13 +71,11 @@ class DialogFileManager
   end
 
   def fields
-    %w/ intent_id priority awaiting_field unresolved missing present entity_values eliza_de extra /
-      .map &:to_sym
+    %i/ intent_id priority awaiting_field unresolved missing present entity_values eliza_de extra /
   end
 
   def attrs_from hash
     dup = hash.dup
-
     intent_id = Intent.find_by( name:hash[ :intent_id ]).id
 
     dup[ :intent_id      ] = intent_id

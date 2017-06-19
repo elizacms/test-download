@@ -1,19 +1,20 @@
 feature 'Fields', :js do
-  let(  :developer       ){ create :user                                }
+  let!( :developer       ){ create :user                                }
   let!( :skill           ){ create :skill                               }
   let!( :intent          ){ create :intent, skill: skill                }
-  let!( :field           ){ create :field, intent: intent               }
+  let!( :field           ){ build  :field                               }
   let!( :field_data_type ){ create :field_data_type                     }
   let!( :role            ){ create :role, user: developer, skill: skill }
 
   before do
+    IntentFileManager.new.save( intent, [field] )
     stub_identity_token
     stub_identity_account_for developer.email
 
     visit '/login/success?code=0123abc'
     click_link 'Intents'
     click_link 'Edit Details'
-    click_link 'Add Fields'
+    click_link 'Edit Fields'
   end
 
   describe 'Read Fields and Intent values' do

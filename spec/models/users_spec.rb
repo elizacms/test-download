@@ -6,12 +6,14 @@ describe User do
   let!( :intent      ){ create :intent, skill: skill                              }
   let!( :intent2     ){ create :intent, skill: skill, name: 'some other intent'   }
   let!( :file_lock   ){ create :file_lock, intent: intent, user_id: user.id.to_s  }
-  let!( :field       ){ create :field, intent: intent                             }
-  let!( :dialog      ){ build :dialog, intent: intent                             }
-  let!( :dialog2     ){ build :dialog, intent: intent2                            }
+  let!( :field       ){ build  :field                                             }
+  let!( :dialog      ){ build  :dialog, intent: intent                            }
+  let!( :dialog2     ){ build  :dialog, intent: intent2                           }
   let!( :response    ){ create :response, dialog: dialog                          }
 
   before do
+    IntentFileManager.new.save( intent, [field] )
+    IntentFileManager.new.save( intent2, []     )
     DialogFileManager.new.save([dialog, dialog2])
   end
 

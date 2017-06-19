@@ -1,14 +1,14 @@
 class IntentFileManager
-  def file_url intent
+  def file_path intent
     "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/actions/"\
     "#{intent.skill.name.downcase}_#{intent.name.downcase}.action"
   end
 
-  def save intent
-    File.write( file_url(intent), intent.action_file )
+  def save intent, fields
+    File.write( file_path(intent), intent.action_file( fields ) )
   end
 
-  def load_from file
+  def load_intent_from file
     skill_name = File.basename(file).split('_')[0]
     skill = Skill.find_or_create_by(name: skill_name)
 
@@ -18,19 +18,19 @@ class IntentFileManager
     intent = skill.intents.find_or_create_by(name: intent_name)
     intent.update(mturk_response: data[:mturk_response_fields])
 
-    data[:fields].try(:each) do |field|
-      field = Field.find_or_create_by(id: field[:id] )
-      field.update(
+    fields = data[:fields].try(:map) do |field|
+      Field.new(
+        name:         field[:id],
         type:         field[:type],
         must_resolve: field[:must_resolve],
         mturk_field:  field[:mturk_field]
       )
     end
 
-    intent
+    { intent: intent, fields: fields }
   end
 
   def delete_file intent
-    File.delete( file_url(intent) )
+    File.delete( file_path(intent) )
   end
 end

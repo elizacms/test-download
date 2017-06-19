@@ -9,7 +9,7 @@ class IntentsController < ApplicationController
                 only: [ :edit, :fields, :dialogs ]
 
   def index
-    @intents = Intent.all_files.map { |file| IntentFileManager.new.load_from( file ) }
+    @intents = Intent.all_files.map { |file| IntentFileManager.new.load_intent_from( file )[:intent] }
   end
 
   def new
@@ -20,6 +20,7 @@ class IntentsController < ApplicationController
     @intent = @skill.intents.create(intent_params)
 
     if @intent.persisted?
+      IntentFileManager.new.save( @intent, [] )
       redirect_to(
         fields_page_path(skill_id: @skill, id: @intent.id),
           flash: { success: "Intent #{ params[:name] } created." }
@@ -34,7 +35,10 @@ class IntentsController < ApplicationController
   end
 
   def update
-    if @skill.intents.find(@intent.id).update( intent_params )
+    if @intent.update( intent_params )
+      file = IntentFileManager.new.file_path( @intent )
+      fields = IntentFileManager.new.load_intent_from( file )[:fields]
+      IntentFileManager.new.save( @intent, fields )
       redirect_to(
         edit_skill_intent_path( @skill, @intent ),
         flash: {
@@ -50,6 +54,7 @@ class IntentsController < ApplicationController
   def destroy
     name = @intent.name
     @intent.destroy
+    IntentFileManager.new.delete_file( @intent )
 
     redirect_to(
       skill_intents_path(@skill),
@@ -71,7 +76,7 @@ class IntentsController < ApplicationController
   end
 
   def dialogs
-    @fields = @intent.entities.map {|e| e.name}
+    @fields = fields_for( @intent ).map {|f| f.name}
   end
 
   def api_file_lock
@@ -82,6 +87,11 @@ class IntentsController < ApplicationController
 
 
   private
+
+  def fields_for( intent )
+    file = IntentFileManager.new.file_path( intent )
+    IntentFileManager.new.load_intent_from( file )[:fields]
+  end
 
   def find_or_set_file_lock
     if @intent.has_file_lock?

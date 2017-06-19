@@ -56,7 +56,7 @@ class CustomCSV
           {
             'ResponseType'    => r.response_type,
             'ResponseValue'   => JSON.parse(r.response_value),
-            'ResponseTrigger' => r.response_trigger
+            'ResponseTrigger' => JSON.parse(r.response_trigger)
           }
         end
 
