@@ -3,39 +3,31 @@ class FieldsController < ApplicationController
 
   before_action :set_field, only: [:update, :destroy]
 
+  # get '/fields'
   def index
     intent = Intent.find( params[ :intent_id ])
 
     render json: fields_for( intent ).to_json
   end
 
+  # post '/fields'
   def create
-    intent = Intent.find(params[:intent_id])
-    @field = Field.new( field_params )
+    intent = Intent.find_by(id: params[:intent_id])
 
-    if @field.valid?
-      IntentFileManager.new.save( intent, fields_for(intent).push(@field) )
-      render json: @field.serialize.to_json
-    else
-      render plain: @field.errors.full_messages.join("\n"), status: :unprocessable_entity
+    unless intent
+      response.headers[ 'Warning' ] = 'A valid intent_id is required.'
+      render json:{}, status: 422
+      return
     end
-  end
 
-  def update
-    if @field.update( field_params )
-      intent = Intent.find(params[:intent_id])
-      IntentFileManager.new.save( @intent, fields_for( intent ) )
+    fields = params[:fields].map{|f| Field.new( f.to_unsafe_h )}
 
-      render json: @field.serialize.to_json
+    if fields.all?{ |f| f.valid? }
+      IntentFileManager.new.save( intent, fields )
+      render json: fields.map{|f| f.serialize}.to_json, status: 201
     else
-      render json: @field.errors.full_messages.join("\n"), status: :unprocessable_entity
+      render plain: fields.map{|f| f.errors.full_messages}.join("\n"), status: 422
     end
-  end
-
-  def destroy
-    @field.destroy
-
-    head :no_content
   end
 
 
