@@ -7,13 +7,13 @@ var DialogForm = React.createClass({
 
   initialData(){
     return {
-      'unresolved-field':     [{id: 0, value: '', inputValue: ''}],
-      'missing-field':        [{id: 0, value: '', inputValue: ''}],
-      'present-field':        [{id: 0, value: 'None', inputValue: ''}],
-      'awaiting-field':       [{id: 0, value: '', inputValue: ''}],
-      'responses_attributes': [{id: 0, value: 'text', inputValue: '',
-                                response_trigger: '', response_id: ''}],
-      'entity-value-field':   [{id: 0, value: 'None', inputValue: ''}],
+      'unresolved-field':   [{id: 0, value: '', inputValue: ''}],
+      'missing-field':      [{id: 0, value: '', inputValue: ''}],
+      'present-field':      [{id: 0, value: 'None', inputValue: ''}],
+      'awaiting-field':     [{id: 0, value: '', inputValue: ''}],
+      'responses':          [{id: 0, value: 'text', inputValue: '',
+                              response_trigger: '', response_id: ''}],
+      'entity-value-field': [{id: 0, value: 'None', inputValue: ''}],
       priority: '',
       comments: ''
     };
@@ -96,16 +96,16 @@ var DialogForm = React.createClass({
   componentWillReceiveProps(nextProps) {
     if(Object.keys(nextProps.data).length > 0) {
       this.setState({
-        'unresolved-field':     this.createNewId('unresolved', nextProps),
-        'missing-field':        this.createNewId('missing', nextProps),
-        // 'present-field':        this.createNewIdForPresent(nextProps),
-        'present-field':        this.createNewIdFor('present', nextProps),
-        'entity-value-field':   this.createNewIdFor('entity_values',nextProps),
-        'awaiting-field':       this.createNewId('awaiting_field', nextProps),
-        'responses_attributes': this.createNewIdForResponses( nextProps ),
-        priority:               nextProps.data.priority,
-        response:               nextProps.data.response,
-        comments:               nextProps.data.comments
+        'unresolved-field':   this.createNewId('unresolved', nextProps),
+        'missing-field':      this.createNewId('missing', nextProps),
+        // 'present-field':      this.createNewIdForPresent(nextProps),
+        'present-field':      this.createNewIdFor('present', nextProps),
+        'entity-value-field': this.createNewIdFor('entity_values',nextProps),
+        'awaiting-field':     this.createNewId('awaiting_field', nextProps),
+        'responses':          this.createNewIdForResponses( nextProps ),
+        priority:             nextProps.data.priority,
+        response:             nextProps.data.response,
+        comments:             nextProps.data.comments
       });
     } else {
       this.setState(this.initialData());
@@ -141,7 +141,7 @@ var DialogForm = React.createClass({
   },
 
   updateState(name, obj){
-    if (this.state.responses_attributes[obj.id].value != obj.value) { // Response Type Changed
+    if (this.state.responses[obj.id].value != obj.value) { // Response Type Changed
       this.state[name][obj.id] = obj;
     } else if ( obj.inputValue && Object.keys(obj.inputValue).length === 0 ) {
       // Update response_trigger only
@@ -161,7 +161,7 @@ var DialogForm = React.createClass({
   },
 
   deleteResponse(input){
-    var new_state = this.state.responses_attributes;
+    var new_state = this.state.responses;
     new_state.splice( new_state.indexOf(input), 1);
 
     this.setState(this.state);
@@ -205,7 +205,7 @@ var DialogForm = React.createClass({
     data[ 'awaiting_field' ] = this.state['awaiting-field'].map( (e)=>e.value );
     data[ 'comments'       ] = this.state.comments;
 
-    data[ 'responses_attributes' ] = this.state.responses_attributes.map( (e) => {
+    data[ 'responses' ] = this.state.responses.map( (e) => {
       if ( e.response_id ){
         return ({ id: e.response_id,
                   response_type: e.value,
@@ -259,21 +259,22 @@ var DialogForm = React.createClass({
           <table className='dialog'>
             <tbody>
               {/* ******************************************************** */}
-              {this.state['responses_attributes'].map(function(input, index){
+              {this.state['responses'].map(function(input, index){
                 return(
                   <ResponseType
                     key={input.id}
                     index={index}
-                    name='responses_attributes'
+                    // name='responses_attributes'
+                    name='responses'
                     className='response-type-text-with-option'
                     title='Response type'
                     addRow={this.addRow}
                     // deleteInput={this.deleteInput.bind(this, input, 'responses_attributes')}
                     deleteInput={this.deleteResponse.bind(this, input)}
-                    value={this.state['responses_attributes'][index].value}
-                    inputValue={this.state['responses_attributes'][index].inputValue}
-                    response_trigger={this.state['responses_attributes'][index].response_trigger}
-                    response_id={this.state['responses_attributes'][index].response_id}
+                    value={this.state['responses'][index].value}
+                    inputValue={this.state['responses'][index].inputValue}
+                    response_trigger={this.state['responses'][index].response_trigger}
+                    response_id={this.state['responses'][index].response_id}
                     updateState={this.updateState}
                   ></ResponseType>
                 );

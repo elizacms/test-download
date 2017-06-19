@@ -26,19 +26,42 @@ var Container = React.createClass({
   },
 
   createOrUpdateDialog(data){
+console.log( "====" );
+console.log( data );
     if (this.state.isUpdate) {
       var url = '/dialogue_api/response?id=' + this.state.currentDialogId.$oid;
+      const current_data = this.state.data;
+      const tmp = current_data.filter( (f) => f.id != this.state.currentDialogId );
+
+      this.setState({
+        data: [...tmp, data]
+      }, () => this.callDialogApi(url) );
+
     } else {
       var url = '/dialogue_api/response?';
+      
+      this.setState({
+        data: [...this.state.data, data]
+      }, () => this.callDialogApi(url) );
     }
 
     IAM.loading.start({ type:'logo', duration: false });
+  },
+
+  callDialogApi(url, data){
+console.log( "AJAXing..." );
+console.log( this.state.isUpdate );
+console.log( url );
+console.log( this.state.data );
+console.log( this.props.intent_id );
 
     $.ajax({
       type: this.state.isUpdate ? 'PUT' : 'POST',
       url: url,
       dataType: 'json',
-      data: data
+      data: { intent_id: this.props.intent_id,
+              dialogs: this.state.data }
+      // data: data
     })
     .done( function( data ){
       var form = $('form');
@@ -82,7 +105,10 @@ var Container = React.createClass({
       data: data
     })
     .done( function( data ){
-      this.setState({ data: data });
+      this.setState({ data: data }, ()=>{
+        console.log( "All Scenarios!" );
+        console.log( data );
+      });
     }.bind(this));
   },
 

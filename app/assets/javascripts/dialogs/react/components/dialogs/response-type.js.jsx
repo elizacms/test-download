@@ -102,7 +102,8 @@ var ResponseType = React.createClass({
   },
 
   updateParentState(newInputValue) {
-    this.props.updateState( 'responses_attributes', {
+    // this.props.updateState( 'responses_attributes', {
+    this.props.updateState( 'responses', {
       id: this.props.index,
       value: this.state.responseType,
       inputValue: newInputValue,
