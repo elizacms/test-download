@@ -139,7 +139,7 @@ feature 'Intents pages' do
       click_link 'Edit Details'
       click_link 'Delete this intent'
 
-      expect( Intent.count ).to eq 2
+      expect( Intent.count ).to eq 0
       expect( page ).to have_content "Destroyed intent with name: #{ intent.name }"
       expect(
         File.exist?("#{ENV['NLU_PERSISTENCE_PATH']}/intents/#{intent.id}.json")

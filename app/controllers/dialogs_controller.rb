@@ -3,12 +3,8 @@ class DialogsController < ApplicationController
 
   before_action :set_intent
 
-  # GET /dialogue_api/all_scenarios?
-  #   intent_id=play_music
+  # GET /dialogue_api/all_scenarios?intent_id=play_music
   def index
-    # dialogs = Dialog.where( intent_id: params[ :intent_id ] ).order('priority DESC')
-    # Find CSV
-    # Load using Dialog Uploader
     intent = Intent.find( params[ :intent_id ])
     csv_file = "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intent_responses_csv/#{ intent.name }.csv"
 
@@ -19,41 +15,25 @@ class DialogsController < ApplicationController
 
   # POST /dialogue_api/response
   def create
-    dialog = Dialog.new( dialog_params )
+    intent  = Intent.find_by( id: params[:intent_id] )
 
-    if dialog.save
-      DialogFileManager.new.save([dialog])
+    unless intent
+      response.headers[ 'Warning' ] = 'A valid intent_id is required.'
+      render json:{}, status: 422
+      return
+    end
+
+    dialogs = params[:dialogs].map{|d| Dialog.new( d.to_unsafe_h.merge!(intent_id: intent.id.to_s) )}
+
+    if dialogs.all?{ |d| d.valid? }
+      intent.dialogs.delete_all
+      dialogs.each{|d| d.save }
+      DialogFileManager.new.save(dialogs)
       render json: {}, status: :created
     else
-      response.headers[ 'Warning' ] = dialog.errors.full_messages.join "\n"
-      render json: dialog.errors, status: :unprocessable_entity
+      response.headers[ 'Warning' ] = dialogs.map{|d| d.errors.full_messages.join "\n"}.join "\n"
+      render json: dialogs.errors, status: 422
     end
-  end
-
-  def update
-    dialog = Dialog.find( id: dialog_params[ :id ] )
-
-    if dialog.update(dialog_params.to_h)
-      DialogFileManager.new.save([dialog])
-      render json: {}, status: :ok
-    else
-      response.headers[ 'Warning' ] = dialog.errors.full_messages.join "\n"
-      render json: dialog.errors, status: :unprocessable_entity
-    end
-  end
-
-  def delete
-    dialog = Dialog.find( id: dialog_params[ :id ] )
-    dialog.delete
-
-    render plain: "You deleted a Dialog.", status: :ok
-  end
-
-  def delete_response
-    response = Response.find( params[:id] )
-    response.destroy
-
-    render json: {}.to_json, status: 202
   end
 
   def csv
@@ -82,7 +62,7 @@ class DialogsController < ApplicationController
   end
 
   def dialog_params
-    params.permit(
+    params.require(:dialogs).permit(
       :id,
       :intent_id,
       :priority,

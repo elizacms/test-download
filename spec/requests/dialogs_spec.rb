@@ -9,9 +9,9 @@ describe 'Dialogs' do
     IntentFileManager.new.save( intent, [field] )
   end
 
-  let( :params ){
-    {
-      intent_id:      intent.id.to_s,
+  let( :params ){{
+    intent_id: intent.id.to_s,
+    dialogs: [{
       priority:       90,
       unresolved:     [ 'unresolved' ],
       missing:        [ field.name ],
@@ -24,8 +24,8 @@ describe 'Dialogs' do
         response_trigger: {trigger: 'some_trigger'}.to_json,
         response_type:    'some_type'
       ]
-    }
-  }
+    }]
+  }}
 
   describe 'Create' do
     specify 'Success' do
@@ -46,81 +46,9 @@ describe 'Dialogs' do
       post '/dialogue_api/response', params.to_json
 
       expect( last_response.status ).to eq 422
-      expect( last_response.headers[ 'Warning' ] ).to eq "Intent can't be blank\nIntent can't be blank"
+      expect( last_response.headers[ 'Warning' ] ).to eq "A valid intent_id is required."
       expect( Dialog.count   ).to eq 0
       expect( Response.count ).to eq 0
-    end
-  end
-
-  describe 'Update' do
-    before do
-      header 'Content-Type', 'application/json'
-      post '/dialogue_api/response', params.to_json
-    end
-
-    specify 'Success' do
-      update_params = params.merge!(
-        missing: ['Green Godess'],
-        responses_attributes: [
-          {
-            id: Response.last.id.to_s,
-            response_value: {text: 'some text'}.to_json,
-            response_trigger: {trigger: 'some_trigger'}.to_json,
-            response_type: 'some_type'
-          }
-        ]
-      )
-
-      header 'Content-Type', 'application/json'
-      put "/dialogue_api/response?id=#{Dialog.last.id.to_s}", update_params.to_json
-
-      expect( last_response.status ).to eq 200
-      expect( Dialog.count         ).to eq 1
-      expect( Response.count       ).to eq 1
-      expect( Dialog.last.attrs[:missing] ).to eq ['Green Godess']
-    end
-
-    specify 'Success with multiple responses_attributes update/create' do
-      update_params = params.merge!({
-        missing:              ['Green Godess'],
-        responses_attributes: [
-          {
-            id:                Response.last.id.to_s,
-            response_type:    'BA_LA_KE',
-            response_value:   {text: 'some text'}.to_json,
-            response_trigger: {trigger: 'some_trigger'}.to_json
-          },
-          {
-            response_type:    'some_other_type',
-            response_value:   {text: 'some awesome text'}.to_json,
-            response_trigger: {trigger: 'some_other_trigger'}.to_json
-          }
-        ]
-      })
-
-      expect(Response.count).to eq 1
-
-      header 'Content-Type', 'application/json'
-      put "/dialogue_api/response?id=#{Dialog.last.id.to_s}", update_params.to_json
-
-      expect( last_response.status         ).to eq 200
-      expect( Dialog.count                 ).to eq 1
-      expect( Dialog.last.responses.count  ).to eq 2
-      expect( Response.count               ).to eq 2
-
-      expect( Dialog.first.attrs[:missing] ).to eq ['Green Godess']
-    end
-
-    specify 'Failure' do
-      params.merge!( intent_id: nil )
-
-      header 'Content-Type', 'application/json'
-      put "/dialogue_api/response?id=#{Dialog.last.id}", params.to_json
-
-      expect( last_response.status ).to eq 422
-      expect( last_response.headers[ 'Warning' ] ).to eq "Intent can't be blank\nIntent can't be blank"
-      expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 1
     end
   end
 
@@ -169,24 +97,6 @@ describe 'Dialogs' do
       expect( last_response.status ).to eq 200
       expect( last_response.headers[ 'Content-Type' ]).to eq 'text/csv'
       expect( last_response.body   ).to eq csv
-    end
-  end
-
-  describe 'Response Delete' do
-    let!( :dialog   ){ create :dialog, intent_id: intent.id }
-    let!( :response ){ create :response, dialog: dialog       }
-    let!( :delete_params ){{
-      id: response.id
-    }}
-
-    specify 'success' do
-      expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 1
-      delete "/dialogue_api/response/#{response.id}", delete_params.to_json
-
-      expect( last_response.status ).to eq 202
-      expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 0
     end
   end
 end
