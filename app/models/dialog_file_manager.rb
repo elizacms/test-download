@@ -46,6 +46,7 @@ class DialogFileManager
 
       attrs = d.attributes.dup.symbolize_keys
       attrs[ :intent_id     ] = d.intent.name
+      attrs[ :present       ] = attrs[ :present ].join( ' && ' )
       attrs[ :entity_values ] = %Q/"[(#{ attrs[ :entity_values ].map{| w | "'#{ w }'" }.join ', ' })]"/
       attrs[ :eliza_de      ] = %Q/"#{ formatted }"/
 
@@ -82,7 +83,9 @@ class DialogFileManager
     dup[ :awaiting_field ] = Array( hash[ :awaiting_field ])
     dup[ :missing        ] = Array( hash[ :missing        ])
     dup[ :unresolved     ] = Array( hash[ :unresolved     ])
-    dup[ :present        ] = Array( hash[ :present        ])
+    
+    present = hash[ :present ].split( '&&' ).map &:strip
+    dup[ :present ] = present
 
     entity_values = hash[ :entity_values ].to_s
                                           .gsub( %r{\[|\(|\)|'}, '' )
