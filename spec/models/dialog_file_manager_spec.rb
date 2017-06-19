@@ -41,6 +41,7 @@ describe DialogFileManager do
     specify do
       expect( dialogs.count ).to eq 1
       expect( dialogs[ 0 ].priority ).to eq 100
+      expect( dialogs[ 0 ].entity_values ).to eq [ 'billing_invoicequestion', 'billexplain' ]
       expect( dialogs[ 0 ].responses[ 0 ].response_type    ).to eq '1'
       expect( dialogs[ 0 ].responses[ 0 ].response_trigger ).to eq nil
 

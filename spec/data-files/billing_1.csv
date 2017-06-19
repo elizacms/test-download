@@ -1,5 +1,5 @@
 intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra
-billing_mybill,100,billing_invoicequestion,None,billing_invoicequestion,None,"[('billing_invoicequestion', 'billexplain')]","[
+billing_mybill,100,billing_invoicequestion,None,billing_invoicequestion,phone_type && handyhilfe_kind,"[('billing_invoicequestion', 'billexplain')]","[
   {
     ""ResponseType"": 1,
     ""ResponseValue"": {

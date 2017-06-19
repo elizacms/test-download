@@ -46,7 +46,7 @@ class DialogFileManager
 
       attrs = d.attributes.dup.symbolize_keys
       attrs[ :intent_id     ] = d.intent.name
-      attrs[ :entity_values ] = %Q/"#{ attrs[ :entity_values ].join ',' }"/
+      attrs[ :entity_values ] = %Q/"[(#{ attrs[ :entity_values ].map{| w | "'#{ w }'" }.join ', ' })]"/
       attrs[ :eliza_de      ] = %Q/"#{ formatted }"/
 
       fields.map{| k | attrs[ k ]}.join ','
@@ -83,7 +83,14 @@ class DialogFileManager
     dup[ :missing        ] = Array( hash[ :missing        ])
     dup[ :unresolved     ] = Array( hash[ :unresolved     ])
     dup[ :present        ] = Array( hash[ :present        ])
-    dup[ :entity_values  ] = Array( hash[ :entity_values  ])
+
+    entity_values = hash[ :entity_values ].to_s
+                                          .gsub( %r{\[|\(|\)|'}, '' )
+                                          .split( ']' )
+                                          .map{| w | w.split( ',' ).map &:strip }
+                                          .flatten
+
+    dup[ :entity_values  ] = entity_values
 
     dup[ :responses ] = JSON.parse( hash[ :eliza_de ]).map do | r |
       r.symbolize_keys!
