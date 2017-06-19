@@ -35,18 +35,11 @@ describe 'User git controls' do
                                       "actions/#{skill.name.downcase}_#{intent2.name.downcase}.action"])}
   let!( :init_commit ){ user.git_commit('Initial Commit')                          }
   let!( :pretty_diff ){
-    [
-      {:old=>"{\"id\":\"get_ride\",\"fields\":[{\"id\":\"destination\",\"type\":\"Text\",\"must_resolve\":false,\"mturk_field\":\"Uber.Destination\"}],\"mturk_response_fields\":\"uber.get.ride\"}", :new=>"{\"id\":\"get_ride\",\"fields\":[],\"mturk_response_fields\":\"uber.get.ride\"}", :file_type=>"Action", :name=>""},
-      {:old=>"intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra\nget_ride,90,destination,,A missing rule,,some,thing,\"[\n  {\n    \"\"ResponseType\"\": 0,\n    \"\"ResponseValue\"\": {\n      \"\"text\"\": \"\"where would you like to go?\"\"\n    },\n    \"\"ResponseTrigger\"\": {\n      \"\"trigger\"\": \"\"some_trigger\"\"\n    }\n  }\n]\",",
-      :new=>"intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra\nget_ride,42,destination,,A missing rule,,some,thing,\"[\n  {\n    \"\"ResponseType\"\": 0,\n    \"\"ResponseValue\"\": {\n      \"\"text\"\": \"\"where would you like to go?\"\"\n    },\n    \"\"ResponseTrigger\"\": {\n      \"\"trigger\"\": \"\"some_trigger\"\"\n    }\n  }\n]\",",
-      :file_type=>"Intent_responses_csv",
-      :name=>""}]
+    [{:old=>"{\"id\":\"get_ride\",\"fields\":[{\"id\":\"destination\",\"type\":\"Text\",\"must_resolve\":false,\"mturk_field\":\"Uber.Destination\"}],\"mturk_response_fields\":\"uber.get.ride\"}", :new=>"{\"id\":\"get_ride\",\"fields\":[],\"mturk_response_fields\":\"uber.get.ride\"}", :file_type=>"Action", :name=>""},
+     {:old=>"intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra\nget_ride,90,destination,,A missing rule,,\"[('some', 'thing')]\",\"[\n  {\n    \"\"ResponseType\"\": 0,\n    \"\"ResponseValue\"\": {\n      \"\"text\"\": \"\"where would you like to go?\"\"\n    },\n    \"\"ResponseTrigger\"\": {\n      \"\"trigger\"\": \"\"some_trigger\"\"\n    }\n  }\n]\",", :new=>"intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra\nget_ride,42,destination,,A missing rule,,\"[('some', 'thing')]\",\"[\n  {\n    \"\"ResponseType\"\": 0,\n    \"\"ResponseValue\"\": {\n      \"\"text\"\": \"\"where would you like to go?\"\"\n    },\n    \"\"ResponseTrigger\"\": {\n      \"\"trigger\"\": \"\"some_trigger\"\"\n    }\n  }\n]\",", :file_type=>"Intent_responses_csv", :name=>""}]
   }
   let!( :pretty_diff2 ){
-    [{ :old=>%Q/intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra\nnewname,100000,destination,,A missing rule,,some,thing,"[\n\n]",/,
-        :new=>%Q/intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra\nnewname,666,destination,,A missing rule,,some,thing,"[\n\n]",/,
-        :file_type=>"Intent_responses_csv",
-        :name=>""}]
+    [{:old=>"intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra\nnewname,100000,destination,,A missing rule,,\"[('some', 'thing')]\",\"[\n\n]\",", :new=>"intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra\nnewname,666,destination,,A missing rule,,\"[('some', 'thing')]\",\"[\n\n]\",", :file_type=>"Intent_responses_csv", :name=>""}]
   }
 
   describe '#repo' do

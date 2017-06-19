@@ -132,7 +132,7 @@ describe 'Dialogs' do
       expect( last_response.status ).to eq 201
     end
 
-    specify 'Success', :focus do
+    specify 'Success' do
       header 'Content-Type', 'application/json'
       get '/dialogue_api/all_scenarios', { intent_id: intent.id }
 
@@ -140,7 +140,7 @@ describe 'Dialogs' do
       expect( parsed_response.count ).to eq 1
       expect( parsed_response[0][:missing         ] ).to eq [ 'destination' ]
       expect( parsed_response[0][:unresolved      ] ).to eq [ 'unresolved' ]
-      expect( parsed_response[0][:present         ] ).to eq [ 'present' ]
+      expect( parsed_response[0][:present         ] ).to eq [ 'present', 'value' ]
       expect( parsed_response[0][:awaiting_field  ] ).to eq [ 'destination' ]
     end
   end
@@ -150,7 +150,7 @@ describe 'Dialogs' do
       "intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,aneeda_en,comments\n"
     }
     let( :data_row   ){
-      "#{ intent.name },90,destination,unresolved,destination,present && value,\"[('some','value')]\","\
+      "#{ intent.name },90,destination,unresolved,destination,present && value,\"[('danger','value')]\","\
       "\"[{\"\"ResponseType\"\":\"\"some_type\"\",\"\"ResponseValue\"\":{\"\"text\"\":\"\"some text\"\"}"\
       ",\"\"ResponseTrigger\"\":{\"\"trigger\"\":\"\"some_trigger\"\"}""}]\",some comments"
     }
