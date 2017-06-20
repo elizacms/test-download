@@ -23,7 +23,10 @@ class Dialog
   end
 
   def dialog_with_responses
-    self.attrs.merge!({id: id, responses: responses.map(&:attrs_with_ids)})
+    attrs = attributes.dup.merge( responses_attributes: responses.map(&:attrs))
+    attrs[ :intent_id ] = intent.id.to_s
+    attrs.delete '_id'
+    attrs
   end
 
   def self.for intent

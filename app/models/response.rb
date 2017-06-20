@@ -8,10 +8,10 @@ class Response
   belongs_to :dialog
 
   def attrs
-    attributes
-  end
+    dup = attributes.dup
+    dup.delete '_id'
+    dup.delete 'dialog_id'
 
-  def attrs_with_ids
-    self.attrs.merge!(id: self.id)
+    dup
   end
 end

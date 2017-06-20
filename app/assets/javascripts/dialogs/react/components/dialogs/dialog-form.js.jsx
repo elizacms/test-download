@@ -205,7 +205,7 @@ var DialogForm = React.createClass({
     data[ 'awaiting_field' ] = this.state['awaiting-field'].map( (e)=>e.value );
     data[ 'comments'       ] = this.state.comments;
 
-    data[ 'responses' ] = this.state.responses.map( (e) => {
+    data[ 'responses_attributes' ] = this.state.responses.map( (e) => {
       if ( e.response_id ){
         return ({ id: e.response_id,
                   response_type: e.value,

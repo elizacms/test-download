@@ -82,11 +82,13 @@ var TableRow = React.createClass({
 
   render() {
     let data = this.props.data;
+    console.log( "Table Row" );
+    console.log( data );
     return (
       <tr className='dialog-data'>
         <td className='priority'>{data.priority}</td>
         <td className='response'>
-          {data.responses.map(function(response, index){
+          {data.responses_attributes.map(function(response, index){
             return(
               <div key={index}>
                 Response [{index + 1}]:
@@ -94,7 +96,7 @@ var TableRow = React.createClass({
                 Type: {response.response_type}
                 <br />
                 Text: {this.parseResponse(response)}
-                {this.tableSeparator(data.responses.length, index)}
+                {this.tableSeparator(data.responses_attributes.length, index)}
               </div>
             );
           }.bind(this))}
