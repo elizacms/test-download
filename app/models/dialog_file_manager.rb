@@ -83,8 +83,8 @@ class DialogFileManager
     dup[ :awaiting_field ] = Array( hash[ :awaiting_field ])
     dup[ :missing        ] = Array( hash[ :missing        ])
     dup[ :unresolved     ] = Array( hash[ :unresolved     ])
-    
-    present = hash[ :present ].split( '&&' ).map &:strip
+
+    present = hash[ :present ].to_s.split( '&&' ).map &:strip
     dup[ :present ] = present
 
     entity_values = hash[ :entity_values ].to_s

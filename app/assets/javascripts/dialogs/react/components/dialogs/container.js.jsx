@@ -26,8 +26,6 @@ var Container = React.createClass({
   },
 
   createOrUpdateDialog(data){
-console.log( "====" );
-console.log( data );
     if (this.state.isUpdate) {
       var url = '/dialogue_api/response?id=' + this.state.currentDialogId.$oid;
       const current_data = this.state.data;
@@ -39,7 +37,7 @@ console.log( data );
 
     } else {
       var url = '/dialogue_api/response?';
-      
+
       this.setState({
         data: [...this.state.data, data]
       }, () => this.callDialogApi(url) );
@@ -49,19 +47,13 @@ console.log( data );
   },
 
   callDialogApi(url, data){
-console.log( "AJAXing..." );
-console.log( this.state.isUpdate );
-console.log( url );
-console.log( this.state.data );
-console.log( this.props.intent_id );
-
     $.ajax({
-      type: this.state.isUpdate ? 'PUT' : 'POST',
+      type: 'POST',
       url: url,
       dataType: 'json',
-      data: { intent_id: this.props.intent_id,
-              dialogs: this.state.data }
-      // data: data
+      contentType: 'application/json',
+      data: JSON.stringify({ intent_id: this.props.intent_id,
+                             dialogs: this.state.data })
     })
     .done( function( data ){
       var form = $('form');

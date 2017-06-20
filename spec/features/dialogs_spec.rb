@@ -52,7 +52,7 @@ feature 'Dialogs', :js do
     # If no CSV with the skill name, then create it
   end
 
-  specify 'User can update a dialog' do
+  specify 'User can update a dialog', :focus do
     within '.dialog-form' do
       select 'destination', from: 'unresolved-field'
       select 'destination', from: 'awaiting-field'
@@ -72,7 +72,7 @@ feature 'Dialogs', :js do
     expect( page ).to have_content 120
     expect( Dialog.count         ).to eq 1
     expect( Dialog.last.attrs[:priority] ).to eq 120
-    expect( Dialog.last.attrs[:comments] ).to eq 'Here are my comments'
+    expect( Dialog.last.comments ).to eq 'Here are my comments'
   end
 
   specify 'User can cancel updating a dialog' do

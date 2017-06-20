@@ -15,7 +15,7 @@ class DialogsController < ApplicationController
 
   # POST /dialogue_api/response
   def create
-    intent  = Intent.find_by( id: params[:intent_id] )
+    intent = Intent.find_by( id: dialog_params[:intent_id] )
 
     unless intent
       response.headers[ 'Warning' ] = 'A valid intent_id is required.'
@@ -23,11 +23,11 @@ class DialogsController < ApplicationController
       return
     end
 
-    dialogs = params[:dialogs].map{|d| Dialog.new( d.to_unsafe_h.merge!(intent_id: intent.id.to_s) )}
+    dialogs = dialog_params[:dialogs].map{|d| Dialog.new( d.merge!(intent_id: intent.id.to_s) )}
 
     if dialogs.all?{ |d| d.valid? }
       intent.dialogs.delete_all
-      dialogs.each{|d| d.save }
+      dialogs.each{ |d| d.save! }
       DialogFileManager.new.save(dialogs)
       render json: {}, status: :created
     else
@@ -62,22 +62,25 @@ class DialogsController < ApplicationController
   end
 
   def dialog_params
-    params.require(:dialogs).permit(
-      :id,
+    params.permit(
       :intent_id,
-      :priority,
-      :comments,
-      responses_attributes: [
+      dialogs: [
         :id,
-        :response_value,
-        :response_trigger,
-        :response_type
-      ],
-      awaiting_field:[],
-      present: [],
-      unresolved: [],
-      missing: [],
-      entity_values: []
+        :intent_id,
+        :priority,
+        :comments,
+        responses_attributes: [
+          :id,
+          :response_value,
+          :response_trigger,
+          :response_type
+        ],
+        awaiting_field:[],
+        present: [],
+        unresolved: [],
+        missing: [],
+        entity_values: []
+      ]
     )
   end
 end

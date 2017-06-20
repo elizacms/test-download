@@ -1,4 +1,4 @@
-describe 'Fields Request Specs', :focus do
+describe 'Fields Request Specs' do
   let!( :skill  ){ create :skill                }
   let!( :intent ){ create :intent, skill: skill }
   let!( :params ){{
