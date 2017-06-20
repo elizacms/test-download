@@ -8,31 +8,11 @@ class DialogFileManager
     intent_name = File.basename( csv_file, '.csv' )
     intent_id   = Intent.find_by( name:intent_name ).id
 
-    rows = CSV.open( csv_file, headers: true ).each_slice( 2 ).with_index.map do | rows, i |
-      row1, row2 = rows
-      hash1 = row1.to_hash.symbolize_keys
+    CSV.open( csv_file, headers: true ).map do | row |
+      hash1 = row.to_hash.symbolize_keys
 
-      # Create first row if first time through loop
-      if i == 0
-        d1 = Dialog.new( attrs_from( hash1 ).merge( intent_id:intent_id ))
-      end
-
-      # If only 1 row then we are done
-      next d1 if row2.nil?
-
-      hash2 = row2.to_hash.symbolize_keys
-      hash2 = Hash[
-        hash2.map do | k,v |
-          value = v.present? ? v : hash1[ k ]
-          [ k, value ]
-        end
-      ]
-
-      d2 = Dialog.new( attrs_from( hash2 ).merge( intent_id:intent_id ))
-
-      # Emit both if d1 is defined, else emit d2
-      [ d1, d2 ].compact
-    end.flatten
+      Dialog.new( attrs_from( hash1 ).merge( intent_id:intent_id ))
+    end
   end
 
   def save dialogs

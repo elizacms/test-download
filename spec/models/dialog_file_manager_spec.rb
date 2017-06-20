@@ -66,7 +66,7 @@ describe DialogFileManager do
     let( :intent_name ){ 'billing_all' }
     
     specify do
-      expect( dialogs.count ).to eq 34
+      expect( dialogs.count ).to eq 66
       expect( dialogs[ 0 ].priority ).to eq 100
       expect( dialogs[ 1 ].priority ).to eq 90
     end
