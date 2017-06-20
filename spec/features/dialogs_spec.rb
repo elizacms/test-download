@@ -52,7 +52,7 @@ feature 'Dialogs', :js do
     # If no CSV with the skill name, then create it
   end
 
-  specify 'User can update a dialog', :focus do
+  specify 'User can update a dialog' do
     within '.dialog-form' do
       select 'destination', from: 'unresolved-field'
       select 'destination', from: 'awaiting-field'

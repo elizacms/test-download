@@ -1,6 +1,12 @@
+# Intent comes from file name.
+# intent_id in file is ignored.
+
 class DialogFileManager
   def load csv_file
     return [] unless File.exist?( csv_file )
+
+    intent_name = File.basename( csv_file, '.csv' )
+    intent_id   = Intent.find_by( name:intent_name ).id
 
     rows = CSV.open( csv_file, headers: true ).each_slice( 2 ).with_index.map do | rows, i |
       row1, row2 = rows
@@ -8,7 +14,7 @@ class DialogFileManager
 
       # Create first row if first time through loop
       if i == 0
-        d1 = Dialog.new( attrs_from hash1 )
+        d1 = Dialog.new( attrs_from( hash1 ).merge( intent_id:intent_id ))
       end
 
       # If only 1 row then we are done
@@ -22,7 +28,7 @@ class DialogFileManager
         end
       ]
 
-      d2 = Dialog.new( attrs_from hash2 )
+      d2 = Dialog.new( attrs_from( hash2 ).merge( intent_id:intent_id ))
 
       # Emit both if d1 is defined, else emit d2
       [ d1, d2 ].compact
@@ -30,6 +36,7 @@ class DialogFileManager
   end
 
   def save dialogs
+    # ap dialogs
     name = dialogs.first.intent.name
     filename = "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/#{ name }.csv"
 
@@ -77,9 +84,7 @@ class DialogFileManager
 
   def attrs_from hash
     dup = hash.dup
-    intent_id = Intent.find_by( name:hash[ :intent_id ]).id
 
-    dup[ :intent_id      ] = intent_id
     dup[ :awaiting_field ] = Array( hash[ :awaiting_field ])
     dup[ :missing        ] = Array( hash[ :missing        ])
     dup[ :unresolved     ] = Array( hash[ :unresolved     ])
@@ -95,18 +100,22 @@ class DialogFileManager
 
     dup[ :entity_values  ] = entity_values
 
-    dup[ :responses ] = JSON.parse( hash[ :eliza_de ]).map do | r |
-      r.symbolize_keys!
+    dup[ :responses ] = begin
+      JSON.parse( hash[ :eliza_de ]).map do | r |
+        r.symbolize_keys!
 
-      response_trigger = r[ :ResponseTrigger ].present? ?
-        JSON.pretty_generate( r[ :ResponseTrigger ]) :
-        nil
+        response_trigger = r[ :ResponseTrigger ].present? ?
+          JSON.pretty_generate( r[ :ResponseTrigger ]) :
+          nil
 
-      Response.new(
-        response_type:    r[ :ResponseType ],
-        response_value:   JSON.pretty_generate( r[ :ResponseValue ]),
-        response_trigger: response_trigger
-      )
+        Response.new(
+          response_type:    r[ :ResponseType ],
+          response_value:   JSON.pretty_generate( r[ :ResponseValue ]),
+          response_trigger: response_trigger
+        )
+      end
+    rescue JSON::ParserError
+      {}
     end
 
     dup.delete :eliza_de

@@ -2,10 +2,11 @@ describe DialogFileManager do
   let( :dialogs ){ DialogFileManager.new.load file }
 
   let!( :skill   ){ create :skill }
-  let!( :intent  ){ create :intent, skill: skill, name: 'billing_mybill' }
+  let!( :intent  ){ create :intent, skill: skill, name:intent_name }
+  let(  :file    ){ "spec/data-files/#{ intent_name }.csv" }
 
   describe '#load returns empty array for no Dialogs' do
-    let( :file ){ 'spec/data-files/billing_0.csv' }
+    let( :intent_name ){ 'billing_0' }
 
     specify do
       expect( dialogs.count ).to eq 0
@@ -13,7 +14,8 @@ describe DialogFileManager do
   end
 
   describe '#load returns single Dialog' do
-    let( :file ){ 'spec/data-files/billing_1.csv' }
+    let( :intent_name ){ 'billing_1' }
+
     let( :first_response_source ){ '{
   ""text"": ""Wenn Sie Fragen zur Rechnung haben, kann ich Ihnen damit behilflich sein."",
   ""spokenText"": ""Wenn Sie Fragen zur Rechnung haben, kann ich Ihnen damit behilflich sein."",
@@ -51,7 +53,7 @@ describe DialogFileManager do
   end
 
   describe '#load returns 2 Dialogs' do
-    let( :file ){ 'spec/data-files/billing_2.csv' }
+    let( :intent_name ){ 'billing_2' }
 
     specify do
       expect( dialogs.count ).to eq 2
@@ -60,9 +62,19 @@ describe DialogFileManager do
     end
   end
 
+  describe '#load returns many Dialogs' do
+    let( :intent_name ){ 'billing_all' }
+    
+    specify do
+      expect( dialogs.count ).to eq 34
+      expect( dialogs[ 0 ].priority ).to eq 100
+      expect( dialogs[ 1 ].priority ).to eq 90
+    end
+  end
+
   describe '#save' do
-    let( :file ){ 'spec/data-files/billing_1.csv' }
-    let( :output_file ){ "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/#{intent.name}.csv" }
+    let( :intent_name ){ 'billing_1' }
+    let( :output_file ){ "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/#{ intent.name }.csv" }
 
     specify 'success' do
       DialogFileManager.new.save dialogs
@@ -72,8 +84,8 @@ describe DialogFileManager do
   end
 
   describe '#save overwrites existing file' do
-    let( :file ){ 'spec/data-files/billing_1.csv' }
-    let( :output_file ){ "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/#{intent.name}.csv" }
+    let( :intent_name ){ 'billing_1' }
+    let( :output_file ){ "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/#{ intent.name }.csv" }
 
     before do
       File.write output_file, 'old data'
