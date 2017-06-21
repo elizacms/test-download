@@ -1,4 +1,4 @@
-feature 'Dialogs', :js do
+feature 'Dialogs', :js ,:skip do
   let!( :dev             ){ create :user                          }
   let!( :skill           ){ create :skill                         }
   let!( :role            ){ create :role, user: dev, skill: skill }

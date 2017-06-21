@@ -18,18 +18,10 @@ class Dialog
 
   validates_presence_of :intent_id
 
-  def attrs
-    attributes
-  end
-
   def dialog_with_responses
-    attrs = attributes.dup.merge( responses_attributes: responses.map(&:attrs))
+    attrs = attributes.dup.merge( responses_attributes: responses.map( &:attrs )).symbolize_keys
     attrs[ :intent_id ] = intent.id.to_s
     attrs.delete '_id'
     attrs
-  end
-
-  def self.for intent
-    self.all.to_a.select { |d| d.intent_id == intent.name }
   end
 end

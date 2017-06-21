@@ -36,7 +36,8 @@ describe 'Dialogs' do
       expect( Dialog.count   ).to eq 1
       expect( Response.count ).to eq 1
       expect( Response.first.attrs[:response_type] ).to eq 'some_type'
-      expect( Dialog.first.attrs[:priority] ).to eq 90
+      expect( Dialog.first.priority ).to eq 90
+      expect( Dialog.first.comments ).to eq 'some comments'
     end
 
     specify 'Failure' do
@@ -65,11 +66,13 @@ describe 'Dialogs' do
       get '/dialogue_api/all_scenarios', { intent_id: intent.id }
 
       expect( last_response.status ).to eq 200
+      
       expect( parsed_response.count ).to eq 1
-      expect( parsed_response[0][:missing         ] ).to eq [ 'destination' ]
-      expect( parsed_response[0][:unresolved      ] ).to eq [ 'unresolved' ]
-      expect( parsed_response[0][:present         ] ).to eq [ 'present', 'value' ]
-      expect( parsed_response[0][:awaiting_field  ] ).to eq [ 'destination' ]
+      expect( parsed_response[0][:missing        ] ).to eq [ 'destination' ]
+      expect( parsed_response[0][:unresolved     ] ).to eq [ 'unresolved' ]
+      expect( parsed_response[0][:present        ] ).to eq [ 'present', 'value' ]
+      expect( parsed_response[0][:awaiting_field ] ).to eq [ 'destination' ]
+      expect( parsed_response[0][:awaiting_field ] ).to eq [ 'destination' ]
     end
   end
 

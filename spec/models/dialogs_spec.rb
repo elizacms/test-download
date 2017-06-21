@@ -21,35 +21,60 @@ describe Dialog do
   let!( :dialog         ){ intent.dialogs.create!(dialog_params) }
 
 
-  describe 'Dialogs' do
-    specify 'Array with non-empty string should be valid' do
-      expect(
-        FactoryGirl.build( :dialog, awaiting_field: ['abc'], missing: ['abc'], intent_id: intent.id )
-      ).to be_valid
-    end
+  specify 'Array with non-empty string should be valid' do
+    expect(
+      FactoryGirl.build( :dialog, awaiting_field: ['abc'], missing: ['abc'], intent_id: intent.id )
+    ).to be_valid
+  end
 
-    specify 'Success from missing' do
-      expect(
-        FactoryGirl.build( :dialog, intent_id: intent.id, missing: ['Something here.'] )
-      ).to be_valid
-    end
+  specify 'Success from missing' do
+    expect(
+      FactoryGirl.build( :dialog, intent_id: intent.id, missing: ['Something here.'] )
+    ).to be_valid
+  end
 
-    specify 'Success from unresolved' do
-      expect(
-        FactoryGirl.build( :dialog, intent_id: intent.id, unresolved: ['Something here.'] )
-      ).to be_valid
-    end
+  specify 'Success from unresolved' do
+    expect(
+      FactoryGirl.build( :dialog, intent_id: intent.id, unresolved: ['Something here.'] )
+    ).to be_valid
+  end
 
-    specify 'Success from present' do
-      expect(
-        FactoryGirl.build( :dialog, intent_id: intent.id, present: ['Something here.'] )
-      ).to be_valid
-    end
+  specify 'Success from present' do
+    expect(
+      FactoryGirl.build( :dialog, intent_id: intent.id, present: ['Something here.'] )
+    ).to be_valid
+  end
 
-    specify 'Success from entity_values' do
-      expect(
-        FactoryGirl.build( :dialog, intent_id: intent.id, entity_values: ['some','thing'] )
-      ).to be_valid
+  specify 'Success from entity_values' do
+    expect(
+      FactoryGirl.build( :dialog, intent_id: intent.id, entity_values: ['some','thing'] )
+    ).to be_valid
+  end
+
+  describe '#dialog_with_responses' do
+    let( :expected ){{
+      awaiting_field: [
+        "await"
+      ],
+      missing: [
+        "miss"
+      ],
+      unresolved: [
+        "no_resolve"
+      ],
+      present: [
+        "here i am"
+      ],
+      entity_values: [
+        "beings"
+      ],
+      priority: 100,
+      comments: "say something",
+      responses_attributes: [] 
+    }}
+
+    specify do
+      expect( dialog.dialog_with_responses ).to include expected
     end
   end
 end
