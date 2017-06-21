@@ -55,7 +55,7 @@ def getCommitAuthor() {
 
 def getCommitId() {
   def props = readFile "commit_id.properties"
-  return props
+  return props.replace("\n", "").replace("\r", "")
 }
 
 def getCommitMessage() {
