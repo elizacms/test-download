@@ -1,4 +1,4 @@
-intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra
+intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra,comments
 billing_mybill,100,billing_invoicequestion,None,billing_invoicequestion,None,,"[
   {
     ""ResponseType"": 1,

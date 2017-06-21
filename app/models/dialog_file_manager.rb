@@ -9,14 +9,13 @@ class DialogFileManager
     intent_id   = Intent.find_by( name:intent_name ).id
 
     CSV.open( csv_file, headers: true ).map do | row |
-      hash1 = row.to_hash.symbolize_keys
+      hash = row.to_hash.symbolize_keys
 
-      Dialog.new( attrs_from( hash1 ).merge( intent_id:intent_id ))
+      Dialog.new( attrs_from( hash ).merge( intent_id:intent_id ))
     end
   end
 
   def save dialogs
-    # ap dialogs
     name = dialogs.first.intent.name
     filename = "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/#{ name }.csv"
 
@@ -36,6 +35,7 @@ class DialogFileManager
       attrs[ :present       ] = attrs[ :present ].join( ' && ' )
       attrs[ :entity_values ] = %Q/"[(#{ attrs[ :entity_values ].map{| w | "'#{ w }'" }.join ', ' })]"/
       attrs[ :eliza_de      ] = %Q/"#{ formatted }"/
+      attrs[ :comments      ] = %Q/"#{ d.comments }"/
 
       fields.map{| k | attrs[ k ]}.join ','
     end
@@ -59,7 +59,7 @@ class DialogFileManager
   end
 
   def fields
-    %i/ intent_id priority awaiting_field unresolved missing present entity_values eliza_de extra /
+    %i/ intent_id priority awaiting_field unresolved missing present entity_values eliza_de extra comments /
   end
 
   def attrs_from hash
@@ -79,8 +79,14 @@ class DialogFileManager
                                           .flatten
 
     dup[ :entity_values  ] = entity_values
+    dup[ :responses ] = responses_for( hash )
+    dup.delete :eliza_de
 
-    dup[ :responses ] = begin
+    dup
+  end
+
+  def responses_for hash
+    begin
       JSON.parse( hash[ :eliza_de ]).map do | r |
         r.symbolize_keys!
 
@@ -95,11 +101,7 @@ class DialogFileManager
         )
       end
     rescue JSON::ParserError
-      {}
+      []
     end
-
-    dup.delete :eliza_de
-
-    dup
   end
 end

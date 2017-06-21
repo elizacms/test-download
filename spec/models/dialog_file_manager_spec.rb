@@ -9,7 +9,7 @@ describe DialogFileManager do
     let( :intent_name ){ 'billing_0' }
 
     specify do
-      expect( dialogs.count ).to eq 0
+      expect( dialogs ).to eq []
     end
   end
 
@@ -42,12 +42,14 @@ describe DialogFileManager do
 
     specify do
       expect( dialogs.count ).to eq 1
+      
       expect( dialogs[ 0 ].priority ).to eq 100
       expect( dialogs[ 0 ].present ).to eq [ 'phone_type', 'handyhilfe_kind' ]
       expect( dialogs[ 0 ].entity_values ).to eq [ 'billing_invoicequestion', 'billexplain' ]
+      expect( dialogs[ 0 ].comments ).to eq 'comments are, here'
+      
       expect( dialogs[ 0 ].responses[ 0 ].response_type    ).to eq '1'
       expect( dialogs[ 0 ].responses[ 0 ].response_trigger ).to eq nil
-
       expect( dialogs[ 0 ].responses[ 0 ].response_value ).to eq first_response_value
     end
   end

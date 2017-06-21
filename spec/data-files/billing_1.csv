@@ -1,4 +1,4 @@
-intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra
+intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra,comments
 billing_1,100,billing_invoicequestion,None,billing_invoicequestion,phone_type && handyhilfe_kind,"[('billing_invoicequestion', 'billexplain')]","[
   {
     ""ResponseType"": 1,
@@ -42,4 +42,4 @@ billing_1,100,billing_invoicequestion,None,billing_invoicequestion,phone_type &&
       ""timeDelayInSecs"": 5
     }
   }
-]",BILL-001
+]",BILL-001,"comments are, here"
