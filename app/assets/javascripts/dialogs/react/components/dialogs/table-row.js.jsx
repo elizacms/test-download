@@ -82,8 +82,7 @@ var TableRow = React.createClass({
 
   render() {
     let data = this.props.data;
-    console.log( "Table Row" );
-    console.log( data );
+
     return (
       <tr className='dialog-data'>
         <td className='priority'>{data.priority}</td>

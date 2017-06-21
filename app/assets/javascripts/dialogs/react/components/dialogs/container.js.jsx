@@ -26,33 +26,34 @@ var Container = React.createClass({
   },
 
   createOrUpdateDialog(data){
-console.log( "Create or Update Dialog" );
-console.log( data );
-console.log( this.state.data );
     if (this.state.isUpdate) {
-      var url = '/dialogue_api/response?id=' + this.state.currentDialogId.$oid;
       const current_data = this.state.data;
       const tmp = current_data.filter( (f) => f.id != this.state.currentDialogId );
+
       this.setState({
         data: [...tmp, data]
-      }, () => this.callDialogApi(url) );
+      }, () => this.callDialogApi() );
 
     } else {
-      var url = '/dialogue_api/response?';
-
       this.setState({
         data: [...this.state.data, data]
-      }, () => this.callDialogApi(url) );
+      }, () => this.callDialogApi() );
     }
 
     IAM.loading.start({ type:'logo', duration: false });
   },
 
-  callDialogApi(url){
+  callDialogApi(){
     console.log("Ajaxing....");
-    
+
+    var dataWithoutId = this.state.data.map((d) => {
+      delete d.id;
+      return d;
+    });
+
+    var url = '/dialogue_api/response?';
     var ajaxData = JSON.stringify({ intent_id: this.props.intent_id,
-                                    dialogs: this.state.data });
+                                    dialogs: dataWithoutId });
     console.log( ajaxData );
 
     $.ajax({
@@ -104,10 +105,17 @@ console.log( this.state.data );
       data: data
     })
     .done( function( data ){
-      this.setState({ data: data }, ()=>{
-        console.log( "All Scenarios!" );
-        console.log( data );
-      });
+      console.log( "All Scenarios!" );
+      console.log( data );
+
+      // stuffs an index as id in each data.
+      var dataWithId = data.map((d,index) => {
+        d['id'] = index;
+        return d;
+      })
+
+      this.setState({ data: dataWithId });
+
     }.bind(this));
   },
 
@@ -129,10 +137,9 @@ console.log( this.state.data );
 
   copyData(data){
     // remove responses ids from the original
-    for(var i=0; i<data.responses.length; i++){
-      data.responses[i].id="";
-    }
-
+    // for(var i=0; i<data.responses_attributes.length; i++){
+    //   data.responses_attributes[i].id="";
+    // }
     this.setState({dialogData: data, isUpdate: false, currentDialogId: null});
   },
 
@@ -143,17 +150,17 @@ console.log( this.state.data );
 
     this.setState({
       data: stateData
-    });
+    }, () => this.callDialogApi() );
 
-    $.ajax({
-      type: 'DELETE',
-      url: '/dialogue_api/response?id=' + dialogData.id.$oid
-    })
-    .done( function( data ){
-      this.setState({
-        message: {'response-message': data}
-      });
-    }.bind(this));
+    // $.ajax({
+    //   type: 'DELETE',
+    //   url: '/dialogue_api/response?id=' + dialogData.id.$oid
+    // })
+    // .done( function( data ){
+    //   this.setState({
+    //     message: {'response-message': data}
+    //   });
+    // }.bind(this));
   },
 
   render() {

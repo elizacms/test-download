@@ -4,7 +4,7 @@ var ResponseType = React.createClass({
       name: '',
       index: '',
       response_id: '',
-      responseType: 'text',
+      responseType: '0',
       response_trigger: '',
       trigger_type: 'null',
       newInputValues: {},
@@ -12,7 +12,11 @@ var ResponseType = React.createClass({
   },
 
   componentDidMount() {
-    const response_trigger_key = Object.keys(this.props.response_trigger)[0] || '';
+    let response_trigger_key = '';
+
+    if (this.props.response_trigger) {
+      response_trigger_key = Object.keys(this.props.response_trigger)[0] || '';
+    }
 
     this.setState({
       name: this.props.name,
@@ -31,12 +35,16 @@ var ResponseType = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    const response_trigger_key = Object.keys(nextProps.response_trigger)[0] || '';
+    let response_trigger_key = '';
+
+    if (nextProps.response_trigger) {
+      response_trigger_key = Object.keys(nextProps.response_trigger)[0] || '';
+    }
 
     this.setState({
       name: nextProps.name,
       index: nextProps.index,
-      response_id: nextProps.response_id,
+      // response_id: nextProps.response_id,
       response_trigger: nextProps.response_trigger,
       trigger_type: response_trigger_key
     });
@@ -102,8 +110,7 @@ var ResponseType = React.createClass({
   },
 
   updateParentState(newInputValue) {
-    // this.props.updateState( 'responses_attributes', {
-    this.props.updateState( 'responses', {
+    this.props.updateState( 'responses_attributes', {
       id: this.props.index,
       value: this.state.responseType,
       inputValue: newInputValue,
@@ -131,13 +138,13 @@ var ResponseType = React.createClass({
     let attachment = "";
 
     switch(selectedType) {
-      case 'text':
+      case '0': // Text
         attachment = <Text
                       value={this.state.newInputValues}
                       componentData={this.handleDataFromChild}
                     />
         break;
-      case 'textWithOption':
+      case '1': // Text With Option
         attachment = <div>
                     <Text
                       value={this.state.newInputValues}
@@ -150,7 +157,7 @@ var ResponseType = React.createClass({
                     />
                     </div>
         break;
-      case 'video':
+      case '2': // Video
         attachment = <div>
                     <Text
                       value={this.state.newInputValues}
@@ -162,14 +169,14 @@ var ResponseType = React.createClass({
                     />
                     </div>
         break;
-      case 'card':
+      case '3': // Card
         attachment = <Template
                       templateType="cards"
                       value={this.state.newInputValues}
                       componentData={this.handleDataFromChild}
                     />
         break;
-      case 'qna':
+      case '4': // Q & A
         attachment = <Qna
                       value={this.state.newInputValues}
                       componentData={this.handleDataFromChild}
@@ -309,11 +316,11 @@ var ResponseType = React.createClass({
             value={this.state.responseType}
             onChange={this.responseTypeMenuChange}
           >
-            <option key='0' value='text'>Text</option>
-            <option key='1' value='textWithOption'>Text With Option</option>
-            <option key='2' value='video'>Video</option>
-            <option key='3' value='card'>Card</option>
-            <option key='4' value='qna'>Q & A</option>
+            <option key='0' value='0'>Text</option>
+            <option key='1' value='1'>Text With Option</option>
+            <option key='2' value='2'>Video</option>
+            <option key='3' value='3'>Card</option>
+            <option key='4' value='4'>Q & A</option>
           </select>
           <br /><br />
           { this.renderComponents() }
