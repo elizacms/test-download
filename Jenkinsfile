@@ -31,7 +31,7 @@ pipeline {
 
     stage('Update App - NLU-CMS') {
       steps {
-        sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=" + getCommitId + " bash ./pipeline/update_app_nlu.sh"
+        sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=" + getCommitId() + " bash ./pipeline/update_app_nlu.sh"
       }
     }
   }
