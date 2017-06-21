@@ -26,3 +26,6 @@
 .DS_Store
 
 /spec/nlu-cms-persistence
+
+#ignore mongo folder
+data/
