@@ -1,18 +1,16 @@
 class FieldsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
-  before_action :set_field, only: [:update, :destroy]
-
-  # get '/fields'
+  # GET '/fields'
   def index
     intent = Intent.find( params[ :intent_id ])
 
     render json: fields_for( intent ).to_json
   end
 
-  # post '/fields'
+  # POST '/fields'
   def create
-    intent = Intent.find_by(id: params[:intent_id])
+    intent = Intent.find_by(id: field_params[:intent_id])
 
     unless intent
       response.headers[ 'Warning' ] = 'A valid intent_id is required.'
@@ -20,10 +18,11 @@ class FieldsController < ApplicationController
       return
     end
 
-    fields = params[:fields].map{|f| Field.new( f.to_unsafe_h )}
+    fields = field_params[:fields].map{|f| Field.new( f )}
 
     if fields.all?{ |f| f.valid? }
       IntentFileManager.new.save( intent, fields )
+
       render json: fields.map{|f| f.serialize}.to_json, status: 201
     else
       render plain: fields.map{|f| f.errors.full_messages}.join("\n"), status: 422
@@ -38,11 +37,15 @@ class FieldsController < ApplicationController
     IntentFileManager.new.load_intent_from( file )[:fields]
   end
 
-  def set_field
-    @field = Field.find_by( id: params[ :id ] )
-  end
-
   def field_params
-    params.permit( :type, :mturk_field, :name )
+    params.permit(
+      :intent_id,
+      fields: [
+        :name,
+        :type,
+        :mturk_field,
+        :must_resolve
+      ]
+    )
   end
 end

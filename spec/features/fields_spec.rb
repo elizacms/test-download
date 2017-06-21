@@ -65,6 +65,7 @@ feature 'Fields', :js do
       execute_script('$("tr.jsgrid-insert-row td input").val("Holy Moly!");')
       page.all('input.black.sm')[0].click
 
+      sleep 0.5
       accept_alert {}
       sleep 0.5
       expect( page ).to_not have_content 'Holy Moly!'

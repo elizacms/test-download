@@ -30,23 +30,25 @@ function initFields(){
                 return ajaxCall( 'GET', '/fields', filter);
             },
             insertItem: function(item){
-                var data = $.extend( { intent_id: intent._id.$oid }, item );
+                var newData = setUpData();
+                newData.push(item);
+                var data = JSON.stringify({ intent_id: intent._id.$oid, fields: newData });
 
-                return $.ajax({
-                    type: 'POST',
-                    dataType: 'json',
-                    url: '/fields',
-                    data: data
-                }).fail(function(r){
-                    IAM.alert.run('red', r.responseText, 3000);
-                });
+                postAllFields(data);
             },
             updateItem: function(item){
-                return ajaxCall( 'PUT', '/fields/'+ item['id']['$oid'], item);
+                var newData = setUpData();
+                var data = JSON.stringify({ intent_id: intent._id.$oid, fields: newData });
+
+                postAllFields(data);
             },
             deleteItem: function(item){
-                return ajaxCall( 'DELETE', '/fields/' + item['id']['$oid'], null);
+                var newData = setUpData();
+                var index = newData.findIndex(d => d.name === item.name);
+                newData.splice(index, 1);
+                var data = JSON.stringify({ intent_id: intent._id.$oid, fields: newData });
 
+                postAllFields(data);
             }
         },
 
@@ -91,6 +93,31 @@ function initFields(){
     });
 }
 
+function setUpData(){
+    var fData = $("#jsGrid").jsGrid("option", "data");
+    var newData = $.extend(true, [], fData);
+
+    $.each(newData, function(index, value){
+        delete value['id'];
+    });
+
+    return newData;
+}
+
+function postAllFields(data){
+    return $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: '/fields',
+        contentType: 'application/json',
+        data: data
+    }).done(function(r){
+        initFields();
+    }).fail(function(r){
+        IAM.alert.run('red', r.responseText, 3000);
+    });
+}
+
 function getCustomInsertControls(gridId) {
     if ( !locked.responseJSON.file_lock ){
         var grid = $(gridId).data('JSGrid');
@@ -131,6 +158,11 @@ function createJSON(){
 
     $.each(newData, function(index, value){
         delete value['id'];
+        delete value['_id'];
+        delete value['created_at'];
+        delete value['updated_at'];
+        value['id'] = value['name'];
+        delete value['name'];
     });
 
     var top = {

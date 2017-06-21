@@ -23,12 +23,7 @@ class DialogsController < ApplicationController
       return
     end
 
-    puts "\n-----"
-    ap dialog_params
-
-    dialogs = dialog_params[:dialogs].map do |ps|
-      Dialog.new( ps.merge(intent_id: intent.id.to_s ))
-    end
+    dialogs = dialog_params[:dialogs].map{|ps| Dialog.new(ps.merge(intent_id: intent.id.to_s))}
 
     if dialogs.all?{ |d| d.valid? }
       intent.dialogs.delete_all
