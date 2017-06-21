@@ -9,8 +9,8 @@ var ExportCSV = React.createClass({
     window.location.assign( '/dialogue_api/csv?intent_id=' + this.props.intent_id );
   },
 
-  intentID() {
-    return this.props['intent_id']
+  intentName() {
+    return this.props['intent_name']
   },
 
   skillName() {
@@ -35,7 +35,7 @@ var ExportCSV = React.createClass({
             <strong>Skill: </strong>{this.skillName()}
           </div>
           <div>
-            <strong>Intent: </strong>{this.intentID()}
+            <strong>Intent: </strong>{this.intentName()}
           </div>
           <div>
             <strong>Webhook: </strong>{this.webHook()}

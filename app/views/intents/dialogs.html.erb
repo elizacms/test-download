@@ -1,3 +1,5 @@
+<%= render partial: 'lock' %>
+
 <%= link_to(
   '&larr; Intents'.html_safe,
   edit_skill_intent_path(@skill, @intent),
@@ -5,12 +7,11 @@
 ) %>
 <br><br>
 
-<%= render partial: 'lock' %><br>
-
 <%= react_component(
   'Container',
   {
     intent_id: @intent.id.to_s,
+    intent_name: @intent.attrs[:name],
     skill_name: @skill.name,
     web_hook: @skill.web_hook,
     field_path: fields_page_path(@skill, @intent),

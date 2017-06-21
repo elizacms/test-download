@@ -35,7 +35,8 @@ describe 'Release Feature Specs' do
 
     visit '/releases/new'
 
-    expect( page ).to have_content "- \"priority\": 90, + \"priority\": 5"
+    expect( page ).to have_content '"priority": 90'
+    expect( page ).to have_content '"priority": 5'
   end
 
   specify 'User can create a release' do
