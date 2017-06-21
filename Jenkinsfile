@@ -7,7 +7,6 @@ pipeline {
     stage('Checkout nlu-cms') {
       steps {
         println env.BRANCH_NAME
-        println env.GIT_COMMIT
         sh "git branch -D ${env.BRANCH_NAME} > /dev/null 2>&1 || true"
         sh "git checkout -b ${env.BRANCH_NAME}"
         sh 'bash ./pipeline/write_commit_info.sh'
@@ -26,13 +25,13 @@ pipeline {
 
     stage('Update App - Eliza-CMS') {
       steps {
-        sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=${env.GIT_COMMIT} bash ./pipeline/update_app.sh"
+        sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=" + getCommitId() + " bash ./pipeline/update_app.sh"
       }
     }
 
     stage('Update App - NLU-CMS') {
       steps {
-        sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=${env.GIT_COMMIT} bash ./pipeline/update_app_nlu.sh"
+        sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=" + getCommitId + " bash ./pipeline/update_app_nlu.sh"
       }
     }
   }
