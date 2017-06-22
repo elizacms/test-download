@@ -11,7 +11,7 @@ var DialogForm = React.createClass({
       'missing-field'       : [{id: 0, value: 'None', inputValue: ''}],
       'present-field'       : [{id: 0, value: 'None', inputValue: ''}],
       'awaiting-field'      : [{id: 0, value: 'None', inputValue: ''}],
-      'responses_attributes': [{id: 0, value: 'text', inputValue: '',
+      'responses_attributes': [{id: 0, value: '0', inputValue: '',
                                 response_trigger: '', response_id: ''}],
       'entity-value-field'  : [{id: 0, value: 'None', inputValue: ''}],
       priority: '',
@@ -141,8 +141,7 @@ var DialogForm = React.createClass({
   updateState(name, obj){
     if (this.state.responses_attributes[obj.id] && this.state.responses_attributes[obj.id].value != obj.value) { // Response Type Changed
       this.state[name][obj.id] = obj;
-    } else if ( obj.inputValue && Object.keys(obj.inputValue).length === 0 ) {
-      // Update response_trigger only
+    } else if ( obj.inputValue && Object.keys(obj.inputValue).length === 0 ) { // response_trigger changed
       this.state[name][obj.id].response_trigger = obj.response_trigger;
     } else {
       this.state[name][obj.id] = obj;
