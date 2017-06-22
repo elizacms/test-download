@@ -19,12 +19,12 @@ describe 'User git controls' do
   let!( :response    ){ create :response, dialog: dialog                           }
 
   before do
-    IntentFileManager.new.save( intent, [field]  )
+    IntentFileManager.new.save( intent, [field]   )
     IntentFileManager.new.save( intent2, [field]  )
     IntentFileManager.new.save( intent3, [field]  )
-    DialogFileManager.new.save([dialog] )
-    DialogFileManager.new.save([dialog2])
-    DialogFileManager.new.save([dialog3])
+    DialogFileManager.new.save([dialog], intent   )
+    DialogFileManager.new.save([dialog2], intent2 )
+    DialogFileManager.new.save([dialog3], intent3 )
   end
 
   let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name.downcase}.csv",
@@ -51,7 +51,7 @@ describe 'User git controls' do
   describe '#git_add files' do
     it 'adds updated files to index' do
       dialog3.update(priority: 25)
-      DialogFileManager.new.save([dialog3])
+      DialogFileManager.new.save([dialog3], intent3)
       user.git_add( [dialog3_path] )
       status = repo.status(dialog3_path)
 
@@ -73,10 +73,10 @@ describe 'User git controls' do
     it 'returns the changes between HEAD and the working directory' do
       dialog.update(priority: 42)
       dialog2.update(priority: 666)
-      DialogFileManager.new.save([dialog])
-      DialogFileManager.new.save([dialog2])
+      DialogFileManager.new.save( [dialog], intent   )
+      DialogFileManager.new.save( [dialog2], intent2 )
       field.destroy
-      IntentFileManager.new.save(intent, [])
+      IntentFileManager.new.save( intent, [] )
 
       expect( user.git_diff_workdir  ).to eq pretty_diff
       expect( user2.git_diff_workdir ).to eq pretty_diff2

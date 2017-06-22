@@ -13,8 +13,8 @@ describe User do
 
   before do
     IntentFileManager.new.save( intent, [field] )
-    IntentFileManager.new.save( intent2, []     )
-    DialogFileManager.new.save([dialog, dialog2])
+    IntentFileManager.new.save( intent2, [] )
+    DialogFileManager.new.save( [dialog, dialog2], intent )
   end
 
   let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name}.csv"]) }

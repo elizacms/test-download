@@ -42,12 +42,12 @@ describe DialogFileManager do
 
     specify do
       expect( dialogs.count ).to eq 1
-      
+
       expect( dialogs[ 0 ].priority ).to eq 100
       expect( dialogs[ 0 ].present ).to eq [ 'phone_type', 'handyhilfe_kind' ]
       expect( dialogs[ 0 ].entity_values ).to eq [ 'billing_invoicequestion', 'billexplain' ]
       expect( dialogs[ 0 ].comments ).to eq 'comments are, here'
-      
+
       expect( dialogs[ 0 ].responses[ 0 ].response_type    ).to eq '1'
       expect( dialogs[ 0 ].responses[ 0 ].response_trigger ).to eq nil
       expect( dialogs[ 0 ].responses[ 0 ].response_value ).to eq first_response_value
@@ -66,7 +66,7 @@ describe DialogFileManager do
 
   describe '#load returns many Dialogs' do
     let( :intent_name ){ 'billing_all' }
-    
+
     specify do
       expect( dialogs.count ).to eq 66
       expect( dialogs[ 0 ].priority ).to eq 100
@@ -79,7 +79,7 @@ describe DialogFileManager do
     let( :output_file ){ "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/#{ intent.name }.csv" }
 
     specify 'success' do
-      DialogFileManager.new.save dialogs
+      DialogFileManager.new.save dialogs, intent
 
       expect( File.read output_file ).to eq File.read( file )
     end
@@ -95,7 +95,7 @@ describe DialogFileManager do
     end
 
     specify do
-      DialogFileManager.new.save dialogs
+      DialogFileManager.new.save dialogs, intent
 
       expect( File.read output_file ).to eq File.read( file )
     end

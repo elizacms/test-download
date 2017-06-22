@@ -1,4 +1,4 @@
-feature 'Dialogs', :js ,:skip do
+feature 'Dialogs', :js do
   let!( :dev             ){ create :user                          }
   let!( :skill           ){ create :skill                         }
   let!( :role            ){ create :role, user: dev, skill: skill }
@@ -31,28 +31,6 @@ feature 'Dialogs', :js ,:skip do
     expect( page ).to have_content 'destination'
   end
 
-  specify 'Shows Dialog from CSV' ,:skip do
-    click_link 'Cancel'
-
-    binding.pry
-    expect( page ).to have_content 'billing_invoicequestion'
-    # expect( page ).to have_content 'Das beantworte ich gern'
-  end
-
-  specify 'Saves Dialog to CSV' ,:skip do
-    within '.dialog-form' do
-      select 'destination', from: 'unresolved-field'
-      select 'destination', from: 'awaiting-field'
-    end
-
-    click_button 'Create Dialog'
-
-    sleep 0.1
-    # expect( page ).to have_content 'destination'
-    # check for CSV creation
-    # If no CSV with the skill name, then create it
-  end
-
   specify 'User can update a dialog' do
     within '.dialog-form' do
       select 'destination', from: 'unresolved-field'
@@ -72,7 +50,7 @@ feature 'Dialogs', :js ,:skip do
 
     expect( page ).to have_content 120
     expect( Dialog.count         ).to eq 1
-    expect( Dialog.last.attrs[:priority] ).to eq 120
+    expect( Dialog.last.priority ).to eq 120
     expect( Dialog.last.comments ).to eq 'Here are my comments'
   end
 
@@ -121,14 +99,14 @@ feature 'Dialogs', :js ,:skip do
     end
 
     expect( Dialog.count                ).to eq 2
-    expect( Dialog.first.attrs[:priority]       ).to eq 120
-    expect( Dialog.first.attrs[:unresolved]     ).to eq ['destination']
-    expect( Dialog.first.attrs[:awaiting_field] ).to eq ['destination']
-    expect( Dialog.first.attrs[:present]        ).to eq ['None', '']
-    expect( Dialog.last.attrs[:priority]        ).to eq 120
-    expect( Dialog.last.attrs[:unresolved]      ).to eq ['destination']
-    expect( Dialog.last.attrs[:awaiting_field]  ).to eq ['None']
-    expect( Dialog.last.attrs[:present]         ).to eq ['destination', '']
+    expect( Dialog.first.priority       ).to eq 120
+    expect( Dialog.first.unresolved     ).to eq ['destination']
+    expect( Dialog.first.awaiting_field ).to eq ['destination']
+    expect( Dialog.first.present        ).to eq ['None', '']
+    expect( Dialog.last.priority        ).to eq 120
+    expect( Dialog.last.unresolved      ).to eq ['destination']
+    expect( Dialog.last.awaiting_field  ).to eq ['None']
+    expect( Dialog.last.present         ).to eq ['destination', '']
   end
 
   specify 'Deleting a dialog shows confirm' do
@@ -143,7 +121,9 @@ feature 'Dialogs', :js ,:skip do
       page.find('.fa-trash').click
     end
 
-    expect( page ).to have_content 'You deleted a Dialog.'
+    sleep 0.5
+
+    expect( page ).to_not have_content 'destination'
   end
 
   specify 'User can add an entity and a value for the entity' do
@@ -156,7 +136,7 @@ feature 'Dialogs', :js ,:skip do
 
     sleep 0.5
 
-    expect( Dialog.last.attrs[:entity_values] ).to eq( ['destination','my wonderful value'] )
+    expect( Dialog.last.entity_values ).to eq( ['destination','my wonderful value'] )
   end
 
   describe 'Responses Types' do
@@ -180,7 +160,6 @@ feature 'Dialogs', :js ,:skip do
       sleep 0.5
 
       expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 1
 
       expected_response_value = {
         'textValue'       => 'abc def 123 10 9 8',
@@ -189,9 +168,9 @@ feature 'Dialogs', :js ,:skip do
 
       expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
-      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq 'text'
-      expect( Dialog.last.responses.first.attrs[:response_trigger] ).to eq expected_response_trigger
-      expect( Dialog.last.responses.first.attrs[:response_value]   ).to eq expected_response_value
+      expect( Dialog.last.responses.first.response_type    ).to eq '0'
+      expect( Dialog.last.responses.first.response_trigger ).to eq expected_response_trigger
+      expect( Dialog.last.responses.first.response_value   ).to eq expected_response_value
     end
 
     specify 'Can save mulitple responses of type text' do
@@ -226,7 +205,6 @@ feature 'Dialogs', :js ,:skip do
       sleep 0.5
 
       expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 2
 
       expected_response_1 = {
         'textValue'       => 'abc def 123 10 9 8',
@@ -240,10 +218,10 @@ feature 'Dialogs', :js ,:skip do
       }.to_json
       expected_response_trigger_2 = {'timeDelayInSecs' => '6'}.to_json
 
-      expect( Dialog.last.responses.first.attrs[:response_type]     ).to eq 'text'
+      expect( Dialog.last.responses.first.attrs[:response_type]     ).to eq '0'
       expect( Dialog.last.responses.first.attrs[:response_trigger]  ).to eq expected_response_trigger_1
       expect( Dialog.last.responses.first.attrs[:response_value]    ).to eq expected_response_1
-      expect( Dialog.last.responses.last.attrs[:response_type]      ).to eq 'text'
+      expect( Dialog.last.responses.last.attrs[:response_type]      ).to eq '0'
       expect( Dialog.last.responses.last.attrs[:response_trigger]   ).to eq expected_response_trigger_2
       expect( Dialog.last.responses.last.attrs[:response_value]     ).to eq expected_response_2
     end
@@ -274,7 +252,6 @@ feature 'Dialogs', :js ,:skip do
       sleep 0.5
 
       expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 1
 
       expected_response_value = {
         'textValue'       => 'abc def 123 10 9 8',
@@ -286,7 +263,7 @@ feature 'Dialogs', :js ,:skip do
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
-      expect( Dialog.last.responses.first.attrs[:response_type]     ).to eq 'textWithOption'
+      expect( Dialog.last.responses.first.attrs[:response_type]     ).to eq '1'
       expect( Dialog.last.responses.first.attrs[:response_trigger]  ).to eq expected_response_trigger
       expect( Dialog.last.responses.first.attrs[:response_value]    ).to eq expected_response_value
     end
@@ -313,7 +290,6 @@ feature 'Dialogs', :js ,:skip do
       sleep 0.5
 
       expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 1
 
       expected_response_value = {
         'textValue'       => 'abc def 123 10 9 8',
@@ -323,7 +299,7 @@ feature 'Dialogs', :js ,:skip do
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
-      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq 'video'
+      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq '2'
       expect( Dialog.last.responses.first.attrs[:response_trigger] ).to eq expected_response_trigger
       expect( Dialog.last.responses.first.attrs[:response_value]   ).to eq expected_response_value
     end
@@ -360,7 +336,6 @@ feature 'Dialogs', :js ,:skip do
       sleep 0.5
 
       expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 2
 
       expected_response_value = {
         'textValue'       => 'abc def 123 10 9 8',
@@ -377,10 +352,10 @@ feature 'Dialogs', :js ,:skip do
       expected_response_trigger_2 = {'timeDelayInSecs' => '6'}.to_json
 
 
-      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq 'video'
+      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq '2'
       expect( Dialog.last.responses.first.attrs[:response_trigger] ).to eq expected_response_trigger_1
       expect( Dialog.last.responses.first.attrs[:response_value]   ).to eq expected_response_value
-      expect( Dialog.last.responses.last.attrs[:response_type]     ).to eq 'text'
+      expect( Dialog.last.responses.last.attrs[:response_type]     ).to eq '0'
       expect( Dialog.last.responses.last.attrs[:response_trigger]  ).to eq expected_response_trigger_2
       expect( Dialog.last.responses.last.attrs[:response_value]    ).to eq expected_response_2
     end
@@ -418,7 +393,6 @@ feature 'Dialogs', :js ,:skip do
       sleep 0.5
 
       expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 2
 
       find( '.fa-pencil' ).click
 
@@ -454,10 +428,10 @@ feature 'Dialogs', :js ,:skip do
       }.to_json
       expected_response_trigger_2 = {'timeDelayInSecs' => '7'}.to_json
 
-      expect( Response.first.attrs[:response_type]    ).to eq 'video'
+      expect( Response.first.attrs[:response_type]    ).to eq '2'
       expect( Response.first.attrs[:response_trigger] ).to eq expected_response_trigger_1
       expect( Response.first.attrs[:response_value]   ).to eq expected_response_value
-      expect( Response.last.attrs[:response_type]     ).to eq 'text'
+      expect( Response.last.attrs[:response_type]     ).to eq '0'
       expect( Response.last.attrs[:response_trigger]  ).to eq expected_response_trigger_2
       expect( Response.last.attrs[:response_value]    ).to eq expected_response_2
     end
@@ -494,7 +468,6 @@ feature 'Dialogs', :js ,:skip do
       sleep 0.5
 
       expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 2
 
       find( '.fa-pencil' ).click
 
@@ -512,20 +485,16 @@ feature 'Dialogs', :js ,:skip do
       end
 
       expected_response_value = {
-        'textValue'      => 'abc def 123 10 9 8',
-        'spokenTextValue'            => 'Speak out!',
-        'videoThumbnail' => 'twin cats',
-        'videoEntity'    => 'Jenny or Luna or Lady'
+        'textValue'       => 'abc def 123 10 9 8',
+        'spokenTextValue' => 'Speak out!',
+        'videoThumbnail'  => 'twin cats',
+        'videoEntity'     => 'Jenny or Luna or Lady'
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '7'}.to_json
 
-      expect( Response.count ).to eq 2
-      expect(
-        File.exist?("#{ENV['NLU_PERSISTENCE_PATH']}/responses/#{Response.last.id}.json")
-      ).to eq false
-      expect( Response.first.attrs[:response_type]    ).to eq 'video'
-      expect( Response.first.attrs[:response_trigger] ).to eq expected_response_trigger
-      expect( Response.first.attrs[:response_value]   ).to eq expected_response_value
+      expect( Response.last.attrs[:response_type]    ).to eq '2'
+      expect( Response.last.attrs[:response_trigger] ).to eq expected_response_trigger
+      expect( Response.last.attrs[:response_value]   ).to eq expected_response_value
     end
 
     specify 'Can save mulitple card types' do
@@ -569,7 +538,6 @@ feature 'Dialogs', :js ,:skip do
       sleep 0.5
 
       expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 1
 
       expected_response_value = {
         "cards" => [
@@ -603,7 +571,7 @@ feature 'Dialogs', :js ,:skip do
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
-      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq 'card'
+      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq '3'
       expect( Dialog.last.responses.first.attrs[:response_trigger] ).to eq expected_response_trigger
       expect( Dialog.last.responses.first.attrs[:response_value]   ).to eq expected_response_value
     end
@@ -635,7 +603,6 @@ feature 'Dialogs', :js ,:skip do
       sleep 0.5
 
       expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 1
 
       expected_response_value = {
         'qnaSpokenText'     => 'Speak out!',
@@ -651,7 +618,7 @@ feature 'Dialogs', :js ,:skip do
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '4'}.to_json
 
-      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq 'qna'
+      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq '4'
       expect( Dialog.last.responses.first.attrs[:response_trigger] ).to eq expected_response_trigger
       expect( Dialog.last.responses.first.attrs[:response_value]   ).to eq expected_response_value
     end
@@ -704,13 +671,12 @@ feature 'Dialogs', :js ,:skip do
 
       sleep 0.5
 
-      expected_response_trigger_1 = """".to_json
+      expected_response_trigger_1 = nil
       expected_response_trigger_2 = {'timeDelayInSecs' => '8'    }.to_json
       expected_response_trigger_3 = {'videoClosed'     => 'true' }.to_json
       expected_response_trigger_4 = {'customerService' => 'false'}.to_json
 
       expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 4
       expect( Dialog.last.responses[0].attrs[:response_trigger] ).to eq expected_response_trigger_1
       expect( Dialog.last.responses[1].attrs[:response_trigger] ).to eq expected_response_trigger_2
       expect( Dialog.last.responses[2].attrs[:response_trigger] ).to eq expected_response_trigger_3
@@ -763,11 +729,10 @@ feature 'Dialogs', :js ,:skip do
       click_button 'Update Dialog'
       sleep 0.5
 
-      expected_response_trigger_1 = """".to_json
+      expected_response_trigger_1 = nil
       expected_response_trigger_2 = {'customerService' => 'false'}.to_json
 
       expect( Dialog.count   ).to eq 1
-      expect( Response.count ).to eq 2
       expect( Dialog.last.responses[0].attrs[:response_trigger] ).to eq expected_response_trigger_1
       expect( Dialog.last.responses[1].attrs[:response_trigger] ).to eq expected_response_trigger_2
     end

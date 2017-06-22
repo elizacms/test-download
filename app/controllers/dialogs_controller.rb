@@ -28,11 +28,11 @@ class DialogsController < ApplicationController
     if dialogs.all?{ |d| d.valid? }
       intent.dialogs.delete_all
       dialogs.each{ |d| d.save! }
-      DialogFileManager.new.save(dialogs)
+      DialogFileManager.new.save(dialogs, intent)
       render json: {}, status: :created
     else
       response.headers[ 'Warning' ] = dialogs.map{|d| d.errors.full_messages.join "\n"}.join "\n"
-      render json: dialogs.errors, status: 422
+      render json: {}, status: 422
     end
   end
 

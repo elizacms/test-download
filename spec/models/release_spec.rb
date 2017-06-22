@@ -7,8 +7,8 @@ describe Release do
   let!( :role        ){ create :role, skill: skill, user: user                  }
 
   before do
-    DialogFileManager.new.save([dialog])
-    IntentFileManager.new.save( intent, [] )
+    DialogFileManager.new.save( [dialog], intent )
+    IntentFileManager.new.save( intent, []       )
   end
 
   let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name}.csv",

@@ -21,7 +21,8 @@ class Dialog
   def dialog_with_responses
     attrs = attributes.merge( responses_attributes: responses.map( &:attrs )).symbolize_keys
     attrs[ :intent_id ] = intent.id.to_s
-    attrs.delete '_id'
+    attrs.delete( :_id )
+
     attrs
   end
 end

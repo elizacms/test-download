@@ -70,11 +70,12 @@ describe Dialog do
       ],
       priority: 100,
       comments: "say something",
-      responses_attributes: [] 
+      responses_attributes: []
     }}
 
     specify do
       expect( dialog.dialog_with_responses ).to include expected
+      expect( dialog.dialog_with_responses.keys ).to_not include :_id
     end
   end
 end

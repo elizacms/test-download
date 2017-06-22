@@ -12,7 +12,7 @@ describe 'Release Feature Specs' do
 
   before do
     IntentFileManager.new.save( intent, [field] )
-    DialogFileManager.new.save( [dialog] )
+    DialogFileManager.new.save( [dialog], intent )
 
     stub_identity_token
     stub_identity_account_for user.email
@@ -31,7 +31,7 @@ describe 'Release Feature Specs' do
 
   specify 'User can visit releases new page' ,:skip do
     dialog.update(priority: 5)
-    DialogFileManager.new.save( [dialog] )
+    DialogFileManager.new.save( [dialog], intent )
 
     visit '/releases/new'
 
@@ -40,7 +40,7 @@ describe 'Release Feature Specs' do
 
   specify 'User can create a release' do
     dialog.update(priority: 5)
-    DialogFileManager.new.save( [dialog] )
+    DialogFileManager.new.save( [dialog], intent )
 
     visit '/releases/new'
     fill_in :message, with: message
@@ -55,7 +55,7 @@ describe 'Release Feature Specs' do
 
   specify 'User can visit releases edit page' do
     dialog.update(priority: 5)
-    DialogFileManager.new.save( [dialog] )
+    DialogFileManager.new.save( [dialog], intent )
 
     visit '/releases/new'
     fill_in :message, with: message
@@ -68,7 +68,7 @@ describe 'Release Feature Specs' do
 
   specify 'User can visit releases show page' do
     dialog.update(priority: 5)
-    DialogFileManager.new.save( [dialog] )
+    DialogFileManager.new.save( [dialog], intent )
 
     visit '/releases/new'
     fill_in :message, with: message
