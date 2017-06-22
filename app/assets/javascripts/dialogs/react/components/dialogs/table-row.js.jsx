@@ -68,7 +68,6 @@ var TableRow = React.createClass({
   },
 
   displayControlOptions(){
-    console.log(this.props.locked);
     if (!this.props.locked) {
       return(
         <div>

@@ -44,8 +44,6 @@ var Container = React.createClass({
   },
 
   callDialogApi(){
-    console.log("Ajaxing....");
-
     var dataWithoutId = this.state.data.map((d) => {
       delete d.id;
       return d;
@@ -54,7 +52,6 @@ var Container = React.createClass({
     var url = '/dialogue_api/response?';
     var ajaxData = JSON.stringify({ intent_id: this.props.intent_id,
                                     dialogs: dataWithoutId });
-    console.log( ajaxData );
 
     $.ajax({
       type: 'POST',
@@ -106,13 +103,11 @@ var Container = React.createClass({
     })
     .done( function( data ){
       console.log( "All Scenarios!" );
-      console.log( data );
-
       // stuffs an index as id in each data.
       var dataWithId = data.map((d,index) => {
         d['id'] = index;
         return d;
-      })
+      });
 
       this.setState({ data: dataWithId });
 
