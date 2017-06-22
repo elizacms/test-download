@@ -72,7 +72,7 @@ feature 'Fields', :js do
     end
   end
 
-  describe 'mturk_response_fields create', :focus do
+  describe 'mturk_response_fields create' do
     it 'should save the mturk_response_fields to file' do
       fill_in :intent_mturk_response, with: 'thingy_that_we_did'
       click_button 'Submit'
