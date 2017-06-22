@@ -27,10 +27,10 @@
 <div id='mturk-response-field'>
   <%= form_for([@skill, @intent]) do |f| %>
     Training Data Response Fields<br>
-    <%= text_field_tag :mturk_response, @intent.mturk_response %>
+    <%= f.text_field :mturk_response, value: get_intent_data[:mturk_response] %>
 
     <% if !locked_by_other_user? %>
-      <%= submit_tag 'Submit', class: 'btn md ghost' %><span id='submit-result'></span>
+      <%= f.submit 'Submit', class: 'btn md ghost' %><span id='submit-result'></span>
     <% end %>
   <% end %>
 </div>

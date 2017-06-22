@@ -68,7 +68,8 @@ class IntentsController < ApplicationController
   end
 
   def submit_mturk_response
-    if @intent.update mturk_response: params[ :mturk_response ]
+    if @intent.update( mturk_response: params[ :mturk_response ] )
+      IntentFileManager.new.save( @intent, fields_for( @intent ) )
       head 200
     else
       head 422

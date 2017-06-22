@@ -50,8 +50,8 @@ feature 'Fields', :js do
     end
   end
 
-  describe 'Field ID/Name must be alphanumeric and underbars' do
-    specify 'Valid should succeed' do
+  describe 'Field Create' do
+    specify 'ID/Name must be alphanumeric and underbars' do
       sleep 0.5
       execute_script('$("tr.jsgrid-insert-row td input").val("abc_123");')
       page.all('input.black.sm')[0].click
@@ -60,7 +60,7 @@ feature 'Fields', :js do
       expect( page ).to have_content 'abc_123'
     end
 
-    specify 'Invalid should fail' do
+    specify 'Invalid ID/Name should fail' do
       sleep 0.5
       execute_script('$("tr.jsgrid-insert-row td input").val("Holy Moly!");')
       page.all('input.black.sm')[0].click
@@ -69,6 +69,21 @@ feature 'Fields', :js do
       accept_alert {}
       sleep 0.5
       expect( page ).to_not have_content 'Holy Moly!'
+    end
+  end
+
+  describe 'mturk_response_fields create', :focus do
+    it 'should save the mturk_response_fields to file' do
+      fill_in :intent_mturk_response, with: 'thingy_that_we_did'
+      click_button 'Submit'
+
+      click_link 'Intents'
+      click_link 'Edit Fields'
+      click_button 'JSON'
+
+      sleep 0.5
+
+      expect( page ).to have_content 'thingy_that_we_did'
     end
   end
 end
