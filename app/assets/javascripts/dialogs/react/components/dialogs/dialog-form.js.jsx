@@ -139,13 +139,6 @@ var DialogForm = React.createClass({
   },
 
   updateState(name, obj){
-    console.log( "Update State" );
-    console.log( name );
-    console.log( obj );
-    console.log( this.state.responses_attributes );
-    console.log( this.state.responses_attributes[obj.id] );
-    console.log( obj.value );
-
     if (this.state.responses_attributes[obj.id] && this.state.responses_attributes[obj.id].value != obj.value) { // Response Type Changed
       this.state[name][obj.id] = obj;
     } else if ( obj.inputValue && Object.keys(obj.inputValue).length === 0 ) {
