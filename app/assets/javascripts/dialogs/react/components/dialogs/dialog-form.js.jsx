@@ -203,24 +203,17 @@ var DialogForm = React.createClass({
     data[ 'comments'       ] = this.state.comments;
 
     data[ 'responses_attributes' ] = this.state.responses_attributes.map( (e) => {
-      // if ( e.response_id ){
-      //   return ({ id: e.response_id,
-      //             response_type: e.value,
-      //             response_trigger: JSON.stringify(e.response_trigger),
-      //             response_value: JSON.stringify(e.inputValue) });
-      // } else {
-      //   return ({ response_type: e.value,
-      //             response_trigger: JSON.stringify(e.response_trigger),
-      //             response_value: JSON.stringify(e.inputValue) });
-      // }
+      var iV = JSON.stringify(e.inputValue);
+
+      if (( e.inputValue == "" ) || ( e.inputValue == null )) iV = JSON.stringify({});
 
       if ( (e.response_trigger == "") || (e.response_trigger == null) ){
         return ({ response_type: e.value,
-                  response_value: JSON.stringify(e.inputValue) });
+                  response_value: iV });
       } else {
         return ({ response_type: e.value,
                   response_trigger: JSON.stringify(e.response_trigger),
-                  response_value: JSON.stringify(e.inputValue) });
+                  response_value: iV });
       }
     });
 
