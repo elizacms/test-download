@@ -96,6 +96,7 @@ feature 'Dialogs', :js do
       select 'None',     from: 'awaiting-field'
 
       click_button 'Create Dialog'
+      sleep 0.1
     end
 
     expect( Dialog.count                ).to eq 2
@@ -491,6 +492,8 @@ feature 'Dialogs', :js do
         'videoEntity'     => 'Jenny or Luna or Lady'
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '7'}.to_json
+
+      sleep 0.1
 
       expect( Response.last.attrs[:response_type]    ).to eq '2'
       expect( Response.last.attrs[:response_trigger] ).to eq expected_response_trigger
