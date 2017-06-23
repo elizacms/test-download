@@ -1,11 +1,15 @@
 feature 'Intents pages' do
-  let(  :developer ){ create :user                                }
-  let!( :skill     ){ create :skill                               }
-  let!( :role      ){ create :role, user: developer, skill: skill }
-  let!( :intent    ){ create :intent, skill: skill                }
+  let(  :developer ){ create :user                                       }
+  let!( :skill     ){ create :skill                                      }
+  let!( :skill2    ){ create :skill, name: 'music', web_hook: 'a'        }
+  let!( :role      ){ create :role, user: developer, skill: skill        }
+  let!( :role2     ){ create :role, user: developer, skill: skill2       }
+  let!( :intent    ){ create :intent, skill: skill                       }
+  let!( :intent2   ){ create :intent, skill: skill2, name: 'best_intent' }
 
   before do
-    IntentFileManager.new.save( intent, [] )
+    IntentFileManager.new.save( intent,  [] )
+    IntentFileManager.new.save( intent2, [] )
     stub_identity_token
     stub_identity_account_for developer.email
   end
@@ -35,6 +39,17 @@ feature 'Intents pages' do
 
       expect( page ).to have_content '1 Intent'
     end
+  end
+
+  specify 'index of intents is for the specific skill', :focus do
+    visit '/login/success?code=0123abc'
+    visit skill_intents_path( skill.id )
+    expect( page ).to have_content 'uber'
+    expect( page ).to_not have_content 'best_intent'
+
+    visit skill_intents_path( skill2.id )
+    expect( page ).to have_content 'best_intent'
+    expect( page ).to_not have_content 'uber'
   end
 
   context 'When not logged in cannot see Intents' do
