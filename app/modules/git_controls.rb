@@ -21,9 +21,16 @@ module GitControls
 
   def git_diff_workdir
     git_add(changed_locked_files)
+    diff = repo.last_commit.diff(repo.index)
 
-    deltas = repo.last_commit.diff(repo.index).deltas
-    diffs = deltas.map do |d|
+    pretty_diff( diff ).tap do
+      repo.reset( repo.last_commit, :mixed )
+    end
+  end
+
+  def pretty_diff diff
+    deltas = diff.deltas
+    deltas.map do |d|
       oid = d.old_file[:oid]
       old_content = d.status == :added ? '' : repo.lookup( oid ).content
       file = d.new_file[:path]
@@ -32,18 +39,6 @@ module GitControls
       current = File.exist?(path) ? File.read(path) : ''
 
       {old: old_content, new: current, file_type: file_type_for(file), name:name_for(file)}
-    end
-
-    repo.reset( repo.last_commit, :mixed )
-
-    return diffs
-  end
-
-  def pretty_diff diff
-    diff.each_line.select do |l|
-      l.line_origin == :addition || l.line_origin == :deletion || l.line_origin == :file_header
-    end.map do |l|
-      { line_origin: l.line_origin, line_number: l.new_lineno, content: l.content }
     end
   end
 

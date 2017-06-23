@@ -26,7 +26,7 @@ class ReleasesController < ApplicationController
 
   def show
     commit = current_user.repo.lookup( @release.commit_sha )
-    @diff = commit.parents.first.diff(commit).patch
+    @diff = current_user.pretty_diff( commit.parents.first.diff(commit) )
   end
 
   def edit
