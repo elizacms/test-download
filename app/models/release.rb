@@ -13,8 +13,8 @@ class Release
     user.git_checkout(branch_name)
 
     attributes[:files].select{|f| f =~ /intents/}.each do |file|
-      id = File.basename(file).split('.')[0]
-      intent = Intent.find(id)
+      name = File.basename(file, '.action').sub(/\A.+_/, '')
+      intent = Intent.find_by( name:/#{ name }/i )
       intent.set(in_review: true)
       intent.save(validate: false)
     end
