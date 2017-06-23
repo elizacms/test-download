@@ -1,15 +1,11 @@
 feature 'Intents pages' do
-  let(  :developer ){ create :user                                       }
-  let!( :skill     ){ create :skill                                      }
-  let!( :skill2    ){ create :skill, name: 'music', web_hook: 'a'        }
-  let!( :role      ){ create :role, user: developer, skill: skill        }
-  let!( :role2     ){ create :role, user: developer, skill: skill2       }
-  let!( :intent    ){ create :intent, skill: skill                       }
-  let!( :intent2   ){ create :intent, skill: skill2, name: 'best_intent' }
+  let(  :developer ){ create :user                                }
+  let!( :skill     ){ create :skill                               }
+  let!( :role      ){ create :role, user: developer, skill: skill }
+  let!( :intent    ){ create :intent, skill: skill                }
 
   before do
     IntentFileManager.new.save( intent,  [] )
-    IntentFileManager.new.save( intent2, [] )
     stub_identity_token
     stub_identity_account_for developer.email
   end
@@ -41,7 +37,12 @@ feature 'Intents pages' do
     end
   end
 
-  specify 'index of intents is for the specific skill', :focus do
+  specify 'index of intents is for the specific skill' do
+    skill2  = FactoryGirl.create( :skill, name: 'music', web_hook: 'a' )
+    intent2 = FactoryGirl.create( :intent, skill: skill2, name: 'best_intent' )
+    FactoryGirl.create( :role, user: developer, skill: skill2 )
+    IntentFileManager.new.save( intent2, [] )
+
     visit '/login/success?code=0123abc'
     visit skill_intents_path( skill.id )
     expect( page ).to have_content 'uber'
