@@ -20,7 +20,7 @@ module GitControls
   end
 
   def git_diff_workdir
-    git_add(list_locked_files)
+    git_add(changed_locked_files)
 
     deltas = repo.last_commit.diff(repo.index).deltas
     diffs = deltas.map do |d|

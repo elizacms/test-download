@@ -50,7 +50,7 @@ class ReleasesController < ApplicationController
   private
 
   def release_params
-    {message: params[:message], files: @current_user.list_locked_files, user: @current_user}
+    {message: params[:message], files: @current_user.changed_locked_files, user: @current_user}
   end
 
   def find_release
