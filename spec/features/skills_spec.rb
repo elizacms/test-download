@@ -17,7 +17,7 @@ feature 'Skills pages' do
 
   describe 'Admin can see all Skills' do
     let!( :admin  ){ create :user, email: 'admin@iamplus.com'                    }
-    let!( :skill2 ){ create :skill, name: 'Easy Skill', web_hook: 'http://ea.sy' }
+    let!( :skill2 ){ create :skill, name: 'EasySkill', web_hook: 'http://ea.sy'  }
     let!( :role   ){ create :role, name: 'admin', skill: nil, user: admin        }
 
     before do
@@ -62,7 +62,7 @@ feature 'Skills pages' do
   describe 'Admin can create a skill' do
     let!( :admin      ){ create :user, email: 'admin@iamplus.com'             }
     let!( :role       ){ create :role, name: 'admin', skill: nil, user: admin }
-    let(  :skill_name ){ 'Super Uber'                                         }
+    let(  :skill_name ){ 'SuperUber'                                          }
     let(  :web_hook   ){ 'https://skill-uber.i.am'                            }
 
     before do
@@ -147,7 +147,7 @@ feature 'Skills pages' do
 
   describe "Developer can update the Skill's name" do
     let!( :skill ){ create :skill           }
-    let( :updated_name ){ "Best Riding App" }
+    let( :updated_name ){ "BestRidingApp"   }
 
     specify do
       visit '/login/success?code=0123abc'

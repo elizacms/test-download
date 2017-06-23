@@ -3,7 +3,7 @@ describe 'api_file_lock' do
   let!( :user2     ){ create :user, email: 'some@email.com'               }
   let!( :skill     ){ create :skill                                       }
   let!( :intent    ){ create :intent, skill: skill                        }
-  let!( :intent2   ){ create :intent, skill: skill, name: 'other skill'   }
+  let!( :intent2   ){ create :intent, skill: skill, name: 'OtherSkill'    }
   let!( :file_lock ){ create :file_lock, intent: intent, user_id: user.id }
 
   before do

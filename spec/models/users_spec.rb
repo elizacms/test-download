@@ -2,7 +2,7 @@ describe User do
   let!( :user        ){ create :user                                              }
   let!( :user2       ){ create :user, email: 'another_user@imaplus.com'           }
   let!( :skill       ){ create :skill                                             }
-  let!( :skill2      ){ create :skill, name: 'Other Skill', web_hook: 'bite.me'   }
+  let!( :skill2      ){ create :skill, name: 'OtherSkill', web_hook: 'bite.me'    }
   let!( :intent      ){ create :intent, skill: skill                              }
   let!( :intent2     ){ create :intent, skill: skill, name: 'some other intent'   }
   let!( :file_lock   ){ create :file_lock, intent: intent, user_id: user.id.to_s  }

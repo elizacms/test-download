@@ -9,6 +9,7 @@ class Skill
   field :web_hook, type:String
 
   validates_presence_of   :name
+  validates :name, format: { with: /\A[a-zA-Z]+\z/, message: "only allows letters" }
   validates_uniqueness_of :name, case_sensetive: false
   validates_uniqueness_of :web_hook
 

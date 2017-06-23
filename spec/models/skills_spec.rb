@@ -23,11 +23,17 @@ describe Skill do
     expect( FactoryGirl.build( :skill ) ).to_not be_valid
   end
 
+  specify 'Name should not contain spaces or underscores' do
+    expect( Skill.create( name: 'james milani', web_hook: 'a' ) ).to_not be_valid
+    expect( Skill.create( name: 'james_milani', web_hook: 'b' ) ).to_not be_valid
+    expect( Skill.create( name: 'jamesmilani',  web_hook: 'c' ) ).to be_valid
+  end
+
   specify 'Webhook should be unique' do
-    FactoryGirl.create( :skill, name: 'Fun Times', web_hook: 'http://a.si/te' )
+    FactoryGirl.create( :skill, name: 'FunTimes', web_hook: 'http://a.si/te' )
 
     expect(
-      FactoryGirl.build( :skill, name: 'Run Times', web_hook: 'http://a.si/te' )
+      FactoryGirl.build( :skill, name: 'RunTimes', web_hook: 'http://a.si/te' )
     ).to_not be_valid
   end
 
