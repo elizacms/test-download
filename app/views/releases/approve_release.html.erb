@@ -1,0 +1,11 @@
+<h1>Approve Release Canadiate</h1>
+
+<%= render partial: '/releases/diff' %>
+
+<div class="text-center">
+  <%= form_tag '/#' do %>
+    <%= hidden_field_tag 'release_id', @release_id %>
+    <%= submit_tag 'Accept', class: "btn xl" %>
+    <%= submit_tag 'Reject', class: "btn xl red" %>
+  <% end %>
+</div>

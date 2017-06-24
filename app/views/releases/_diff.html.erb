@@ -1,0 +1,14 @@
+<% @diff.each do |d| %>
+  <div class="code-font">
+    <%= d[:file_type] %> <%= d[:name] %>
+  </div>
+  <div class="flex-container code-font">
+    <div class="flex-column pink">
+      <%= raw diff_format( d ).left %>
+    </div>
+    <div class="flex-column green">
+      <%= raw diff_format( d ).right %>
+    </div>
+  </div>
+  </br>
+<% end %>
