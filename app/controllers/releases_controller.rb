@@ -1,10 +1,10 @@
 class ReleasesController < ApplicationController
   before_action :validate_current_user
-  before_action :find_release, only: [:show_release, :show_status]
+  before_action :find_release, only: [:review, :accept_or_reject]
 
   def index
     @repo = Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH'])
-    @releases = Release.all
+    @releases = Release.all.order('created_at DESC')
   end
 
   def new
@@ -24,16 +24,42 @@ class ReleasesController < ApplicationController
     end
   end
 
-  def show_release
+  def review
     commit = current_user.repo.lookup( @release.commit_sha )
     @diff = current_user.pretty_diff( commit.parents.first.diff(commit) )
     @release_id = params[:id]
   end
 
-  def show_status
+  def submit_to_training
+    release = Release.find(params[:release_id])
+    release.update(state: 'in_training')
+
+    #send off to kick-off the job
+    redirect_to releases_path, notice: 'Training job started for release.'
+  end
+
+  def accept_or_reject
+    last_build_no = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/api/json")['builds'].first['number']
+    @last_build = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/#{last_build_no}/api/json")
+
     commit = current_user.repo.lookup( @release.commit_sha )
     @diff = current_user.pretty_diff( commit.parents.first.diff(commit) )
     @release_id = params[:id]
+  end
+
+  def approval_or_rejection
+    release = Release.find(params[:release_id])
+
+    if params[:commit] == 'Accept'
+      release.update(state: 'approved')
+      current_user.git_rebase(release.branch_name)
+
+      redirect_to releases_path, notice: 'Release has been accepted and merged.'
+    else
+      release.update(state: 'rejected')
+
+      redirect_to releases_path, alert: 'Release has been rejected.'
+    end
   end
 
 

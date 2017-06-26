@@ -6,15 +6,18 @@
 <table class='table table-hover'>
   <thead class='thead-default'>
     <th>Message</th>
-    <th>Status</th>
-    <th>No. Files Changed</th>
+    <th>State</th>
   </thead>
   <tbody>
     <% @releases.each do |release| %>
       <tr>
-        <td><%= link_to @repo.lookup(release.commit_sha).message, show_release_path( release ) %></td>
-        <td><%=  %></td>
-        <td><%=  %></td>
+        <td>
+          <%= link_to(
+            @repo.lookup(release.commit_sha).message,
+            release.state == 'unreviewed' ? review_release_path( release ) : accept_or_reject_path( release )
+          ) %>
+        </td>
+        <td><%= release.state %></td>
       </tr>
     <% end %>
   </tbody>

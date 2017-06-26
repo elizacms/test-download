@@ -18,13 +18,34 @@ Rails.application.routes.draw do
 
   resources :users
 
-  #resources :releases
-  get    '/releases'          => 'releases#index', as: :release
-  post   '/releases'          => 'releases#create'
-  get    '/releases/new'      => 'releases#new', as: :new_release
-  get    '/releases/:id'      => 'releases#show_release', as: :show_release
-  post   '/releases/:id/show_status' => 'releases#show_status', as: :show_status
-  
+  get '/releases',
+    to: 'releases#index',
+    as: :releases
+
+  post '/releases',
+    to: 'releases#create'
+
+  get '/releases/new',
+    to: 'releases#new',
+    as: :new_release
+
+  get '/releases/:id/review',
+    to: 'releases#review',
+    as: :review_release
+
+  post '/releases/submit_to_training',
+    to: 'releases#submit_to_training',
+    as: :submit_to_training
+
+  match '/releases/:id/accept_or_reject',
+    to: 'releases#accept_or_reject',
+    as: :accept_or_reject,
+    via: [ 'GET','POST']
+
+  post '/releases/approval_or_rejection',
+    to: 'releases#approval_or_rejection',
+    as: :approval_or_rejection
+
   match '/ajax-developers',
     to: 'roles#ajax_set_or_unset_developers',
     as: :ajax_set_or_unset_developers,

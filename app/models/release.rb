@@ -5,8 +5,9 @@ class Release
 
   STATES = ['unreviewed', 'in_training', 'approved', 'rejected']
 
-  field :commit_sha, type:String
-  field :state,      type:String, default:STATES.first
+  field :branch_name, type:String
+  field :commit_sha,  type:String
+  field :state,       type:String, default:STATES.first
 
   belongs_to :user
 
@@ -26,9 +27,10 @@ class Release
     commit = user.git_commit( attributes[:message] )
     user.git_checkout('master')
 
-    self.files      = nil
-    self.message    = nil
-    self.user       = nil
-    self.commit_sha = commit
+    self.files       = nil
+    self.message     = nil
+    self.user        = user
+    self.branch_name = branch_name
+    self.commit_sha  = commit
   end
 end
