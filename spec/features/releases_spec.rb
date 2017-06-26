@@ -76,6 +76,6 @@ describe 'Release Feature Specs' do
 
     visit "/releases/#{Release.last.id}"
 
-    expect(page).to have_content 'Release Show'
+    expect(page).to have_content 'Review Release Canadiate'
   end
 end
