@@ -36,9 +36,9 @@ module GitControls
       file = d.new_file[:path]
 
       path = persistence_path_for( d.new_file[:path] )
-      current = File.exist?(path) ? File.read(path) : ''
+      new_content = repo.lookup( d.new_file[ :oid ]).content
 
-      {old: old_content, new: current, file_type: file_type_for(file), name:name_for(file)}
+      {old: old_content, new: new_content, file_type: file_type_for(file), name:name_for(file)}
     end
   end
 
