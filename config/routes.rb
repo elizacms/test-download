@@ -19,16 +19,12 @@ Rails.application.routes.draw do
   resources :users
 
   #resources :releases
-  get    '/releases'          => 'releases#index', as: :releases
+  get    '/releases'          => 'releases#index', as: :release
   post   '/releases'          => 'releases#create'
   get    '/releases/new'      => 'releases#new', as: :new_release
-  get    '/releases/:id/edit' => 'releases#edit', as: :edit_release
-get    '/releases/:id'         => 'releases#show_release', as: :release
-post   '/releases/:id/approve' => 'releases#approve_release', as: :approve_release
-  patch  '/releases/:id'      => 'releases#update'
-  put    '/releases/:id'      => 'releases#update'
-  delete '/releases/:id'      => 'releases#destroy'
-
+  get    '/releases/:id'      => 'releases#show_release', as: :show_release
+  post   '/releases/:id/show_status' => 'releases#show_status', as: :show_status
+  
   match '/ajax-developers',
     to: 'roles#ajax_set_or_unset_developers',
     as: :ajax_set_or_unset_developers,

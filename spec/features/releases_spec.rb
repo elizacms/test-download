@@ -53,19 +53,6 @@ describe 'Release Feature Specs' do
     expect( message       ).to eq commit.message
   end
 
-  specify 'User can visit releases edit page' do
-    dialog.update(priority: 5)
-    DialogFileManager.new.save( [dialog], intent )
-
-    visit '/releases/new'
-    fill_in :message, with: message
-    click_button 'Create Release'
-
-    visit "/releases/#{Release.last.id}/edit"
-
-    expect(page).to have_content 'Release Edit'
-  end
-
   specify 'User can visit releases show page' do
     dialog.update(priority: 5)
     DialogFileManager.new.save( [dialog], intent )
@@ -76,6 +63,6 @@ describe 'Release Feature Specs' do
 
     visit "/releases/#{Release.last.id}"
 
-    expect(page).to have_content 'Review Release Canadiate'
+    expect(page).to have_content 'Review Release Candidate'
   end
 end

@@ -1,9 +1,9 @@
-<h1>Review Release Canadiate</h1>
+<h1>Review Release Candidate</h1>
 
 <%= render partial: '/releases/diff' %>
 
 <div class="text-center">
-  <%= form_tag approve_release_path(@release_id) do %>
+  <%= form_tag show_status_path(@release_id) do %>
     <%= hidden_field_tag 'release_id', @release_id %>
     <%= submit_tag 'Submit for training', class: "btn xxl" %>
   <% end %>
