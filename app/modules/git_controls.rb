@@ -42,6 +42,26 @@ module GitControls
     end
   end
 
+  def git_branch name, target
+    repo.create_branch( name, target )
+  end
+
+  def git_checkout name
+    repo.checkout( name )
+  end
+
+  def git_rebase branch
+    rebase = Rugged::Rebase.new(repo, 'refs/heads/master', "refs/heads/#{branch}" )
+    rebase.finish(rebase_signature)
+  end
+
+  def git_branch_current
+    repo.head.name.sub(/^refs\/heads\//, '')
+  end
+
+
+  private
+
   def commit_options message
     committer = {email: email, name: email, time: Time.now}
 
@@ -55,16 +75,14 @@ module GitControls
     }
   end
 
-  def git_branch name, target
-    repo.create_branch( name, target )
+  def rebase_signature
+    {
+      name: email,
+      email: email,
+      time: Time.now,
+      time_offset: 0,
+    }
   end
-
-  def git_checkout name
-    repo.checkout( name )
-  end
-
-
-  private
 
   def file_type_for file
     file.split("/").first.singularize.capitalize

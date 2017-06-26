@@ -24,6 +24,7 @@ describe Release do
                                 message: '2nd Commit')
 
       expect( Release.count ).to eq 1
+      expect( Release.first.state ).to eq 'unreviewed'
       expect( repo.lookup( release.commit_sha ) ).to be_a Rugged::Commit
       expect( repo.lookup( release.commit_sha ).message ).to eq '2nd Commit'
     end

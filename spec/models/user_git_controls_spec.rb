@@ -92,10 +92,32 @@ describe 'User git controls' do
   end
 
   describe '#git_checkout' do
-    it 'should create the branch' do
+    it 'should checkout the branch' do
       user.git_branch( 'ducking_branch', 'HEAD' )
       checkout = user.git_checkout( 'ducking_branch' )
       expect( checkout.target.name ).to eq 'refs/heads/ducking_branch'
+      expect( user.git_branch_current  ).to eq 'ducking_branch'
+    end
+  end
+
+  describe '#git_rebase branch' do
+    it 'should incorporate a branch into master' do
+      dialog.update( priority: 1212 )
+      DialogFileManager.new.save( [dialog], intent )
+
+      user.git_branch( 'quack', 'HEAD' )
+      user.git_checkout( 'quack' )
+
+      user.git_add( user.changed_locked_files )
+      user.git_commit( 'Changed first dialog priority to 1212.' )
+
+      checkout = user.git_checkout( 'master' )
+      user.git_rebase( 'quack' )
+
+      expect( user.git_branch_current  ).to eq 'master'
+      expect( checkout.target.name     ).to eq 'refs/heads/master'
+      expect( user.git_diff_workdir    ).to eq []
+      expect( repo.last_commit.message ).to eq 'Changed first dialog priority to 1212.'
     end
   end
 end

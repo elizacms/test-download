@@ -3,7 +3,10 @@ class Release
   include Mongoid::Timestamps
   include Mongoid::Attributes::Dynamic
 
+  STATES = ['unreviewed', 'in_training', 'approved', 'rejected']
+
   field :commit_sha, type:String
+  field :state,      type:String, default:STATES.first
 
   belongs_to :user
 
