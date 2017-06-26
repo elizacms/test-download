@@ -54,6 +54,7 @@ feature 'Fields', :js do
     specify 'ID/Name must be alphanumeric and underbars' do
       sleep 0.5
       execute_script('$("tr.jsgrid-insert-row td input").val("abc_123");')
+      sleep 0.5
       page.all('input.black.sm')[0].click
       sleep 0.5
 
@@ -63,6 +64,7 @@ feature 'Fields', :js do
     specify 'Invalid ID/Name should fail' do
       sleep 0.5
       execute_script('$("tr.jsgrid-insert-row td input").val("Holy Moly!");')
+      sleep 0.5
       page.all('input.black.sm')[0].click
 
       sleep 0.5
