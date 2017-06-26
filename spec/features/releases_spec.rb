@@ -61,7 +61,7 @@ describe 'Release Feature Specs' do
     fill_in :message, with: message
     click_button 'Create Release'
 
-    visit "/releases/#{Release.last.id}"
+    visit "/releases/#{Release.last.id}/review"
 
     expect(page).to have_content 'Review Release Candidate'
   end
