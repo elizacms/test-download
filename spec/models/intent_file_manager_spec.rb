@@ -45,4 +45,17 @@ describe IntentFileManager do
       expect( Intent.count ).to eq 1
     end
   end
+
+  describe 'Errors with skill names' do
+    it 'should succeed with capitals in the skill name' do
+      new_skill  = FactoryGirl.create(:skill, name: "JamesTest", web_hook: 'a' )
+      new_intent = FactoryGirl.create(:intent, skill: new_skill)
+      new_field  = FactoryGirl.build( :field )
+      new_intent_path = IntentFileManager.new.file_path( new_intent )
+      IntentFileManager.new.save( new_intent, [new_field] )
+
+      expect( IntentFileManager.new.load_intent_from( new_intent_path )[:intent].name )
+      .to eq( 'get_ride' )
+    end
+  end
 end

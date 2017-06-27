@@ -10,7 +10,7 @@ class IntentFileManager
 
   def load_intent_from file
     skill_name = File.basename(file).split('_')[0]
-    skill = Skill.find_by(name: skill_name)
+    skill = Skill.find_by_name(skill_name)
 
     data = JSON.parse(File.read(file), symbolize_names: true)
 

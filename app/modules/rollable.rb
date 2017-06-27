@@ -8,7 +8,7 @@ module Rollable
   end
 
   def set_role role, skill_name=nil
-    skill = Skill.find_by( name:skill_name )
+    skill = Skill.find_by_name( skill_name )
 
     if persisted?
       roles.create!( name:role, skill:skill )
@@ -26,13 +26,13 @@ module Rollable
   end
 
   def has_role? role, skill_name=nil
-    skill = Skill.find_by( name:skill_name )
+    skill = Skill.find_by_name( skill_name )
 
     !! roles.find_by( name:role, skill:skill )
   end
 
   def remove_role role, skill_name=nil
-    skill = Skill.find_by( name:skill_name )
+    skill = Skill.find_by_name( skill_name )
 
     roles.find_by( name:role, skill:skill ).try :delete
   end

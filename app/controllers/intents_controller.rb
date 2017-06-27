@@ -9,7 +9,10 @@ class IntentsController < ApplicationController
                 only: [ :edit, :fields, :dialogs ]
 
   def index
-    files_for_skill = Intent.all_files.select {|file| File.basename(file).split('_').first == @skill.name }
+    files_for_skill = Intent.all_files.select do |file|
+      File.basename(file).split('_').first == @skill.name.downcase
+    end
+
     @intents = files_for_skill.map { |file| IntentFileManager.new.load_intent_from( file )[:intent] }
   end
 

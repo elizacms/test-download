@@ -49,4 +49,11 @@ describe Skill do
 
     expect( Role.count ).to eq 0
   end
+
+  specify '::find_by_name name' do
+    expect( Skill.find_by_name 'uber'  ).to eq skill
+    expect( Skill.find_by_name 'Uber'  ).to eq skill
+    expect( Skill.find_by_name 'henry' ).to eq nil
+    expect( Skill.find_by_name nil     ).to eq nil
+  end
 end

@@ -8,10 +8,15 @@ class Skill
   field :name,     type:String
   field :web_hook, type:String
 
-  validates_presence_of   :name
-  validates :name, format: { with: /\A[a-zA-Z]+\z/, message: "only allows letters" }
-  validates_uniqueness_of :name, case_sensetive: false
   validates_uniqueness_of :web_hook
+  validates :name,
+            presence: true,
+            uniqueness: {case_sensitive: false},
+            format: { with: /\A[a-zA-Z]+\z/, message: "only allows letters (no spaces)." }
 
   after_destroy -> { intents.each {|intent| IntentFileManager.new.delete_file(intent)} }
+
+  def self.find_by_name( name )
+    Skill.find_by(name: /\A#{name}\z/i)
+  end
 end

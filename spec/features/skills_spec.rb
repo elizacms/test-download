@@ -29,7 +29,7 @@ feature 'Skills pages' do
       visit '/skills'
 
       expect( page ).to have_content '2 Skills'
-      expect( page ).to have_content skill2 .name
+      expect( page ).to have_content skill2.name
     end
   end
 
