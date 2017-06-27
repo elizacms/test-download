@@ -8,12 +8,12 @@
     <% end %>
     <% if key.to_s == "alert" %>
       <script>
-        IAM.alert.run('red', '<%= value %>', false);
+        IAM.alert.run('red', "<%= value %>", 2500);
       </script>
     <% end %>
     <% if key.to_s == "success" %>
       <script>
-        IAM.alert.run('green', '<%= value %>', false);
+        IAM.alert.run('green', '<%= value %>', 2500);
       </script>
     <% end %>
   <% end %>

@@ -64,7 +64,7 @@ function initFields(){
                 width: 100,
                 editing: false,
                 validate: function(value){
-                    return /^[a-zA-Z0-9_]*$/.test(value);
+                    return /^[a-zA-Z0-9_]+$/.test(value);
                 }
             },
             {
@@ -89,7 +89,7 @@ function initFields(){
                 insertTemplate: function() { return getCustomInsertControls("#jsGrid") },
             }
         ],
-        invalidMessage: "Alphanumeric characters only"
+        invalidMessage: "Cannot be empty and alphanumeric characters only"
     });
 }
 

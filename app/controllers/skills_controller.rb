@@ -22,7 +22,7 @@ class SkillsController < ApplicationController
         }
       )
     else
-      flash.now[ :alert ] = @skill.errors.full_messages.join( "\n" )
+      flash.now[ :alert ] = @skill.errors.full_messages.to_sentence
       render :new
     end
   end
@@ -39,7 +39,7 @@ class SkillsController < ApplicationController
         }
       )
     else
-      flash.now[ :alert ] = @skill.errors.full_messages.join( "\n" )
+      flash.now[ :alert ] = @skill.errors.full_messages.to_sentence
       render :edit
     end
   end

@@ -9,9 +9,10 @@ class Skill
   field :web_hook, type:String
 
   validates_uniqueness_of :web_hook
+  validates_presence_of   :web_hook
+  validates_uniqueness_of :name
+  validates_presence_of   :name, case_sensitive: false, message: 'must be present'
   validates :name,
-            presence: true,
-            uniqueness: {case_sensitive: false},
             format: { with: /\A[a-zA-Z]+\z/, message: "only allows letters (no spaces)." }
 
   after_destroy -> { intents.each {|intent| IntentFileManager.new.delete_file(intent)} }
