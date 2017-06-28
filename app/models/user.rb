@@ -27,7 +27,7 @@ class User
 
   def list_locked_files
     locked_intents.map{ |i|
-      [IntentFileManager.new.file_path( i ),
+      [IntentFileManager.new.file_path( i ).split('nlu-cms-persistence/')[1],
       dialog_file_for_intent( i )]
     }.flatten
   end

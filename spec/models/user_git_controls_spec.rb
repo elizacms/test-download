@@ -30,9 +30,9 @@ describe 'User git controls' do
   let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name.downcase}.csv",
                                       "intent_responses_csv/#{intent2.name.downcase}.csv",
                                       "intent_responses_csv/#{intent3.name.downcase}.csv",
-                                      "eliza_de/actions/#{skill.name.downcase}_#{intent.name.downcase}.action",
-                                      "eliza_de/actions/#{skill.name.downcase}_#{intent2.name.downcase}.action",
-                                      "eliza_de/actions/#{skill.name.downcase}_#{intent2.name.downcase}.action"])}
+                                      "eliza_de/actions/#{intent.name.downcase}.action",
+                                      "eliza_de/actions/#{intent2.name.downcase}.action",
+                                      "eliza_de/actions/#{intent2.name.downcase}.action"])}
   let!( :init_commit ){ user.git_commit('Initial Commit')                          }
   let!( :pretty_diff ){
     [{:old=>"{\"id\":\"get_ride\",\"fields\":[{\"id\":\"destination\",\"type\":\"Text\",\"must_resolve\":false,\"mturk_field\":\"Uber.Destination\"}],\"mturk_response_fields\":\"uber.get.ride\"}", :new=>"{\"id\":\"get_ride\",\"fields\":[],\"mturk_response_fields\":\"uber.get.ride\"}", :file_type=>"Eliza_de", :name=>""},

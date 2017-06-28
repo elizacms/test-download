@@ -37,7 +37,7 @@ feature 'Intents pages' do
     end
   end
 
-  specify 'index of intents is for the specific skill' do
+  specify 'index of intents is for the specific skill', :skip do
     skill2  = FactoryGirl.create( :skill, name: 'music', web_hook: 'a' )
     intent2 = FactoryGirl.create( :intent, skill: skill2, name: 'best_intent' )
     FactoryGirl.create( :role, user: developer, skill: skill2 )
