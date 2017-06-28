@@ -1,7 +1,6 @@
 class IntentFileManager
   def file_path intent
-    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/eliza_de/actions/"\
-    "#{intent.skill.name.downcase}_#{intent.name.downcase}.action"
+    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/eliza_de/actions/#{intent.name.downcase}.action"
   end
 
   def save intent, fields
@@ -9,8 +8,9 @@ class IntentFileManager
   end
 
   def load_intent_from file
-    skill_name = File.basename(file).split('_')[0]
-    skill = Skill.find_by_name(skill_name)
+    # skill_name = File.basename(file).split('_')[0]
+    # skill = Skill.find_by_name(skill_name)
+    skill = Skill.first
 
     data = JSON.parse(File.read(file), symbolize_names: true)
 

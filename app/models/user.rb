@@ -27,7 +27,7 @@ class User
 
   def list_locked_files
     locked_intents.map{ |i|
-      [action_file_for_intent( i ),
+      [IntentFileManager.new.file_path( i ),
       dialog_file_for_intent( i )]
     }.flatten
   end
@@ -51,10 +51,6 @@ class User
 
   def user_roles type
     self.roles.select{ |r| r.name == type }
-  end
-
-  def action_file_for_intent intent
-    "eliza_de/actions/#{intent.skill.name.downcase}_#{intent.name.downcase}.action"
   end
 
   def dialog_file_for_intent intent
