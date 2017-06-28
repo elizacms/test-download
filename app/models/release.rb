@@ -5,9 +5,10 @@ class Release
 
   STATES = ['unreviewed', 'in_training', 'approved', 'rejected']
 
-  field :branch_name, type:String
-  field :commit_sha,  type:String
-  field :state,       type:String, default:STATES.first
+  field :branch_name,  type:String
+  field :commit_sha,   type:String
+  field :build_number, type:Integer
+  field :state,        type:String, default:STATES.first
 
   belongs_to :user
 

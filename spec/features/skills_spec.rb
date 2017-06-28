@@ -96,7 +96,7 @@ feature 'Skills pages' do
         end
 
         expect( page ).to have_content 'Create Skill'
-        expect( page ).to have_content "Name can't be blank"
+        expect( page ).to have_content "Name must be present"
       end
     end
   end

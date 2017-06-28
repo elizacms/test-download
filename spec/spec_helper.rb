@@ -46,7 +46,8 @@ RSpec.configure do |config|
     Mongoid.purge!
 
     Dir.mkdir( ENV['NLU_CMS_PERSISTENCE_PATH'] )
-    Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/actions" )
+    Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/eliza_de/" )
+    Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/eliza_de/actions" )
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intent_responses_csv" )
 
     Rugged::Repository.init_at("#{ENV['NLU_CMS_PERSISTENCE_PATH']}")

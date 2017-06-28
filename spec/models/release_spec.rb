@@ -12,7 +12,7 @@ describe Release do
   end
 
   let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name}.csv",
-                                      "actions/#{skill.name.downcase}_#{intent.name.downcase}.action"])}
+                                      "eliza_de/actions/#{skill.name.downcase}_#{intent.name.downcase}.action"])}
   let!( :init_commit ){ user.git_commit('Initial Commit')                       }
 
   describe '#create, also creates a commit' do
@@ -20,7 +20,7 @@ describe Release do
       dialog.update(priority: 777)
       release = Release.create( user: user,
                                 files: ["intent_responses_csv/#{intent.name}.csv",
-                                        "actions/#{skill.name.downcase}_#{intent.name.downcase}.action"],
+                                        "eliza_de/actions/#{skill.name.downcase}_#{intent.name.downcase}.action"],
                                 message: '2nd Commit')
 
       expect( Release.count ).to eq 1

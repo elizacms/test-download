@@ -56,6 +56,6 @@ class Intent
   end
 
   def self.all_files
-    Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/actions/*.action"]
+    Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/eliza_de/actions/*.action"]
   end
 end

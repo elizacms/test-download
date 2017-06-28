@@ -30,12 +30,12 @@ describe 'User git controls' do
   let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name.downcase}.csv",
                                       "intent_responses_csv/#{intent2.name.downcase}.csv",
                                       "intent_responses_csv/#{intent3.name.downcase}.csv",
-                                      "actions/#{skill.name.downcase}_#{intent.name.downcase}.action",
-                                      "actions/#{skill.name.downcase}_#{intent2.name.downcase}.action",
-                                      "actions/#{skill.name.downcase}_#{intent2.name.downcase}.action"])}
+                                      "eliza_de/actions/#{skill.name.downcase}_#{intent.name.downcase}.action",
+                                      "eliza_de/actions/#{skill.name.downcase}_#{intent2.name.downcase}.action",
+                                      "eliza_de/actions/#{skill.name.downcase}_#{intent2.name.downcase}.action"])}
   let!( :init_commit ){ user.git_commit('Initial Commit')                          }
   let!( :pretty_diff ){
-    [{:old=>"{\"id\":\"get_ride\",\"fields\":[{\"id\":\"destination\",\"type\":\"Text\",\"must_resolve\":false,\"mturk_field\":\"Uber.Destination\"}],\"mturk_response_fields\":\"uber.get.ride\"}", :new=>"{\"id\":\"get_ride\",\"fields\":[],\"mturk_response_fields\":\"uber.get.ride\"}", :file_type=>"Action", :name=>""},
+    [{:old=>"{\"id\":\"get_ride\",\"fields\":[{\"id\":\"destination\",\"type\":\"Text\",\"must_resolve\":false,\"mturk_field\":\"Uber.Destination\"}],\"mturk_response_fields\":\"uber.get.ride\"}", :new=>"{\"id\":\"get_ride\",\"fields\":[],\"mturk_response_fields\":\"uber.get.ride\"}", :file_type=>"Eliza_de", :name=>""},
      {:old=>"intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra,comments\nget_ride,90,destination,,A missing rule,,\"[('some', 'thing')]\",\"[\n  {\n    \"\"ResponseType\"\": 0,\n    \"\"ResponseValue\"\": {\n      \"\"text\"\": \"\"where would you like to go?\"\"\n    },\n    \"\"ResponseTrigger\"\": {\n      \"\"trigger\"\": \"\"some_trigger\"\"\n    }\n  }\n]\",,\"some comment\"", :new=>"intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra,comments\nget_ride,42,destination,,A missing rule,,\"[('some', 'thing')]\",\"[\n  {\n    \"\"ResponseType\"\": 0,\n    \"\"ResponseValue\"\": {\n      \"\"text\"\": \"\"where would you like to go?\"\"\n    },\n    \"\"ResponseTrigger\"\": {\n      \"\"trigger\"\": \"\"some_trigger\"\"\n    }\n  }\n]\",,\"some comment\"", :file_type=>"Intent_responses_csv", :name=>""}]
   }
   let!( :pretty_diff2 ){

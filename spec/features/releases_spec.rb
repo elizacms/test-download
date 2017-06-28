@@ -19,7 +19,7 @@ describe 'Release Feature Specs' do
     visit '/login/success?code=0123abc'
   end
 
-  let!( :init_add    ){ user.git_add(["actions/#{skill.name.downcase}_#{intent.name.downcase}.action",
+  let!( :init_add    ){ user.git_add(["eliza_de/actions/#{skill.name.downcase}_#{intent.name.downcase}.action",
                                       "intent_responses_csv/#{intent.name}.csv"]) }
   let!( :init_commit ){ user.git_commit('Initial Commit')                        }
 

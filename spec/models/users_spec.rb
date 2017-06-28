@@ -107,11 +107,11 @@ describe User do
   end
 
   specify '#list_locked_files' do
-    expect( user.list_locked_files ).to eq(["actions/#{skill.name.downcase}_#{intent.name.downcase}.action", "intent_responses_csv/#{intent.name}.csv"])
+    expect( user.list_locked_files ).to eq(["eliza_de/actions/#{skill.name.downcase}_#{intent.name.downcase}.action", "intent_responses_csv/#{intent.name}.csv"])
   end
 
   specify '#changed_locked_files' do
-    expect( user.changed_locked_files ).to eq(["actions/#{skill.name.downcase}_#{intent.name.downcase}.action"])
+    expect( user.changed_locked_files ).to eq(["eliza_de/actions/#{skill.name.downcase}_#{intent.name.downcase}.action"])
 
     expect( user2.changed_locked_files ).to eq([])
   end

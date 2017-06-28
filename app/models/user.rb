@@ -54,7 +54,7 @@ class User
   end
 
   def action_file_for_intent intent
-    "actions/#{intent.skill.name.downcase}_#{intent.name.downcase}.action"
+    "eliza_de/actions/#{intent.skill.name.downcase}_#{intent.name.downcase}.action"
   end
 
   def dialog_file_for_intent intent

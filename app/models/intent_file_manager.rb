@@ -1,6 +1,6 @@
 class IntentFileManager
   def file_path intent
-    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/actions/"\
+    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/eliza_de/actions/"\
     "#{intent.skill.name.downcase}_#{intent.name.downcase}.action"
   end
 
