@@ -2,7 +2,7 @@
   <div class="container">
     <a id="logo" class="clearfix" href="#" title="i.am+">
       <div class="icon-pyramid pull-left"></div>
-      <div class="txt pull-left">nlu-cms</div>
+      <div class="txt pull-left"><%= ENV['NEW_RELIC_APP_NAME'] %></div>
     </a>
 
     <div id="desktop-menu" class="nav navbar-nav pull-right">
@@ -22,10 +22,6 @@
 
         <% if ENV['ELIZA_CMS'] != 'true' %>
           <%= link_to 'Test Queries', test_queries_path %>
-        <% end %>
-
-        <% if ENV['ELIZA_CMS'] == 'true' %>
-          <%= link_to 'NLU Training', nlu_training_path %>
         <% end %>
 
         <div id="regularLogout" class="dropdown pull-right">

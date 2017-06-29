@@ -23,15 +23,6 @@ class PagesController < ApplicationController
   def test_queries
   end
 
-  def nlu_training
-    unless ENV['ELIZA_CMS'] == 'true'
-      redirect_to skills_path, notice: 'That resource is not available.'
-    end
-
-    last_build_no = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/lastBuild/buildNumber")
-    @last_build = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/#{last_build_no}/api/json")
-  end
-
   def dialogs_upload
     if !current_user.has_role?( 'admin' )
       redirect_to skills_path, notice: 'You do not have access.'
