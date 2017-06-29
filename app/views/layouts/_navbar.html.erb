@@ -2,7 +2,9 @@
   <div class="container">
     <a id="logo" class="clearfix" href="#" title="i.am+">
       <div class="icon-pyramid pull-left"></div>
-      <div class="txt pull-left"><%= ENV['NEW_RELIC_APP_NAME'] %></div>
+      <div class="txt pull-left">
+        <%= ENV['NEW_RELIC_APP_NAME'].gsub('_', ' ') %>
+      </div>
     </a>
 
     <div id="desktop-menu" class="nav navbar-nav pull-right">
