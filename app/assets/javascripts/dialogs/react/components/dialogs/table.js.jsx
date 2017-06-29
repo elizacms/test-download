@@ -29,8 +29,8 @@ var Table = React.createClass({
         <table className='dialogs'>
           <tbody>
             <tr>
-              <th className='row5'>&nbsp;Priority</th>
-              <th className='row20'>Response</th>
+              <th className='row8'>&nbsp;Priority</th>
+              <th className='row16'>Response</th>
               <th className='row12'>Unresolved</th>
               <th className='row12'>Missing</th>
               <th className='row12'>Awaiting Field</th>

@@ -3,7 +3,7 @@ var Option = React.createClass({
     return {
       id: "",
       text: "",
-      entity: ""
+      spokenText: ""
     };
   },
 
@@ -11,7 +11,7 @@ var Option = React.createClass({
     this.setState({
       id: this.props.index,
       text: this.props.value.text || "",
-      entity: this.props.value.entity || ""
+      spokenText: this.props.value.spokenText || ""
     });
   },
 
@@ -19,7 +19,7 @@ var Option = React.createClass({
     this.setState({
       id: nextProps.index,
       text: nextProps.value.text || "",
-      entity: nextProps.value.entity || ""
+      spokenText: nextProps.value.spokenText || ""
     });
   },
 
@@ -51,9 +51,9 @@ var Option = React.createClass({
         <input
           className='dialog-input response-option-input abs-position'
           type='text'
-          name='entity'
+          name='spokenText'
           placeholder="Entity Value"
-          value={this.state.entity}
+          value={this.state.spokenText}
           onChange={this.handleInputChange}
         />
         <a href="#" onClick={(e)=>this.props.removeItem(e, this.state.id)}>

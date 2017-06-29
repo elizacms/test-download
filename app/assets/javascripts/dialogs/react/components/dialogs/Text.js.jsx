@@ -1,22 +1,22 @@
 var Text = React.createClass({
   getInitialState() {
     return {
-      textValue: "",
-      spokenTextValue: ""
+      text: "",
+      spokenText: ""
     };
   },
 
   componentDidMount() {
     this.setState({
-      textValue: this.props.value.textValue || "",
-      spokenTextValue: this.props.value.spokenTextValue || ""
+      text: this.props.value.text || "",
+      spokenText: this.props.value.spokenText || ""
     });
   },
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      textValue: nextProps.value.textValue || "",
-      spokenTextValue: nextProps.value.spokenTextValue || ""
+      text: nextProps.value.text || "",
+      spokenText: nextProps.value.spokenText || ""
     });
   },
 
@@ -39,8 +39,8 @@ var Text = React.createClass({
         <input
           className='dialog-input'
           type='text'
-          name='textValue'
-          value={this.state.textValue}
+          name='text'
+          value={this.state.text}
           onChange={this.handleInputChange}
         />
         <br />
@@ -50,8 +50,8 @@ var Text = React.createClass({
         <input
           className='dialog-input'
           type='text'
-          name='spokenTextValue'
-          value={this.state.spokenTextValue}
+          name='spokenText'
+          value={this.state.spokenText}
           onChange={this.handleInputChange}
         />
       </div>

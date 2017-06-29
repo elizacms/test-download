@@ -1,22 +1,22 @@
 var Video = React.createClass({
   getInitialState() {
     return {
-      videoThumbnail: "",
-      videoEntity: ""
+      thumbnail: "",
+      url: ""
     };
   },
 
   componentDidMount() {
     this.setState({
-      videoThumbnail: this.props.value.videoThumbnail || "",
-      videoEntity: this.props.value.videoEntity || ""
+      thumbnail: this.props.value.thumbnail || "",
+      url: this.props.value.url || ""
     });
   },
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      videoThumbnail: nextProps.value.videoThumbnail || "",
-      videoEntity: nextProps.value.videoEntity || ""
+      thumbnail: nextProps.value.thumbnail || "",
+      url: nextProps.value.url || ""
     });
   },
 
@@ -34,25 +34,25 @@ var Video = React.createClass({
     return(
       <div>
         <label>
-          <span className='dialog-label'>Video</span>
+          <span className='dialog-label'>Video Thumbnail</span>
         </label>
         <input
           className='dialog-input'
           type='text'
-          name='videoThumbnail'
+          name='thumbnail'
           placeholder="Thumbnail"
-          value={this.state.videoThumbnail}
+          value={this.state.thumbnail}
           onChange={this.handleInputChange}
         />
         <label>
-          <span className='dialog-label video-label-right'>Entity Value</span>
+          <span className='dialog-label'>Video URL</span>
         </label>
         <input
           className='dialog-input abs-position'
           type='text'
-          name='videoEntity'
+          name='url'
           placeholder="Link"
-          value={this.state.videoEntity}
+          value={this.state.url}
           onChange={this.handleInputChange}
         />
         <br />

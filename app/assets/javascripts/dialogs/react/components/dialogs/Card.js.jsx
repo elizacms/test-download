@@ -2,8 +2,8 @@ var Card = React.createClass({
   getInitialState() {
     return {
       id: "",
-      textValue: "",
-      spokenTextValue: "",
+      text: "",
+      spokenText: "",
       iconUrl: "",
       options: []
     };
@@ -12,8 +12,8 @@ var Card = React.createClass({
   componentDidMount() {
     this.setState({
       id: this.props.index,
-      textValue: this.props.value.textValue || "",
-      spokenTextValue: this.props.value.spokenTextValue || "",
+      text: this.props.value.text || "",
+      spokenText: this.props.value.spokenText || "",
       iconUrl: this.props.value.iconUrl || "",
       options: this.props.value.options || []
     });
@@ -22,8 +22,8 @@ var Card = React.createClass({
   componentWillReceiveProps(nextProps) {
     this.setState({
       id: nextProps.index,
-      textValue: nextProps.value.textValue || "",
-      spokenTextValue: nextProps.value.spokenTextValue || "",
+      text: nextProps.value.text || "",
+      spokenText: nextProps.value.spokenText || "",
       iconUrl: nextProps.value.iconUrl || "",
       options: nextProps.value.options || []
     });
@@ -64,7 +64,7 @@ var Card = React.createClass({
             <span className='fa fa-trash option-trash-position'></span>
           </a>
           <Text
-            value={ {textValue, spokenTextValue}=this.state }
+            value={ {text, spokenText}=this.state }
             componentData={this.handleDataFromChild}
           />
           <label>
