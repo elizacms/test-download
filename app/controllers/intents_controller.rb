@@ -13,9 +13,9 @@ class IntentsController < ApplicationController
     #   File.basename(file).split('_').first == @skill.name.downcase
     # end
 
-    @intents = Intent.all_files.map do |file|
+    @intents = Intent.all_files.sort {|a,b| b <=> a}.map do |file|
       IntentFileManager.new.load_intent_from( file )[:intent]
-    end.sort {|a,b| a <=> b}
+    end
   end
 
   def new
