@@ -52,7 +52,7 @@ class Intent
       {id: e.name, type: e.type, must_resolve: e.must_resolve, mturk_field: e.mturk_field}
     end
 
-    { id: name, fields: fields, mturk_response_fields: mturk_response }.to_json
+    JSON.pretty_generate( { id: name, fields: fields, mturk_response_fields: mturk_response } )
   end
 
   def self.all_files
