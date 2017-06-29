@@ -39,7 +39,7 @@ var TableRow = React.createClass({
     e.preventDefault();
     $('.dialogForm').show();
     $('.dialogTable').hide();
-    $('.exportCSV').hide();
+    $('.dialogHeader').hide();
     this.props.sendData(this.props.data);
 
     $('html, body').animate({
@@ -51,7 +51,7 @@ var TableRow = React.createClass({
     e.preventDefault();
     $('.dialogForm').show();
     $('.dialogTable').hide();
-    $('.exportCSV').hide();
+    $('.dialogHeader').hide();
     this.props.copyData(this.props.data);
 
     $('html, body').animate({

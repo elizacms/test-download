@@ -6,7 +6,7 @@ var Table = React.createClass({
   showDialogForm(){
     $('.dialogForm').show();
     $('.dialogTable').hide();
-    $('.exportCSV').hide();
+    $('.dialogHeader').hide();
   },
 
   displayCreateOrUpdateBtn(){

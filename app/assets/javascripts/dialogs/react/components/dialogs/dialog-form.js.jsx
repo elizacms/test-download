@@ -180,7 +180,7 @@ var DialogForm = React.createClass({
 
     $('.dialogForm').hide();
     $('.dialogTable').show();
-    $('.exportCSV').show();
+    $('.dialogHeader').show();
 
     var data = {};
 
@@ -217,7 +217,7 @@ var DialogForm = React.createClass({
 
     $('.dialogForm').hide();
     $('.dialogTable').show();
-    $('.exportCSV').show();
+    $('.dialogHeader').show();
 
     this.props.resetDialogData();
     this.props.resetIsUpdateState();

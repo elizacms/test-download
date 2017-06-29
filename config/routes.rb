@@ -132,9 +132,6 @@ Rails.application.routes.draw do
     to: 'dialogs#delete_response',
     as: :delete_response
 
-  get '/dialogue_api/csv',
-    to: 'dialogs#csv'
-
   delete '/dialogue_api/response',
     to: 'dialogs#delete',
     as: :delete_dialogs

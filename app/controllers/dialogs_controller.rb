@@ -36,16 +36,6 @@ class DialogsController < ApplicationController
     end
   end
 
-  def csv
-    dialogs = Dialog.where( intent_id: params[ :intent_id ] ).order('priority DESC')
-    filename = "#{ params[ :intent_id ] }.csv"
-
-    response.headers[ 'Content-Type'        ] = 'text/csv'
-    response.headers[ 'Content-Disposition' ] = %Q/attachment; filename="#{ filename }"/
-
-    render inline: CustomCSV.for( dialogs )
-  end
-
 
   private
 

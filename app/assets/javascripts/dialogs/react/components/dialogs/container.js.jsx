@@ -161,12 +161,12 @@ var Container = React.createClass({
   render() {
     return (
       <div>
-        <ExportCSV
+        <DialogHeader
           skill_name={this.props.skill_name}
           intent_name={this.props.intent_name}
           web_hook={this.props.web_hook}
           >
-        </ExportCSV>
+        </DialogHeader>
 
         <Table
           locked={this.props.file_lock}

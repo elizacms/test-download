@@ -66,40 +66,13 @@ describe 'Dialogs' do
       get '/dialogue_api/all_scenarios', { intent_id: intent.id }
 
       expect( last_response.status ).to eq 200
-      
+
       expect( parsed_response.count ).to eq 1
       expect( parsed_response[0][:missing        ] ).to eq [ 'destination' ]
       expect( parsed_response[0][:unresolved     ] ).to eq [ 'unresolved' ]
       expect( parsed_response[0][:present        ] ).to eq [ 'present', 'value' ]
       expect( parsed_response[0][:awaiting_field ] ).to eq [ 'destination' ]
       expect( parsed_response[0][:awaiting_field ] ).to eq [ 'destination' ]
-    end
-  end
-
-  describe 'CSV export' do
-    let( :header_row ){
-      "intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,aneeda_en,comments\n"
-    }
-    let( :data_row   ){
-      "#{ intent.name },90,destination,unresolved,destination,present && value,\"[('danger','value')]\","\
-      "\"[{\"\"ResponseType\"\":\"\"some_type\"\",\"\"ResponseValue\"\":{\"\"text\"\":\"\"some text\"\"}"\
-      ",\"\"ResponseTrigger\"\":{\"\"trigger\"\":\"\"some_trigger\"\"}""}]\",some comments"
-    }
-    let( :csv ){ header_row + data_row }
-
-    before do
-      header 'Content-Type', 'application/json'
-      post '/dialogue_api/response', params.to_json
-
-      expect( last_response.status ).to eq 201
-    end
-
-    specify 'Success' do
-      get '/dialogue_api/csv', { intent_id: intent.id }
-
-      expect( last_response.status ).to eq 200
-      expect( last_response.headers[ 'Content-Type' ]).to eq 'text/csv'
-      expect( last_response.body   ).to eq csv
     end
   end
 end

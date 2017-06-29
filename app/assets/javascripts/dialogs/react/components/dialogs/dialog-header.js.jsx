@@ -1,12 +1,6 @@
-var ExportCSV = React.createClass({
+var DialogHeader = React.createClass({
   propTypes: {
     title: React.PropTypes.string
-  },
-
-  getCSV() {
-    var intent_id = $( 'form' ).children( 'input[name="intent-id"]' ).val();
-
-    window.location.assign( '/dialogue_api/csv?intent_id=' + this.props.intent_id );
   },
 
   intentName() {
@@ -24,12 +18,7 @@ var ExportCSV = React.createClass({
 
   render() {
     return (
-      <div className='exportCSV'>
-        <div className='info-header-button'>
-          <button onClick={this.getCSV} className='btn lg ghost export-csv'>
-            Export CSV
-          </button>
-        </div>
+      <div className='dialogHeader'>
         <div className='info-header'>
           <div>
             <strong>Skill: </strong>{this.skillName()}
