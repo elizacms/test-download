@@ -32,7 +32,7 @@ describe IntentFileManager do
     specify do
       IntentFileManager.new.save( intent, [field] )
 
-      expect( File.read( action_file_path ) ).to eq( file_data.to_json )
+      expect( File.read( action_file_path ) ).to eq( JSON.pretty_generate file_data )
     end
   end
 
