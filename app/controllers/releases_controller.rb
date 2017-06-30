@@ -35,17 +35,17 @@ class ReleasesController < ApplicationController
     release.update(state: 'in_training')
 
     auth = {username: ENV['JENKINS_USERNAME'], password: ENV['JENKINS_PASSWORD']}
-    HTTParty.post( "#{ENV['NLU_TRAINER_URL']}/build", body: {}, basic_auth: auth )
+    # HTTParty.post( "#{ENV['NLU_TRAINER_URL']}/build", body: {}, basic_auth: auth )
 
-    build_number = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/lastBuild/buildNumber")
-    release.update(build_number: build_number)
+    # build_number = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/lastBuild/buildNumber")
+    release.update(build_number: 10)
 
     redirect_to releases_path, notice: 'Training job started for release.'
   end
 
   def accept_or_reject
-    last_build_no = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/lastBuild/buildNumber")
-    @last_build = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/#{last_build_no}/api/json")
+    # last_build_no = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/lastBuild/buildNumber")
+    # @last_build = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/#{last_build_no}/api/json")
 
     commit = current_user.repo.lookup( @release.commit_sha )
     @diff = current_user.pretty_diff( commit.parents.first.diff(commit) )
