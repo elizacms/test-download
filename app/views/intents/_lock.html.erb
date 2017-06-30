@@ -2,7 +2,7 @@
   <div class='row'>
     <div class='col-xs-12'>
       <div class='file-locked'>
-        Another user is currently editing this Intent.
+        This intent is currently being edited by <%= @intent.file_lock.user_email %>.
         You are able to view it but not save any changes.
       </div>
     </div>
