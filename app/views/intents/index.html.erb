@@ -1,8 +1,10 @@
-<%= link_to(
-  "&larr; Skills".html_safe,
-  skills_path,
-  class: 'btn md grey pull-left'
-) %>
+<% if ENV['ELIZA_CMS'] != 'true' %>
+  <%= link_to(
+    "&larr; Skills".html_safe,
+    skills_path,
+    class: 'btn md grey pull-left'
+  ) %>
+<% end %>
 
 <%= link_to(
   'Create new Intent',

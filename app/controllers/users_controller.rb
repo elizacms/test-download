@@ -31,9 +31,7 @@ class UsersController < ApplicationController
           flash: { success: "User #{ @user.email } created." }
         )
       else
-        redirect_to(
-          users_path, flash: { success: "User #{ @user.email } created." }
-        )
+        redirect_to users_path, flash: { success: "User #{ @user.email } created." }
       end
 
       UserMailer.invite_user( @user.email ).deliver_now
@@ -106,7 +104,7 @@ class UsersController < ApplicationController
 
   def validate_admin_or_owner
     if current_user.nil? || !current_user.is_a_skill_owner? && !current_user.has_role?('admin')
-      redirect_to skills_path, flash: { notice: 'You must be an owner to have access.' }
+      redirect_to root_path, flash: { notice: 'You must be an owner to have access.' }
     end
   end
 

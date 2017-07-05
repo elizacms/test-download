@@ -9,6 +9,11 @@ class PagesController < ApplicationController
   def login_success
     if current_user.has_role?( 'admin' )
       redirect_to users_path
+      return
+    end
+
+    if ENV['ELIZA_CMS'] == 'true'
+      redirect_to skill_intents_path(skill_id: Skill.first)
     else
       redirect_to skills_path
     end

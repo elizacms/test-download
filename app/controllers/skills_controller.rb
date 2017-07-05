@@ -2,6 +2,7 @@ class SkillsController < ApplicationController
   before_action :validate_current_user
   before_action :validate_permissions_for_skill, only: [ :edit, :update, :destroy ]
   before_action :find_skill, only: [ :edit, :update, :destroy ]
+  before_action :intent_index_for_eliza
 
   def index
     @skills = current_user_skills
@@ -15,12 +16,7 @@ class SkillsController < ApplicationController
     @skill = Skill.create( skill_params )
 
     if @skill.persisted?
-      redirect_to(
-        skills_path,
-        flash: {
-          success: "Skill #{ @skill.name } created."
-        }
-      )
+      redirect_to skills_path, flash: { success: "Skill #{ @skill.name } created." }
     else
       flash.now[ :alert ] = @skill.errors.full_messages.to_sentence
       render :new
@@ -32,12 +28,7 @@ class SkillsController < ApplicationController
 
   def update
     if @skill.update( skill_params )
-      redirect_to(
-        edit_skill_path( @skill ),
-        flash: {
-          success: "Skill #{@skill.name} updated."
-        }
-      )
+      redirect_to edit_skill_path( @skill ), flash: {success: "Skill #{@skill.name} updated."}
     else
       flash.now[ :alert ] = @skill.errors.full_messages.to_sentence
       render :edit
@@ -49,14 +40,18 @@ class SkillsController < ApplicationController
       name = @skill.name
       @skill.destroy
 
-      redirect_to( skills_path, flash: { alert: "Destroyed skill with name: #{name}." } )
+      redirect_to skills_path, alert: "Destroyed skill with name: #{name}."
     else
-      redirect_to( skills_path, flash: { alert: 'Only an owner or admin can delete a skill.' } )
+      redirect_to skills_path, alert: 'Only an owner or admin can delete a skill.'
     end
   end
 
 
   private
+
+  def intent_index_for_eliza
+    redirect_to skill_intents_path(skill_id: Skill.first) if ENV['ELIZA_CMS'] == 'true'
+  end
 
   def skill_params
     params.require( :skill ).permit( :name, :description, :web_hook, :user_id )

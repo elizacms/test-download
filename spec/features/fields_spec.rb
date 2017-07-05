@@ -79,7 +79,7 @@ feature 'Fields', :js do
       fill_in :intent_mturk_response, with: 'thingy_that_we_did'
       click_button 'Submit'
 
-      click_link 'Intents'
+      click_link 'Intent Details'
       click_link 'Edit Fields'
       click_button 'JSON'
 
