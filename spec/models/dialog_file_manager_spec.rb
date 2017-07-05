@@ -74,6 +74,17 @@ describe DialogFileManager do
     end
   end
 
+  context 'When eliza_de column contains {{intent:intent_name}}, return empty array for responses' do
+    let( :intent_name ){ 'invalid' }
+
+    specify do
+      expect( dialogs.count ).to eq 2
+      expect( dialogs[ 0 ].priority ).to eq 100
+      expect( dialogs[ 1 ].priority ).to eq 90
+      expect( dialogs[ 1 ].responses ).to eq []
+    end
+  end
+
   describe '#save' do
     let( :intent_name ){ 'billing_1' }
     let( :output_file ){ "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/#{ intent.name }.csv" }

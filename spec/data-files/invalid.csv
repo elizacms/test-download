@@ -1,0 +1,46 @@
+intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra,comments
+billing_mybill,100,billing_invoicequestion,None,billing_invoicequestion,None,,"[
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Wenn Sie Fragen zur Rechnung haben, kann ich Ihnen damit behilflich sein."",
+      ""spokenText"": ""Wenn Sie Fragen zur Rechnung haben, kann ich Ihnen damit behilflich sein."",
+      ""options"": [
+        {
+          ""text"": ""Rechnung einfach erklärt"",
+          ""spokenText"": ""Rechnung einfach erklärt"",
+          ""nluentityvalue"": ""Rechnung einfach erklärt""
+        },
+        {
+          ""text"": ""Warum ist meine Rechnung so hoch?"",
+          ""spokenText"": ""Warum ist meine Rechnung so hoch?"",
+          ""nluentityvalue"": ""Warum ist meine Rechnung so hoch""
+        },
+        {
+          ""text"": ""Mehr zum Thema Rechnung"",
+          ""spokenText"": ""Mehr zum Thema Rechnung"",
+          ""nluentityvalue"": ""Mehr zum Thema Rechnung""
+        }
+      ]
+    },
+    ""ResponseTrigger"": null
+  },
+  {
+    ""ResponseType"": 1,
+    ""ResponseValue"": {
+      ""text"": ""Sie können unter Mein T-Mobile Ihre Rechnung jederzeit einsehen."",
+      ""spokenText"": ""Sie können unter Mein T-Mobile Ihre Rechnung jederzeit einsehen."",
+      ""options"": [
+        {
+          ""text"": ""Meine Rechnung einsehen"",
+          ""spokenText"": ""Meine Rechnung einsehen"",
+          ""url"": ""https://mein.t-mobile.at/myTNT/application.html?menu_id=1011&portlet_id=24""
+        }
+      ]
+    },
+    ""ResponseTrigger"": {
+      ""timeDelayInSecs"": 5
+    }
+  }
+]",BILL-001
+,90,billing_invoicequestion,billing_invoicequestion,None,None,,{{ intent: intent_name }},BILL-001

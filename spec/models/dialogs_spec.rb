@@ -1,24 +1,11 @@
 describe Dialog do
-  let!( :skill  ){ create :skill }
-  let!( :valid_intent ){{
-    "name"           => "valid_intent",
-    "description"    => "some description",
-    "mturk_response" => "some response"
-  }}
-  let!( :intent ){ skill.intents.create!(valid_intent) }
-  let!( :dialog_params ){{
-    'intent_id'      => intent.id.to_s,
-    'priority'       => 100,
-    'awaiting_field' => ['await'],
-    'missing'        => ['miss'],
-    'unresolved'     => ['no_resolve'],
-    'present'        => ['here i am'],
-    'entity_values'  => ['beings'],
-    'comments'       => 'say something'
-  }}
-  let(  :dialog_from_db ){ Dialog.last }
-  let(  :dialogs_path   ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/dialogs/*.json" }
-  let!( :dialog         ){ intent.dialogs.create!(dialog_params) }
+  let!( :skill ){ create :skill }
+  let(  :intent_params ){{ name:           'invalid'   ,
+                           description:    'description'    ,
+                           mturk_response: 'mturk_response' }}
+  let!( :intent   ){ skill.intents.create!(intent_params) }
+  let(  :csv_file ){ "spec/data-files/#{ intent.name }.csv" }
+  let(  :dialogs  ){ DialogFileManager.new.load( csv_file )}
 
 
   specify 'Array with non-empty string should be valid' do
@@ -52,30 +39,20 @@ describe Dialog do
   end
 
   describe '#dialog_with_responses' do
-    let( :expected ){{
-      awaiting_field: [
-        "await"
-      ],
-      missing: [
-        "miss"
-      ],
-      unresolved: [
-        "no_resolve"
-      ],
-      present: [
-        "here i am"
-      ],
-      entity_values: [
-        "beings"
-      ],
-      priority: 100,
-      comments: "say something",
-      responses_attributes: []
-    }}
+    let( :expected ){{ awaiting_field: [ 'billing_invoicequestion' ],
+                       missing: [ 'billing_invoicequestion'],
+                       unresolved: [ 'None' ],
+                       present: [ 'None' ],
+                       entity_values: [],
+                       priority: 100,
+                       comments: nil,
+                       extra:'BILL-001' }}
 
     specify do
-      expect( dialog.dialog_with_responses ).to include expected
-      expect( dialog.dialog_with_responses.keys ).to_not include :_id
+      expect( dialogs.count ).to eq 2
+      expect( dialogs.first.dialog_with_responses      ).to include expected
+      expect( dialogs.first.dialog_with_responses.keys ).to_not include :_id
+      expect( dialogs.last.dialog_with_responses[ :responses_attributes ]).to eq []
     end
   end
 end
