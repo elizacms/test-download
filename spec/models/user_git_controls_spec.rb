@@ -120,4 +120,29 @@ describe 'User git controls' do
       expect( repo.last_commit.message ).to eq 'Changed first dialog priority to 1212.'
     end
   end
+
+  describe '#git_rebase( branch ) w/ multi users and files in working directory' do
+    it 'should incorporate a branch into master' do
+      dialog.update( priority: 1212 )
+      DialogFileManager.new.save( [dialog], intent )
+
+      dialog2.update( priority: 666 )
+      DialogFileManager.new.save( [dialog2], intent2 )
+
+      user.git_branch( 'quack', 'HEAD' )
+      user.git_checkout( 'quack' )
+
+      user.git_add( user.changed_locked_files )
+      user.git_commit( 'Changed first dialog priority to 1212.' )
+
+      checkout = user.git_checkout( 'master' )
+      user.git_rebase( 'quack' )
+
+      expect( user.git_branch_current  ).to eq 'master'
+      expect( checkout.target.name     ).to eq 'refs/heads/master'
+      expect( user.git_diff_workdir    ).to eq []
+      expect( repo.last_commit.message ).to eq 'Changed first dialog priority to 1212.'
+      expect( user2.git_diff_workdir   ).to eq pretty_diff2
+    end
+  end
 end

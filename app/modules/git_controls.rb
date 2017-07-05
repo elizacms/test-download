@@ -51,12 +51,32 @@ module GitControls
   end
 
   def git_rebase branch
+    changed_files = []
+    repo.status { |file| changed_files << file }
+    wip_branch = "WIP-#{(Time.now.to_f * 1000).to_i}"
+
+    git_branch(wip_branch, 'HEAD')
+    git_checkout(wip_branch)
+
+    git_add(changed_files)
+    temp_commit = git_commit('temp commit')
+    git_checkout('master')
+
     rebase = Rugged::Rebase.new(repo, 'refs/heads/master', "refs/heads/#{branch}" )
     rebase.finish(rebase_signature)
+
+    repo.cherrypick( temp_commit )
+    repo.reset( repo.last_commit, :mixed )
+
+    git_branch_delete( wip_branch )
   end
 
   def git_branch_current
     repo.head.name.sub(/^refs\/heads\//, '')
+  end
+
+  def git_branch_delete( branch )
+    Rugged::BranchCollection.new(repo).delete(branch)
   end
 
 
