@@ -1,9 +1,11 @@
 class AppConfig
-  def eliza?
-    ENV['ELIZA_CMS'] == 'true'
-  end
+  class << self
+    def eliza?
+      ENV['ELIZA_CMS'] == 'true'
+    end
 
-  def aneeda?
-    ! eliza?
+    def aneeda?
+      ! eliza?
+    end
   end
 end
