@@ -1,4 +1,4 @@
-<% if ENV['ELIZA_CMS'] != 'true' %>
+<% if AppConfig.aneeda? %>
   <%= link_to(
     "&larr; Skills".html_safe,
     skills_path,

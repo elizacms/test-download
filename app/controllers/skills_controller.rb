@@ -50,7 +50,7 @@ class SkillsController < ApplicationController
   private
 
   def intent_index_for_eliza
-    redirect_to skill_intents_path(skill_id: Skill.first) if ENV['ELIZA_CMS'] == 'true'
+    redirect_to skill_intents_path(skill_id: Skill.first) if AppConfig.eliza?
   end
 
   def skill_params

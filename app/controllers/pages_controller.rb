@@ -12,7 +12,7 @@ class PagesController < ApplicationController
       return
     end
 
-    if ENV['ELIZA_CMS'] == 'true'
+    if AppConfig.eliza?
       redirect_to skill_intents_path(skill_id: Skill.first)
     else
       redirect_to skills_path

@@ -34,7 +34,7 @@ Rails.application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  if ENV['ELIZA_CMS'] == 'true'
+  if AppConfig.eliza?
     config.logger = RemoteSyslogLogger.new( '127.0.0.1', 514, program: "nlu-cms-dev" )
   end
 
