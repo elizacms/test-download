@@ -92,4 +92,22 @@ describe 'Release Feature Specs' do
     expect( page ).to_not have_content 'Accept'
     expect( page ).to_not have_content 'Reject'
   end
+
+  specify 'accepting a release candidate unlocks the intent' do
+    dialog.update(priority: 5)
+    DialogFileManager.new.save( [dialog], intent )
+
+    visit '/releases/new'
+    fill_in :message, with: message
+    click_button 'Create Release'
+
+    click_link message
+
+    click_button 'Submit for training'
+    click_link message
+
+    click_button 'Accept'
+
+    expect( intent.reload.file_lock ).to eq nil
+  end
 end

@@ -3,13 +3,13 @@ class Intent
   include Mongoid::Timestamps
 
   belongs_to :skill
+  belongs_to :release, optional:true
   has_many :dialogs
   embeds_one :file_lock
 
   field :name,           type:String
   field :description,    type:String
   field :mturk_response, type:String
-  field :in_review,      type:Mongoid::Boolean, default:false
 
   validates_presence_of :name
   validate :unique_name

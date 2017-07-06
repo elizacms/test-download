@@ -11,17 +11,21 @@ class Release
   field :state,        type:String, default:STATES.first
 
   belongs_to :user
+  has_many :intents
 
   before_create do |attributes|
     branch_name = "release-#{(Time.now.to_f * 1000).to_i}"
     user.git_branch(branch_name, 'HEAD')
     user.git_checkout(branch_name)
 
-    attributes[:files].select{|f| f =~ /intents/}.each do |file|
-      name = File.basename(file, '.action').sub(/\A.+_/, '')
-      intent = Intent.find_by( name:/#{ name }/i )
-      intent.set(in_review: true)
-      intent.save(validate: false)
+    intents = attributes[:files].map do |file|
+      name = if file =~ /actions/
+        File.basename(file, '.action').sub(/\A.+_/, '')
+      else
+        File.basename(file, '.csv')
+      end
+
+      Intent.find_by( name:/#{ name }/i )
     end
 
     user.git_add( attributes[:files] )
@@ -30,6 +34,7 @@ class Release
 
     self.files       = nil
     self.message     = nil
+    self.intents     = intents
     self.user        = user
     self.branch_name = branch_name
     self.commit_sha  = commit

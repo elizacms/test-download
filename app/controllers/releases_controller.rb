@@ -54,6 +54,7 @@ class ReleasesController < ApplicationController
 
   def approval_or_rejection
     release = Release.find(params[:release_id])
+    release.intents.each { |intent| intent.unlock }
 
     if params[:commit] == 'Accept'
       release.update(state: 'approved')
