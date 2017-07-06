@@ -1,3 +1,5 @@
+require 'http_mocks/jenkins_mock'
+
 describe 'Release Feature Specs' do
   let!( :repo        ){ Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH'])  }
   let!( :user        ){ create :user                                             }
@@ -13,6 +15,10 @@ describe 'Release Feature Specs' do
   before do
     IntentFileManager.new.save( intent, [field] )
     DialogFileManager.new.save( [dialog], intent )
+
+    stub_jenkins_post
+    stub_jenkins_last_build
+    stub_jenkins_api
 
     stub_identity_token
     stub_identity_account_for user.email
@@ -64,5 +70,26 @@ describe 'Release Feature Specs' do
     visit "/releases/#{Release.last.id}/review"
 
     expect(page).to have_content 'Review Release Candidate'
+  end
+
+  specify 'User can visit accept_or_reject again and no accept or reject btns' do
+    dialog.update(priority: 5)
+    DialogFileManager.new.save( [dialog], intent )
+
+    visit '/releases/new'
+    fill_in :message, with: message
+    click_button 'Create Release'
+
+    click_link message
+
+    click_button 'Submit for training'
+    click_link message
+
+    click_button 'Accept'
+
+    click_link message
+
+    expect( page ).to_not have_content 'Accept'
+    expect( page ).to_not have_content 'Reject'
   end
 end

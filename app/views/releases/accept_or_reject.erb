@@ -21,7 +21,9 @@
 <div class="text-center">
   <%= form_tag '/releases/approval_or_rejection' do %>
     <%= hidden_field_tag 'release_id', @release_id %>
-    <%= submit_tag 'Accept', class: "btn xl" %>
-    <%= submit_tag 'Reject', class: "btn xl red" %>
+    <% if @release.state == 'in_training' %>
+      <%= submit_tag 'Accept', class: "btn xl" %>
+      <%= submit_tag 'Reject', class: "btn xl red" %>
+    <% end %>
   <% end %>
 </div>
