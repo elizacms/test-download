@@ -110,12 +110,6 @@ class IntentsController < ApplicationController
 
   def find_skill
     @skill = Skill.find_by( id: params[ :skill_id ] )
-
-    if @skill.nil? && ENV['ELIZA_CMS'] == 'true'
-      redirect_to skills_path
-    elsif @skill.nil? && ENV['ELIZA_CMS'] != 'true'
-      redirect_to skill_intents_path(skill_id: Skill.first)
-    end
   end
 
   def find_intent
