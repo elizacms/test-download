@@ -8,10 +8,12 @@ class DialogFileManager
     intent_name = File.basename( csv_file, '.csv' )
     intent_id   = Intent.find_by( name:intent_name ).id
 
-    CSV.open( csv_file, headers: true ).map do | row |
-      hash = row.to_hash.symbolize_keys
+    CSV.open( csv_file, headers: true )
+       .select( &:any? )
+       .map do | row |
+          hash = row.to_hash.symbolize_keys
 
-      Dialog.new( attrs_from( hash ).merge( intent_id:intent_id ))
+          Dialog.new( attrs_from( hash ).merge( intent_id:intent_id ))
     end
   end
 

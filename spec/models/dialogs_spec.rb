@@ -38,7 +38,7 @@ describe Dialog do
     ).to be_valid
   end
 
-  describe '#dialog_with_responses' do
+  describe '#with_responses' do
     let( :expected ){{ awaiting_field: [ 'billing_invoicequestion' ],
                        missing: [ 'billing_invoicequestion'],
                        unresolved: [ 'None' ],
@@ -50,9 +50,9 @@ describe Dialog do
 
     specify do
       expect( dialogs.count ).to eq 2
-      expect( dialogs.first.dialog_with_responses      ).to include expected
-      expect( dialogs.first.dialog_with_responses.keys ).to_not include :_id
-      expect( dialogs.last.dialog_with_responses[ :responses_attributes ]).to eq []
+      expect( dialogs.first.with_responses      ).to include expected
+      expect( dialogs.first.with_responses.keys ).to_not include :_id
+      expect( dialogs.last.with_responses[ :responses_attributes ]).to eq []
     end
   end
 end

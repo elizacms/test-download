@@ -60,7 +60,10 @@ describe DialogFileManager do
     specify do
       expect( dialogs.count ).to eq 2
       expect( dialogs[ 0 ].priority ).to eq 100
+      expect( dialogs[ 0 ].responses.to_a.count ).to eq 2
+      
       expect( dialogs[ 1 ].priority ).to eq 90
+      expect( dialogs[ 1 ].responses.to_a.count ).to eq 2
     end
   end
 
@@ -82,6 +85,18 @@ describe DialogFileManager do
       expect( dialogs[ 0 ].priority ).to eq 100
       expect( dialogs[ 1 ].priority ).to eq 90
       expect( dialogs[ 1 ].responses ).to eq []
+    end
+  end
+
+  context 'When CSV contains blank lines at the end, return valid responses' do
+    let( :intent_name ){ 'billing_with_blank_lines' }
+
+    specify do
+      expect( dialogs.count ).to eq 2
+      expect( dialogs[ 0 ].priority ).to eq 100
+      expect( dialogs[ 0 ].responses.to_a.count ).to eq 2
+      expect( dialogs[ 1 ].priority ).to eq 90
+      expect( dialogs[ 1 ].responses.to_a.count ).to eq 2
     end
   end
 

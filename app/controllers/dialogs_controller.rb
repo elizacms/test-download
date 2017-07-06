@@ -10,7 +10,7 @@ class DialogsController < ApplicationController
 
     dialogs = DialogFileManager.new.load( csv_file )
 
-    render json: dialogs.map( &:dialog_with_responses ).to_json
+    render json: dialogs.map( &:with_responses ).to_json
   end
 
   # POST /dialogue_api/response
