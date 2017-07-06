@@ -26,7 +26,7 @@ class Release
       end
 
       Intent.find_by( name:/#{ name }/i )
-    end
+    end.uniq
 
     user.git_add( attributes[:files] )
     commit = user.git_commit( attributes[:message] )
