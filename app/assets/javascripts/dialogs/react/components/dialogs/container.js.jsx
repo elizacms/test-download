@@ -165,6 +165,7 @@ var Container = React.createClass({
           skill_name={this.props.skill_name}
           intent_name={this.props.intent_name}
           web_hook={this.props.web_hook}
+          edit_skill_intent_path={this.props.edit_skill_intent_path}
           >
         </DialogHeader>
 

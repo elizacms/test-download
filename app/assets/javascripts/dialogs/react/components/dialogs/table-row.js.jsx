@@ -3,19 +3,27 @@ var TableRow = React.createClass({
     title: React.PropTypes.string
   },
 
-  parseResponse(response){
-    var value = JSON.parse(response.response_value);
+  parseResponse(obj){
+    var value = JSON.parse(obj);
 
-    if ( response.response_type === 'text' ) {
-      return(value['response_text_input']);
-    } else if ( response.response_type === 'card' ) {
-      return(value['cards'][0]['text']);
-    } else if ( response.response_type === 'text_with_option' ) {
-      return(value['response_text_with_option_text_input']);
-    } else if ( response.response_type === 'video' ) {
-      return(value['response_video_text_input']);
-    } else if ( response.response_type === 'question_and_answer' ){
-      return(value['response_text_input']);
+    if ( isNaN(value) ) {
+      if ( value.hasOwnProperty('text') ) return ( value.text.substring(0, 40) + " ..." );
+
+      return '';
+    }
+
+    switch ( value ) {
+      case 1:
+        return("Text w/ Options");
+      case 2:
+        return("Video");
+      case 3:
+        return("Cards");
+      case 4:
+        return("Questions & Answers");
+      default:
+        return("Text");
+        break;
     }
   },
 
@@ -88,12 +96,10 @@ var TableRow = React.createClass({
         <td className='response'>
           {data.responses_attributes.map(function(response, index){
             return(
-              <div key={index}>
-                Response [{index + 1}]:
+              <div key={index} className="line-spacing">
+                Type: {this.parseResponse(response.response_type)}
                 <br />
-                Type: {response.response_type}
-                <br />
-                Text: {this.parseResponse(response)}
+                {this.parseResponse(response.response_value)}
                 {this.tableSeparator(data.responses_attributes.length, index)}
               </div>
             );

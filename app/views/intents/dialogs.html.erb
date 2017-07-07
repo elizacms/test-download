@@ -1,12 +1,5 @@
 <%= render partial: 'lock' %>
 
-<%= link_to(
-  '&larr; Intent Details'.html_safe,
-  edit_skill_intent_path(@skill, @intent),
-  class: 'btn md grey pull-left intent-details-btn'
-) %>
-<br><br>
-
 <%= react_component(
   'Container',
   {
@@ -16,7 +9,8 @@
     web_hook: @skill.web_hook,
     field_path: fields_page_path(@skill, @intent),
     fields: @fields,
-    file_lock: locked_by_other_user?
+    file_lock: locked_by_other_user?,
+    edit_skill_intent_path: edit_skill_intent_path(@skill, @intent)
   },
   class: 'dialogs-container'
 ) %>

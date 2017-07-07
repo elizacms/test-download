@@ -19,6 +19,11 @@ var DialogHeader = React.createClass({
   render() {
     return (
       <div className='dialogHeader'>
+        <a href={this.props.edit_skill_intent_path}
+           className="btn md grey pull-left intent-details-btn">
+          &larr; Intent Details
+        </a>
+
         <div className='info-header'>
           <div>
             <strong>Skill: </strong>{this.skillName()}
