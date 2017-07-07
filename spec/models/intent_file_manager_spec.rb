@@ -48,14 +48,14 @@ describe IntentFileManager do
 
   describe 'Errors with skill names' do
     it 'should succeed with capitals in the skill name' do
-      new_skill  = FactoryGirl.create(:skill, name: "JamesTest", web_hook: 'a' )
-      new_intent = FactoryGirl.create(:intent, skill: new_skill)
-      new_field  = FactoryGirl.build( :field )
+      new_skill  = create(:skill, name: "JamesTest", web_hook: 'a' )
+      new_intent = create(:intent, skill: new_skill, name:'new_intent')
+      new_field  = build( :field )
       new_intent_path = IntentFileManager.new.file_path( new_intent )
       IntentFileManager.new.save( new_intent, [new_field] )
 
       expect( IntentFileManager.new.load_intent_from( new_intent_path )[:intent].name )
-      .to eq( 'get_ride' )
+        .to eq( 'new_intent' )
     end
   end
 end

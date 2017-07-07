@@ -5,8 +5,8 @@ class DialogsController < ApplicationController
 
   # GET /dialogue_api/all_scenarios?intent_id=play_music
   def index
-    # intent = Intent.find( params[ :intent_id ])
     csv_file = "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intent_responses_csv/#{ @intent.name }.csv"
+    # csv_file = FilePath.dialog_file_for( @intent )
 
     dialogs = DialogFileManager.new.load( csv_file )
 

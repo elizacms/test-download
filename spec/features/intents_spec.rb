@@ -78,7 +78,7 @@ feature 'Intents pages' do
   end
 
   describe 'Developer can create an Intent' do
-    let( :intent_name        ){ 'get_ride'                }
+    let( :intent_name        ){ 'new_intent'              }
     let( :intent_description ){ 'Get a ride a with Uber.' }
 
     specify do

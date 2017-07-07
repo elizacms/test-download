@@ -1,7 +1,7 @@
-# Intent comes from file name.
-# intent_id in file is ignored.
-
 class DialogFileManager
+  # Intent name comes from file name.
+  # intent_id in file is ignored.
+
   def load csv_file
     return [] unless File.exist?( csv_file )
 
@@ -19,6 +19,7 @@ class DialogFileManager
 
   def save dialogs, intent
     filename = "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/#{ intent.name }.csv"
+    # dialog_file = dialog_file_for( intent )
 
     File.write filename, serialize( dialogs )
   end
