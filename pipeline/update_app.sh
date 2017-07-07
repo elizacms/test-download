@@ -2,7 +2,7 @@
 if [ "${BRANCH}" = 'staging' ]; then
   cd ~/devops_dev/live/eliza/stg
   ansible-playbook eliza-cms-update.yml --extra-vars="{'branch_name':'${COMMIT_ID}'}"
-else if [ "${BRANCH}" = 'master' ]; then
+elif [ "${BRANCH}" = 'master' ]; then
   cd ~/devops_dev/live/eliza/prod
   ansible-playbook eliza-cms-update.yml --extra-vars="{'branch_name':'${COMMIT_ID}'}"
 else
