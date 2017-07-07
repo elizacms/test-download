@@ -35,7 +35,7 @@ describe 'Dialogs' do
       expect( last_response.status ).to eq 201
       expect( Dialog.count   ).to eq 1
       expect( Response.count ).to eq 1
-      expect( Response.first.attrs[:response_type] ).to eq 'some_type'
+      expect( Response.first.response_type ).to eq 'some_type'
       expect( Dialog.first.priority ).to eq 90
       expect( Dialog.first.comments ).to eq 'some comments'
     end

@@ -1,7 +1,12 @@
 module ReleasesHelper
   def diff_format single_diff
-    old_formatted = single_diff[:file_type] == 'Eliza_de' ? json_pretty_for( single_diff[:old] ) : single_diff[:old].force_encoding('ISO-8859-1')
-    new_formatted = single_diff[:file_type] == 'Eliza_de' ? json_pretty_for( single_diff[:new] ) : single_diff[:new].force_encoding('ISO-8859-1')
+    if single_diff[:file_type] == 'Eliza_de'
+      new_formatted = json_pretty_for( single_diff[:new] )
+      old_formatted = json_pretty_for( single_diff[:old] )
+    else
+      new_formatted = single_diff[:new].force_encoding('UTF-8')
+      old_formatted = single_diff[:old].force_encoding('UTF-8')
+    end
 
     Diffy::SplitDiff.new(old_formatted, new_formatted,
                           format: :html,

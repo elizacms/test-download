@@ -16,8 +16,4 @@ class Field
       must_resolve: must_resolve
     }
   end
-
-  def attrs
-    attributes
-  end
 end

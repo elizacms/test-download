@@ -219,12 +219,12 @@ feature 'Dialogs', :js do
       }.to_json
       expected_response_trigger_2 = {'timeDelayInSecs' => '6'}.to_json
 
-      expect( Dialog.last.responses.first.attrs[:response_type]     ).to eq '0'
-      expect( Dialog.last.responses.first.attrs[:response_trigger]  ).to eq expected_response_trigger_1
-      expect( Dialog.last.responses.first.attrs[:response_value]    ).to eq expected_response_1
-      expect( Dialog.last.responses.last.attrs[:response_type]      ).to eq '0'
-      expect( Dialog.last.responses.last.attrs[:response_trigger]   ).to eq expected_response_trigger_2
-      expect( Dialog.last.responses.last.attrs[:response_value]     ).to eq expected_response_2
+      expect( Dialog.last.responses.first.response_type     ).to eq '0'
+      expect( Dialog.last.responses.first.response_trigger  ).to eq expected_response_trigger_1
+      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_1
+      expect( Dialog.last.responses.last.response_type      ).to eq '0'
+      expect( Dialog.last.responses.last.response_trigger   ).to eq expected_response_trigger_2
+      expect( Dialog.last.responses.last.response_value     ).to eq expected_response_2
     end
 
     specify 'Can save a response of type text with options with muli options' do
@@ -265,9 +265,9 @@ feature 'Dialogs', :js do
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
-      expect( Dialog.last.responses.first.attrs[:response_type]     ).to eq '1'
-      expect( Dialog.last.responses.first.attrs[:response_trigger]  ).to eq expected_response_trigger
-      expect( Dialog.last.responses.first.attrs[:response_value]    ).to eq expected_response_value
+      expect( Dialog.last.responses.first.response_type     ).to eq '1'
+      expect( Dialog.last.responses.first.response_trigger  ).to eq expected_response_trigger
+      expect( Dialog.last.responses.first.response_value    ).to eq expected_response_value
     end
 
     specify 'Can save a response of type video' do
@@ -301,9 +301,9 @@ feature 'Dialogs', :js do
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
-      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq '2'
-      expect( Dialog.last.responses.first.attrs[:response_trigger] ).to eq expected_response_trigger
-      expect( Dialog.last.responses.first.attrs[:response_value]   ).to eq expected_response_value
+      expect( Dialog.last.responses.first.response_type    ).to eq '2'
+      expect( Dialog.last.responses.first.response_trigger ).to eq expected_response_trigger
+      expect( Dialog.last.responses.first.response_value   ).to eq expected_response_value
     end
 
     specify 'Can save mulitple responses of type video and text' do
@@ -354,12 +354,12 @@ feature 'Dialogs', :js do
       expected_response_trigger_2 = {'timeDelayInSecs' => '6'}.to_json
 
 
-      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq '2'
-      expect( Dialog.last.responses.first.attrs[:response_trigger] ).to eq expected_response_trigger_1
-      expect( Dialog.last.responses.first.attrs[:response_value]   ).to eq expected_response_value
-      expect( Dialog.last.responses.last.attrs[:response_type]     ).to eq '0'
-      expect( Dialog.last.responses.last.attrs[:response_trigger]  ).to eq expected_response_trigger_2
-      expect( Dialog.last.responses.last.attrs[:response_value]    ).to eq expected_response_2
+      expect( Dialog.last.responses.first.response_type    ).to eq '2'
+      expect( Dialog.last.responses.first.response_trigger ).to eq expected_response_trigger_1
+      expect( Dialog.last.responses.first.response_value   ).to eq expected_response_value
+      expect( Dialog.last.responses.last.response_type     ).to eq '0'
+      expect( Dialog.last.responses.last.response_trigger  ).to eq expected_response_trigger_2
+      expect( Dialog.last.responses.last.response_value    ).to eq expected_response_2
     end
 
     specify 'Can save mulitple responses and update them' do
@@ -430,12 +430,12 @@ feature 'Dialogs', :js do
       }.to_json
       expected_response_trigger_2 = {'timeDelayInSecs' => '7'}.to_json
 
-      expect( Response.first.attrs[:response_type]    ).to eq '2'
-      expect( Response.first.attrs[:response_trigger] ).to eq expected_response_trigger_1
-      expect( Response.first.attrs[:response_value]   ).to eq expected_response_value
-      expect( Response.last.attrs[:response_type]     ).to eq '0'
-      expect( Response.last.attrs[:response_trigger]  ).to eq expected_response_trigger_2
-      expect( Response.last.attrs[:response_value]    ).to eq expected_response_2
+      expect( Response.first.response_type    ).to eq '2'
+      expect( Response.first.response_trigger ).to eq expected_response_trigger_1
+      expect( Response.first.response_value   ).to eq expected_response_value
+      expect( Response.last.response_type     ).to eq '0'
+      expect( Response.last.response_trigger  ).to eq expected_response_trigger_2
+      expect( Response.last.response_value    ).to eq expected_response_2
     end
 
     specify 'Can save mulitple responses, then delete a response' do
@@ -496,9 +496,9 @@ feature 'Dialogs', :js do
 
       sleep 0.1
 
-      expect( Response.last.attrs[:response_type]    ).to eq '2'
-      expect( Response.last.attrs[:response_trigger] ).to eq expected_response_trigger
-      expect( Response.last.attrs[:response_value]   ).to eq expected_response_value
+      expect( Response.last.response_type    ).to eq '2'
+      expect( Response.last.response_trigger ).to eq expected_response_trigger
+      expect( Response.last.response_value   ).to eq expected_response_value
     end
 
     specify 'Can save mulitple card types' do
@@ -572,9 +572,9 @@ feature 'Dialogs', :js do
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
-      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq '3'
-      expect( Dialog.last.responses.first.attrs[:response_trigger] ).to eq expected_response_trigger
-      expect( Dialog.last.responses.first.attrs[:response_value]   ).to eq expected_response_value
+      expect( Dialog.last.responses.first.response_type    ).to eq '3'
+      expect( Dialog.last.responses.first.response_trigger ).to eq expected_response_trigger
+      expect( Dialog.last.responses.first.response_value   ).to eq expected_response_value
     end
 
     specify 'Can save a response of type Question and Answer' do
@@ -619,9 +619,9 @@ feature 'Dialogs', :js do
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '4'}.to_json
 
-      expect( Dialog.last.responses.first.attrs[:response_type]    ).to eq '4'
-      expect( Dialog.last.responses.first.attrs[:response_trigger] ).to eq expected_response_trigger
-      expect( Dialog.last.responses.first.attrs[:response_value]   ).to eq expected_response_value
+      expect( Dialog.last.responses.first.response_type    ).to eq '4'
+      expect( Dialog.last.responses.first.response_trigger ).to eq expected_response_trigger
+      expect( Dialog.last.responses.first.response_value   ).to eq expected_response_value
     end
 
     specify 'Can save mulitple response-trigger-types' do
@@ -678,10 +678,10 @@ feature 'Dialogs', :js do
       expected_response_trigger_4 = {'customerService' => 'false'}.to_json
 
       expect( Dialog.count   ).to eq 1
-      expect( Dialog.last.responses[0].attrs[:response_trigger] ).to eq expected_response_trigger_1
-      expect( Dialog.last.responses[1].attrs[:response_trigger] ).to eq expected_response_trigger_2
-      expect( Dialog.last.responses[2].attrs[:response_trigger] ).to eq expected_response_trigger_3
-      expect( Dialog.last.responses[3].attrs[:response_trigger] ).to eq expected_response_trigger_4
+      expect( Dialog.last.responses[0].response_trigger ).to eq expected_response_trigger_1
+      expect( Dialog.last.responses[1].response_trigger ).to eq expected_response_trigger_2
+      expect( Dialog.last.responses[2].response_trigger ).to eq expected_response_trigger_3
+      expect( Dialog.last.responses[3].response_trigger ).to eq expected_response_trigger_4
     end
 
     specify 'Can edit and save mulitple response-trigger-types' do
@@ -734,8 +734,8 @@ feature 'Dialogs', :js do
       expected_response_trigger_2 = {'customerService' => 'false'}.to_json
 
       expect( Dialog.count   ).to eq 1
-      expect( Dialog.last.responses[0].attrs[:response_trigger] ).to eq expected_response_trigger_1
-      expect( Dialog.last.responses[1].attrs[:response_trigger] ).to eq expected_response_trigger_2
+      expect( Dialog.last.responses[0].response_trigger ).to eq expected_response_trigger_1
+      expect( Dialog.last.responses[1].response_trigger ).to eq expected_response_trigger_2
     end
   end
 end

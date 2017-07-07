@@ -35,13 +35,15 @@ describe 'Release Feature Specs' do
     expect(page).to have_content 'Releases Index'
   end
 
-  specify 'User can visit releases new page' ,:skip do
+  specify 'User can visit releases new page' do
     dialog.update(priority: 5)
     DialogFileManager.new.save( [dialog], intent )
 
     visit '/releases/new'
 
-    expect( page ).to have_content "- \"priority\": 90, + \"priority\": 5"
+    expect( page ).to have_content "-get_ride,90,destination,,A missing rule,"\
+                                   ",\"[('some', 'thing')]\",\"[ +get_ride,5,destination,"\
+                                   ",A missing rule,,\"[('some', 'thing')]\",\"["
   end
 
   specify 'User can create a release' do
