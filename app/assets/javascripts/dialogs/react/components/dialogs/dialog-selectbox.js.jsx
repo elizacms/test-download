@@ -19,7 +19,7 @@ var DialogSelectbox = React.createClass({
   componentWillReceiveProps(nextProps) {
     this.setState({
       field1: nextProps.value,
-      field2: nextProps.inputValue
+      field2: nextProps.inputValue || ''
     });
   },
 
