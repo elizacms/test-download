@@ -33,8 +33,7 @@ class FieldsController < ApplicationController
   private
 
   def fields_for( intent )
-    file = IntentFileManager.new.file_path( intent )
-    IntentFileManager.new.load_intent_from( file )[:fields]
+    IntentFileManager.new.fields_for intent
   end
 
   def field_params

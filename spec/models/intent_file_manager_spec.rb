@@ -1,8 +1,8 @@
 describe IntentFileManager do
-  let!( :skill            ){ create :skill                             }
-  let!( :intent           ){ create :intent, skill: skill              }
-  let(  :field            ){ build :field                              }
-  let(  :action_file_path ){ IntentFileManager.new.file_path( intent ) }
+  let!( :skill            ){ create :skill                }
+  let!( :intent           ){ create :intent, skill: skill }
+  let(  :field            ){ build :field                 }
+  let(  :action_file_path ){ IntentFileManager.new.action_file_for intent }
   let(  :file_data        ){{
     id: 'get_ride',
     fields:[
@@ -51,7 +51,7 @@ describe IntentFileManager do
       new_skill  = create(:skill, name: "JamesTest", web_hook: 'a' )
       new_intent = create(:intent, skill: new_skill, name:'new_intent')
       new_field  = build( :field )
-      new_intent_path = IntentFileManager.new.file_path( new_intent )
+      new_intent_path = IntentFileManager.new.action_file_for( new_intent )
       IntentFileManager.new.save( new_intent, [new_field] )
 
       expect( IntentFileManager.new.load_intent_from( new_intent_path )[:intent].name )

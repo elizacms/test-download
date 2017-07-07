@@ -27,7 +27,7 @@
 <div id='mturk-response-field'>
   <%= form_for([@skill, @intent]) do |f| %>
     Training Data Response Fields<br>
-    <%= f.text_field :mturk_response, value: get_intent_data[:mturk_response] %>
+    <%= f.text_field :mturk_response, value:IntentFileManager.new.intent_data_for( @intent )[:mturk_response] %>
 
     <% if !locked_by_other_user? %>
       <%= f.submit 'Submit', class: 'btn md ghost' %><span id='submit-result'></span>

@@ -6,7 +6,7 @@ describe Intent do
   let(  :intent_from_db  ){ Intent.first                                        }
   let(  :intent          ){ skill.intents.create intent_params                  }
   let(  :intents_path    ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" }
-  let(  :action_file_url ){ IntentFileManager.new.file_path( intent )           }
+  let(  :action_file_url ){ IntentFileManager.new.action_file_for intent        }
   let(  :user            ){ create :user                                        }
   
   before do
