@@ -1,4 +1,4 @@
-feature 'Users pages', :focus do
+feature 'Users pages' do
   let!( :admin     ){ create :user                                         }
   let!( :non_admin ){ create :user, email: 'non-admin@iamplus.com'         }
   let!( :role      ){ create :role, user: admin, name: 'admin', skill: nil }
