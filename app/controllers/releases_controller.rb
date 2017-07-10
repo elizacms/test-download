@@ -17,6 +17,11 @@ class ReleasesController < ApplicationController
   end
 
   def create
+    if release_params[:message].blank?
+      redirect_to new_release_path, alert: "Message can't be blank"
+      return
+    end
+
     if Release.create(release_params)
       redirect_to releases_path, notice: 'Release created.'
     else
