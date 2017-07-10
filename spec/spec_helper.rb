@@ -23,7 +23,6 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
   config.filter_run_including focus: true
-  config.filter_run_excluding js: ENV[ 'SUPPRESS_JS_SPECS' ]
   config.run_all_when_everything_filtered = true
   config.infer_spec_type_from_file_location!
 
