@@ -29,8 +29,4 @@ class Intent
 
     JSON.pretty_generate( id: name, fields: fields_hash, mturk_response_fields: mturk_response )
   end
-
-  def self.all_files
-    Dir["#{ENV['NLU_CMS_PERSISTENCE_PATH']}/eliza_de/actions/*.action"]
-  end
 end

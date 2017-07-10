@@ -1,4 +1,6 @@
 class IntentsController < ApplicationController
+  include FilePath
+
   before_action :validate_current_user, except: [:api_file_lock]
   before_action :validate_permissions_for_skill, except: [:api_file_lock]
   before_action :find_skill, except: [:api_file_lock]
@@ -9,11 +11,7 @@ class IntentsController < ApplicationController
                 only: [ :edit, :fields, :dialogs ]
 
   def index
-    # files_for_skill = Intent.all_files.select do |file|
-    #   File.basename(file).split('_').first == @skill.name.downcase
-    # end
-
-    @intents = Intent.all_files.sort {|a,b| a <=> b}.map do |file|
+    @intents = all_action_files.sort {|a,b| a <=> b}.map do |file|
       IntentFileManager.new.load_intent_from( file )[:intent]
     end
   end

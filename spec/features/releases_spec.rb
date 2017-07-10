@@ -1,5 +1,3 @@
-require 'http_mocks/jenkins_mock'
-
 describe 'Release Feature Specs' do
   let!( :repo        ){ Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH'])  }
   let!( :user        ){ create :user                                             }

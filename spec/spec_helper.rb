@@ -10,6 +10,8 @@ require 'webmock/rspec'
 # Shared
 require 'shared'
 require 'http_mocks/identity_mock'
+require 'http_mocks/jenkins_mock'
+
 
 Mongoid.logger.level = Logger::ERROR
 
