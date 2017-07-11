@@ -7,17 +7,25 @@ var Video = React.createClass({
   },
 
   componentDidMount() {
-    this.setState({
-      thumbnail: this.props.value.thumbnail || "",
-      url: this.props.value.url || ""
-    });
+    if (this.props.value.video){
+      this.setState({
+        thumbnail: this.props.value.video.thumbnail,
+        url: this.props.value.video.url
+      });
+    } else {
+      this.getInitialState();
+    }
   },
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      thumbnail: nextProps.value.thumbnail || "",
-      url: nextProps.value.url || ""
-    });
+    if (nextProps.value.video) {
+      this.setState({
+        thumbnail: nextProps.value.video.thumbnail,
+        url: nextProps.value.video.url
+      });
+    } else {
+      this.getInitialState();
+    }
   },
 
   handleInputChange(event) {
@@ -26,7 +34,7 @@ var Video = React.createClass({
     this.setState({
       [stateKey]: event.target.value
     }, () => { //Update parent after setState
-      this.props.componentData( this.state );
+      this.props.componentData( {video: this.state} );
     });
   },
 
