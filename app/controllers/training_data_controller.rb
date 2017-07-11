@@ -3,8 +3,8 @@ class TrainingDataController < ApplicationController
 
   def upload
     intent = Intent.find(training_data_params[:intent_id])
-
-    file_name = "#{training_data_upload_location}/training-data-#{Time.now.to_i}.csv"
+    original_name = training_data_params[:training_data].original_filename
+    file_name = "#{training_data_upload_location}/#{original_name}"
     file_contents = File.read( training_data_params[:training_data].tempfile )
 
     File.write( file_name, file_contents )
