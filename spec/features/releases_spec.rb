@@ -13,6 +13,7 @@ describe 'Release Feature Specs' do
   before do
     IntentFileManager.new.save( intent, [field] )
     DialogFileManager.new.save( [dialog], intent )
+    File.write("#{training_data_upload_location}/test.csv", 'james test')
 
     stub_jenkins_post
     stub_jenkins_last_build
@@ -24,7 +25,8 @@ describe 'Release Feature Specs' do
   end
 
   let!( :init_add    ){ user.git_add(["eliza_de/actions/#{intent.name.downcase}.action",
-                                      "intent_responses_csv/#{intent.name}.csv"]) }
+                                      "intent_responses_csv/#{intent.name}.csv",
+                                      "training_data/test.csv"]) }
   let!( :init_commit ){ user.git_commit('Initial Commit')                        }
 
   specify 'User can visit releases index page' do

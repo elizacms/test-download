@@ -10,4 +10,16 @@ module FilePath
   def dialog_file_for intent
     "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intent_responses_csv/#{ intent.name.downcase }.csv"
   end
+
+  def training_data_upload_location
+    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/training_data"
+  end
+
+  def training_data_file_for intent
+    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/training_data/#{intent.training_data.file_name}"
+  end
+
+  def relative_path_for path
+    path.try( :split, "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/").try( :last )
+  end
 end

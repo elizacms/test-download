@@ -1,0 +1,13 @@
+<div class='upload-training-data row'>
+  <div class='col-xs-2'>
+    <%= form_tag({ controller: :training_data, action: :upload}, multipart: true) do %>
+      <input type='hidden' name='intent_id' value='<%= params[:id] %>' />
+      <label class='btn btn-default btn-file'>
+        Training Data<input type='file' id='files' name='training_data'/>
+      </label>
+      <br><br>
+      <button class='lg btn black'>Save</button>
+      <br>
+    <% end %>
+  </div>
+</div>

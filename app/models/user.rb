@@ -3,6 +3,7 @@ class User
   include Mongoid::Timestamps
   include Rollable
   include GitControls
+  include FilePath
 
   field :email, type:String
 
@@ -26,10 +27,11 @@ class User
   end
 
   def list_locked_files
-    locked_intents.map{ |i|
-      [IntentFileManager.new.action_file_for( i ).split('nlu-cms-persistence/')[1],
-      dialog_file_for_intent( i )]
-    }.flatten
+    locked_intents.map do |i|
+      [relative_path_for( action_file_for( i ) ),
+       relative_path_for( dialog_file_for( i ) ),
+       relative_path_for( i.training_data.present? ? training_data_file_for( i ) : nil )]
+    end.flatten.compact
   end
 
   def locked_intents
@@ -47,13 +49,10 @@ class User
     changed_files
   end
 
+
   private
 
   def user_roles type
     self.roles.select{ |r| r.name == type }
-  end
-
-  def dialog_file_for_intent intent
-    "intent_responses_csv/#{intent.name.downcase}.csv"
   end
 end

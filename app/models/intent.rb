@@ -4,8 +4,9 @@ class Intent
 
   belongs_to :skill
   belongs_to :release, optional:true
-  has_many :dialogs
+  has_many   :dialogs
   embeds_one :file_lock
+  embeds_one :training_data
 
   field :name,           type:String
   field :description,    type:String

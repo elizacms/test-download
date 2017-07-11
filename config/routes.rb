@@ -112,6 +112,9 @@ Rails.application.routes.draw do
       to: 'api#process_dialog_upload'
   end
 
+  post '/process_training_data_upload',
+    to: 'training_data#upload'
+
   get '/types/field-data-types',
     to: 'types#field_data_types',
     as: :field_data_types

@@ -25,6 +25,7 @@ describe 'User git controls' do
     DialogFileManager.new.save([dialog], intent   )
     DialogFileManager.new.save([dialog2], intent2 )
     DialogFileManager.new.save([dialog3], intent3 )
+    File.write("#{training_data_upload_location}/test.csv", 'james test')
   end
 
   let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name.downcase}.csv",
@@ -32,7 +33,8 @@ describe 'User git controls' do
                                       "intent_responses_csv/#{intent3.name.downcase}.csv",
                                       "eliza_de/actions/#{intent.name.downcase}.action",
                                       "eliza_de/actions/#{intent2.name.downcase}.action",
-                                      "eliza_de/actions/#{intent2.name.downcase}.action"])}
+                                      "eliza_de/actions/#{intent2.name.downcase}.action",
+                                      "training_data/test.csv"])}
   let!( :init_commit ){ user.git_commit('Initial Commit')                          }
   let!( :pretty_diff ){
     [{:old=>"{\n  \"id\": \"get_ride\",\n  \"fields\": [\n    {\n      \"id\": \"destination\",\n      \"type\": \"Text\",\n      \"must_resolve\": false,\n      \"mturk_field\": \"Uber.Destination\"\n    }\n  ],\n  \"mturk_response_fields\": \"uber.get.ride\"\n}", :new=>"{\n  \"id\": \"get_ride\",\n  \"fields\": [\n\n  ],\n  \"mturk_response_fields\": \"uber.get.ride\"\n}", :file_type=>"Eliza_de", :name=>""},

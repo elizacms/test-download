@@ -11,6 +11,7 @@ describe 'Training Data Feature Specs' do
   let(  :message     ){ 'Add Training Data'                                      }
 
   before do
+    File.write("#{training_data_upload_location}/test.csv", 'james test')
     IntentFileManager.new.save( intent, [field] )
     DialogFileManager.new.save( [dialog], intent )
 
@@ -21,19 +22,20 @@ describe 'Training Data Feature Specs' do
     stub_identity_token
     stub_identity_account_for user.email
     visit '/login/success?code=0123abc'
-  end
 
-  let!( :init_add    ){ user.git_add(["eliza_de/actions/#{intent.name.downcase}.action",
-                                      "intent_responses_csv/#{intent.name}.csv"]) }
-  let!( :init_commit ){ user.git_commit('Initial Commit')                        }
+    user.git_add(["eliza_de/actions/#{intent.name.downcase}.action",
+                  "intent_responses_csv/#{intent.name}.csv",
+                  "training_data/test.csv"])
+    user.git_commit('Initial Commit')
+  end
 
   specify 'User can create release with new Training Data' do
     click_link 'Intents'
     click_link 'Edit Details'
 
-    click_button 'Upload Training Data'
-    attach_file 'ok', File.absolute_path( 'spec/data-files/training_data.csv' )
-
+    attach_file 'training_data', File.absolute_path( 'spec/data-files/training_data.csv' )
+    click_button 'Save'
+    sleep 1
     visit '/releases/new'
 
     expect( page ).to have_content '+new training data'

@@ -86,7 +86,7 @@ feature 'Intents pages' do
       click_link 'Intents'
       click_link 'Create new Intent'
 
-      within 'form' do
+      within 'form.new_intent' do
         fill_in :name,        with:intent_name
         fill_in :description, with:intent_description
 
@@ -106,7 +106,7 @@ feature 'Intents pages' do
       click_link 'Intents'
       click_link 'Create new Intent'
 
-      within 'form' do
+      within 'form.new_intent' do
         fill_in :description, with: intent_description
         click_button 'Create'
       end
@@ -137,7 +137,7 @@ feature 'Intents pages' do
 
       click_link 'Edit Details'
 
-      within 'form' do
+      within 'form.edit_intent' do
         fill_in :description, with: 'New Awesome!'
         click_button 'Update'
       end

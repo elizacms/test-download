@@ -23,6 +23,7 @@ RSpec.configure do |config|
   config.include Rack::Test::Methods
   config.include Capybara::DSL
   config.include FactoryGirl::Syntax::Methods
+  config.include FilePath
 
   config.filter_run_including focus: true
   config.run_all_when_everything_filtered = true
@@ -51,6 +52,7 @@ RSpec.configure do |config|
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/eliza_de/" )
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/eliza_de/actions" )
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intent_responses_csv" )
+    Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/training_data" )
 
     Rugged::Repository.init_at("#{ENV['NLU_CMS_PERSISTENCE_PATH']}")
     ActionMailer::Base.deliveries = []
