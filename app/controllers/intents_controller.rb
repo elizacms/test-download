@@ -42,9 +42,9 @@ class IntentsController < ApplicationController
 
   def update
     if @intent.update( intent_params )
-      file = IntentFileManager.new.file_path( @intent )
-      fields = IntentFileManager.new.load_intent_from( file )[:fields]
+      fields = IntentFileManager.new.fields_for( @intent )
       IntentFileManager.new.save( @intent, fields )
+      
       redirect_to(
         edit_skill_intent_path( @skill, @intent ),
         flash: {
@@ -96,8 +96,7 @@ class IntentsController < ApplicationController
   private
 
   def fields_for( intent )
-    file = IntentFileManager.new.file_path( intent )
-    IntentFileManager.new.load_intent_from( file )[:fields]
+    IntentFileManager.new.fields_for intent
   end
 
   def find_or_set_file_lock

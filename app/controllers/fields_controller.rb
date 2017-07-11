@@ -20,7 +20,7 @@ class FieldsController < ApplicationController
 
     fields = field_params[:fields].map{|f| Field.new( f )}
 
-    if fields.all?{ |f| f.valid? }
+    if fields.all?( &:valid? )
       IntentFileManager.new.save( intent, fields )
 
       render json: fields.map{|f| f.serialize}.to_json, status: 201
@@ -33,8 +33,7 @@ class FieldsController < ApplicationController
   private
 
   def fields_for( intent )
-    file = IntentFileManager.new.file_path( intent )
-    IntentFileManager.new.load_intent_from( file )[:fields]
+    IntentFileManager.new.fields_for intent
   end
 
   def field_params

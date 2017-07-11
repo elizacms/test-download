@@ -10,15 +10,16 @@ class Courier
 
       begin
         res_json = JSON.pretty_generate( res )
+        
+        {
+          response: res_json,
+          time: end_time - start_time
+        }
+        
       rescue JSON::GeneratorError
         {
           response: "The response could not be parsed. Status: #{res.code}",
           time: 0
-        }
-      else
-        {
-          response: res_json,
-          time: end_time - start_time
         }
       end
     end

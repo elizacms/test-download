@@ -10,7 +10,7 @@ describe Skill do
     expect( Intent.count ).to eq 1
     expect( Skill.count ).to eq 1
 
-    file_path = IntentFileManager.new.file_path( intent )
+    file_path = IntentFileManager.new.action_file_for( intent )
 
     skill.destroy
 

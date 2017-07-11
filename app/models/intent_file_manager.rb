@@ -1,15 +1,11 @@
 class IntentFileManager
-  def file_path intent
-    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/eliza_de/actions/#{intent.name.downcase}.action"
-  end
+  include FilePath
 
   def save intent, fields
-    File.write( file_path(intent), intent.action_file( fields ) )
+    File.write( action_file_for(intent), intent.action_file( fields ) )
   end
 
   def load_intent_from file
-    # skill_name = File.basename(file).split('_')[0]
-    # skill = Skill.find_by_name(skill_name)
     skill = Skill.first
 
     data = JSON.parse(File.read(file), symbolize_names: true)
@@ -31,6 +27,16 @@ class IntentFileManager
   end
 
   def delete_file intent
-    File.delete( file_path(intent) )
+    File.delete action_file_for( intent )
+  end
+
+  def fields_for intent
+    intent_from_file = load_intent_from( action_file_for( intent ))
+    intent_from_file[:fields]
+  end
+
+  def intent_data_for intent
+    intent_from_file = load_intent_from( action_file_for( intent ))
+    intent_from_file[:intent]
   end
 end

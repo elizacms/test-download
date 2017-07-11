@@ -56,8 +56,8 @@
 .bottom-pad128 {
   padding-bottom: 128px;
 }
-.top-margin-21{
-  margin-top: -21px;
+.top-margin-16{
+  margin-top: -16px;
 }
 .abs-position{
   position: absolute;
@@ -292,4 +292,17 @@ table.dialogs{
 }
 .line-spacing {
   line-height: 2rem;
+}
+.display-table-wrapper {
+  display: table;
+  .block {
+    display: table-cell;
+  }
+  .true-block {
+    position: absolute;
+  }
+  .false-block {
+    position: absolute;
+    margin-left: 60px;
+  }
 }
