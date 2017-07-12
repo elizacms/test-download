@@ -15,12 +15,9 @@ describe 'Training Data Feature Specs' do
     IntentFileManager.new.save( intent, [field] )
     DialogFileManager.new.save( [dialog], intent )
 
-    stub_jenkins_post
-    stub_jenkins_last_build
-    stub_jenkins_api
-
     stub_identity_token
     stub_identity_account_for user.email
+
     visit '/login/success?code=0123abc'
 
     user.git_add(["eliza_de/actions/#{intent.name.downcase}.action",
@@ -35,7 +32,7 @@ describe 'Training Data Feature Specs' do
 
     attach_file 'training_data', File.absolute_path( 'spec/data-files/training_data.csv' )
     click_button 'Upload'
-    sleep 1
+    sleep 0.1
     visit '/releases/new'
 
     expect( page ).to have_content '+new training data'

@@ -37,24 +37,21 @@ class ReleasesController < ApplicationController
 
   def submit_to_training
     release = Release.find(params[:release_id])
-    release.update(state: 'in_training')
 
-    auth = {username: ENV['JENKINS_USERNAME'], password: ENV['JENKINS_PASSWORD']}
-    HTTParty.post( "#{ENV['NLU_TRAINER_URL']}/build", body: {}, basic_auth: auth )
-
-    build_number = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/lastBuild/buildNumber")
-    release.update(build_number: build_number)
+    build_number = TrainingAPI.new.build( release )
+    release.update( state:'in_training', build_number:build_number )
 
     redirect_to releases_path, notice: 'Training job started for release.'
   end
 
   def accept_or_reject
-    last_build_no = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/lastBuild/buildNumber")
-    @last_build = HTTParty.get("#{ENV['NLU_TRAINER_URL']}/#{last_build_no}/api/json")
+    release = Release.find(params[:id])
+
+    @build_output = TrainingAPI.new.output_for( @release.build_number )
 
     commit = current_user.repo.lookup( @release.commit_sha )
-    @diff = current_user.pretty_diff( commit.parents.first.diff(commit) )
-    @release_id = params[:id]
+    @diff = current_user.pretty_diff( commit.parents.first.diff( commit ))
+    @release_id = params[ :id ]
   end
 
   def approval_or_rejection

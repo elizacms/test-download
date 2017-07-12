@@ -16,14 +16,17 @@
 <h4>Last Job:</h4>
 <br>
 <div class='nluTraining'>
-  <p>Name: <%= @last_build['fullDisplayName'] %></p>
+  <p>Name: <%= @build_output['fullDisplayName'] %></p>
   <p>
     Result:
-    <span class='<%= class_for_build( @last_build['result'] ) %>'>
-      <%= @last_build['result'] %>
+    <span class='<%= class_for_build( @build_output['result'] ) %>'>
+      <%= @build_output['result'] %>
     </span>
   </p>
-  <p>Time: <%= Time.at(@last_build['timestamp'].to_i / 1000) %></p>
+  <p>Time: <%= Time.at(@build_output['timestamp'].to_i / 1000) %></p>
+</div>
+<div class='console-text'>
+  <%= @build_output[ 'console_text' ] %>
 </div>
 <hr>
 <h3>Diff</h3>
@@ -32,6 +35,7 @@
 <div class="text-center">
   <%= form_tag '/releases/approval_or_rejection' do %>
     <%= hidden_field_tag 'release_id', @release_id %>
+    
     <% if @release.state == 'in_training' %>
       <%= submit_tag 'Accept', class: "btn xl" %>
       <%= submit_tag 'Reject', class: "btn xl red" %>

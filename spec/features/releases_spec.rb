@@ -15,10 +15,6 @@ describe 'Release Feature Specs' do
     DialogFileManager.new.save( [dialog], intent )
     File.write("#{training_data_upload_location}/test.csv", 'james test')
 
-    stub_jenkins_post
-    stub_jenkins_last_build
-    stub_jenkins_api
-
     stub_identity_token
     stub_identity_account_for user.email
     visit '/login/success?code=0123abc'
@@ -85,13 +81,15 @@ describe 'Release Feature Specs' do
     expect(page).to have_content 'Review Release Candidate'
   end
 
-  specify 'User can visit accept_or_reject again and no accept or reject btns' ,:js do
+  specify 'User can visit accept_or_reject again and no accept or reject buttons' ,:js do
     dialog.update(priority: 5)
     DialogFileManager.new.save( [dialog], intent )
 
     visit '/releases/new'
     fill_in :message, with: message
     click_button 'Create Release'
+
+    stub_jenkins_for Release.first
 
     page.all('#allReleasesTable tr')[1].click
     click_button 'Submit for training'
@@ -113,6 +111,8 @@ describe 'Release Feature Specs' do
     fill_in :message, with: message
     click_button 'Create Release'
 
+    stub_jenkins_for Release.first
+
     page.all('#allReleasesTable tr')[1].click
     click_button 'Submit for training'
 
@@ -120,5 +120,41 @@ describe 'Release Feature Specs' do
     click_button 'Accept'
 
     expect( intent.reload.file_lock ).to eq nil
+  end
+
+  describe 'User submits for training' do
+    let( :release ){ Release.last }
+    
+    before do
+      dialog.update( priority: 5 )
+      DialogFileManager.new.save( [dialog], intent )
+
+      visit '/releases/new'
+      fill_in :message, with: message
+      click_button 'Create Release'
+
+      visit review_release_path( release )
+
+      stub_jenkins_for release
+
+      expect(page).to have_content 'Review Release Candidate'
+
+      click_on 'Submit for training'
+    end
+
+    specify 'Shows output from Jenkins Training Job' do
+      visit accept_or_reject_path( release )
+      
+      expect( page ).to have_content 'Result: SUCCESS'
+      expect( page ).to have_content 'Started by user George'
+    end
+
+    context 'When Jenkins times out' ,:skip do
+
+    end
+
+    context 'When Jenkins returns 500' ,:skip do
+      # visit accept_or_reject_path( release )      
+    end
   end
 end
