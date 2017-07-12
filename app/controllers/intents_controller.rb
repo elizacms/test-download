@@ -44,12 +44,10 @@ class IntentsController < ApplicationController
     if @intent.update( intent_params )
       fields = IntentFileManager.new.fields_for( @intent )
       IntentFileManager.new.save( @intent, fields )
-      
+
       redirect_to(
         edit_skill_intent_path( @skill, @intent ),
-        flash: {
-          success: "Intent #{intent_params[:name]} updated."
-        }
+        flash: { success: "Intent #{@intent.name} updated." }
       )
     else
       flash.now[ :alert ] = @intent.errors.full_messages.join( "\n" )
