@@ -6,16 +6,6 @@
   class: "btn md grey"
 ) %>
 
-<%= link_to(
-  "Delete this intent",
-  skill_intent_path( @skill, @intent ),
-  method: :delete,
-  data: {
-    confirm: "Are you sure you want to delete this intent?"
-  },
-  class: "btn md red pull-right"
-) %>
-
 <h1>Edit <%= @intent.name %> Details</h1>
 
 <%= render partial: "form" %>

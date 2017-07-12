@@ -129,8 +129,6 @@ feature 'Intents pages' do
   end
 
   describe "Developer can update the Intent's description" do
-    let(  :updated_name ){ "get_ride_now" }
-
     specify do
       visit '/login/success?code=0123abc'
       click_link 'Intents'
@@ -147,7 +145,7 @@ feature 'Intents pages' do
     end
   end
 
-  describe 'Developer can delete an intent' do
+  describe 'Developer can delete an intent', :skip do
     specify do
       visit '/login/success?code=0123abc'
       click_link 'Intents'
@@ -158,7 +156,7 @@ feature 'Intents pages' do
       expect( Intent.count ).to eq 0
       expect( page ).to have_content "Destroyed intent with name: #{ intent.name }"
       expect(
-        File.exist?("#{ENV['NLU_PERSISTENCE_PATH']}/intents/#{intent.id}.json")
+        File.exist?("#{ENV['NLU_PERSISTENCE_PATH']}/intents/#{intent.id}.action")
       ).to eq false
     end
   end

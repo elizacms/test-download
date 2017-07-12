@@ -296,8 +296,10 @@ feature 'Dialogs', :js do
       expected_response_value = {
         'text'       => 'abc def 123 10 9 8',
         'spokenText' => 'Speak out!',
-        'thumbnail'  => 'twin cats',
-        'url'     => 'Jenny or Luna or Lady'
+        'video' => {
+          'thumbnail' => 'twin cats',
+          'url'       => 'Jenny or Luna or Lady'
+        }
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '5'}.to_json
 
@@ -342,8 +344,10 @@ feature 'Dialogs', :js do
       expected_response_value = {
         'text'       => 'abc def 123 10 9 8',
         'spokenText' => 'Speak out!',
-        'thumbnail'  => 'twin cats',
-        'url'     => 'Jenny or Luna or Lady'
+        'video' => {
+          'thumbnail' => 'twin cats',
+          'url'       => 'Jenny or Luna or Lady'
+        }
       }.to_json
       expected_response_trigger_1 = {'timeDelayInSecs' => '5'}.to_json
 
@@ -419,8 +423,10 @@ feature 'Dialogs', :js do
       expected_response_value = {
         'text'       => 'abc def 123 10 9 8',
         'spokenText' => 'Speak out!',
-        'thumbnail'  => 'twin cats',
-        'url'     => 'Jenny or Luna or Lady'
+        'video' => {
+          'thumbnail' => 'twin cats',
+          'url'       => 'Jenny or Luna or Lady'
+        }
       }.to_json
       expected_response_trigger_1 = {'timeDelayInSecs' => '5'}.to_json
 
@@ -489,8 +495,10 @@ feature 'Dialogs', :js do
       expected_response_value = {
         'text'       => 'abc def 123 10 9 8',
         'spokenText' => 'Speak out!',
-        'thumbnail'  => 'twin cats',
-        'url'     => 'Jenny or Luna or Lady'
+        'video' => {
+          'thumbnail' => 'twin cats',
+          'url'       => 'Jenny or Luna or Lady'
+        }
       }.to_json
       expected_response_trigger = {'timeDelayInSecs' => '7'}.to_json
 

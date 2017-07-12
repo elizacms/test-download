@@ -209,61 +209,69 @@ var ResponseType = React.createClass({
     } else if (this.state.trigger_type === 'videoClosed') {
       return(
         <form
-          className="top-margin-21"
+          className="top-margin-16"
         >
         &nbsp;&nbsp;&nbsp;&nbsp;
-          <label>
-            <input
-              className='dialog-input response_trigger'
-              name='videoClosed'
-              type='radio'
-              value='true'
-              checked={this.state.response_trigger.videoClosed == 'true'}
-              onChange={this.responseTriggerChange}
-            />&nbsp;
-            True
+          <div className="true-block">
+            <label>
+              <input
+                className='dialog-input response_trigger'
+                name='videoClosed'
+                type='radio'
+                value='true'
+                checked={this.state.response_trigger.videoClosed == 'true'}
+                onChange={this.responseTriggerChange}
+              />&nbsp;
+              True
           </label>
-          <label>
-            <input
-              className='dialog-input response_trigger'
-              name='videoClosed'
-              type='radio'
-              value='false'
-              checked={this.state.response_trigger.videoClosed == 'true' ? false : true}
-              onChange={this.responseTriggerChange}
-            />&nbsp;
-            False
-          </label>
+          </div>
+          <div className="false-block">
+            <label>
+              <input
+                className='dialog-input response_trigger'
+                name='videoClosed'
+                type='radio'
+                value='false'
+                checked={this.state.response_trigger.videoClosed == 'true' ? false : true}
+                onChange={this.responseTriggerChange}
+              />&nbsp;
+              False
+            </label>
+          </div>
         </form>
       );
     } else if (this.state.trigger_type === 'customerService'){
       return(
         <form
-          className="top-margin-21"
+          className="top-margin-16"
         >
         &nbsp;&nbsp;&nbsp;&nbsp;
-          <label>
-            <input
-              className='dialog-input response_trigger'
-              name='customerService'
-              type='radio'
-              value='true'
-              checked={this.state.response_trigger.customerService == 'true'}
-              onChange={this.responseTriggerChange}
-            />&nbsp;
-            True
-          </label>
-          <label>
-            <input
-              className='dialog-input response_trigger'
-              name='customerService'
-              type='radio'
-              value='false'
-              checked={this.state.response_trigger.customerService == 'true' ? false : true}
-              onChange={this.responseTriggerChange}
-            />&nbsp;
-            False
-          </label>
+          <div className="true-block">
+            <label>
+              <input
+                className='dialog-input response_trigger'
+                name='customerService'
+                type='radio'
+                value='true'
+                checked={this.state.response_trigger.customerService == 'true'}
+                onChange={this.responseTriggerChange}
+              />&nbsp;
+              True
+            </label>
+          </div>
+          <div className="false-block">
+            <label>
+              <input
+                className='dialog-input response_trigger'
+                name='customerService'
+                type='radio'
+                value='false'
+                checked={this.state.response_trigger.customerService == 'true' ? false : true}
+                onChange={this.responseTriggerChange}
+              />&nbsp;
+              False
+            </label>
+          </div>
         </form>
       );
     } else {
@@ -326,19 +334,24 @@ var ResponseType = React.createClass({
           { this.renderComponents() }
           <br />
 
-          <select
-            className='float-left'
-            name='trigger_type'
-            value={ this.state.trigger_type }
-            onChange={(e) => this.triggerMenuChange(e)}
-          >
-            <option key='0' value='null'>Null</option>
-            <option key='1' value='timeDelayInSecs'>Time delay in seconds</option>
-            <option key='2' value='videoClosed'>Video closed</option>
-            <option key='3' value='customerService'>Customer service</option>
-          </select>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          { this.renderTriggerType() }
+          <div className="display-table-wrapper">
+            <div className="block">
+              <select
+                name='trigger_type'
+                value={ this.state.trigger_type }
+                onChange={(e) => this.triggerMenuChange(e)}
+              >
+                <option key='0' value='null'>Null</option>
+                <option key='1' value='timeDelayInSecs'>Time delay in seconds</option>
+                <option key='2' value='videoClosed'>Video closed</option>
+                <option key='3' value='customerService'>Customer service</option>
+              </select>
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="block">
+              { this.renderTriggerType() }
+            </div>
+          </div>
         </td>
 
         <td className='valign-top'>

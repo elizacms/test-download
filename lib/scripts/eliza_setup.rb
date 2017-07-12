@@ -11,4 +11,4 @@ all_types = Intent.all_files.map do |file_path|
 end.flatten.compact.uniq
 
 # Create FieldDataType objects
-all_types.each { |type| FieldDataType.create(type) }
+all_types.each { |type| FieldDataType.create(name: type) }

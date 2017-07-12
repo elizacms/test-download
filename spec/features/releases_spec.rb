@@ -61,6 +61,17 @@ describe 'Release Feature Specs' do
     expect( message       ).to eq commit.message
   end
 
+  specify 'Commit message is required for each release' do
+    dialog.update(priority: 5)
+    DialogFileManager.new.save( [dialog], intent )
+
+    visit '/releases/new'
+    click_button 'Create Release'
+
+    expect( page ).to have_content "Message can't be blank"
+    expect( Release.count ).to eq 0
+  end
+
   specify 'User can visit releases show page' do
     dialog.update(priority: 5)
     DialogFileManager.new.save( [dialog], intent )
@@ -74,7 +85,7 @@ describe 'Release Feature Specs' do
     expect(page).to have_content 'Review Release Candidate'
   end
 
-  specify 'User can visit accept_or_reject again and no accept or reject btns' do
+  specify 'User can visit accept_or_reject again and no accept or reject btns' ,:js do
     dialog.update(priority: 5)
     DialogFileManager.new.save( [dialog], intent )
 
@@ -82,20 +93,19 @@ describe 'Release Feature Specs' do
     fill_in :message, with: message
     click_button 'Create Release'
 
-    click_link message
-
+    page.all('#allReleasesTable tr')[1].click
     click_button 'Submit for training'
-    click_link message
 
+    page.all('#allReleasesTable tr')[1].click
     click_button 'Accept'
 
-    click_link message
+    page.all('#allReleasesTable tr')[1].click
 
     expect( page ).to_not have_content 'Accept'
     expect( page ).to_not have_content 'Reject'
   end
 
-  specify 'accepting a release candidate unlocks the intent' do
+  specify 'accepting a release candidate unlocks the intent' ,:js do
     dialog.update(priority: 5)
     DialogFileManager.new.save( [dialog], intent )
 
@@ -103,11 +113,10 @@ describe 'Release Feature Specs' do
     fill_in :message, with: message
     click_button 'Create Release'
 
-    click_link message
-
+    page.all('#allReleasesTable tr')[1].click
     click_button 'Submit for training'
-    click_link message
 
+    page.all('#allReleasesTable tr')[1].click
     click_button 'Accept'
 
     expect( intent.reload.file_lock ).to eq nil
