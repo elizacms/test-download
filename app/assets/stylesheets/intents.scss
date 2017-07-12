@@ -12,6 +12,11 @@ textarea#intent_description {
   min-height: 250px !important;
 }
 
+#name.disabledInput {
+  color: grey;
+  background-color: lightgrey;
+}
+
 #files {
   display: none;
 }

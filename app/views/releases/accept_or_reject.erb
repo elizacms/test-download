@@ -12,7 +12,6 @@
     </span>
   </p>
   <p>Time: <%= Time.at(@last_build['timestamp'].to_i / 1000) %></p>
-  <p>Jenkins Link: <%= link_to @last_build['url'] %></p>
 </div>
 <hr>
 <h3>Diff</h3>
