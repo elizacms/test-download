@@ -5,7 +5,7 @@
       <%= text_field_tag(
         :name,
         @intent.name,
-        disabled: ( @intent.persisted? ? true : false ),
+        disabled: ( @intent.persisted? ),
         class: "#{@intent.persisted? ? 'disabledInput' : '' }"
       ) %>
       <br><br>
