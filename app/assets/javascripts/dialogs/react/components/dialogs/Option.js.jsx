@@ -33,23 +33,23 @@ var Option = React.createClass({
 
   render() {
     return(
-      <div>
-        <label>
+      <div className="flex-box-wrapper">
+        <label className="flex-box1">
           <span className='dialog-label'>Option</span>
         </label>
         <input
-          className='dialog-input response-option-input'
+          className='dialog-input response-option-input flex-box2'
           type='text'
           name='text'
           placeholder="Text"
           value={this.state.text}
           onChange={this.handleInputChange}
         />
-        <label>
-          <span className='dialog-label option-label-right'>Entity</span>
+        <label className="flex-box1 margin-left15">
+          <span className='dialog-label'>Entity</span>
         </label>
         <input
-          className='dialog-input response-option-input abs-position'
+          className='dialog-input response-option-input margin-left-50 flex-box2'
           type='text'
           name='spokenText'
           placeholder="Entity Value"
