@@ -34,7 +34,7 @@ describe 'Training Data Feature Specs' do
     click_link 'Edit Details'
 
     attach_file 'training_data', File.absolute_path( 'spec/data-files/training_data.csv' )
-    click_button 'Save'
+    click_button 'Upload'
     sleep 1
     visit '/releases/new'
 
