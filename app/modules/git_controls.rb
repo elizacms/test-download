@@ -16,21 +16,9 @@ module GitControls
   end
 
   def git_rm files_to_remove
-    temp_branch = "rm-branch-#{(Time.now.to_f * 1000).to_i}"
-    git_branch(temp_branch, 'HEAD')
-    git_checkout(temp_branch)
-
-    repo.status { |file| git_add([file]) if !files_to_remove.include? file }
-    temp_commit = git_commit('temp_commit')
-
-    repo.reset( repo.last_commit, :hard )
-
-    git_checkout('master')
-
-    repo.cherrypick( temp_commit )
-    repo.reset( repo.last_commit, :mixed )
-
-    git_branch_delete(temp_branch)
+    repo.status do |file, status|
+      repo.checkout_head( paths: file, strategy: :force ) if files_to_remove.include? file
+    end
   end
 
   def git_commit message
@@ -69,24 +57,12 @@ module GitControls
   end
 
   def git_rebase branch
-    changed_files = []
-    repo.status { |file| changed_files << file }
-    wip_branch = "WIP-#{(Time.now.to_f * 1000).to_i}"
-
-    git_branch(wip_branch, 'HEAD')
-    git_checkout(wip_branch)
-
-    git_add(changed_files)
-    temp_commit = git_commit('temp commit')
-    git_checkout('master')
+    git_stash
 
     rebase = Rugged::Rebase.new(repo, 'refs/heads/master', "refs/heads/#{branch}" )
     rebase.finish(rebase_signature)
 
-    repo.cherrypick( temp_commit )
-    repo.reset( repo.last_commit, :mixed )
-
-    git_branch_delete( wip_branch )
+    git_stash_pop
   end
 
   def git_branch_current
@@ -95,6 +71,14 @@ module GitControls
 
   def git_branch_delete( branch )
     Rugged::BranchCollection.new(repo).delete(branch)
+  end
+
+  def git_stash
+    `cd #{ENV['NLU_CMS_PERSISTENCE_PATH']} ; git stash ; cd -`
+  end
+
+  def git_stash_pop
+    `cd #{ENV['NLU_CMS_PERSISTENCE_PATH']} ; git stash pop ; cd -`
   end
 
 
