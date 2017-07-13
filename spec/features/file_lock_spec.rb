@@ -5,10 +5,18 @@ describe 'File Lock Spec' do
   let!( :role   ){ create :role, skill: nil, name: 'admin', user: admin }
   let!( :role2  ){ create :role, skill: skill, user: user               }
   let!( :intent ){ create :intent, skill: skill                         }
-
+  let!( :dialog ){ create :dialog, intent: intent                       }
 
   before do
     IntentFileManager.new.save( intent, [] )
+    DialogFileManager.new.save( [dialog], intent )
+    File.write("#{training_data_upload_location}/test.csv", 'james test')
+
+    user.git_add(["eliza_de/actions/#{intent.name.downcase}.action",
+                  "intent_responses_csv/#{intent.name}.csv",
+                  "training_data/test.csv"])
+    user.git_commit('Initial Commit')
+
     stub_identity_token
     stub_identity_account_for admin.email
     visit '/login/success?code=0123abc'
@@ -36,5 +44,23 @@ describe 'File Lock Spec' do
     sleep 0.5
 
     expect( page ).to have_content "This intent is currently being edited by #{ admin.email }"
+  end
+
+  describe 'unlock' do
+    specify 'the intent and its dependent files when unlock btn is clicked' do
+      click_button 'Clear Intent'
+
+      stub_identity_token
+      stub_identity_account_for user.email
+      visit '/login/success?code=0123abc'
+
+      visit '/skills'
+      click_link 'Manage Intents'
+      click_link 'Edit Details'
+
+      sleep 0.5
+
+      expect( page ).to_not have_content "This intent is currently being edited by #{ admin.email }"
+    end
   end
 end

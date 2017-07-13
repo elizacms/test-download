@@ -15,6 +15,24 @@ module GitControls
     repo.index.write
   end
 
+  def git_rm files_to_remove
+    temp_branch = "rm-branch-#{(Time.now.to_f * 1000).to_i}"
+    git_branch(temp_branch, 'HEAD')
+    git_checkout(temp_branch)
+
+    repo.status { |file| git_add([file]) if !files_to_remove.include? file }
+    temp_commit = git_commit('temp_commit')
+
+    repo.reset( repo.last_commit, :hard )
+
+    git_checkout('master')
+
+    repo.cherrypick( temp_commit )
+    repo.reset( repo.last_commit, :mixed )
+
+    git_branch_delete(temp_branch)
+  end
+
   def git_commit message
     Rugged::Commit.create( repo, commit_options( message ) )
   end

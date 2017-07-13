@@ -88,6 +88,17 @@ class IntentsController < ApplicationController
     render json: {file_lock: locked_for_user}.to_json, status: 200
   end
 
+  def clear_changes
+    intent = Intent.find( params[:id] )
+    current_user.clear_changes_for intent
+
+    if AppConfig.eliza?
+      redirect_to skill_intents_path(skill_id: Skill.first)
+    else
+      redirect_to skills_path
+    end
+  end
+
 
   private
 

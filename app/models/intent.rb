@@ -1,6 +1,7 @@
 class Intent
   include Mongoid::Document
   include Mongoid::Timestamps
+  include FilePath
 
   belongs_to :skill
   belongs_to :release, optional:true
@@ -21,6 +22,12 @@ class Intent
 
   def unlock
     self.file_lock = nil
+  end
+
+  def files
+    [ relative_path_for( action_file_for( self ) ),
+      relative_path_for( dialog_file_for( self ) ),
+      relative_path_for( self.training_data.present? ? training_data_file_for( self ) : nil )]
   end
 
   def action_file fields

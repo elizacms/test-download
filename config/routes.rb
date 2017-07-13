@@ -87,6 +87,10 @@ Rails.application.routes.draw do
       to: 'intents#submit_mturk_response'
   end
 
+  post '/skills/:skill_id/intents/:id/clear-changes',
+    to: 'intents#clear_changes',
+    as: 'clear_changes'
+
   resources :fields
 
   scope :api do

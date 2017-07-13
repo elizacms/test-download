@@ -1,3 +1,7 @@
+<% if @intent.persisted? %>
+  <%= render partial: 'clear_changes' %>
+<% end %>
+
 <%= form_for( [@skill, @intent] ) do |f| %>
   <div class="row">
     <div class="col-xs-12 col-md-6">

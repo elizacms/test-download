@@ -147,4 +147,23 @@ describe 'User git controls' do
       expect( user2.git_diff_workdir   ).to eq pretty_diff2
     end
   end
+
+  describe '#git_rm files' do
+    it 'should remove the files' do
+      dialog.update(priority: 42)
+      dialog2.update(priority: 666)
+      DialogFileManager.new.save( [dialog], intent   )
+      DialogFileManager.new.save( [dialog2], intent2 )
+      field.destroy
+      IntentFileManager.new.save( intent, [] )
+      expect( user.git_diff_workdir  ).to eq pretty_diff
+      expect( user2.git_diff_workdir ).to eq pretty_diff2
+
+      user.git_rm(["intent_responses_csv/#{intent.name.downcase}.csv",
+                   "eliza_de/actions/#{intent.name.downcase}.action"])
+
+      expect( user.git_diff_workdir  ).to eq []
+      expect( user2.git_diff_workdir ).to eq pretty_diff2
+    end
+  end
 end

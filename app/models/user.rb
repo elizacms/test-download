@@ -27,11 +27,7 @@ class User
   end
 
   def list_locked_files
-    locked_intents.map do |i|
-      [relative_path_for( action_file_for( i ) ),
-       relative_path_for( dialog_file_for( i ) ),
-       relative_path_for( i.training_data.present? ? training_data_file_for( i ) : nil )]
-    end.flatten.compact
+    locked_intents.map { |i| i.files }.flatten.compact
   end
 
   def locked_intents
@@ -47,6 +43,11 @@ class User
     end
 
     changed_files
+  end
+
+  def clear_changes_for intent
+    git_rm( intent.files.compact )
+    intent.unlock
   end
 
 

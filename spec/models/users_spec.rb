@@ -15,10 +15,11 @@ describe User do
     IntentFileManager.new.save( intent, [field] )
     IntentFileManager.new.save( intent2, [] )
     DialogFileManager.new.save( [dialog, dialog2], intent )
+    File.write("#{training_data_upload_location}/test.csv", 'james test')
+    user.git_add(["intent_responses_csv/#{intent.name}.csv",
+                  "training_data/test.csv"])
+    user.git_commit('Initial Commit')
   end
-
-  let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name}.csv"]) }
-  let!( :init_commit ){ user.git_commit('Initial Commit')                         }
 
   specify '#set_role admin creates Role' do
     user.set_role :admin
@@ -107,12 +108,20 @@ describe User do
   end
 
   specify '#list_locked_files' do
-    expect( user.list_locked_files ).to eq(["eliza_de/actions/#{intent.name.downcase}.action", "intent_responses_csv/#{intent.name}.csv"])
+    expect( user.list_locked_files ).to eq(["eliza_de/actions/#{intent.name.downcase}.action",
+                                            "intent_responses_csv/#{intent.name}.csv"])
   end
 
   specify '#changed_locked_files' do
     expect( user.changed_locked_files ).to eq(["eliza_de/actions/#{intent.name.downcase}.action"])
 
     expect( user2.changed_locked_files ).to eq([])
+  end
+
+  specify '#clear_changes_for intent' do
+    expect( user.list_locked_files ).to eq(["eliza_de/actions/#{intent.name.downcase}.action",
+                                            "intent_responses_csv/#{intent.name}.csv"])
+    user.clear_changes_for intent
+    expect( user.changed_locked_files ).to eq([])
   end
 end
