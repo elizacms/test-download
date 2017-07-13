@@ -29,6 +29,12 @@ pipeline {
       }
     }
 
+    stage('Update App - Eliza-Voice') {
+      steps {
+        sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=" + getCommitId() + " bash ./pipeline/update_app.sh"
+      }
+    }
+
     stage('Update App - NLU-CMS') {
       steps {
         sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=" + getCommitId() + " bash ./pipeline/update_app_nlu.sh"
