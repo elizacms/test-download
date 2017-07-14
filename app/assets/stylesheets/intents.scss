@@ -37,3 +37,31 @@ textarea#intent_description {
     padding-top: 0px;
   }
 }
+
+.intents-form {
+  .btn.lg {
+    max-width: 130px !important;
+    padding: 7px 0px !important;
+  }
+}
+
+.upload-training-data {
+  position: absolute;
+  left: 495px;
+  top: 260px;
+}
+
+.intent-edit-fields-dialogs {
+  top: -8px;
+}
+
+.intent-edit-update {
+  position: absolute;
+  top: 350px;
+}
+
+.intent-edit-clear {
+  position: absolute;
+  left: 628px;
+  top: 481px;
+}

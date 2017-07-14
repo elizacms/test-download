@@ -1,7 +1,3 @@
-<% if @intent.persisted? %>
-  <%= render partial: 'clear_changes' %>
-<% end %>
-
 <%= form_for( [@skill, @intent] ) do |f| %>
   <div class="row">
     <div class="col-xs-12 col-md-6">
@@ -12,28 +8,35 @@
         disabled: ( @intent.persisted? ),
         class: "#{@intent.persisted? ? 'disabledInput' : '' }"
       ) %>
+
       <br><br>
 
       <%= label_tag :description %><br>
       <%= text_area_tag :description, @intent.description %><br><br>
     </div>
-    <% if Intent.find_by( id: @intent.id ) %>
-      <div class="col-xs-12 col-md-6">
-        <br>
+
+    <div class="col-xs-12 col-md-6 intent-edit-fields-dialogs">
+      <% if Intent.find_by( id: @intent.id ) %>
+        <br><br>
         <%= link_to( 'Edit Fields', fields_page_path( @skill, @intent ), class: 'btn lg black' ) %>
         <%= link_to( 'Edit Dialogs', dialogs_page_path( @skill, @intent ), class: 'btn lg black' ) %>
-      </div>
-    <% end %>
-  </div>
-  <% if !locked_by_other_user? %>
-    <div class="row">
-      <div class="col-xs-12 col-md-6">
-        <%= submit_tag(
-          Intent.find_by( id: @intent.id ) ? 'Update' : 'Create' , class: 'btn md black'
-        ) %>
+      <% end %>
+
+      <div class="intent-edit-update">
+        <% if !locked_by_other_user? %>
+          <%= submit_tag(
+            Intent.find_by( id: @intent.id ) ? 'Update Intent' : 'Create Intent' , class: 'btn lg black'
+          ) %>
+        <% end %>
       </div>
     </div>
-  <% end %>
+  </div>
 <% end %>
+
+<div class="intent-edit-clear">
+  <% if @intent.persisted? %>
+    <%= render partial: 'clear_changes' %>
+  <% end %>
+</div>
 
 <%= render partial: 'training_data_upload' %>
