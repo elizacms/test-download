@@ -3,10 +3,6 @@ module GitControls
     @repo ||= Rugged::Repository.new(ENV['NLU_CMS_PERSISTENCE_PATH'])
   end
 
-  def persistence_path_for file
-    "#{ ENV['NLU_CMS_PERSISTENCE_PATH']}/#{file}"
-  end
-
   def git_add files
     files.each do |file|
       File.exist?(persistence_path_for( file )) ? repo.index.add(file) : repo.index.remove(file)
@@ -68,8 +64,15 @@ module GitControls
   def git_rebase branch
     git_stash
 
+    pull_from_origin branch
+    pull_from_origin 'master'
+
     rebase = Rugged::Rebase.new(repo, 'refs/heads/master', "refs/heads/#{branch}" )
     rebase.finish(rebase_signature)
+
+    push_master_to_origin
+
+    git_branch_delete branch
 
     git_stash_pop
   end
@@ -78,9 +81,8 @@ module GitControls
     repo.head.name.sub(/^refs\/heads\//, '')
   end
 
-  def git_branch_delete( branch )
-    Rugged::BranchCollection.new(repo).delete(branch)
-  end
+
+  private
 
   def git_stash
     `cd #{ENV['NLU_CMS_PERSISTENCE_PATH']} ; git stash ; cd -`
@@ -90,8 +92,17 @@ module GitControls
     `cd #{ENV['NLU_CMS_PERSISTENCE_PATH']} ; git stash pop ; cd -`
   end
 
+  def git_branch_delete( branch )
+    Rugged::BranchCollection.new(repo).delete(branch)
+  end
 
-  private
+  def push_master_to_origin
+    `cd #{ENV['NLU_CMS_PERSISTENCE_PATH']} ; git push origin master; cd -`
+  end
+
+  def pull_from_origin branch
+    `cd #{ENV['NLU_CMS_PERSISTENCE_PATH']} ; git pull -r origin #{branch}; cd -`
+  end
 
   def commit_options message
     committer = {email: email, name: email, time: Time.now}
@@ -125,5 +136,9 @@ module GitControls
     else
       ''
     end
+  end
+
+  def persistence_path_for file
+    "#{ ENV['NLU_CMS_PERSISTENCE_PATH']}/#{file}"
   end
 end

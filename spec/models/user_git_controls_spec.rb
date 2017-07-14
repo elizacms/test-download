@@ -103,7 +103,10 @@ describe 'User git controls' do
   end
 
   describe '#git_rebase branch' do
-    it 'should incorporate a branch into master' do
+    before do
+      allow( user ).to receive :pull_from_origin
+      allow( user ).to receive :push_master_to_origin
+
       dialog.update( priority: 1212 )
       DialogFileManager.new.save( [dialog], intent )
 
@@ -113,13 +116,28 @@ describe 'User git controls' do
       user.git_add( user.changed_locked_files )
       user.git_commit( 'Changed first dialog priority to 1212.' )
 
-      checkout = user.git_checkout( 'master' )
+      @checkout = user.git_checkout( 'master' )
       user.git_rebase( 'quack' )
+    end
 
+    it 'should incorporate a branch into master' do
       expect( user.git_branch_current  ).to eq 'master'
-      expect( checkout.target.name     ).to eq 'refs/heads/master'
+      expect( @checkout.target.name    ).to eq 'refs/heads/master'
       expect( user.git_diff_workdir    ).to eq []
       expect( repo.last_commit.message ).to eq 'Changed first dialog priority to 1212.'
+    end
+
+    it 'should pull from origin' do
+      expect( user ).to have_received( :pull_from_origin ).with 'quack'
+      expect( user ).to have_received( :pull_from_origin ).with 'master'
+    end
+
+    it 'should push master origin' do
+      expect( user ).to have_received( :push_master_to_origin )
+    end
+
+    it 'should delete release branch' do
+      expect( repo.branches.each_name().sort ).to eq [ 'master' ]
     end
   end
 
