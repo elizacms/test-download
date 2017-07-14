@@ -108,7 +108,9 @@ describe 'User git controls' do
       allow( user ).to receive :push_master_to_origin
 
       dialog.update( priority: 1212 )
+      dialog2.update( priority: 666 )
       DialogFileManager.new.save( [dialog], intent )
+      DialogFileManager.new.save( [dialog2], intent2 )
 
       user.git_branch( 'quack', 'HEAD' )
       user.git_checkout( 'quack' )
