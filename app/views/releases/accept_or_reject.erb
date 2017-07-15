@@ -1,6 +1,18 @@
 <h1>Approve Release Candidate</h1>
 
-<h3>NLU Training</h3>
+<div class="row">
+  <div class="col-xs-12 col-md-6">
+    <h3>NLU Training</h3>
+  </div>
+  <div class="col-xs-12 col-md-6">
+    <div class="pull-right">
+      <h3 class="state-font-<%= style_for_release_state(@release.state) %>">
+        <%= @release.state %>
+      </h3>
+    </div>
+  </div>
+</div>
+
 <h4>Last Job:</h4>
 <br>
 <div class='nluTraining'>
