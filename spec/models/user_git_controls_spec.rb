@@ -165,5 +165,24 @@ describe 'User git controls' do
       expect( user.git_diff_workdir  ).to eq []
       expect( user2.git_diff_workdir ).to eq pretty_diff2
     end
+
+    it 'should remove new and modified files' do
+      new_intent = create( :intent, skill: skill, name: 'another_for_user' )
+      create( :file_lock, intent: new_intent,  user_id: user.id.to_s )
+
+      dialog.update(priority: 42)
+      dialog2.update(priority: 666)
+
+      DialogFileManager.new.save( [dialog],   intent  )
+      DialogFileManager.new.save( [dialog2],  intent2 )
+      IntentFileManager.new.save( new_intent, []      )
+
+      user.git_rm(user.list_locked_files)
+
+      expect( repo.status( 'eliza_de/actions/newanothername.action'  ) ).to eq [:worktree_new]
+      expect( repo.status( 'intent_responses_csv/newname.csv'        ) ).to eq [:worktree_modified]
+      expect( File.exist?( 'eliza_de/actions/another_for_user.action') ).to eq false
+      expect( repo.status( 'intent_responses_csv/get_ride.csv'       ) ).to eq []
+    end
   end
 end

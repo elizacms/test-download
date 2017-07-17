@@ -16,8 +16,17 @@ module GitControls
   end
 
   def git_rm files_to_remove
+    to_remove = []
     repo.status do |file, status|
-      repo.checkout_head( paths: file, strategy: :force ) if files_to_remove.include? file
+      to_remove.push({file: file, status: status}) if files_to_remove.include?( file )
+    end
+
+    to_remove.each do |hsh|
+      if hsh[:status].include?( :worktree_modified )
+        `cd #{ENV['NLU_CMS_PERSISTENCE_PATH']} ; git checkout #{hsh[:file]} ; cd -`
+      elsif hsh[:status].include?( :worktree_new )
+        File.delete( persistence_path_for( hsh[:file] ) )
+      end
     end
   end
 
