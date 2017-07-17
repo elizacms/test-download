@@ -129,18 +129,15 @@ var Qna = React.createClass({
         <br />
         {this.state.qnaAnswers.map((answer, index) => (
           <div key={index}>
-            <label>
               <textarea
                 name='qnaAnswers'
                 className='response-qna-answer-input'
                 value={answer.answer}
                 onChange={ (e) => this.handleInputChange(e, index) }
               />
-              &nbsp;&nbsp;
               <a onClick={this.deleteAnswer.bind(this, index)} href='#'>
                 <i className='fa fa-trash answer-delete'></i>
               </a>
-            </label>
           </div>
         ))}
         <br />
