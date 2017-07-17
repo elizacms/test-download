@@ -25,13 +25,13 @@ pipeline {
 
     stage('Update App - Eliza-CMS') {
       steps {
-        sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=" + getCommitId() + " bash ./pipeline/update_app.sh"
+        sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=" + getCommitId() + " bash ./pipeline/update_app_eliza.sh"
       }
     }
 
     stage('Update App - Eliza-Voice') {
       steps {
-        sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=" + getCommitId() + " bash ./pipeline/update_app.sh"
+        sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=" + getCommitId() + " bash ./pipeline/update_app_eliza.sh"
       }
     }
 
