@@ -11,6 +11,7 @@ describe Release do
     DialogFileManager.new.save( [dialog], intent )
     IntentFileManager.new.save( intent, []       )
     IntentFileManager.new.save( intent2, []      )
+    allow( user ).to receive :git_push_origin
   end
 
   let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name}.csv",
@@ -29,6 +30,7 @@ describe Release do
       expect( Release.first.state ).to eq 'unreviewed'
       expect( repo.lookup( release.commit_sha ) ).to be_a Rugged::Commit
       expect( repo.lookup( release.commit_sha ).message ).to eq '2nd Commit'
+      expect( user ).to have_received(:git_push_origin).with release.branch_name
     end
   end
 

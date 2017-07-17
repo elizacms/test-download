@@ -30,6 +30,8 @@ class Release
 
     user.git_add( attributes[:files] )
     commit = user.git_commit( attributes[:message] )
+
+    user.git_push_origin( branch_name )
     user.git_checkout('master')
 
     self.files       = nil

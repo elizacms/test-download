@@ -77,6 +77,10 @@ module GitControls
     git_stash_pop
   end
 
+  def git_push_origin branch
+    `cd #{ENV['NLU_CMS_PERSISTENCE_PATH']} ; git push origin #{branch}; cd -`
+  end
+
   def git_branch_current
     repo.head.name.sub(/^refs\/heads\//, '')
   end
