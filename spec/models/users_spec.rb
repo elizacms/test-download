@@ -21,6 +21,13 @@ describe User do
     user.git_commit('Initial Commit')
   end
 
+  specify 'cannot create duplicate user' do
+    dup_user = User.create(email: 'user@iamplus.com')
+
+    expect( dup_user.errors.full_messages[0] ).to eq "Email is already taken"
+    expect( User.count ).to eq 2
+  end
+
   specify '#set_role admin creates Role' do
     user.set_role :admin
 
