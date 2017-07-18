@@ -18,12 +18,12 @@ describe 'Release Feature Specs' do
     stub_identity_token
     stub_identity_account_for user.email
     visit '/login/success?code=0123abc'
-  end
 
-  let!( :init_add    ){ user.git_add(["eliza_de/actions/#{intent.name.downcase}.action",
-                                      "intent_responses_csv/#{intent.name}.csv",
-                                      "training_data/test.csv"]) }
-  let!( :init_commit ){ user.git_commit('Initial Commit')                        }
+    user.git_add(["eliza_de/actions/#{intent.name.downcase}.action",
+                  "intent_responses_csv/#{intent.name}.csv",
+                  "training_data/test.csv"])
+    user.git_commit('Initial Commit')
+  end
 
   specify 'User can visit releases index page' do
     visit '/releases'
@@ -89,7 +89,7 @@ describe 'Release Feature Specs' do
     fill_in :message, with: message
     click_button 'Create Release'
 
-    stub_jenkins_for Release.first
+    stub_jenkins_for Release.last
 
     page.all('#allReleasesTable tr')[1].click
     click_button 'Submit for training'
@@ -111,7 +111,7 @@ describe 'Release Feature Specs' do
     fill_in :message, with: message
     click_button 'Create Release'
 
-    stub_jenkins_for Release.first
+    stub_jenkins_for Release.last
 
     page.all('#allReleasesTable tr')[1].click
     click_button 'Submit for training'
@@ -124,7 +124,7 @@ describe 'Release Feature Specs' do
 
   describe 'User submits for training' do
     let( :release ){ Release.last }
-    
+
     before do
       dialog.update( priority: 5 )
       DialogFileManager.new.save( [dialog], intent )
@@ -144,7 +144,7 @@ describe 'Release Feature Specs' do
 
     specify 'Shows output from Jenkins Training Job' do
       visit accept_or_reject_path( release )
-      
+
       expect( page ).to have_content 'Result: SUCCESS'
       expect( page ).to have_content 'Started by user George'
     end
@@ -154,7 +154,7 @@ describe 'Release Feature Specs' do
     end
 
     context 'When Jenkins returns 500' ,:skip do
-      # visit accept_or_reject_path( release )      
+      # visit accept_or_reject_path( release )
     end
   end
 end

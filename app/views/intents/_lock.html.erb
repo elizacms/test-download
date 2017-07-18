@@ -7,4 +7,13 @@
       </div>
     </div>
   </div>
+<% elsif @intent.has_open_release? %>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div class='file-locked'>
+        There is already a release candidate pertaining to this intent. That candidate must be
+        accepted or rejected before you can further edit this intent.
+      </div>
+    </div>
+  </div>
 <% end %>

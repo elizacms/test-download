@@ -24,6 +24,14 @@ class Intent
     self.file_lock = nil
   end
 
+  def has_open_release?
+    release = self.try( :release )
+
+    if release.try( :state ) == 'unreviewed' || release.try( :state ) == 'in_training'
+      true
+    end
+  end
+
   def files
     [ relative_path_for( action_file_for( self ) ),
       relative_path_for( dialog_file_for( self ) ),

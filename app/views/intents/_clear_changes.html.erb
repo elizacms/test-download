@@ -1,8 +1,9 @@
-<%= form_tag( clear_changes_path( @skill, @intent ) ) do %>
-
-  <%= submit_tag(
-    'Clear Intent',
-    confirm: 'Are you sure you would like to delete your changes?',
-    class: 'btn lg ghost'
-  ) %>
+<% if !@intent.has_open_release? %>
+  <%= form_tag( clear_changes_path( @skill, @intent ) ) do %>
+    <%= submit_tag(
+      'Clear Intent',
+      confirm: 'Are you sure you would like to delete your changes?',
+      class: 'btn lg ghost'
+    ) %>
+  <% end %>
 <% end %>
