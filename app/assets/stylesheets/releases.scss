@@ -55,3 +55,13 @@
   color: red;
   text-transform: capitalize;
 }
+
+.green-accept{
+  color: white;
+  background-color: #26DE44;
+}
+
+// disable strike-through by Diffy
+del {
+  text-decoration: none !important;
+}

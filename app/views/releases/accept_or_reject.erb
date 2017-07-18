@@ -37,7 +37,7 @@
     <%= hidden_field_tag 'release_id', @release_id %>
     
     <% if @release.state == 'in_training' %>
-      <%= submit_tag 'Accept', class: "btn xl" %>
+      <%= submit_tag 'Accept', class: "btn xl green-accept" %>
       <%= submit_tag 'Reject', class: "btn xl red" %>
     <% end %>
   <% end %>
