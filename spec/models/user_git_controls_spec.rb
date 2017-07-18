@@ -144,6 +144,11 @@ describe 'User git controls' do
   end
 
   describe '#git_rebase( branch ) w/ multi users and files in working directory' do
+    before do
+      allow( user ).to receive :pull_from_origin
+      allow( user ).to receive :push_master_to_origin
+    end
+
     it 'should incorporate a branch into master' do
       dialog.update( priority: 1212 )
       DialogFileManager.new.save( [dialog], intent )

@@ -19,6 +19,12 @@ describe 'Release Feature Specs' do
     stub_identity_account_for user.email
     visit '/login/success?code=0123abc'
 
+    allow_any_instance_of( GitControls ).to receive :git_stash
+    allow_any_instance_of( GitControls ).to receive :pull_from_origin
+    allow_any_instance_of( GitControls ).to receive :push_master_to_origin
+    allow_any_instance_of( GitControls ).to receive :git_stash_pop
+    allow_any_instance_of( GitControls ).to receive :git_push_origin
+
     user.git_add(["eliza_de/actions/#{intent.name.downcase}.action",
                   "intent_responses_csv/#{intent.name}.csv",
                   "training_data/test.csv"])
