@@ -12,8 +12,6 @@ module Rollable
 
     if persisted?
       roles.create!( name:role, skill:skill )
-    else
-      roles.build!( name:role, skill:skill )
     end
   end
 
