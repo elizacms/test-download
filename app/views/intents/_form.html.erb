@@ -23,7 +23,7 @@
       <% end %>
 
       <div class="intent-edit-update">
-        <% if !locked_by_other_user? || !@intent.has_open_release? %>
+        <% if !@intent.locked_for?( @current_user ) %>
           <%= submit_tag(
             Intent.find_by( id: @intent.id ) ? 'Update Intent' : 'Create Intent' , class: 'btn lg black'
           ) %>

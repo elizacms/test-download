@@ -17,6 +17,8 @@ describe 'File Lock Spec' do
                   "training_data/test.csv"])
     user.git_commit('Initial Commit')
 
+    allow_any_instance_of( GitControls ).to receive :git_push_origin
+
     stub_identity_token
     stub_identity_account_for admin.email
     visit '/login/success?code=0123abc'

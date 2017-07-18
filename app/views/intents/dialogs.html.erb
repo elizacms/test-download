@@ -9,7 +9,7 @@
     web_hook: @skill.web_hook,
     field_path: fields_page_path(@skill, @intent),
     fields: @fields,
-    file_lock: locked_by_other_user? || @intent.has_open_release?,
+    file_lock: @intent.locked_for?(@current_user),
     edit_skill_intent_path: edit_skill_intent_path(@skill, @intent)
   },
   class: 'dialogs-container'

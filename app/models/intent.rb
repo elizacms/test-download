@@ -24,12 +24,17 @@ class Intent
     self.file_lock = nil
   end
 
-  def has_open_release?
-    release = self.try( :release )
+  def locked_for?( current_user )
+    locked_by_other_user?( current_user ) || has_open_release?
+  end
 
-    if release.try( :state ) == 'unreviewed' || release.try( :state ) == 'in_training'
-      true
-    end
+  def locked_by_other_user?( current_user )
+    return false if file_lock.nil?
+    User.find(file_lock.user_id) != current_user
+  end
+
+  def has_open_release?
+    release.try( :state ) == 'unreviewed' || release.try( :state ) == 'in_training'
   end
 
   def files
