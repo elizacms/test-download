@@ -144,23 +144,36 @@ describe 'Release Feature Specs' do
       stub_jenkins_for release
 
       expect(page).to have_content 'Review Release Candidate'
-
-      click_on 'Submit for training'
     end
 
     specify 'Shows output from Jenkins Training Job' do
+      click_on 'Submit for training'
+
       visit accept_or_reject_path( release )
 
       expect( page ).to have_content 'Result: SUCCESS'
       expect( page ).to have_content 'Started by user George'
     end
 
-    context 'When Jenkins times out' ,:skip do
+    specify 'Saves build_url' do
+      click_on 'Submit for training'
 
+      expect( Release.first.build_url ).to eq 'http://test.jenkins.com/queue/item/24743'
     end
 
-    context 'When Jenkins returns 500' ,:skip do
-      # visit accept_or_reject_path( release )
+    context 'When Jenkins returns 500' do
+      before do
+        stub_jenkins_error_for Release.first
+        click_on 'Submit for training'
+      end
+
+      specify 'Show error to user' do
+        expect( page ).to have_content 'Could not get Build queue location from Jenkins.'
+      end
+
+      specify 'Does not update release' do
+        expect( release.build_url ).to be_nil
+      end
     end
   end
 end

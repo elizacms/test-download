@@ -33,3 +33,11 @@ def stub_jenkins_for release
                      body: "Started by user George Malary\n[EnvInject] - Loading node environment variables.\nBuilding in workspace /var/lib/jenkins/workspace/nlu-cms-test\nFinished: SUCCESS\n", 
                      headers: {} )
 end
+
+def stub_jenkins_error_for release
+  auth = { Authorization: 'Basic Og==' }
+
+  WebMock.stub_request(:post, "#{ ENV[ 'NLU_TRAINER_URL' ]}/buildWithParameters" )
+    .with( headers:auth, body:{ BRANCH:release.branch_name }.to_query )
+    .to_return( status:500, body:'' )
+end

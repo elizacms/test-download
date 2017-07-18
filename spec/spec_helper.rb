@@ -1,11 +1,14 @@
 # Config
 require 'shared/config'
 
+
 # Gems
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'capybara/rspec'
 require 'webmock/rspec'
+require 'sidekiq/testing'
+
 
 # Shared
 require 'shared'
@@ -14,10 +17,9 @@ require 'http_mocks/jenkins_mock'
 
 
 Mongoid.logger.level = Logger::ERROR
-
 WebMock.disable_net_connect!( allow_localhost:true )
-
 Capybara.javascript_driver = :selenium
+Sidekiq::Testing.inline!
 
 RSpec.configure do |config|
   config.include Rack::Test::Methods

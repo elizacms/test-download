@@ -1,5 +1,7 @@
 module PagesHelper
   def class_for_build( build_result )
+    return if build_result.blank?
+
     build_result.downcase =~ /fail/ ? 'fail' : 'success'
   end
 

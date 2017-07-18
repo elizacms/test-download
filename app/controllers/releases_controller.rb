@@ -37,14 +37,18 @@ class ReleasesController < ApplicationController
   end
 
   def submit_to_training
-    build_number = TrainingAPI.new.build( @release )
-    @release.update( state:'in_training', build_number:build_number )
+    begin
+      TrainingAPI.new( @release ).build
+    rescue TrainingAPIError => e
+      redirect_to releases_path, flash:{ alert: e.message }
+      return
+    end
 
     redirect_to releases_path, notice: 'Training job started for release.'
   end
 
   def accept_or_reject
-    @build_output = TrainingAPI.new.output_for( @release.build_number )
+    @build_output = TrainingAPI.new( @release ).output
 
     commit = current_user.repo.lookup( @release.commit_sha )
     @diff = current_user.pretty_diff( commit.parents.first.diff( commit ))
