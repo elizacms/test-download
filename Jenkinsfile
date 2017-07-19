@@ -23,21 +23,19 @@ pipeline {
       }
     }
 
-    stage('Update App - Eliza-CMS') {
+    stage('Update App -- Eliza') {
       steps {
         sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=" + getCommitId() + " bash ./pipeline/update_app_eliza.sh"
       }
     }
-
-    stage('Update App - Eliza-Voice') {
+    stage('Update App -- Eliza Voice') {
       steps {
-        sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=" + getCommitId() + " bash ./pipeline/update_app_eliza.sh"
+        sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=" + getCommitId() + " bash ./pipeline/update_app_eliza_voice.sh"
       }
     }
-
-    stage('Update App - NLU-CMS') {
+    stage('Update App -- Aneeda') {
       steps {
-        sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=" + getCommitId() + " bash ./pipeline/update_app_nlu.sh"
+        sh "BRANCH=${env.BRANCH_NAME} COMMIT_ID=" + getCommitId() + " bash ./pipeline/update_app_aneeda.sh"
       }
     }
   }
