@@ -83,7 +83,7 @@ class IntentsController < ApplicationController
   end
 
   def api_file_lock
-    locked_for_user = @intent.has_file_lock? ? @intent.file_lock.user_id != current_user.id.to_s : false
+    locked_for_user = @intent.locked_for?( current_user )
 
     render json: {file_lock: locked_for_user}.to_json, status: 200
   end

@@ -48,17 +48,29 @@ describe 'File Lock Spec' do
     expect( page ).to have_content "This intent is currently being edited by #{ admin.email }"
   end
 
-  it 'should lock the intent when there is a release-candidate for that intent' do
-    Release.create( user: user,
-                    files: ["intent_responses_csv/#{intent.name}.csv",
-                            "eliza_de/actions/#{intent.name.downcase}.action"],
-                    message: '2nd Commit')
+  describe 'locked b/c release candidate present' do
+    before do
+      Release.create( user: user,
+                      files: ["intent_responses_csv/#{intent.name}.csv",
+                              "eliza_de/actions/#{intent.name.downcase}.action"],
+                      message: '2nd Commit')
 
-    visit '/skills'
-    click_link 'Manage Intents'
-    click_link 'Edit Details'
+      visit '/skills'
+      click_link 'Manage Intents'
+      click_link 'Edit Details'
+    end
 
-    expect( page ).to have_content 'There is already a release candidate pertaining to this intent. That candidate must be accepted or rejected before you can further edit this intent.'
+    it 'should lock the intent when there is a release-candidate for that intent' do
+      expect( page ).to have_content 'There is already a release candidate pertaining to this intent. That candidate must be accepted or rejected before you can further edit this intent.'
+    end
+
+    it 'should not show the save btn on the fields page' do
+      click_link 'Edit Fields'
+
+      expect( page ).to have_content 'There is already a release candidate pertaining to this intent. That candidate must be accepted or rejected before you can further edit this intent.'
+
+      expect( page ).to_not have_content 'Save'
+    end
   end
 
   describe 'unlock' do
