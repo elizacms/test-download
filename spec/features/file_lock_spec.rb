@@ -74,8 +74,10 @@ describe 'File Lock Spec' do
   end
 
   describe 'unlock' do
-    specify 'the intent and its dependent files when unlock btn is clicked' do
-      click_button 'Clear Intent'
+    specify 'the intent and its dependent files when unlock btn is clicked', :js do
+      accept_alert do
+        click_button 'Clear Intent of Changes'
+      end
 
       stub_identity_token
       stub_identity_account_for user.email
