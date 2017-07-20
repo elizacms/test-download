@@ -24,6 +24,7 @@
   <thead class="thead-default">
     <tr>
       <th>Name</th>
+      <th>Locked By</th>
       <th>Description</th>
       <th></th>
     </tr>
@@ -31,6 +32,7 @@
   <% @intents.each do |intent| %>
     <tr>
       <td><%= intent.name %></td>
+      <td><%= User.find_by( id: intent.try(:file_lock).try(:user_id) ).try(:email) %></td>
       <td><%= intent.description %></td>
       <td>
         <%= link_to(

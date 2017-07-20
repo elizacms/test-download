@@ -28,6 +28,11 @@ class Intent
     locked_by_other_user?( current_user ) || has_open_release?
   end
 
+  def locked_by_current_user?( current_user )
+    return false if file_lock.nil?
+    User.find(file_lock.user_id) == current_user
+  end
+
   def locked_by_other_user?( current_user )
     return false if file_lock.nil?
     User.find(file_lock.user_id) != current_user

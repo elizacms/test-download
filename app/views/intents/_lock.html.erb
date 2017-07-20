@@ -1,19 +1,28 @@
 <% if @intent.locked_by_other_user?( @current_user ) %>
-<div class='row'>
-  <div class='col-xs-12'>
-    <div class='file-locked'>
-      This intent is currently being edited by <%= @intent.file_lock.user_email %>.
-      You are able to view it but not save any changes.
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div class='file-locked'>
+        This intent is currently being edited by <%= @intent.file_lock.user_email %>.
+        You are able to view it but not save any changes.
+      </div>
     </div>
   </div>
-</div>
 <% elsif @intent.has_open_release? %>
-<div class='row'>
-  <div class='col-xs-12'>
-    <div class='file-locked'>
-      There is already a release candidate pertaining to this intent. That candidate must be
-      accepted or rejected before you can further edit this intent.
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div class='file-locked'>
+        There is already a release candidate pertaining to this intent. That candidate must be
+        accepted or rejected before you can further edit this intent.
+      </div>
     </div>
   </div>
-</div>
+<% elsif @intent.locked_by_current_user?( @current_user ) %>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div class='file-locked'>
+        <strong>You have locked this intent.</strong><br>
+        Other user's cannot modify this intent unless you click the 'Clear Intent of Changes' button.
+      </div>
+    </div>
+  </div>
 <% end %>
