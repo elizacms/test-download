@@ -1,5 +1,5 @@
 #!/bin/bash -ex
-if [ "${BRANCH}" = 'staging' ]; then
+if [ "${BRANCH}" = 'master' ]; then
   cd ~/devops_dev/live/eliza/voice
   ansible-playbook eliza-cms-update.yml --extra-vars="{'branch_name':'${COMMIT_ID}'}"
 else
