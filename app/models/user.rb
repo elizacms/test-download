@@ -34,15 +34,10 @@ class User
     Intent.all.select{|i| i.file_lock.try(:user_id) == id.to_s }
   end
 
-  def changed_locked_files
-    changed_files = []
-    repo.status do |file|
-      if list_locked_files.include?( file )
-        changed_files << file
-      end
+  def changed_files
+    list_locked_files.select do | file |
+      repo.status( file ).any?
     end
-
-    changed_files
   end
 
   def clear_changes_for intent

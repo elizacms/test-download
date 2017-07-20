@@ -10,13 +10,13 @@ class Skill
 
   validates_uniqueness_of :web_hook
   validates_presence_of   :web_hook
-  validates_uniqueness_of :name
-  validates_presence_of   :name, case_sensitive: false, message: 'must be present'
+  validates_uniqueness_of :name, case_sensitive: false
+  validates_presence_of   :name, message: 'must be present'
+  
   validates :name,
             format: { with: /\A[a-zA-Z]+\z/, message: "only allows letters (no spaces)." }
 
-  after_destroy -> { intents.each {|intent| IntentFileManager.new.delete_file(intent)} }
-
+  
   def self.find_by_name( name )
     Skill.find_by(name: /\A#{name}\z/i)
   end

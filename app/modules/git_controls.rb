@@ -31,7 +31,7 @@ module GitControls
   end
 
   def git_diff_workdir
-    git_add(changed_locked_files)
+    git_add(changed_files)
     diff = repo.last_commit.diff(repo.index)
 
     pretty_diff( diff ).tap do

@@ -115,7 +115,7 @@ describe 'User git controls' do
       user.git_branch( 'quack', 'HEAD' )
       user.git_checkout( 'quack' )
 
-      user.git_add( user.changed_locked_files )
+      user.git_add( user.changed_files )
       user.git_commit( 'Changed first dialog priority to 1212.' )
 
       @checkout = user.git_checkout( 'master' )
@@ -159,7 +159,7 @@ describe 'User git controls' do
       user.git_branch( 'quack', 'HEAD' )
       user.git_checkout( 'quack' )
 
-      user.git_add( user.changed_locked_files )
+      user.git_add( user.changed_files )
       user.git_commit( 'Changed first dialog priority to 1212.' )
 
       checkout = user.git_checkout( 'master' )

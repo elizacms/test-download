@@ -6,19 +6,6 @@ describe Skill do
     IntentFileManager.new.save( intent, [] )
   end
 
-  specify 'Destroy callbacks for intents' do
-    expect( Intent.count ).to eq 1
-    expect( Skill.count ).to eq 1
-
-    file_path = IntentFileManager.new.action_file_for( intent )
-
-    skill.destroy
-
-    expect( Skill.count ).to eq 0
-    expect( Intent.count ).to eq 0
-    expect( File.exist?( file_path ) ).to eq false
-  end
-
   specify 'Name should be unique' do
     expect( FactoryGirl.build( :skill ) ).to_not be_valid
   end

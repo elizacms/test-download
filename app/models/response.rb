@@ -8,10 +8,9 @@ class Response
   belongs_to :dialog
 
   def attrs
-    dup = attributes.dup
-    dup.delete '_id'
-    dup.delete 'dialog_id'
-
-    dup
+    attributes.dup.tap do | dup |
+      dup.delete '_id'
+      dup.delete 'dialog_id'
+    end
   end
 end
