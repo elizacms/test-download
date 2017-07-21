@@ -29,13 +29,11 @@ class Intent
   end
 
   def locked_by_current_user?( current_user )
-    return false if file_lock.nil?
-    User.find(file_lock.user_id) == current_user
+    file_lock.nil? ? false : User.find(file_lock.user_id) == current_user
   end
 
   def locked_by_other_user?( current_user )
-    return false if file_lock.nil?
-    User.find(file_lock.user_id) != current_user
+    file_lock.nil? ? false : User.find(file_lock.user_id) != current_user
   end
 
   def has_open_release?
@@ -45,7 +43,8 @@ class Intent
   def files
     [ relative_path_for( action_file_for( self ) ),
       relative_path_for( dialog_file_for( self ) ),
-      relative_path_for( self.training_data.present? ? training_data_file_for( self ) : nil )]
+      relative_path_for( self.training_data.present? ? training_data_file_for( self ) : nil )
+    ].compact
   end
 
   def action_file fields

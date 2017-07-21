@@ -41,7 +41,7 @@ class User
   end
 
   def clear_changes_for intent
-    git_rm( intent.files.compact )
+    git_rm( intent.files )
     intent.unlock
   end
 

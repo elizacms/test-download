@@ -1,16 +1,19 @@
 describe Intent do
-  let(:intent_params){{ name:           'valid_intent'     ,
-                        description:    'some description' ,
-                        mturk_response: 'some response'   }}
-  let(  :skill           ){ create :skill                                       }
-  let(  :intent_from_db  ){ Intent.first                                        }
-  let(  :intent          ){ skill.intents.create intent_params                  }
-  let(  :intents_path    ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" }
-  let(  :action_file_url ){ IntentFileManager.new.action_file_for intent        }
-  let(  :user            ){ create :user                                        }
-  
+  let( :intent_params   ){{ name:           'valid_intent'     ,
+                            description:    'some description' ,
+                            mturk_response: 'some response'   }}
+  let( :skill           ){ create :skill                                       }
+  let( :intent_from_db  ){ Intent.first                                        }
+  let( :intent          ){ skill.intents.create intent_params                  }
+  let( :dialog          ){ create :dialog, intent: intent                      }
+  let( :intents_path    ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" }
+  let( :action_file_url ){ IntentFileManager.new.action_file_for intent        }
+  let( :user            ){ create :user                                        }
+
   before do
     IntentFileManager.new.save( intent, [] )
+    DialogFileManager.new.save( [dialog], intent )
+    allow( user ).to receive :git_push_origin
   end
 
   describe 'Intent > FileLock' do
@@ -84,6 +87,66 @@ describe Intent do
       intent_2 = skill.intents.create( name:'VALID_Intent' )
 
       expect( intent_2 ).to be_invalid
+    end
+  end
+
+  describe '#locked_for? current_user' do
+    it 'should return true when locked by another user' do
+      user2 = create( :user, email: 'user2@iamplus.com')
+      create( :file_lock, intent: intent, user_id: user2.id)
+
+      expect( intent.locked_for? user ).to eq true
+    end
+
+    it 'should return true when there is an open release' do
+      user.git_add intent.files
+      user.git_commit 'Initial Commit'
+
+      Release.create( user: user, files: intent.files, message: 'My Test Commit' )
+
+      expect( intent.reload.locked_for? user ).to eq true
+    end
+
+    it 'should return false when not locked and there is no open release' do
+      expect( intent.locked_for? user ).to eq false
+    end
+  end
+
+  describe '#locked_by_current_user? current_user' do
+    it 'should return true when locked by current_user' do
+      create( :file_lock, intent: intent, user_id: user.id)
+
+      expect( intent.locked_by_current_user? user ).to eq true
+    end
+
+    it 'should return false when locked by another user' do
+      user2 = create( :user, email: 'user2@iamplus.com')
+      create( :file_lock, intent: intent, user_id: user2.id)
+
+      expect( intent.locked_by_current_user? user ).to eq false
+    end
+
+    it 'should return false when not locked' do
+      expect( intent.locked_by_current_user? user ).to eq false
+    end
+  end
+
+  describe '#locked_by_other_user?( current_user )' do
+    it 'should return true when locked by another user' do
+      user2 = create( :user, email: 'user2@iamplus.com')
+      create( :file_lock, intent: intent, user_id: user2.id)
+
+      expect( intent.locked_by_other_user? user ).to eq true
+    end
+
+    it 'should return false when locked by current_user' do
+      create( :file_lock, intent: intent, user_id: user.id)
+
+      expect( intent.locked_by_other_user? user ).to eq false
+    end
+
+    it 'should return false when not locked' do
+      expect( intent.locked_by_other_user? user ).to eq false
     end
   end
 end
