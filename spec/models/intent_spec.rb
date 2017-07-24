@@ -149,4 +149,19 @@ describe Intent do
       expect( intent.locked_by_other_user? user ).to eq false
     end
   end
+
+  describe '#files' do
+    it 'should return files for the intent' do
+      expect( intent.files ).to eq ["eliza_de/actions/#{intent.name}.action",
+                                    "intent_responses_csv/#{intent.name}.csv"]
+    end
+
+    it 'should return training_data if it is present' do
+      TrainingDatum.create(file_name: 'test.csv', intent: intent)
+
+      expect( intent.files ).to eq ["eliza_de/actions/#{intent.name}.action",
+                                    "intent_responses_csv/#{intent.name}.csv",
+                                    "training_data/test.csv"]
+    end
+  end
 end

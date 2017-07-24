@@ -25,6 +25,7 @@ class IntentsController < ApplicationController
 
     if @intent.persisted?
       IntentFileManager.new.save( @intent, [] )
+      DialogFileManager.new.save( [], @intent )
       redirect_to(
         fields_page_path(skill_id: @skill, id: @intent.id),
           flash: { success: "Intent #{ params[:name] } created." }

@@ -43,7 +43,7 @@ class Intent
   def files
     [ relative_path_for( action_file_for( self ) ),
       relative_path_for( dialog_file_for( self ) ),
-      relative_path_for( self.training_data.present? ? training_data_file_for( self ) : nil )
+      relative_path_for( training_data.present? ? training_data_file_for( self ) : nil )
     ].compact
   end
 

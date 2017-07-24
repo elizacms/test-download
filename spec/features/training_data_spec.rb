@@ -26,7 +26,7 @@ describe 'Training Data Feature Specs' do
     user.git_commit('Initial Commit')
   end
 
-  specify 'User can create release with new Training Data',:focus do
+  specify 'User can create release with new Training Data' do
     click_link 'Intents'
     click_link 'Edit Details'
 
