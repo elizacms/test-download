@@ -26,7 +26,7 @@ describe 'Training Data Feature Specs' do
     user.git_commit('Initial Commit')
   end
 
-  specify 'User can create release with new Training Data' do
+  specify 'User can create release with new Training Data',:focus do
     click_link 'Intents'
     click_link 'Edit Details'
 
@@ -36,5 +36,6 @@ describe 'Training Data Feature Specs' do
     visit '/releases/new'
 
     expect( page ).to have_content '+new training data'
+    expect( repo.status('training_data/training_data.csv') ).to eq [:worktree_new]
   end
 end

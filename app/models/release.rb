@@ -19,13 +19,14 @@ class Release
     user.git_checkout(branch_name)
 
     intents = attributes[:files].map do |file|
-      name = if file =~ /actions/
-        File.basename(file, '.action').sub(/\A.+_/, '')
+      name = if file =~ /eliza_de\/actions/
+        # This will have to change when skills are included
+        File.basename(file, '.action')
       else
         File.basename(file, '.csv')
       end
 
-      Intent.find_by( name:/#{ name }/i )
+      Intent.find_by( name:/\A#{ name }\z/i )
     end.uniq
 
     user.git_add( attributes[:files] )

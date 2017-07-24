@@ -1,16 +1,16 @@
 <div class='upload-training-data'>
-    <h5>Upload Training Data</h5>
-    <%= form_tag(
-      { controller: :training_data, action: :upload},
-      multipart: true,
-      class: 'trainingDataUpload'
-    ) do %>
-      <input type='hidden' name='intent_id' value='<%= params[:id] %>' />
-      <label class='btn lg btn-default btn-file'>
-        Select File<input type='file' id='files' name='training_data'/>
-      </label>
-      <button class='btn lg black uploadBtn'>Upload</button>
-      <br>
-     <% end %>
-    <span class='infoText'></span>
+  <h5>Upload Training Data</h5>
+  <%= form_tag(
+    { controller: :training_data, action: :upload },
+    multipart: true,
+    id: 'trainingDataUpload'
+  ) do %>
+    <input type='hidden' name='intent_id' value='<%= params[:id] %>' />
+    <label class='btn lg btn-default btn-file'>
+      Select File<input type='file' id='files' name='training_data'/>
+    </label>
+    <button class='btn lg black uploadBtn'>Upload</button>
+    <br>
+   <% end %>
+  <span class='infoText'></span>
 </div>

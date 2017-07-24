@@ -9,14 +9,14 @@ describe Release do
 
   before do
     DialogFileManager.new.save( [dialog], intent )
-    IntentFileManager.new.save( intent, []       )
+    IntentFileManager.new.save( intent,  []      )
     IntentFileManager.new.save( intent2, []      )
     allow( user ).to receive :git_push_origin
-  end
 
-  let!( :init_add    ){ user.git_add(["intent_responses_csv/#{intent.name}.csv",
-                                      "eliza_de/actions/#{intent.name.downcase}.action"])}
-  let!( :init_commit ){ user.git_commit('Initial Commit')                       }
+    user.git_add(["intent_responses_csv/#{intent.name}.csv",
+                  "eliza_de/actions/#{intent.name.downcase}.action"])
+    user.git_commit('Initial Commit')
+  end
 
   describe '#create, also creates a commit' do
     it 'should succeed' do
@@ -44,6 +44,23 @@ describe Release do
                                 message: 'My Test Commit')
 
       expect( release.intents ).to eq [intent, intent2]
+    end
+  end
+
+  describe 'sets the correct intent to the release' do
+    before do
+      @billing_intent = create( :intent, skill: skill, name: 'billing_add')
+      @topup_intent   = create( :intent, skill: skill, name: 'topup_add'  )
+      topup_dialog   = create( :dialog, intent: intent )
+      IntentFileManager.new.save( @billing_intent, [] )
+      IntentFileManager.new.save( @topup_intent, []   )
+      DialogFileManager.new.save( [topup_dialog], @topup_intent )
+    end
+
+    it 'should succeed when there is another intent with a similar name' do
+      release = Release.create(user: user, files: @topup_intent.files, message: 'Test et_ride.')
+      expect( release.intents.first ).to eq @topup_intent
+      expect( release.intents.first ).to_not eq @billing_intent
     end
   end
 end
