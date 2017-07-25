@@ -135,11 +135,7 @@ module GitControls
   end
 
   def name_for file
-    if ['Field', 'Intent' ].include? file_type_for( file )
-      Object.const_get( file_type_for( file )).find( File.basename( file, '.*' )).attrs[ :name ]
-    else
-      ''
-    end
+    File.basename file
   end
 
   def persistence_path_for file
