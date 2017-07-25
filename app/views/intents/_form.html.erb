@@ -38,5 +38,8 @@
     <%= render partial: 'clear_changes' %>
   <% end %>
 </div>
-
-<%= render partial: 'training_data_upload' %>
+<div class='intent-edit-training-data-upload'>
+  <% if @intent.persisted? %>
+    <%= render partial: 'training_data_upload' %>
+  <% end %>
+</div>
