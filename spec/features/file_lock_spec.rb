@@ -62,6 +62,8 @@ describe 'File Lock Spec' do
 
     it 'should lock the intent when there is a release-candidate for that intent' do
       expect( page ).to have_content 'There is already a release candidate pertaining to this intent. That candidate must be accepted or rejected before you can further edit this intent.'
+
+      expect( page ).to_not have_content 'Upload'
     end
 
     it 'should not show the save btn on the fields page' do

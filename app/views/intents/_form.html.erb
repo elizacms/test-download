@@ -39,7 +39,7 @@
   <% end %>
 </div>
 <div class='intent-edit-training-data-upload'>
-  <% if @intent.persisted? %>
+  <% if @intent.persisted? && !@intent.has_open_release? %>
     <%= render partial: 'training_data_upload' %>
   <% end %>
 </div>

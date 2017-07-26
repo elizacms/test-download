@@ -61,9 +61,7 @@ class IntentsController < ApplicationController
 
     redirect_to(
       skill_intents_path(@skill),
-      flash: {
-        alert: "Destroyed intent with name: #{name}."
-      }
+      flash: { alert: "Destroyed intent with name: #{name}." }
     )
   end
 
