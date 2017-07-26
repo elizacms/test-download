@@ -1,4 +1,6 @@
-Rails.application.routes.draw do
+require 'sidekiq/web'
+  
+  Rails.application.routes.draw do
   domain = {
     production: ENV['NLU_CMS_URI'],
     development: 'http://localhost:3000',
@@ -162,4 +164,6 @@ Rails.application.routes.draw do
   get '/test-queries',
     to: 'pages#test_queries',
     as: :test_queries
+
+  mount Sidekiq::Web => '/sidekiq'
 end
