@@ -29,3 +29,6 @@
 
 #ignore mongo folder
 data/
+
+#redis dump
+dump.rdb

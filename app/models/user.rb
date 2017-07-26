@@ -31,7 +31,7 @@ class User
   end
 
   def locked_intents
-    Intent.all.select{|i| i.file_lock.try(:user_id) == id.to_s }
+    Intent.all.select{|i| i.file_lock.try(:user_id) == id.to_s && !i.has_open_release? }
   end
 
   def changed_files

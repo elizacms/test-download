@@ -128,6 +128,41 @@ describe 'Release Feature Specs' do
     expect( intent.reload.file_lock ).to eq nil
   end
 
+  describe 'User can create another release' do
+    let( :release ){ Release.last }
+
+    before do
+      visit '/skills'
+      click_link 'Manage Intents'
+      click_link 'Create new Intent'
+
+      fill_in :name, with: 'test_intent_1'
+      click_button 'Create Intent'
+
+      click_link 'Releases'
+      click_link 'Create New Release Candidate'
+
+      fill_in :message, with: message
+      click_button 'Create Release'
+
+      visit review_release_path( release )
+      stub_jenkins_for release
+    end
+
+    specify 'Can create another release' do
+      visit '/skills'
+      click_link 'Manage Intents'
+      click_link 'Create new Intent'
+
+      fill_in :name, with: 'new_test_best_of_the_rest'
+      click_button 'Create Intent'
+      click_link 'Releases'
+      click_link 'Create New Release Candidate'
+
+      expect(page).to have_content '+ "id": "new_test_best_of_the_rest"'
+    end
+  end
+
   describe 'User submits for training' do
     let( :release ){ Release.last }
 
