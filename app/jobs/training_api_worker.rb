@@ -11,7 +11,7 @@ class TrainingAPIWorker
     if build = build_response.try( :dig, 'executable', 'number' )
       release.update( build_number:build )
     else
-      self.class.perform_in CHECK_TIME
+      self.class.perform_in CHECK_TIME, release_id
     end
   end
 
