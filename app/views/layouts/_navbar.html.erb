@@ -1,6 +1,11 @@
 <nav class="navbar">
   <div class="container">
-    <a id="logo" class="clearfix" href="#" title="i.am+">
+    <a
+      id="logo"
+      class="clearfix"
+      href="<%= AppConfig.eliza? ? skill_intents_path(skill_id: Skill.first) : skills_path %>"
+      title="i.am+"
+    >
       <div class="icon-pyramid pull-left"></div>
       <div class="txt pull-left">
         <%= ENV['NEW_RELIC_APP_NAME'].gsub('_', ' ') %>

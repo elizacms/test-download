@@ -132,17 +132,6 @@ function getCustomInsertControls(gridId) {
     }
 }
 
-function initJSON(){
-    $( 'button.json' ).click(function() {
-        $( 'code.json' ).text( createJSON() );
-
-        // Highlight the code.
-        $('pre code').each(function(i, block) {
-            hljs.highlightBlock(block);
-        });
-    });
-}
-
 function ajaxCall( type, url, data ){
     return $.ajax({
         type: type,
@@ -150,28 +139,6 @@ function ajaxCall( type, url, data ){
         url: url,
         data: data
     });
-}
-
-function createJSON(){
-    var data = $("#jsGrid").jsGrid("option", "data");
-    var newData = $.extend(true, [], data);
-
-    $.each(newData, function(index, value){
-        delete value['id'];
-        delete value['_id'];
-        delete value['created_at'];
-        delete value['updated_at'];
-        value['id'] = value['name'];
-        delete value['name'];
-    });
-
-    var top = {
-        id: intent.name,
-        fields: newData,
-        mturk_response_fields:[ mturkResponseFields() ]
-    };
-
-  return JSON.stringify( top, null, 2 );
 }
 
 function mturkResponseFields(){
