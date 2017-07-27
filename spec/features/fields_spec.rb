@@ -26,30 +26,6 @@ feature 'Fields', :js do
     end
   end
 
-  describe 'Generates JSON' do
-    let( :json ){
-      { id: intent.name, fields: [fields], mturk_response_fields: [ intent.mturk_response ] }.to_json
-    }
-
-    let( :fields ){
-      { id: field.name, type: field.type, mturk_field: field.mturk_field }
-    }
-
-    let( :code_json_content ){
-      find( 'code.json' ).native.attribute( 'innerHTML' ).gsub( /\s/, '' )
-    }
-
-    specify do
-      click_button 'JSON'
-
-      sleep 0.5
-
-      expect( code_json_content ).to have_content 'destination'
-      expect( code_json_content ).to have_content 'mturk_field'
-      expect( code_json_content ).to have_content 'Uber.Destination'
-    end
-  end
-
   describe 'Field Create' do
     specify 'ID/Name must be alphanumeric and underbars' do
       sleep 0.5
@@ -74,18 +50,14 @@ feature 'Fields', :js do
     end
   end
 
-  describe 'mturk_response_fields create' do
+  describe 'mturk_response_fields create',:focus do
     it 'should save the mturk_response_fields to file' do
       fill_in :intent_mturk_response, with: 'thingy_that_we_did'
       click_button 'Submit'
 
-      click_link 'Intent Details'
-      click_link 'Edit Fields'
-      click_button 'JSON'
-
       sleep 0.5
 
-      expect( page ).to have_content 'thingy_that_we_did'
+      expect( page ).to have_content 'Saved'
     end
   end
 end
