@@ -17,8 +17,7 @@ textarea#intent_description {
 }
 
 #name.disabledInput {
-  color: grey;
-  background-color: lightgrey;
+  visibility: hidden;
 }
 
 #files {

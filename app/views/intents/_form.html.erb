@@ -2,6 +2,9 @@
   <div class="row">
     <div class="col-xs-12 col-md-6">
       <%= label_tag :name %>
+      <% if @intent.persisted? %>
+        <%= label_tag @intent.name %>
+      <% end %>
       <%= text_field_tag(
         :name,
         @intent.name,
