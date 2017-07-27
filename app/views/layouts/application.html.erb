@@ -3,9 +3,6 @@
   <head>
     <title>nlu-cms</title>
     <meta name="google" value="notranslate">
-    <% if params[:action] == 'accept_or_reject' && params[:controller] == 'releases' %>
-      <meta http-equiv="refresh" content="15">
-    <% end %>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
