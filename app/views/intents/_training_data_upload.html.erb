@@ -11,6 +11,12 @@
     </label>
     <button class='btn lg black uploadBtn'>Upload</button>
     <br>
-   <% end %>
+  <% end %>
   <span class='infoText'></span>
+  <%= link_to(
+    'Download',
+    download_training_data_path(@intent),
+    class: 'btn lg black pull-right downloadTrainingDataBtn'
+  ) %>
+
 </div>

@@ -52,7 +52,11 @@ textarea#intent_description {
 .upload-training-data {
   position: absolute;
   left: 490px;
-  bottom: 220px;
+  bottom: 175px;
+}
+
+.downloadTrainingDataBtn {
+  margin-right: 3px;
 }
 
 .intent-edit-fields-dialogs {

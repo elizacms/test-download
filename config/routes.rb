@@ -1,5 +1,5 @@
 require 'sidekiq/web'
-  
+
   Rails.application.routes.draw do
   domain = {
     production: ENV['NLU_CMS_URI'],
@@ -120,6 +120,10 @@ require 'sidekiq/web'
 
   post '/process_training_data_upload',
     to: 'training_data#upload'
+
+  get '/intent/:intent_id/download-training-data',
+    to: 'training_data#download',
+    as: :download_training_data
 
   get '/types/field-data-types',
     to: 'types#field_data_types',

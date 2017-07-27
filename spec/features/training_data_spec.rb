@@ -24,18 +24,29 @@ describe 'Training Data Feature Specs' do
                   "intent_responses_csv/#{intent.name}.csv",
                   "training_data/test.csv"])
     user.git_commit('Initial Commit')
-  end
 
-  specify 'User can create release with new Training Data' do
     click_link 'Intents'
     click_link 'Edit Details'
 
     attach_file 'training_data', File.absolute_path( 'spec/data-files/training_data.csv' )
     click_button 'Upload'
     sleep 0.1
+  end
+
+  specify 'User can create release with new Training Data' do
     visit '/releases/new'
 
     expect( page ).to have_content '+new training data'
     expect( repo.status('training_data/training_data.csv') ).to eq [:worktree_new]
+  end
+
+  specify 'User can download a training_data file' do
+    visit '/skills'
+    click_link 'Manage Intents'
+    click_link 'Edit Details'
+    click_link 'Download'
+
+    expect( page.response_headers['Content-Type'] ).to eq "text/csv"
+    expect( page.response_headers['Content-Disposition'] ).to eq "attachment; filename=\"training_data.csv\""
   end
 end
