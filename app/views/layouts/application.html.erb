@@ -20,6 +20,10 @@
       <% end %>
     <% end %>
 
+    <% if params[:controller] == 'releases' %>
+      <%= javascript_include_tag 'releases/releases_index.js', 'data-turbolinks-track': 'reload' %>
+    <% end %>
+
     <% if params[:action] == 'test_queries' && params[:controller] == 'pages' %>
       <%= javascript_include_tag 'test_queries/manifest', 'data-turbolinks-track': 'reload' %>
     <% end %>

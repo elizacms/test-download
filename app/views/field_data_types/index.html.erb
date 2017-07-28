@@ -1,0 +1,17 @@
+<h1>Entities</h1>
+<table class='table table-hover'>
+  <thead class='thead-default'>
+    <tr>
+      <th>Name</th>
+      <th>Attached File</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @field_data_types.each do |fdt| %>
+      <tr>
+        <td><%= link_to fdt.name, field_data_type_path( fdt ) %></td>
+        <td><%= fdt.data_file.present? ? File.basename( fdt.data_file ) : nil %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

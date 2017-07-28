@@ -2,7 +2,7 @@ function initFieldDataTypes(){
     types = $.ajax({
         type: 'GET',
         dataType: 'json',
-        url: '/types/field-data-types',
+        url: '/api/field-data-types',
         data: null
     }).done(function(){
         var filter = { id: intent._id.$oid };

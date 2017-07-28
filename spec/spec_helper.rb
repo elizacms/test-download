@@ -55,6 +55,8 @@ RSpec.configure do |config|
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/eliza_de/actions" )
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intent_responses_csv" )
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/training_data" )
+    Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/raw_knowledge" )
+    Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/raw_knowledge/entity_data" )
 
     Rugged::Repository.init_at("#{ENV['NLU_CMS_PERSISTENCE_PATH']}")
     ActionMailer::Base.deliveries = []

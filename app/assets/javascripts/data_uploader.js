@@ -17,6 +17,6 @@ $(document).on('turbolinks:load', function(){
 
     var fileName = $('.infoText').text();
     $('.infoText').html('Saved ' + fileName + '!').css('color', 'green');
-    $( '#trainingDataUpload' ).submit();
+    $( '.uploadDataForm' ).submit();
   });
 });

@@ -25,6 +25,8 @@
 
         <%= link_to 'Releases', releases_path %>
 
+        <%= link_to 'Entities', field_data_types_path %>
+
         <% if AppConfig.eliza? %>
           <%= link_to 'Intents', skill_intents_path(skill_id: Skill.first) %>
         <% else %>

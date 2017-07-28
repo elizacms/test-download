@@ -19,6 +19,15 @@ require 'sidekiq/web'
     as: :logout
 
   resources :users
+  resources :field_data_types, only: [:index, :show]
+
+  get '/entities/:id/download-entity-data',
+    to: 'field_data_types#download',
+    as: :download_entity_data
+
+  post '/entities/:id/upload',
+    to: 'field_data_types#upload',
+    as: :upload_entity_data
 
   get '/releases',
     to: 'releases#index',
@@ -116,6 +125,9 @@ require 'sidekiq/web'
 
     post '/process_dialog_upload',
       to: 'api#process_dialog_upload'
+
+    get '/field-data-types',
+      to: 'api#field_data_types'
   end
 
   post '/process_training_data_upload',
@@ -124,10 +136,6 @@ require 'sidekiq/web'
   get '/intent/:intent_id/download-training-data',
     to: 'training_data#download',
     as: :download_training_data
-
-  get '/types/field-data-types',
-    to: 'types#field_data_types',
-    as: :field_data_types
 
   post '/dialogue_api/response',
     to: 'dialogs#create',

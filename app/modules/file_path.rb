@@ -22,4 +22,8 @@ module FilePath
   def relative_path_for path
     path.try( :split, "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/").try( :last )
   end
+
+  def entity_data_upload_location
+    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/raw_knowledge/entity_data"
+  end
 end

@@ -2,6 +2,7 @@ class FieldDataType
   include Mongoid::Document
 
   field :name, type:String
+  field :data_file, type:String
 
   validates_presence_of   :name
   validates_uniqueness_of :name

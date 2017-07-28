@@ -3,7 +3,7 @@
   <%= form_tag(
     { controller: :training_data, action: :upload },
     multipart: true,
-    id: 'trainingDataUpload'
+    class: 'uploadDataForm'
   ) do %>
     <input type='hidden' name='intent_id' value='<%= params[:id] %>' />
     <label class='btn lg btn-default btn-file'>
@@ -18,5 +18,4 @@
     download_training_data_path(@intent),
     class: 'btn lg black pull-right downloadTrainingDataBtn'
   ) %>
-
 </div>

@@ -110,6 +110,10 @@ class ApiController < ApplicationController
     render json: { response: info }, status: 200
   end
 
+  def field_data_types
+    render json: FieldDataType.all.map( &:serialize ).to_json
+  end
+
 
   private
 
