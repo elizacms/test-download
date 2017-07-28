@@ -1,17 +1,18 @@
 <%= form_for( [@skill, @intent] ) do |f| %>
   <div class="row">
     <div class="col-xs-12 col-md-6">
-      <%= label_tag :name %>
-      <% if @intent.persisted? %>
-        <%= label_tag @intent.name %>
-      <% end %>
-      <%= text_field_tag(
-        :name,
-        @intent.name,
-        disabled: ( @intent.persisted? ),
-        class: "#{@intent.persisted? ? 'disabledInput' : '' }"
-      ) %>
-
+      <h5>
+        Name: &nbsp;&nbsp;
+        <% if @intent.persisted? %>
+          <%= @intent.name %>
+        <% end %>
+        <%= text_field_tag(
+          :name,
+          @intent.name,
+          disabled: ( @intent.persisted? ),
+          class: "#{@intent.persisted? ? 'disabledInput' : '' }"
+        ) %>
+      </h5>
       <br><br>
 
       <%= label_tag :description %><br>
