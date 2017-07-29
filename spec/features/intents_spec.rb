@@ -124,7 +124,7 @@ feature 'Intents pages' do
       click_link 'Edit Details'
 
       expect( current_path ).to eq edit_skill_intent_path(skill, Intent.last)
-      expect( page ).to have_content "Name: #{intent.name}"
+      expect( page ).to have_content "Name #{intent.name}"
     end
   end
 
