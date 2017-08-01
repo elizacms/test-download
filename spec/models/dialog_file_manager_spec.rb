@@ -114,7 +114,7 @@ describe DialogFileManager do
     end
   end
 
-  describe '#save for Dialog Reference' ,:focus do
+  describe '#save for Dialog Reference' do
     let( :intent_name ){ 'dialog_reference' }
     let( :output_file ){ "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/#{ intent.name }.csv" }
 

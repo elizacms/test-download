@@ -42,5 +42,5 @@ dialog_reference,100,billing_invoicequestion,None,billing_invoicequestion,None,,
       ""timeDelayInSecs"": 5
     }
   }
-]",BILL-001
-dialog_reference,90,billing_invoicequestion,billing_invoicequestion,None,None,,{{ intent: intent_name }},BILL-001
+]",BILL-001,
+dialog_reference,90,billing_invoicequestion,billing_invoicequestion,None,None,,{{intent:intent_name}},BILL-001,

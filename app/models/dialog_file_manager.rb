@@ -39,18 +39,20 @@ class DialogFileManager
       attrs = d.attributes.dup.symbolize_keys
       attrs[ :intent_id     ] = d.intent.name
       attrs[ :present       ] = attrs[ :present ].join( ' && ' )
-      attrs[ :entity_values ] = %Q/"[(#{ attrs[ :entity_values ].map{| w | "'#{ w }'" }.join ', ' })]"/
+      attrs[ :entity_values ] = entity_values_for( d.entity_values )
       attrs[ :eliza_de      ] = d.for_csv
-      attrs[ :comments      ] = %Q/"#{ d.comments }"/
-
-      ap __method__
-      puts attrs[ :entity_values ]
-      # puts fields.map{| k | attrs[ k ]}.join( ',' )
+      attrs[ :comments      ] = %Q/"#{ d.comments }"/ if d.comments.present?
 
       fields.map{| k | attrs[ k ]}.join ','
     end
 
     header_row + rows.join( "\n" )
+  end
+
+  def entity_values_for entity_values
+    return if entity_values.empty?
+
+    %Q/"[(#{ entity_values.map{| w | "'#{ w }'" }.join ', ' })]"/
   end
 
   def header_row
