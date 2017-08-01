@@ -1,5 +1,5 @@
 class ApiController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [ :get_webhook ]
+  skip_before_action :verify_authenticity_token, only: [ :get_webhook, :get_intents ]
   before_action :validate_api_auth, only: [ :get_webhook ]
 
   def get_webhook
@@ -108,6 +108,10 @@ class ApiController < ApplicationController
     info = DialogUploader.create_for( csv, current_user )
 
     render json: { response: info }, status: 200
+  end
+
+  def get_intents
+    render json: Intent.pluck( :name ).sort_by( &:downcase ).to_json
   end
 
 

@@ -46,4 +46,16 @@ describe 'API' do
       end
     end
   end
+
+  describe 'Get all Intents' do
+    let( :expected ){ Intent.pluck :name }
+
+    specify 'Success' do
+      header 'Accept', 'application/json'
+      get '/api/intents'
+
+      expect( last_response.status ).to eq 200
+      expect( parsed_response ).to eq expected
+    end
+  end
 end

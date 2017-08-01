@@ -116,6 +116,9 @@ require 'sidekiq/web'
 
     post '/process_dialog_upload',
       to: 'api#process_dialog_upload'
+
+    get '/intents',
+      to: 'api#get_intents'
   end
 
   post '/process_training_data_upload',
