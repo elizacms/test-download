@@ -45,10 +45,11 @@ class User
     end
   end
 
-  def clear_changes_for intent_or_fdt
-    git_rm( intent_or_fdt.files )
-    intent_or_fdt.unlock
+  def clear_changes_for locked_item
+    git_rm( locked_item.files )
+    locked_item.unlock
   end
+
 
   private
 

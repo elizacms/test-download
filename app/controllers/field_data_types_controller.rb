@@ -4,7 +4,7 @@ class FieldDataTypesController < ApplicationController
   before_action :find_field_data_type, only: [:show, :upload, :download, :clear_changes]
 
   def index
-    @field_data_types = FieldDataType.all
+    @field_data_types = FieldDataType.all.sort { |a,b| a.name.downcase <=> b.name.downcase }
   end
 
   def show
@@ -15,8 +15,7 @@ class FieldDataTypesController < ApplicationController
       current_user.git_rm( @field_data_type.files )
     end
 
-    original_name = field_data_type_params[:entity_data].original_filename
-    file_name = "#{entity_data_upload_location}/#{original_name}"
+    file_name = "#{entity_data_upload_location}/#{@field_data_type.name.downcase}.csv"
     file_contents = File.read( field_data_type_params[:entity_data].tempfile )
 
     File.write( file_name, file_contents )

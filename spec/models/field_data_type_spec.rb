@@ -1,4 +1,4 @@
-describe FieldDataType,:focus do
+describe FieldDataType do
   let(  :user ){ create :user                              }
   let!( :fdt  ){ create :field_data_type, name: 'yes_or_no'}
 

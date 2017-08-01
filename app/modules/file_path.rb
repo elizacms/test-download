@@ -16,7 +16,7 @@ module FilePath
   end
 
   def training_data_file_for intent
-    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/training_data/#{intent.training_data.file_name}"
+    "#{training_data_upload_location}/#{intent.training_data.file_name}"
   end
 
   def relative_path_for path
@@ -28,6 +28,6 @@ module FilePath
   end
 
   def entity_data_file_for file_data_type
-    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/raw_knowledge/entity_data/#{ file_data_type.data_file }"
+    "#{entity_data_upload_location}/#{ file_data_type.data_file }"
   end
 end

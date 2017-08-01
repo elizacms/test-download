@@ -11,17 +11,8 @@ describe 'Entities' do
   before do
     IntentFileManager.new.save( intent, [field] )
     DialogFileManager.new.save( [dialog], intent )
-    File.write("#{training_data_upload_location}/test.csv", 'james test')
 
-    allow_any_instance_of( GitControls ).to receive :git_stash
-    allow_any_instance_of( GitControls ).to receive :pull_from_origin
-    allow_any_instance_of( GitControls ).to receive :push_master_to_origin
-    allow_any_instance_of( GitControls ).to receive :git_stash_pop
-    allow_any_instance_of( GitControls ).to receive :git_push_origin
-
-    dev.git_add(["eliza_de/actions/#{intent.name.downcase}.action",
-                  "intent_responses_csv/#{intent.name}.csv",
-                  "training_data/test.csv"])
+    dev.git_add( intent.files )
     dev.git_commit('Initial Commit')
 
     stub_identity_token
@@ -30,60 +21,44 @@ describe 'Entities' do
     click_link 'Entities'
   end
 
-  specify 'User should see the list of entities' do
-    expect( page ).to have_content 'Text'
-    expect( page ).to have_content 'Other'
+  describe 'Field Data Type Index' do
+    specify 'User should see the list of entities' do
+      expect( page ).to have_content 'Text'
+      expect( page ).to have_content 'Other'
+    end
   end
 
-  specify 'User can visit show page' do
-    click_link 'Text'
+  describe 'Entity Data File' do
+    before do
+      click_link 'Text'
 
-    expect( page ).to have_content 'Text'
-    expect( page ).to have_content 'Upload Entity Resolution Data'
-  end
+      attach_file 'entity_data', File.absolute_path( 'spec/data-files/entity_data.csv' )
+      click_button 'Upload'
+      sleep 0.1
 
-  specify 'User can upload a data file to the entity' do
-    click_link 'Text'
+      visit field_data_types_path
+    end
 
-    attach_file 'entity_data', File.absolute_path( 'spec/data-files/entity_data.csv' )
-    click_button 'Upload'
-    sleep 0.1
+    specify 'User can upload a data file to the entity' do
+      expect( page ).to have_content 'text.csv'
+    end
 
-    visit field_data_types_path
+    specify 'User can download a data file from the entity' do
+      click_link 'Text'
+      click_link 'Download'
 
-    expect( page ).to have_content 'entity_data.csv'
-  end
+      expect( page.response_headers['Content-Type'] ).to eq "text/csv"
+      expect( page.response_headers['Content-Disposition'] ).to eq "attachment; filename=\"text.csv\""
+    end
 
-  specify 'User can download a data file from the entity' do
-    click_link 'Text'
+    specify 'User can clear the file' do
+      click_link 'Text'
+      click_button 'Clear Uploaded File'
 
-    attach_file 'entity_data', File.absolute_path( 'spec/data-files/entity_data.csv' )
-    click_button 'Upload'
-    sleep 0.1
+      click_link 'Releases'
+      click_link 'Create New Release Candidate'
 
-    visit field_data_types_path
-    click_link 'Text'
-
-    click_link 'Download'
-
-    expect( page.response_headers['Content-Type'] ).to eq "text/csv"
-    expect( page.response_headers['Content-Disposition'] ).to eq "attachment; filename=\"entity_data.csv\""
-  end
-
-  specify 'User can clear the file' do
-    click_link 'Text'
-
-    attach_file 'entity_data', File.absolute_path( 'spec/data-files/entity_data.csv' )
-    click_button 'Upload'
-    sleep 0.1
-
-    visit field_data_types_path
-    click_link 'Text'
-    click_button 'Clear Uploaded File'
-
-    click_link 'Releases'
-    click_link 'Create New Release Candidate'
-
-    expect( page ).to have_content "You haven't made any changes."
+      expect( page ).to have_content "You haven't made any changes."
+    end
   end
 end
