@@ -8,12 +8,12 @@ describe 'Release Feature Specs' do
   let!( :field       ){ build  :field                                            }
   let!( :dialog      ){ create :dialog, intent: intent                           }
   let!( :response    ){ create :response, dialog: dialog                         }
+  let!( :fdt         ){ create :field_data_type                                  }
   let(  :message     ){ "Crazy Commit"                                           }
 
   before do
     IntentFileManager.new.save( intent, [field] )
     DialogFileManager.new.save( [dialog], intent )
-    File.write("#{training_data_upload_location}/test.csv", 'james test')
 
     stub_identity_token
     stub_identity_account_for user.email
@@ -25,9 +25,7 @@ describe 'Release Feature Specs' do
     allow_any_instance_of( GitControls ).to receive :git_stash_pop
     allow_any_instance_of( GitControls ).to receive :git_push_origin
 
-    user.git_add(["eliza_de/actions/#{intent.name.downcase}.action",
-                  "intent_responses_csv/#{intent.name}.csv",
-                  "training_data/test.csv"])
+    user.git_add( intent.files )
     user.git_commit('Initial Commit')
   end
 
@@ -126,6 +124,23 @@ describe 'Release Feature Specs' do
     click_button 'Accept'
 
     expect( intent.reload.file_lock ).to eq nil
+  end
+
+  describe 'User can add an Entity Resolution file' do
+    it 'should be in the release diff' do
+      click_link 'Entities'
+      click_link 'Text'
+
+      attach_file 'entity_data', File.absolute_path( 'spec/data-files/entity_data.csv' )
+      click_button 'Upload'
+      sleep 0.1
+
+      click_link 'Releases'
+      click_link 'Create New Release Candidate'
+
+      expect( page ).to have_content 'text.csv'
+      expect( page ).to have_content '+data, data, entity data'
+    end
   end
 
   describe 'User can create another release' do
