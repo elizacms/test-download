@@ -3,6 +3,7 @@
   <thead class='thead-default'>
     <tr>
       <th>Name</th>
+      <th>Locked By</th>
       <th>Attached File</th>
     </tr>
   </thead>
@@ -10,6 +11,7 @@
     <% @field_data_types.each do |fdt| %>
       <tr>
         <td><%= link_to fdt.name, field_data_type_path( fdt ) %></td>
+        <td><%= User.find_by(id: fdt.file_lock.try(:user_id)).try(:email) %></td>
         <td><%= fdt.data_file.present? ? File.basename( fdt.data_file ) : nil %></td>
       </tr>
     <% end %>

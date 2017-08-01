@@ -1,0 +1,28 @@
+<% if @field_data_type.locked_by_other_user?( @current_user ) %>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div class='file-locked'>
+        This entity has open changes by <%= @field_data_type.file_lock.user_email %>.
+        You are able to view it but you cannot upload a file.
+      </div>
+    </div>
+  </div>
+<% elsif @field_data_type.has_open_release? %>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div class='file-locked'>
+        There is already a release candidate pertaining to this entity. That candidate must be
+        accepted or rejected before you can upload a file.
+      </div>
+    </div>
+  </div>
+<% elsif @field_data_type.locked_by_current_user?( @current_user ) %>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div class='file-locked'>
+        <strong>You have locked this entity.</strong><br>
+        Other user's cannot upload file unless you click the 'Clear Uploaded File' button.
+      </div>
+    </div>
+  </div>
+<% end %>

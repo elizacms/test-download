@@ -100,7 +100,11 @@ require 'sidekiq/web'
 
   post '/skills/:skill_id/intents/:id/clear-changes',
     to: 'intents#clear_changes',
-    as: 'clear_changes'
+    as: :clear_intent_changes
+
+  post '/field_data_type/:id/clear-changes',
+    to: 'field_data_types#clear_changes',
+    as: :clear_field_data_type_changes
 
   resources :fields
 

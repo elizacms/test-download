@@ -57,6 +57,7 @@ class ReleasesController < ApplicationController
 
   def approval_or_rejection
     @release.intents.each { |intent| intent.unlock }
+    @release.field_data_types.each { |fdt| fdt.unlock }
 
     if params[:commit] == 'Accept'
       @release.update(state: 'approved')

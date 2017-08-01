@@ -1,0 +1,9 @@
+<% if !@field_data_type.locked_for?( @current_user ) && @field_data_type.data_file.present? %>
+  <%= form_tag( clear_field_data_type_changes_path( @field_data_type ) ) do %>
+    <%= submit_tag(
+      'Clear Uploaded File',
+      data: { confirm: "Are you sure you would like to remove your uploaded file?\nThis will allow other users to upload files".html_safe },
+      class: 'btn lg ghost pull-right'
+    ) %>
+  <% end %>
+<% end %>

@@ -26,4 +26,8 @@ module FilePath
   def entity_data_upload_location
     "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/raw_knowledge/entity_data"
   end
+
+  def entity_data_file_for file_data_type
+    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/raw_knowledge/entity_data/#{ file_data_type.data_file }"
+  end
 end

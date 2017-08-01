@@ -27,11 +27,16 @@ class User
   end
 
   def list_locked_files
-    locked_intents.map { |i| i.files }.flatten.compact
+    [ locked_intents.map { |i| i.files },
+      locked_field_data_types.map{ |fdt| fdt.files} ].flatten.compact
   end
 
   def locked_intents
     Intent.all.select{|i| i.file_lock.try(:user_id) == id.to_s && !i.has_open_release? }
+  end
+
+  def locked_field_data_types
+    FieldDataType.all.select{|fdt| fdt.file_lock.try(:user_id) == id.to_s && !fdt.has_open_release? }
   end
 
   def changed_files
@@ -40,11 +45,10 @@ class User
     end
   end
 
-  def clear_changes_for intent
-    git_rm( intent.files )
-    intent.unlock
+  def clear_changes_for intent_or_fdt
+    git_rm( intent_or_fdt.files )
+    intent_or_fdt.unlock
   end
-
 
   private
 

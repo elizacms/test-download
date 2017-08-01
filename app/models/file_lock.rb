@@ -3,6 +3,7 @@ class FileLock
   include Mongoid::Timestamps
 
   embedded_in :intent
+  embedded_in :field_data_type
 
   field :user_id, type:String
 

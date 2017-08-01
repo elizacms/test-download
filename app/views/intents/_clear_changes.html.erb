@@ -1,5 +1,5 @@
 <% if !@intent.locked_for?( @current_user ) %>
-  <%= form_tag( clear_changes_path( @skill, @intent ) ) do %>
+  <%= form_tag( clear_intent_changes_path( @skill, @intent ) ) do %>
     <%= submit_tag(
       'Clear Intent of Changes',
       data: { confirm: "Are you sure you would like to delete your changes?\nThis will allow other users to edit this intent.".html_safe },

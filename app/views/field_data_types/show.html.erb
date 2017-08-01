@@ -1,3 +1,4 @@
+<%= render partial: 'lock' %>
 <%= link_to(
   '&larr; Entities'.html_safe,
   field_data_types_path,
@@ -10,24 +11,29 @@
 </h1>
 <br><hr>
 
-<div class='upload-entity-resolution-data'>
-  <h5>Upload Entity Resolution Data</h5>
-  <%= form_tag(
-    { controller: :field_data_types, action: :upload },
-    multipart: true,
-    class: 'uploadDataForm'
-  ) do %>
-    <input type='hidden' name='id' value='<%= params[:id] %>' />
-    <label class='btn lg btn-default btn-file'>
-      Select File<input type='file' id='files' name='entity_data'/>
-    </label>
-    <button class='btn lg black uploadBtn'>Upload</button>
-    <br>
-  <% end %>
-  <span class='infoText'></span>
-  <%= link_to(
-    'Download',
-    download_entity_data_path(@field_data_type),
-    class: 'btn lg black downloadEntityResolutionDataBtn'
-  ) %>
-</div>
+<% if !@field_data_type.locked_for?( @current_user ) %>
+  <div class='upload-entity-resolution-data'>
+    <h5>Upload Entity Resolution Data</h5>
+    <%= form_tag(
+      { controller: :field_data_types, action: :upload },
+      multipart: true,
+      class: 'uploadDataForm'
+    ) do %>
+      <input type='hidden' name='id' value='<%= params[:id] %>' />
+      <label class='btn lg btn-default btn-file'>
+        Select File<input type='file' id='files' name='entity_data'/>
+      </label>
+      <button class='btn lg black uploadBtn'>Upload</button>
+      <br>
+    <% end %>
+    <span class='infoText'></span>
+    <%= link_to(
+      'Download',
+      download_entity_data_path(@field_data_type),
+      class: 'btn lg black downloadEntityResolutionDataBtn'
+    ) %>
+  </div>
+  <br>
+<% end %>
+
+<%= render partial: 'clear_changes' %>

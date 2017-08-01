@@ -13,6 +13,7 @@ class Release
 
   belongs_to :user
   has_many :intents
+  has_many :field_data_types
 
   before_create do |attributes|
     branch_name = "release-#{(Time.now.to_f * 1000).to_i}"

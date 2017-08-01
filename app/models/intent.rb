@@ -2,6 +2,7 @@ class Intent
   include Mongoid::Document
   include Mongoid::Timestamps
   include FilePath
+  include Lockable
 
   belongs_to :skill
   belongs_to :release, optional:true
@@ -15,30 +16,6 @@ class Intent
 
   validates_presence_of   :name
   validates_uniqueness_of :name, case_sensitive:false
-
-  def lock( user_id )
-    FileLock.create( intent: self, user_id: user_id)
-  end
-
-  def unlock
-    self.file_lock = nil
-  end
-
-  def locked_for?( current_user )
-    locked_by_other_user?( current_user ) || has_open_release?
-  end
-
-  def locked_by_current_user?( current_user )
-    file_lock.nil? ? false : User.find(file_lock.user_id) == current_user
-  end
-
-  def locked_by_other_user?( current_user )
-    file_lock.nil? ? false : User.find(file_lock.user_id) != current_user
-  end
-
-  def has_open_release?
-    release.try( :state ) == 'unreviewed' || release.try( :state ) == 'in_training'
-  end
 
   def files
     [ relative_path_for( action_file_for( self ) ),
