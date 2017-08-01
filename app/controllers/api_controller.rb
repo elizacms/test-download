@@ -111,7 +111,7 @@ class ApiController < ApplicationController
   end
 
   def field_data_types
-    render json: FieldDataType.all.map( &:serialize ).to_json
+    render json: FieldDataType.all.sort_by{ |fdt| fdt.name.downcase }.map( &:serialize ).to_json
   end
 
 

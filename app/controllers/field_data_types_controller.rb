@@ -4,7 +4,7 @@ class FieldDataTypesController < ApplicationController
   before_action :find_field_data_type, only: [:show, :upload, :download, :clear_changes]
 
   def index
-    @field_data_types = FieldDataType.all.sort { |a,b| a.name.downcase <=> b.name.downcase }
+    @field_data_types = FieldDataType.all.sort_by { |fdt| fdt.name.downcase }
   end
 
   def show

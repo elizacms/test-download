@@ -11,7 +11,7 @@ class IntentsController < ApplicationController
                 only: [ :edit, :fields, :dialogs ]
 
   def index
-    @intents = all_action_files.sort {|a,b| a <=> b}.map do |file|
+    @intents = all_action_files.sort_by{ |f| f }.map do |file|
       IntentFileManager.new.load_intent_from( file )[:intent]
     end
   end
