@@ -94,6 +94,7 @@ var TableRow = React.createClass({
       <tr className='dialog-data'>
         <td className='priority'>{data.priority}</td>
         <td className='response'>
+          {/* Display response type or intent reference */}
           {data.responses_attributes.map(function(response, index){
             return(
               <div key={index} className="line-spacing">
@@ -104,6 +105,8 @@ var TableRow = React.createClass({
               </div>
             );
           }.bind(this))}
+
+          Intent: { data.intent_reference }
         </td>
         <td className='unresolved'>
           {data.unresolved.map(function(condition, index){
