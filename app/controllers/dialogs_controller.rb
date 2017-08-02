@@ -42,7 +42,8 @@ class DialogsController < ApplicationController
     ps.merge!( intent_id: @intent.id.to_s )
     
     model = Object.const_get( ps.delete( :type ).camelize )
-    
+    ps.delete( :intent_reference ) if model == Dialog
+
     model.new ps
   end
 

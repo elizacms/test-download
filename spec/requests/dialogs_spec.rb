@@ -16,6 +16,7 @@ describe 'Dialogs' do
     dialogs: [{
       priority:       90,
       type:          'dialog',
+      intent_reference: '',
       unresolved:     [ 'unresolved' ],
       missing:        [ field.name ],
       present:        [ 'present', 'value' ],
