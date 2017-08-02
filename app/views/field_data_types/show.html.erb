@@ -10,7 +10,7 @@
   <div class='pull-left'>Entity: <%= @field_data_type.name %></div>
   <div class='pull-right'>
     Attached File:
-    <%= @field_data_type.data_file ? File.basename( @field_data_type.data_file ) : 'None' %>
+    <%= @field_data_type.files.present? ? File.basename( @field_data_type.files.first ) : 'None' %>
   </div>
 </h1>
 <br><hr>

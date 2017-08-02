@@ -1,14 +1,14 @@
 describe Intent do
-  let( :intent_params   ){{ name:           'valid_intent'     ,
-                            description:    'some description' ,
-                            mturk_response: 'some response'   }}
-  let( :skill           ){ create :skill                                       }
-  let( :intent_from_db  ){ Intent.first                                        }
-  let( :intent          ){ skill.intents.create intent_params                  }
-  let( :dialog          ){ create :dialog, intent: intent                      }
-  let( :intents_path    ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" }
-  let( :action_file_url ){ IntentFileManager.new.action_file_for intent        }
-  let( :user            ){ create :user                                        }
+  let( :user               ){ create :user                                        }
+  let( :intent_params      ){{ name:           'valid_intent'     ,
+                               description:    'some description' ,
+                               mturk_response: 'some response'   }}
+  let( :skill              ){ create :skill                                       }
+  let( :intent             ){ skill.intents.create intent_params                  }
+  let( :dialog             ){ create :dialog, intent: intent                      }
+  let( :intents_path       ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/intents/*.json" }
+  let( :action_file_url    ){ IntentFileManager.new.action_file_for intent        }
+  let( :training_data_path ){ "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/training_data/#{intent.name}.csv" }
 
   before do
     IntentFileManager.new.save( intent, [] )
@@ -157,11 +157,11 @@ describe Intent do
     end
 
     it 'should return training_data if it is present' do
-      TrainingDatum.create(file_name: 'test.csv', intent: intent)
+      File.write( training_data_path, 'test' )
 
       expect( intent.files ).to eq ["eliza_de/actions/#{intent.name}.action",
                                     "intent_responses_csv/#{intent.name}.csv",
-                                    "training_data/test.csv"]
+                                    "training_data/#{intent.name}.csv"]
     end
   end
 end

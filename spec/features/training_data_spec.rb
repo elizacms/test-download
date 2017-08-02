@@ -37,7 +37,7 @@ describe 'Training Data Feature Specs' do
     visit '/releases/new'
 
     expect( page ).to have_content '+new training data'
-    expect( repo.status('training_data/training_data.csv') ).to eq [:worktree_new]
+    expect( repo.status('training_data/get_ride.csv') ).to eq [:worktree_new]
   end
 
   specify 'User can download a training_data file' do
@@ -47,6 +47,6 @@ describe 'Training Data Feature Specs' do
     click_link 'Download'
 
     expect( page.response_headers['Content-Type'] ).to eq "text/csv"
-    expect( page.response_headers['Content-Disposition'] ).to eq "attachment; filename=\"training_data.csv\""
+    expect( page.response_headers['Content-Disposition'] ).to eq "attachment; filename=\"get_ride.csv\""
   end
 end

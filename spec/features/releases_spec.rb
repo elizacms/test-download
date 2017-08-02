@@ -138,14 +138,7 @@ describe 'Release Feature Specs' do
 
       click_link 'Releases'
       click_link 'Create New Release Candidate'
-    end
 
-    it 'should be in the release diff' do
-      expect( page ).to have_content 'text.csv'
-      expect( page ).to have_content '+data, data, entity data'
-    end
-
-    it 'User can clear changes after release and file remains',:focus, :js do
       fill_in :message, with: 'Entity Commit'
       click_button 'Create Release'
 
@@ -167,7 +160,10 @@ describe 'Release Feature Specs' do
 
       click_link 'Releases'
       click_link 'Create New Release Candidate'
+    end
 
+    it 'User can clear changes after release and file remains', :js do
+      expect( page ).to have_content 'text.csv'
       expect( page ).to have_content '+new training data'
 
       click_link 'Entities'

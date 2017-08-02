@@ -8,7 +8,6 @@ class Intent
   belongs_to :release, optional:true
   has_many   :dialogs
   embeds_one :file_lock
-  embeds_one :training_data
 
   field :name,           type:String
   field :description,    type:String
@@ -20,7 +19,7 @@ class Intent
   def files
     [ relative_path_for( action_file_for( self ) ),
       relative_path_for( dialog_file_for( self ) ),
-      relative_path_for( training_data.present? ? training_data_file_for( self ) : nil )
+      relative_path_for( File.exist?( training_data_file_for( self ) ) ? training_data_file_for( self ) : nil )
     ].compact
   end
 

@@ -6,9 +6,7 @@ class FieldDataType
   belongs_to :release, optional:true
   embeds_one :file_lock
 
-  field :name,                    type:String
-  field :data_file,               type:String
-  field :has_committed_data_file, type:Mongoid::Boolean, default:false
+  field :name, type:String
 
   validates_presence_of   :name
   validates_uniqueness_of :name
@@ -18,6 +16,7 @@ class FieldDataType
   end
 
   def files
-    [ relative_path_for( entity_data_file_for( self ) ) ].compact
+    abs_path = entity_data_file_for( self )
+    File.exist?( abs_path ) ? [relative_path_for( abs_path )] : []
   end
 end

@@ -1,4 +1,4 @@
-<% if !@field_data_type.locked_for?( @current_user ) && @field_data_type.data_file.present? %>
+<% if !@field_data_type.locked_for?( @current_user ) && @field_data_type.files.present? %>
   <%= form_tag( clear_field_data_type_changes_path( @field_data_type ) ) do %>
     <%= submit_tag(
       'Clear Uploaded File',

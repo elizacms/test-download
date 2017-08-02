@@ -12,7 +12,7 @@
       <tr>
         <td><%= link_to fdt.name, field_data_type_path( fdt ) %></td>
         <td><%= User.find_by(id: fdt.file_lock.try(:user_id)).try(:email) %></td>
-        <td><%= fdt.data_file.present? ? File.basename( fdt.data_file ) : nil %></td>
+        <td><%= fdt.files.present? ? File.basename( fdt.files.first ) : nil %></td>
       </tr>
     <% end %>
   </tbody>

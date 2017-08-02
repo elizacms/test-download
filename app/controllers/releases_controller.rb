@@ -61,7 +61,6 @@ class ReleasesController < ApplicationController
 
     if params[:commit] == 'Accept'
       @release.update(state: 'approved')
-      @release.field_data_types.each {|fdt| fdt.update(has_committed_data_file: true)}
       current_user.git_rebase(@release.branch_name)
 
       redirect_to releases_path, notice: 'Release has been accepted and merged.'

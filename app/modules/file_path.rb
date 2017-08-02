@@ -16,7 +16,7 @@ module FilePath
   end
 
   def training_data_file_for intent
-    "#{training_data_upload_location}/#{intent.training_data.file_name}"
+    "#{training_data_upload_location}/#{intent.name.downcase}.csv"
   end
 
   def relative_path_for path
@@ -28,6 +28,6 @@ module FilePath
   end
 
   def entity_data_file_for file_data_type
-    "#{entity_data_upload_location}/#{ file_data_type.data_file }"
+    "#{entity_data_upload_location}/#{ file_data_type.name.downcase }.csv"
   end
 end
