@@ -46,7 +46,6 @@ module GitControls
       old_content = d.status == :added ? '' : repo.lookup( oid ).content
       file = d.new_file[:path]
 
-      path = persistence_path_for( d.new_file[:path] )
       new_content = repo.lookup( d.new_file[ :oid ]).content
 
       {old: old_content, new: new_content, file_type: file_type_for(file), name:name_for(file)}

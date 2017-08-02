@@ -31,17 +31,26 @@ class Release
       Intent.find_by( name:/\A#{ name }\z/i )
     end.uniq
 
+    field_data_types = attributes[:files].map do |file|
+      name = if file =~ /raw_knowledge\/entity_data/
+        File.basename(file, '.csv')
+      end
+
+      FieldDataType.find_by( name:/\A#{ name }\z/i )
+    end
+
     user.git_add( attributes[:files] )
     commit = user.git_commit( attributes[:message] )
 
     user.git_push_origin( branch_name )
     user.git_checkout('master')
 
-    self.files       = nil
-    self.message     = nil
-    self.intents     = intents
-    self.user        = user
-    self.branch_name = branch_name
-    self.commit_sha  = commit
+    self.files            = nil
+    self.message          = nil
+    self.intents          = intents
+    self.field_data_types = field_data_types
+    self.user             = user
+    self.branch_name      = branch_name
+    self.commit_sha       = commit
   end
 end

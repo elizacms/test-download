@@ -126,20 +126,67 @@ describe 'Release Feature Specs' do
     expect( intent.reload.file_lock ).to eq nil
   end
 
-  describe 'User can add an Entity Resolution file' do
-    it 'should be in the release diff' do
+  describe 'Entity Resolution file' do
+    before do
       click_link 'Entities'
       click_link 'Text'
 
+      execute_script("$('#files').show();")
       attach_file 'entity_data', File.absolute_path( 'spec/data-files/entity_data.csv' )
       click_button 'Upload'
       sleep 0.1
 
       click_link 'Releases'
       click_link 'Create New Release Candidate'
+    end
 
+    it 'should be in the release diff' do
       expect( page ).to have_content 'text.csv'
       expect( page ).to have_content '+data, data, entity data'
+    end
+
+    it 'User can clear changes after release and file remains',:focus, :js do
+      fill_in :message, with: 'Entity Commit'
+      click_button 'Create Release'
+
+      stub_jenkins_for Release.last
+
+      page.all('#allReleasesTable tr')[1].click
+      click_button 'Submit for training'
+
+      page.all('#allReleasesTable tr')[1].click
+      click_button 'Accept'
+
+      click_link 'Entities'
+      click_link 'Text'
+
+      execute_script("$('#files').show();")
+      attach_file 'entity_data', File.absolute_path( 'spec/data-files/training_data.csv' )
+      click_button 'Upload'
+      sleep 0.1
+
+      click_link 'Releases'
+      click_link 'Create New Release Candidate'
+
+      expect( page ).to have_content '+new training data'
+
+      click_link 'Entities'
+      click_link 'Text'
+
+      accept_alert do
+        click_button 'Clear Uploaded File'
+      end
+
+      expect( current_path ).to eq '/field_data_types'
+      expect( page ).to have_content 'text.csv'
+      within 'table.table' do
+        expect( page ).to_not have_content user.email
+      end
+
+      click_link 'Releases'
+      click_link 'Create New Release Candidate'
+
+      expect( page ).to have_content "You haven't made any changes."
     end
   end
 

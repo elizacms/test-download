@@ -6,8 +6,9 @@ class FieldDataType
   belongs_to :release, optional:true
   embeds_one :file_lock
 
-  field :name, type:String
-  field :data_file, type:String
+  field :name,                    type:String
+  field :data_file,               type:String
+  field :has_committed_data_file, type:Mongoid::Boolean, default:false
 
   validates_presence_of   :name
   validates_uniqueness_of :name

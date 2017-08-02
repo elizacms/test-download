@@ -38,7 +38,7 @@ class FieldDataTypesController < ApplicationController
               " Other users can upload files to it."
 
     current_user.clear_changes_for @field_data_type
-    @field_data_type.update(data_file: nil)
+    @field_data_type.update(data_file: nil) unless @field_data_type.has_committed_data_file
 
     redirect_to field_data_types_path, notice: message
   end
