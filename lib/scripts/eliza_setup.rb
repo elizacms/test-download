@@ -6,7 +6,7 @@ Role.create( name: 'admin', user_id: user.id )
 Skill.create( name: 'Eliza', web_hook: 'eliza' )
 
 # Get Existing Data Types
-all_types = Intent.all_files.map do |file_path|
+all_types = Intent.new.all_action_files.map do |file_path|
   JSON.parse( File.read(file_path) )['fields'].map { |field| field['type'] }
 end.flatten.compact.uniq
 
