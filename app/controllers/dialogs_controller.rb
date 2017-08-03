@@ -15,21 +15,20 @@ class DialogsController < ApplicationController
 
   # POST /dialogue_api/response
   def create
-    intent = Intent.find_by( id: dialog_params[:intent_id] )
-
-    unless intent
+    unless @intent
       response.headers[ 'Warning' ] = 'A valid intent_id is required.'
       render json:{}, status: 422
       return
     end
 
-    dialogs = dialog_params[:dialogs].map{|ps| Dialog.new(ps.merge(intent_id: intent.id.to_s))}
+    dialogs = dialog_params[:dialogs].map{| ps | create_dialog_for ps }
 
-    if dialogs.all?{ |d| d.valid? }
-      intent.dialogs.delete_all
-      dialogs.each{ |d| d.save! }
-      DialogFileManager.new.save(dialogs, intent)
+    if dialogs.all?( &:valid? )
+      @intent.dialogs.delete_all
+      dialogs.each &:save!
+      DialogFileManager.new.save(dialogs, @intent)
       render json: {}, status: :created
+    
     else
       response.headers[ 'Warning' ] = dialogs.map{|d| d.errors.full_messages.join "\n"}.join "\n"
       render json: {}, status: 422
@@ -38,6 +37,15 @@ class DialogsController < ApplicationController
 
 
   private
+
+  def create_dialog_for ps
+    ps.merge!( intent_id: @intent.id.to_s )
+    
+    model = Object.const_get( ps.delete( :type ).camelize )
+    ps.delete( :intent_reference ) if model == Dialog
+
+    model.new ps
+  end
 
   def set_intent
     @intent = Intent.find_by( id: params[ :intent_id ] )
@@ -55,8 +63,8 @@ class DialogsController < ApplicationController
     params.permit(
       :intent_id,
       dialogs: [
-        :id,
-        :intent_id,
+        :type,
+        :intent_reference,
         :priority,
         :comments,
         responses_attributes: [

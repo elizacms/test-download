@@ -1,6 +1,7 @@
 class Dialog
   include Mongoid::Document
   include Mongoid::Timestamps
+  include DialogExportable
 
   field :intent_id,      type:String
   field :priority,       type:Integer
@@ -21,6 +22,8 @@ class Dialog
   def with_responses
     attrs = attributes.merge( responses_attributes: responses.map( &:attrs )).symbolize_keys
     attrs[ :intent_id ] = intent.id.to_s
+    attrs[ :type      ] = self.class.to_s.underscore
+    
     attrs.delete( :_id )
 
     attrs

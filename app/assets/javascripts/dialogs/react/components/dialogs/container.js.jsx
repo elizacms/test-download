@@ -11,7 +11,8 @@ var Container = React.createClass({
       form: {},
       dialogData: {},
       isUpdate: false,
-      currentDialogId: null
+      currentDialogId: null,
+      intentReferences: []
     };
   },
 
@@ -87,6 +88,7 @@ var Container = React.createClass({
 
   componentDidMount() {
     this.getAllScenarios();
+    this.getAllIntents();
   },
 
   messageState(message){
@@ -102,7 +104,6 @@ var Container = React.createClass({
       data: data
     })
     .done( function( data ){
-      console.log( "All Scenarios!" );
       // stuffs an index as id in each data.
       var dataWithId = data.map((d,index) => {
         d['id'] = index;
@@ -110,7 +111,19 @@ var Container = React.createClass({
       });
 
       this.setState({ data: dataWithId });
+    }.bind(this));
+  },
 
+  getAllIntents() {
+    $.ajax({
+      type: 'GET',
+      url: '/api/intents',
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    .done(function(data) {
+      this.setState({ intentReferences: data });
     }.bind(this));
   },
 
@@ -146,16 +159,6 @@ var Container = React.createClass({
     this.setState({
       data: stateData
     }, () => this.callDialogApi() );
-
-    // $.ajax({
-    //   type: 'DELETE',
-    //   url: '/dialogue_api/response?id=' + dialogData.id.$oid
-    // })
-    // .done( function( data ){
-    //   this.setState({
-    //     message: {'response-message': data}
-    //   });
-    // }.bind(this));
   },
 
   render() {
@@ -195,6 +198,7 @@ var Container = React.createClass({
           resetDialogData={this.resetDialogData}
           createOrUpdateBtnText={this.createOrUpdateBtnText}
           isUpdate={this.state.isUpdate}
+          intentReferences={this.state.intentReferences}
         ></DialogForm>
       </div>
     );

@@ -737,4 +737,48 @@ feature 'Dialogs', :js do
       expect( Dialog.last.responses[1].response_trigger ).to eq expected_response_trigger_2
     end
   end
+
+  describe 'Dialog Intent Reference' do
+    specify 'Can create a dialog of type dialog_reference' do
+      within '.dialog-form' do
+        fill_in :priority, with: 123
+        find( 'input[value="dialog_reference"]' ).click
+        select 'get_ride', from: 'reference-type-select'
+        fill_in :comments, with: "Testing testing 1 2 3"
+      end
+      click_button 'Create Dialog'
+
+      sleep 0.5
+
+      expect( Dialog.count   ).to eq 1
+      expect( Dialog.last[:comments]                       ).to eq 'Testing testing 1 2 3'
+      expect( Dialog.last[:intent_reference]               ).to eq 'get_ride'
+      expect( Dialog.last.responses.first.response_type    ).to eq '0'
+      expect( Dialog.last.responses.first.response_value   ).to eq '{}'
+    end
+
+    specify 'Can edit a dialog of type dialog_reference' do
+      within '.dialog-form' do
+        fill_in :priority, with: 123
+        find( 'input[value="dialog_reference"]' ).click
+        select 'get_ride', from: 'reference-type-select'
+        fill_in :comments, with: "Testing testing 1 2 3"
+      end
+      click_button 'Create Dialog'
+
+      sleep 0.5
+
+      find( '.fa-pencil' ).click
+
+      within '.dialog-form' do
+        fill_in :comments, with: "Editing 1 2 3"
+      end
+      click_button 'Update Dialog'
+
+      sleep 0.5
+
+      expect( Dialog.count   ).to eq 1
+      expect( Dialog.last[:comments] ).to eq 'Editing 1 2 3'
+    end
+  end
 end

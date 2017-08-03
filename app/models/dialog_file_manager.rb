@@ -15,7 +15,7 @@ class DialogFileManager
        .map do | row |
           hash = row.to_hash.symbolize_keys
 
-          Dialog.new( attrs_from( hash ).merge( intent_id:intent_id ))
+          initialize_for( attrs_from( hash ).merge( intent_id:intent_id ))
     end
   end
 
@@ -26,17 +26,22 @@ class DialogFileManager
 
   private
 
+  def initialize_for hash
+    if hash[ :responses ].any?
+      Dialog.new hash
+    else
+      DialogReference.new hash
+    end
+  end
+
   def serialize dialogs
     rows = dialogs.map do | d |
-      responses = d.responses.map{| r | serialize_response r }
-      formatted = JSON.pretty_generate( responses ).gsub( '"', '""' )
-
       attrs = d.attributes.dup.symbolize_keys
       attrs[ :intent_id     ] = d.intent.name
       attrs[ :present       ] = attrs[ :present ].join( ' && ' )
-      attrs[ :entity_values ] = %Q/"[(#{ attrs[ :entity_values ].map{| w | "'#{ w }'" }.join ', ' })]"/
-      attrs[ :eliza_de      ] = %Q/"#{ formatted }"/
-      attrs[ :comments      ] = %Q/"#{ d.comments }"/
+      attrs[ :entity_values ] = entity_values_for( d.entity_values )
+      attrs[ :eliza_de      ] = d.for_csv
+      attrs[ :comments      ] = %Q/"#{ d.comments }"/ if d.comments.present?
 
       fields.map{| k | attrs[ k ]}.join ','
     end
@@ -44,16 +49,11 @@ class DialogFileManager
     header_row + rows.join( "\n" )
   end
 
-  def serialize_response r
-    response_trigger = r[ :response_trigger ].present? ?
-          JSON.parse( r[ :response_trigger ]) :
-          r[ :response_trigger ]
+  def entity_values_for entity_values
+    return if entity_values.empty?
 
-    { ResponseType:    r[ :response_type ].to_i            ,
-      ResponseValue:   JSON.parse( r[ :response_value ])   ,
-      ResponseTrigger: response_trigger }
+    %Q/"[(#{ entity_values.map{| w | "'#{ w }'" }.join ', ' })]"/
   end
-
 
   def header_row
     fields.join( ',' ) + "\n"
@@ -73,17 +73,22 @@ class DialogFileManager
     present = hash[ :present ].to_s.split( '&&' ).map &:strip
     dup[ :present ] = present
 
-    entity_values = hash[ :entity_values ].to_s
-                                          .gsub( %r{\[|\(|\)|'}, '' )
-                                          .split( ']' )
-                                          .map{| w | w.split( ',' ).map &:strip }
-                                          .flatten
+    dup[ :entity_values  ] = hash[ :entity_values ].to_s
+                                                   .gsub( %r{\[|\(|\)|'}, '' )
+                                                   .split( ']' )
+                                                   .map{| w | w.split( ',' ).map &:strip }
+                                                   .flatten
 
-    dup[ :entity_values  ] = entity_values
     dup[ :responses ] = responses_for( hash )
+    dup[ :intent_reference ] = intent_reference_for( hash ) if intent_reference_for( hash )
+    
     dup.delete :eliza_de
 
     dup
+  end
+
+  def intent_reference_for hash
+    hash[ :eliza_de ].match( /\A\s*{{\s*intent\s*:(.*)}}\s*\z/ ).try( :[], 1 ).try( :strip )
   end
 
   def responses_for hash

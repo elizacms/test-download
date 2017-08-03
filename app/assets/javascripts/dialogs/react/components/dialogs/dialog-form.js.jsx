@@ -15,7 +15,9 @@ var DialogForm = React.createClass({
                                 response_trigger: '', response_id: ''}],
       'entity-value-field'  : [{id: 0, value: 'None', inputValue: ''}],
       priority: '',
-      comments: ''
+      comments: '',
+      'type': 'dialog',
+      intent_reference: ''
     };
   },
 
@@ -103,7 +105,9 @@ var DialogForm = React.createClass({
         'responses_attributes': this.createNewIdForResponses( nextProps ),
         priority:               nextProps.data.priority,
         response:               nextProps.data.response,
-        comments:               nextProps.data.comments
+        comments:               nextProps.data.comments,
+        type:                   nextProps.data.type,
+        intent_reference:       nextProps.data.intent_reference
       });
     } else {
       this.setState(this.initialData());
@@ -113,6 +117,14 @@ var DialogForm = React.createClass({
 
   priorityHandleChange(event) {
     this.setState({ priority: event.target.value });
+  },
+
+  dialogOrReferenceChange(event) {
+    this.setState({ type: event.target.value });
+  },
+
+  intentReferenceMenuChange(event) {
+    this.setState({ intent_reference: event.target.value });
   },
 
   commentsHandleChange(event) {
@@ -190,9 +202,11 @@ var DialogForm = React.createClass({
     data[ 'unresolved'     ] = this.state['unresolved-field'].map( (e)=>e.value );
     data[ 'missing'        ] = this.state['missing-field'].map( (e)=>e.value );
     data[ 'present'        ] = [].concat.apply( [], this.state['present-field'].map((e)=>[e.value, e.inputValue]) ); //concat.apply = merging
-    data[ 'entity_values'   ] = [].concat.apply( [], this.state['entity-value-field'].map((e)=>[e.value, e.inputValue]) );
+    data[ 'entity_values'  ] = [].concat.apply( [], this.state['entity-value-field'].map((e)=>[e.value, e.inputValue]) );
     data[ 'awaiting_field' ] = this.state['awaiting-field'].map( (e)=>e.value );
     data[ 'comments'       ] = this.state.comments;
+    data[ 'type'           ] = this.state.type;
+    data['intent_reference'] = this.state.intent_reference;
 
     data[ 'responses_attributes' ] = this.state.responses_attributes.map( (e) => {
       var iV = JSON.stringify(e.inputValue);
@@ -234,15 +248,59 @@ var DialogForm = React.createClass({
           <hr className='margin50220'></hr>
 
           <div>
-            <strong className='two columns margin0'>Priority</strong>
-            <input
-              className='three columns priority-input'
-              name='priority'
-              type='number'
-              value={this.state.priority}
-              onChange={this.priorityHandleChange} />
+            <span>
+              <strong >Priority</strong>
+              <input
+                className='priority-input marginL80'
+                name='priority'
+                type='number'
+                value={this.state.priority}
+                onChange={this.priorityHandleChange}
+              />
+            </span>
+
+            <span className="dialog-reference-radio">
+              <label>
+                <input
+                  type='radio'
+                  value='dialog'
+                  checked={this.state.type == 'dialog'}
+                  onChange={this.dialogOrReferenceChange}
+                />&nbsp;
+                Dialogs
+              </label>
+
+              <label>
+                <input
+                  type='radio'
+                  value='dialog_reference'
+                  checked={this.state.type == 'dialog' ? false : true}
+                  onChange={this.dialogOrReferenceChange}
+                />&nbsp;
+                Intent Reference
+              </label>
+            </span>
           </div>
-          <br /><br />
+
+          <div className={this.state.type == 'dialog' ? 'displayNone' : ''}>
+            <div>
+              <strong>Intent Reference</strong>
+              <select
+                className='dialog-select marginL24'
+                name='reference-type-select'
+                value={this.state.intent_reference}
+                onChange={this.intentReferenceMenuChange}
+              >
+                <option key='0' value=''>Choose intent</option>
+                {this.props.intentReferences.map( function(ref, index){
+                  return(
+                    <option key={index+1} value={ref}>{ref}</option>
+                  );
+                }.bind(this) )}
+              </select>
+            </div>
+          </div>
+
           <Message message={this.props.response} name='aneeda-says-error'>
           </Message>
           <hr className='margin0'></hr>
@@ -251,23 +309,24 @@ var DialogForm = React.createClass({
             <tbody>
               {/* ******************************************************** */}
               {this.state['responses_attributes'].map(function(input, index){
-                return(
-                  <ResponseType
-                    key={input.id}
-                    index={index}
-                    name='responses_attributes'
-                    className='response-type-text-with-option'
-                    title='Response type'
-                    addRow={this.addRow}
-                    // deleteInput={this.deleteInput.bind(this, input, 'responses_attributes')}
-                    deleteInput={this.deleteResponse.bind(this, input)}
-                    value={this.state['responses_attributes'][index].value}
-                    inputValue={this.state['responses_attributes'][index].inputValue}
-                    response_trigger={this.state['responses_attributes'][index].response_trigger}
-                    response_id={this.state['responses_attributes'][index].response_id}
-                    updateState={this.updateState}
-                  ></ResponseType>
-                );
+                if ( this.state.type == 'dialog' ){
+                  return(
+                    <ResponseType
+                      key={input.id}
+                      index={index}
+                      name='responses_attributes'
+                      className='response-type-text-with-option'
+                      title='Response type'
+                      addRow={this.addRow}
+                      deleteInput={this.deleteResponse.bind(this, input)}
+                      value={this.state['responses_attributes'][index].value}
+                      inputValue={this.state['responses_attributes'][index].inputValue}
+                      response_trigger={this.state['responses_attributes'][index].response_trigger}
+                      response_id={this.state['responses_attributes'][index].response_id}
+                      updateState={this.updateState}
+                    ></ResponseType>
+                  );
+                }
               }.bind(this))}
               {/* ******************************************************** */}
 

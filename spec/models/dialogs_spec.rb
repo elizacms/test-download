@@ -1,6 +1,6 @@
 describe Dialog do
   let!( :skill ){ create :skill }
-  let(  :intent_params ){{ name:           'invalid'   ,
+  let(  :intent_params ){{ name:           'dialog_reference'   ,
                            description:    'description'    ,
                            mturk_response: 'mturk_response' }}
   let!( :intent   ){ skill.intents.create!(intent_params) }
@@ -46,13 +46,20 @@ describe Dialog do
                        entity_values: [],
                        priority: 100,
                        comments: nil,
-                       extra:'BILL-001' }}
+                       extra:'BILL-001',
+                       type:'dialog' }}
 
     specify do
       expect( dialogs.count ).to eq 2
+      
       expect( dialogs.first.with_responses      ).to include expected
       expect( dialogs.first.with_responses.keys ).to_not include :_id
+      
+      expect( dialogs.last.with_responses[ :type                 ]).to eq 'dialog_reference'
       expect( dialogs.last.with_responses[ :responses_attributes ]).to eq []
+      expect( dialogs.last.with_responses[ :intent_reference     ]).to eq 'intent_name'
+      
+      expect( dialogs.map &:class ).to eq [ Dialog, DialogReference ]
     end
   end
 end

@@ -132,6 +132,9 @@ require 'sidekiq/web'
 
     get '/field-data-types',
       to: 'api#field_data_types'
+
+    get '/intents',
+      to: 'api#get_intents'
   end
 
   post '/process_training_data_upload',

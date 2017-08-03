@@ -1,5 +1,5 @@
 class ApiController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [ :get_webhook ]
+  skip_before_action :verify_authenticity_token, only: [ :get_webhook, :get_intents ]
   before_action :validate_api_auth, only: [ :get_webhook ]
 
   def get_webhook
@@ -112,6 +112,10 @@ class ApiController < ApplicationController
 
   def field_data_types
     render json: FieldDataType.all.sort_by{ |fdt| fdt.name.downcase }.map( &:serialize ).to_json
+  end
+
+  def get_intents
+    render json: Intent.pluck( :name ).sort_by( &:downcase ).to_json
   end
 
 

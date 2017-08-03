@@ -1,9 +1,9 @@
 describe DialogFileManager do
-  let( :dialogs ){ DialogFileManager.new.load file }
-
   let!( :skill   ){ create :skill }
   let!( :intent  ){ create :intent, skill: skill, name:intent_name }
-  let(  :file    ){ "spec/data-files/#{ intent_name }.csv" }
+
+  let( :dialogs ){ DialogFileManager.new.load file        }
+  let( :file    ){ "spec/data-files/#{ intent_name }.csv" }
 
   describe '#load returns empty array for no Dialogs' do
     let( :intent_name ){ 'billing_0' }
@@ -77,14 +77,17 @@ describe DialogFileManager do
     end
   end
 
-  context 'When eliza_de column contains {{intent:intent_name}}, return empty array for responses' do
-    let( :intent_name ){ 'invalid' }
+  context 'When eliza_de column contains {{intent:intent_name}}, return Dialog Reference' do
+    let( :intent_name ){ 'dialog_reference' }
 
     specify do
       expect( dialogs.count ).to eq 2
       expect( dialogs[ 0 ].priority ).to eq 100
+      expect( dialogs[ 0 ].class ).to eq Dialog
+      
       expect( dialogs[ 1 ].priority ).to eq 90
-      expect( dialogs[ 1 ].responses ).to eq []
+      expect( dialogs[ 1 ].intent_reference ).to eq 'intent_name'
+      expect( dialogs[ 1 ].class ).to eq DialogReference
     end
   end
 
@@ -102,6 +105,17 @@ describe DialogFileManager do
 
   describe '#save' do
     let( :intent_name ){ 'billing_1' }
+    let( :output_file ){ "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/#{ intent.name }.csv" }
+
+    specify 'success' do
+      DialogFileManager.new.save dialogs, intent
+
+      expect( File.read output_file ).to eq File.read( file )
+    end
+  end
+
+  describe '#save for Dialog Reference' do
+    let( :intent_name ){ 'dialog_reference' }
     let( :output_file ){ "#{ ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}/intent_responses_csv/#{ intent.name }.csv" }
 
     specify 'success' do
