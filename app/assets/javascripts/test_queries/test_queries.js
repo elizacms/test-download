@@ -141,7 +141,7 @@ $(document).on('turbolinks:load', function(){
           if ( action === '/api/nlu-query'){
               window.intent = JSON.parse( response )['intent'];
               window.mentions = JSON.parse( response )['mentions'];
-              var skillUrl = JSON.parse( intents['response'] )[intent].split('.com')[0];
+              var skillUrl = JSON.parse( intents['response'] )[intent].split('/format')[0];
 
               var retrieveJSON = {};
               var nlu = retrieveJSON['nlu_response'] = {};
@@ -154,8 +154,8 @@ $(document).on('turbolinks:load', function(){
 
               var r = JSON.stringify( retrieveJSON, null, 2 );
               $('#skill_retrieve'    ).val( r );
-              $('#skill_retrieve_url').val( skillUrl + '.com/retrieve');
-              $('#skill_format_url'  ).val( skillUrl + '.com/format');
+              $('#skill_retrieve_url').val( skillUrl + '/retrieve');
+              $('#skill_format_url'  ).val( skillUrl + '/format');
 
               if ($('.skill-retrieve').find('.requestCodeMirror').length > 0){
                 $('.skill-retrieve').find('.requestCodeMirror').remove();
