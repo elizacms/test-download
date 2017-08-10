@@ -1,4 +1,4 @@
-class TrainingAPIError < StandardError
+class RepoLockError < StandardError
   attr_accessor :message
 
   def initialize message

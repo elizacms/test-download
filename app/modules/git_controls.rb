@@ -52,8 +52,8 @@ module GitControls
     end
   end
 
-  def git_branch name, target
-    repo.create_branch( name, target )
+  def git_branch name
+    repo.create_branch( name )
   end
 
   def git_checkout name
@@ -61,19 +61,25 @@ module GitControls
   end
 
   def git_rebase branch
-    git_stash
+    RepoLock.perform_check_and_lock
+    begin
+      git_stash
 
-    pull_from_origin branch
-    pull_from_origin 'master'
+      pull_from_origin branch
+      pull_from_origin 'master'
 
-    rebase = Rugged::Rebase.new(repo, 'refs/heads/master', "refs/heads/#{branch}" )
-    rebase.finish(rebase_signature)
+      `cd #{ENV[ 'NLU_CMS_PERSISTENCE_PATH' ]}; git rebase #{branch}; cd -`
 
-    push_master_to_origin
+      push_master_to_origin
+      git_branch_delete branch
 
-    git_branch_delete branch
+      git_stash_pop
 
-    git_stash_pop
+      RepoLock.unlock
+    rescue => e
+      RepoLock.unlock
+      raise e
+    end
   end
 
   def git_push_origin branch
@@ -117,15 +123,6 @@ module GitControls
       message:    message,
       parents:    repo.empty? ? [] : [repo.head.target].compact,
       update_ref: 'HEAD'
-    }
-  end
-
-  def rebase_signature
-    {
-      name: email,
-      email: email,
-      time: Time.now,
-      time_offset: 0,
     }
   end
 
