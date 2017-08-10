@@ -22,4 +22,8 @@ module FilePath
   def relative_path_for path
     path.try( :split, "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/").try( :last )
   end
+
+  def faq_article_file
+    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/language_rule_csv/de/german-faq.csv"
+  end
 end

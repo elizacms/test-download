@@ -116,6 +116,14 @@ require 'sidekiq/web'
 
     post '/process_dialog_upload',
       to: 'api#process_dialog_upload'
+
+    scope module:'faq' do
+      get '/articles',
+        to: 'api#get_articles'
+
+      put '/articles/:kbid/',
+        to: 'api#put_articles'
+    end
   end
 
   post '/process_training_data_upload',
