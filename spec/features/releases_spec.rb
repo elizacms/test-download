@@ -141,6 +141,7 @@ describe 'Release Feature Specs' do
 
       fill_in :message, with: 'Entity Commit'
       click_button 'Create Release'
+      sleep 0.5
 
       stub_jenkins_for Release.last
 

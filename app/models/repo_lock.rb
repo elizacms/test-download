@@ -1,5 +1,6 @@
 class RepoLock
   include Mongoid::Document
+  MAX_WAIT_TIME = 5.seconds
 
   def self.locked?
     RepoLock.all.any?
@@ -18,10 +19,10 @@ class RepoLock
   end
 
   def self.wait_and_try_again
-    end_time = Time.new + 5.seconds
+    end_time = Time.new + MAX_WAIT_TIME
 
     while RepoLock.locked? && Time.new < end_time do
-      logger.info "waiting..."
+      logger.info "Repo is locked; waiting..."
       sleep 0.1
     end
 
