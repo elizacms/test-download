@@ -44,6 +44,92 @@ describe 'User git controls' do
     [{:old=>"intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra,comments\nnewname,100000,destination,,A missing rule,,\"[('some', 'thing')]\",\"[\n\n]\",,\"some comment\"", :new=>"intent_id,priority,awaiting_field,unresolved,missing,present,entity_values,eliza_de,extra,comments\nnewname,666,destination,,A missing rule,,\"[('some', 'thing')]\",\"[\n\n]\",,\"some comment\"", :file_type=>"Intent_responses_csv", :name=>"newname.csv"}]
   }
 
+  describe 'concurrency' do
+    before do
+      allow( user  ).to receive :git_push_origin
+      allow( user  ).to receive :pull_from_origin
+      allow( user  ).to receive :push_master_to_origin
+      allow( user2 ).to receive :git_push_origin
+      allow( user2 ).to receive :pull_from_origin
+      allow( user2 ).to receive :push_master_to_origin
+
+      dialog.update(  priority: 4343 )
+      dialog2.update( priority: 8787 )
+      DialogFileManager.new.save( [dialog],  intent  )
+      DialogFileManager.new.save( [dialog2], intent2 )
+    end
+
+    it 'should succeed with rebases' do
+      allow( user  ).to receive :git_stash
+      allow( user  ).to receive :git_stash_pop
+      allow( user2 ).to receive :git_stash
+      allow( user2 ).to receive :git_stash_pop
+
+      @r1 = Release.create( user: user,  files: user.changed_files,  message: '1st Commit' )
+      @r2 = Release.create( user: user2, files: user2.changed_files, message: '2nd Commit' )
+
+      user.repo.index.reload
+      user2.repo.index.reload
+
+      t1 = Thread.new do
+        user.git_rebase( @r1.branch_name )
+      end
+
+      t2 = Thread.new do
+        user2.git_rebase( @r2.branch_name )
+      end
+
+      t1.join
+      t2.join
+
+      expect( @r1.intents ).to eq [ intent  ]
+      expect( @r2.intents ).to eq [ intent2 ]
+      expect( user.git_branch_current ).to eq 'master'
+      expect( dialog.priority  ).to eq 4343
+      expect( dialog2.priority ).to eq 8787
+      expect( repo.walk(repo.last_commit.oid).count ).to eq 3
+    end
+
+    it 'should succeed with releases' do
+      t1 = Thread.new do
+        @r1 = Release.create( user: user,  files: user.changed_files,  message: '1st Commit' )
+      end
+
+      t2 = Thread.new do
+        @r2 = Release.create( user: user2, files: user2.changed_files, message: '2nd Commit' )
+      end
+
+      t1.join
+      t2.join
+
+      expect( @r1.intents ).to eq [ intent  ]
+      expect( @r2.intents ).to eq [ intent2 ]
+      expect( user.git_branch_current ).to eq 'master'
+    end
+
+    it 'should succeed with a rebase and a release' do
+      @r1 = Release.create( user: user,  files: user.changed_files,  message: '1st Commit' )
+
+      t1 = Thread.new do
+        @r2 = Release.create( user: user2, files: user2.changed_files, message: '2nd Commit' )
+      end
+
+      t2 = Thread.new do
+        user.git_rebase(@r1.branch_name)
+      end
+
+      t1.join
+      t2.join
+
+      expect( @r1.intents ).to eq [ intent  ]
+      expect( @r2.intents ).to eq [ intent2 ]
+      expect( user.git_branch_current ).to eq 'master'
+      expect( dialog.priority         ).to eq 4343
+      expect( dialog2.priority        ).to eq 8787
+      expect( repo.walk(repo.last_commit.oid).count ).to eq 2
+    end
+  end
+
   describe '#repo' do
     it 'initializes Rugged Repo' do
       expect( user.repo.path ).to eq( repo.path )
@@ -210,88 +296,6 @@ describe 'User git controls' do
       expect( repo.status( 'intent_responses_csv/newname.csv'        ) ).to eq [:worktree_modified]
       expect( File.exist?( 'eliza_de/actions/another_for_user.action') ).to eq false
       expect( repo.status( 'intent_responses_csv/get_ride.csv'       ) ).to eq []
-    end
-  end
-
-  describe 'two users create at the same time' do
-    before do
-      allow( user  ).to receive :git_push_origin
-      allow( user  ).to receive :pull_from_origin
-      allow( user  ).to receive :push_master_to_origin
-      allow( user2 ).to receive :git_push_origin
-      allow( user2 ).to receive :pull_from_origin
-      allow( user2 ).to receive :push_master_to_origin
-
-      dialog.update(  priority: 4343 )
-      dialog2.update( priority: 8787 )
-      DialogFileManager.new.save( [dialog],  intent  )
-      DialogFileManager.new.save( [dialog2], intent2 )
-    end
-
-    it 'should succeed with releases' do
-      t1 = Thread.new do
-        @r1 = Release.create( user: user,  files: user.changed_files,  message: '1st Commit' )
-      end
-
-      t2 = Thread.new do
-        @r2 = Release.create( user: user2, files: user2.changed_files, message: '2nd Commit' )
-      end
-
-      t1.join
-      t2.join
-
-      expect( @r1.intents ).to eq [ intent  ]
-      expect( @r2.intents ).to eq [ intent2 ]
-      expect( user.git_branch_current ).to eq 'master'
-    end
-
-    it 'should succeed with rebases',:focus do
-      allow( user  ).to receive :git_stash
-      allow( user  ).to receive :git_stash_pop
-      allow( user2 ).to receive :git_stash
-      allow( user2 ).to receive :git_stash_pop
-      @r1 = Release.create( user: user,  files: user.changed_files,  message: '1st Commit' )
-      @r2 = Release.create( user: user2, files: user2.changed_files, message: '2nd Commit' )
-
-      t1 = Thread.new do
-        user.git_rebase( @r1.branch_name )
-      end
-
-      t2 = Thread.new do
-        user2.git_rebase( @r2.branch_name )
-      end
-
-      t1.join
-      t2.join
-
-      expect( @r1.intents ).to eq [ intent  ]
-      expect( @r2.intents ).to eq [ intent2 ]
-      expect( user.git_branch_current ).to eq 'master'
-      expect( dialog.priority  ).to eq 4343
-      expect( dialog2.priority ).to eq 8787
-      expect( repo.walk(repo.last_commit.oid).count ).to eq 3
-    end
-
-    it 'should succeed with a rebase and a release' do
-      @r1 = Release.create( user: user,  files: user.changed_files,  message: '1st Commit' )
-
-      t1 = Thread.new do
-        @r2 = Release.create( user: user2, files: user2.changed_files, message: '2nd Commit' )
-      end
-
-      t2 = Thread.new do
-        user.git_rebase(@r1.branch_name)
-      end
-
-      t1.join
-      t2.join
-
-      expect( @r1.intents ).to eq [ intent  ]
-      expect( @r2.intents ).to eq [ intent2 ]
-      expect( user.git_branch_current ).to eq 'master'
-      expect( dialog.priority         ).to eq 4343
-      expect( dialog2.priority        ).to eq 8787
-      expect( repo.walk(repo.last_commit.oid).count ).to eq 2
     end
   end
 end
