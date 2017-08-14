@@ -12,7 +12,7 @@
 
     <% if params[:controller] == 'intents' %>
       <% if params[:action] == 'dialogs' %>
-        <%= javascript_include_tag 'dialogs/manifest', 'data-turbolinks-track': 'reload' %>
+        <%= javascript_include_tag 'react/manifest', 'data-turbolinks-track': 'reload' %>
       <% elsif params[:action] == 'fields' %>
         <%= javascript_include_tag 'fields/manifest', 'data-turbolinks-track': 'reload' %>
       <% else %>
