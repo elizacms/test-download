@@ -30,11 +30,11 @@ describe 'File Lock Spec' do
     click_link 'Edit Details'
   end
 
-  it 'should lock the intent when the Edit Details button is clicked' do
-    expect(intent.reload.file_lock.user_id).to eq admin.id.to_s
+  it 'should NOT lock the intent when the Edit Details button is clicked' do
+    expect(intent.reload.file_lock).to eq nil
   end
 
-  it 'should show "This intent is currently being edited" when there is a file lock' do
+  it 'should show "You have locked this intent."',:js do
     stub_identity_token
     stub_identity_account_for user.email
     visit '/login/success?code=0123abc'
@@ -42,10 +42,15 @@ describe 'File Lock Spec' do
     visit '/skills'
     click_link 'Manage Intents'
     click_link 'Edit Details'
+    click_link 'Edit Fields'
 
     sleep 0.5
+    execute_script('$("tr.jsgrid-insert-row td input").val("abc_123");')
+    sleep 0.5
+    page.all('input.black.sm')[0].click
+    sleep 0.5
 
-    expect( page ).to have_content "This intent is currently being edited by #{ admin.email }"
+    expect( page ).to have_content "You have locked this intent."
   end
 
   describe 'locked b/c release candidate present' do

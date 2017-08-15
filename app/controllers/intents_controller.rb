@@ -7,7 +7,7 @@ class IntentsController < ApplicationController
   before_action :find_intent,
                 only: [ :edit, :update, :destroy, :fields, :dialogs,
                         :submit_mturk_response, :api_file_lock ]
-  before_action :find_or_set_file_lock,
+  before_action :find_file_lock,
                 only: [ :edit, :fields, :dialogs ]
 
   def index
@@ -26,9 +26,11 @@ class IntentsController < ApplicationController
     if @intent.persisted?
       IntentFileManager.new.save( @intent, [] )
       DialogFileManager.new.save( [], @intent )
+      @intent.lock( current_user.id )
+
       redirect_to(
         fields_page_path(skill_id: @skill, id: @intent.id),
-          flash: { success: "Intent #{ params[:name] } created." }
+        flash: { success: "Intent #{ params[:name] } created." }
       )
     else
       flash.now[ :alert ] = @intent.errors.full_messages.join( "\n" )
@@ -43,6 +45,7 @@ class IntentsController < ApplicationController
     if @intent.update( intent_params )
       fields = IntentFileManager.new.fields_for( @intent )
       IntentFileManager.new.save( @intent, fields )
+      @intent.lock( current_user.id )
 
       redirect_to(
         edit_skill_intent_path( @skill, @intent ),
@@ -106,11 +109,9 @@ class IntentsController < ApplicationController
     IntentFileManager.new.fields_for intent
   end
 
-  def find_or_set_file_lock
+  def find_file_lock
     if @intent.has_file_lock?
       @file_lock = @intent.file_lock
-    else
-      @file_lock = FileLock.create(intent: @intent, user_id: current_user.id.to_s)
     end
   end
 

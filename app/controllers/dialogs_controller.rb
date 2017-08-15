@@ -23,12 +23,22 @@ class DialogsController < ApplicationController
 
     dialogs = dialog_params[:dialogs].map{| ps | create_dialog_for ps }
 
+    if !@intent.locked_for?( current_user.id ) && dialogs.all?( &:valid? )
+      @intent.dialogs.delete_all
+      dialogs.each( &:save! )
+      DialogFileManager.new.save(dialogs, @intent)
+      @intent.lock( current_user.id )
+
+      render json: { return_early: 'file_locked' }, status: 201
+      return
+    end
+
     if dialogs.all?( &:valid? )
       @intent.dialogs.delete_all
-      dialogs.each &:save!
+      dialogs.each( &:save! )
       DialogFileManager.new.save(dialogs, @intent)
+
       render json: {}, status: :created
-    
     else
       response.headers[ 'Warning' ] = dialogs.map{|d| d.errors.full_messages.join "\n"}.join "\n"
       render json: {}, status: 422
@@ -40,7 +50,7 @@ class DialogsController < ApplicationController
 
   def create_dialog_for ps
     ps.merge!( intent_id: @intent.id.to_s )
-    
+
     model = Object.const_get( ps.delete( :type ).camelize )
     ps.delete( :intent_reference ) if model == Dialog
 

@@ -1,4 +1,5 @@
 describe 'Fields Request Specs' do
+  let!( :user   ){ create :user                 }
   let!( :skill  ){ create :skill                }
   let!( :intent ){ create :intent, skill: skill }
   let!( :params ){{
@@ -13,6 +14,8 @@ describe 'Fields Request Specs' do
 
   before do
     IntentFileManager.new.save( intent, [] )
+
+    allow_any_instance_of( FieldsController ).to receive(:current_user).and_return(user)
   end
 
   describe 'Create' do

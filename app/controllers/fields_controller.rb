@@ -20,6 +20,14 @@ class FieldsController < ApplicationController
 
     fields = field_params[:fields].map{|f| Field.new( f )}
 
+    if !intent.locked_for?( current_user ) && fields.all?( &:valid? )
+      IntentFileManager.new.save( intent, fields )
+      intent.lock( current_user.id )
+
+      render json: { return_early: 'file_locked' }, status: 201
+      return
+    end
+
     if fields.all?( &:valid? )
       IntentFileManager.new.save( intent, fields )
 
@@ -34,6 +42,11 @@ class FieldsController < ApplicationController
 
   def fields_for( intent )
     IntentFileManager.new.fields_for intent
+  end
+
+  def lock_and_render_index intent, user
+    intent.lock( current_user.id )
+    redirect_to fields_path
   end
 
   def field_params

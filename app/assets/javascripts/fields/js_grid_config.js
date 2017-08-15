@@ -112,7 +112,12 @@ function postAllFields(data){
         contentType: 'application/json',
         data: data
     }).done(function(r){
-        initFields();
+        console.log(r);
+        if( r.hasOwnProperty('return_early') ){
+            window.location.reload();
+        } else {
+            initFields();
+        }
     }).fail(function(r){
         IAM.alert.run('red', r.responseText, 3000);
     });
