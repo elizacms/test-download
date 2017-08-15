@@ -91,6 +91,9 @@ require 'sidekiq/web'
     to: 'users#invite_developer',
     as: :invite_dev
 
+  get '/faqs',
+    to: 'faqs#index'
+
   resources :skills do
     resources :intents
 

@@ -31,6 +31,10 @@
     <% if params[:action] == 'dialogs_upload' && params[:controller] == 'pages' %>
       <%= javascript_include_tag 'dialog_upload/dialog_upload.js', 'data-turbolinks-track': 'reload' %>
     <% end %>
+
+    <% if params[:controller] == 'faqs' %>
+      <%= javascript_include_tag 'react/manifest', 'data-turbolinks-track': 'reload' %>
+    <% end %>
   </head>
 
 
