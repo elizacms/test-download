@@ -21,9 +21,10 @@ export default class App extends Component {
           )
         }
         <h2>{heading}</h2>
-        <button onClick={ () => this.ee.emit('openModal', testContent) }>open modal with fake content</button>
+        <button onClick={ () => this.ee.emit('openModal', testContent) }>
+            open modal with fake content
+        </button>
       </div>
     )
   }
 }
-

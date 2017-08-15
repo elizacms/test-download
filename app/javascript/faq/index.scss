@@ -1,4 +1,4 @@
-@import '~draft-js/dist/Draft.css';
+@import 'draft-js/dist/Draft.css';
 
 body {
   margin: 0;
@@ -33,27 +33,31 @@ button {
   position: fixed;
   width: 100%;
   height: 100%;
+  left:0;
+  top:0;
   overflow-y: scroll;
   margin-bottom:20px;
 }
+
 .Modal-close-btn {
   border:none !important;
 
   float:right;
   margin-top:-20px;
   margin-right:-20px;
-  
 
 }
+
 .RichEditor-root{
   border:1px solid #ccc;
   padding:10px;
 }
+
 .RichEditor-editor {
-  
   margin-top:30px;
   border-bottom:2px dashed #ccc;
 }
+
 .RichEditor-styleButton{
   background: #333;
   margin-right: 6px;
