@@ -25,9 +25,6 @@ class PagesController < ApplicationController
     redirect_to root_path, notice: "You've been successfully logged out."
   end
 
-  def test_queries
-  end
-
   def dialogs_upload
     if !current_user.has_role?( 'admin' )
       redirect_to skills_path, notice: 'You do not have access.'
