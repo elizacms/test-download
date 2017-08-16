@@ -20,7 +20,7 @@ class FieldsController < ApplicationController
 
     fields = field_params[:fields].map{|f| Field.new( f )}
 
-    if !intent.locked_for?( current_user ) && fields.all?( &:valid? )
+    if !intent.locked_by_current_user?( current_user ) && fields.all?( &:valid? )
       IntentFileManager.new.save( intent, fields )
       intent.lock( current_user.id )
 

@@ -112,7 +112,6 @@ function postAllFields(data){
         contentType: 'application/json',
         data: data
     }).done(function(r){
-        console.log(r);
         if( r.hasOwnProperty('return_early') ){
             window.location.reload();
         } else {

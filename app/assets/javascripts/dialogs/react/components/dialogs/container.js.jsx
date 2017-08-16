@@ -62,17 +62,22 @@ var Container = React.createClass({
       data: ajaxData
     })
     .done( function( data ){
-      var form = $('form');
-      form.find( 'input' ).val( '' );
-      form.find( 'select' ).val( '' );
+      if ( data.hasOwnProperty('return_early') ) {
+        window.location.reload();
+      }
+      else {
+        var form = $('form');
+        form.find( 'input' ).val( '' );
+        form.find( 'select' ).val( '' );
 
-      $('.iam-loading').each(function(){
-          IAM.loading.stop({id: $(this).attr('rel')});
-      });
+        $('.iam-loading').each(function(){
+            IAM.loading.stop({id: $(this).attr('rel')});
+        });
 
-      this.resetDialogData();
-      this.getAllScenarios();
-      this.resetIsUpdateState();
+        this.resetDialogData();
+        this.getAllScenarios();
+        this.resetIsUpdateState();
+      }
     }.bind(this))
     .fail(function(error){
       IAM.alert.run('red', error.getResponseHeader('Warning'), 5000);

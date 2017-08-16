@@ -21,32 +21,34 @@ class DialogsController < ApplicationController
       return
     end
 
-    dialogs = dialog_params[:dialogs].map{| ps | create_dialog_for ps }
+    @dialogs = dialog_params[:dialogs].map{| ps | create_dialog_for ps }
 
-    if !@intent.locked_for?( current_user.id ) && dialogs.all?( &:valid? )
-      @intent.dialogs.delete_all
-      dialogs.each( &:save! )
-      DialogFileManager.new.save(dialogs, @intent)
+    if !@intent.locked_by_current_user?( current_user ) && @dialogs.all?( &:valid? )
+      delete_and_recreate_all_dialogs
       @intent.lock( current_user.id )
 
       render json: { return_early: 'file_locked' }, status: 201
       return
     end
 
-    if dialogs.all?( &:valid? )
-      @intent.dialogs.delete_all
-      dialogs.each( &:save! )
-      DialogFileManager.new.save(dialogs, @intent)
+    if @dialogs.all?( &:valid? )
+      delete_and_recreate_all_dialogs
 
       render json: {}, status: :created
     else
-      response.headers[ 'Warning' ] = dialogs.map{|d| d.errors.full_messages.join "\n"}.join "\n"
+      response.headers[ 'Warning' ] = @dialogs.map{|d| d.errors.full_messages.join "\n"}.join "\n"
       render json: {}, status: 422
     end
   end
 
 
   private
+
+  def delete_and_recreate_all_dialogs
+    @intent.dialogs.delete_all
+    @dialogs.each( &:save! )
+    DialogFileManager.new.save(@dialogs, @intent)
+  end
 
   def create_dialog_for ps
     ps.merge!( intent_id: @intent.id.to_s )
