@@ -1,4 +1,4 @@
-describe 'FAQ API' ,:focus do
+describe 'FAQ API' do
   let!( :developer ){ create :user                                }
   let!( :skill     ){ create :skill                               }
   let!( :intent    ){ create :intent, skill: skill                }
