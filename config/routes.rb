@@ -135,6 +135,14 @@ require 'sidekiq/web'
 
     get '/intents',
       to: 'api#get_intents'
+
+    scope module:'faq' do
+      get '/articles',
+        to: 'api#get_articles'
+
+      put '/articles/:kbid/',
+        to: 'api#put_articles'
+    end
   end
 
   post '/process_training_data_upload',

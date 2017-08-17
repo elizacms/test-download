@@ -30,4 +30,8 @@ module FilePath
   def entity_data_file_for file_data_type
     "#{entity_data_upload_location}/#{ file_data_type.name.downcase }.csv"
   end
+
+  def faq_article_file
+    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/language_rule_csv/de/german-faq.csv"
+  end
 end

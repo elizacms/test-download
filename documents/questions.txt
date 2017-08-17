@@ -1,0 +1,6 @@
+Questions
+
+1. What is Qid and id? Which one is kbid?
+2. Why is type in the an aggregate? Each row has its own type.
+3. Can you have different types within 1 KBID.
+4. What is Enabled?
