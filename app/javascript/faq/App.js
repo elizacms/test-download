@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import './App.css';
 
 import ee from './EventEmitter'
 import Modal from './components/Modal';
+import SearchBar from './components/SearchBar';
+import PagingControl from './components/PagingControl';
+import FaqList from './components/FaqList';
+import EditFaq from './components/EditFaq';
 
 export default class App extends Component {
   componentDidMount() {
@@ -11,7 +14,7 @@ export default class App extends Component {
 
   render() {
     const {heading, modalContent} = this.props;
-    const testContent = (<div key={0}>Test</div>);
+    const testContent = <EditFaq />;
 
     return (
       <div className="App">
@@ -21,9 +24,13 @@ export default class App extends Component {
           )
         }
         <h2>{heading}</h2>
-        <button onClick={ () => this.ee.emit('openModal', testContent) }>
-            open modal with fake content
+
+        <SearchBar />
+        <button className="add-faq" onClick={ () => this.ee.emit('openModal', testContent) }>
+        + Add New FAQ
         </button>
+        <FaqList data={null}/>
+        <PagingControl itemCount={5} />
       </div>
     )
   }

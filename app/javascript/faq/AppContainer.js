@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 // components
 import App from './App';
-import MyEditor from './components/MyEditor';
+import TextEditor from './components/TextEditor';
 import ee from './EventEmitter'
 
 export default class AppContainer extends Component {
@@ -28,7 +28,7 @@ export default class AppContainer extends Component {
 	openModal(content) {
 		console.log(content);
 		this.setState({
-			modalContent: <MyEditor key={2} />,
+			modalContent: content,
 		});
 	}
 

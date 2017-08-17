@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { CSSTransitionGroup } from 'react-transition-group';
 
 import ee from '../../EventEmitter';
 
@@ -15,9 +14,9 @@ export default class Modal extends Component {
 	render() {
 		const modalContentStyle = {
 			background: 'white',
-			width: '70%',
 			margin: '13% auto',
-			padding:'25px',
+      maxWidth: '95%',
+			padding: '25px',
 		}
 
 		return (

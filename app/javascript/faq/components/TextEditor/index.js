@@ -150,6 +150,7 @@ const BlockStyleControls = (props) => {
     </div>
   );
 };
+
 var INLINE_STYLES = [
   {label: 'Bold', style: 'BOLD'},
   {label: 'Italic', style: 'ITALIC'},
