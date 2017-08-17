@@ -202,6 +202,9 @@ GEM
     redis (3.3.3)
     remote_syslog_logger (1.0.3)
       syslog_protocol
+    roo (2.4.0)
+      nokogiri (~> 1)
+      rubyzip (~> 1.1, < 2.0.0)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
@@ -303,6 +306,7 @@ DEPENDENCIES
   rails-assets-tether (>= 1.1.0)!
   react-rails (~> 1.7)
   remote_syslog_logger (~> 1.0)
+  roo (~> 2.4.0)
   rspec-rails (~> 3.5)
   rspec_junit_formatter
   rugged (~> 0.24.0)
@@ -318,4 +322,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.15.1
+   1.15.3

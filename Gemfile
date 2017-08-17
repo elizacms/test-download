@@ -21,6 +21,7 @@ gem 'rugged', '~> 0.24.0'
 gem 'diffy', '>= 3.2.0'
 gem 'sprockets', '3.7.1'
 gem 'sidekiq'
+gem 'roo', '~> 2.4.0'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'
