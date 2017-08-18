@@ -7,6 +7,7 @@ class FAQ::FileImporter
     # Iterate over questions and import
     question_sheet.each_row(offset:1) do |row|
       next if cell_val( row, 1 ).nil?
+
       article = FAQ::Article.find_or_create_by!(kbid: cell_val( row, 1 ))
 
       article.questions.create( text: cell_val( row, 6 ) )
@@ -15,18 +16,22 @@ class FAQ::FileImporter
     # Iterate over answers and import
     answer_sheet.each_row(offset:1) do |row|
       next if cell_val( row, 1 ).nil?
-      article = FAQ::Article.find_or_create_by!(kbid: cell_val( row, 1 ))
-      article.update(enabled: cell_val( row, 3 ))
 
-      next if cell_val( row, 5 ) == '<dialog>'
+      article = FAQ::Article.find_or_create_by!(kbid: cell_val( row, 1 ))
+
+      # next if cell_val( row, 5 ) == '<dialog>'
 
       begin
         metadata = cell_val( row, 17 ).nil? ? {} : JSON.parse( cell_val( row, 17 ) )
       rescue JSON::ParserError
-        ap "JSON::ParserError: row # #{row[17].coordinate.row}"
+        ele = row.find{|e| e.coordinate.column == 17}
+        row_num = ele.coordinate.row
+        ap "JSON::ParserError: row # #{row_num}"
+        metadata = {}
       end
 
       article.answers.create(
+        active:   cell_val( row, 3  ),
         text:     cell_val( row, 5  ),
         links:   [cell_val( row, 9  ),
                   cell_val( row, 10 ),
