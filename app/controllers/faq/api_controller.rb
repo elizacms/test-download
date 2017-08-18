@@ -50,7 +50,7 @@ module FAQ
        { kbid:     article.kbid,
          enabled:  article.enabled,
          questions:article.questions.pluck( :text ),
-         answers:  article.answers.pluck( :response )}
+         answers:  article.answers.map( &:serialize )}
     end
   end
 end

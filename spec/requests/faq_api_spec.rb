@@ -6,10 +6,10 @@ describe 'FAQ API' do
   describe 'Get Articles by KBID' do
     let( :first_result ){{  kbid:       article.kbid       ,
                             enabled:    article.enabled    ,
-                            questions:[ question.text   ]  ,
-                            answers:  [ answer.response ]  }} 
+                            questions:[ question.text     ],
+                            answers:  [ answer.attributes ]} } 
 
-    specify 'success' do
+    specify 'success' ,:focus do
       get '/api/articles', { kbid:article.kbid }
 
       expect( parsed_response[ :results ][ 0 ]).to eq first_result
