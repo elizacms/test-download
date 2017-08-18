@@ -4,12 +4,12 @@ describe 'FAQ API' do
   let!( :answer   ){ create :answer,   article:article }
 
   describe 'Get Articles by KBID' do
-    let( :first_result ){{  kbid:       article.kbid       ,
-                            enabled:    article.enabled    ,
-                            questions:[ question.text     ],
-                            answers:  [ answer.attributes ]} } 
+    let( :first_result ){{  kbid:       article.kbid      ,
+                            enabled:    article.enabled   ,
+                            questions:[ question.text    ],
+                            answers:  [ answer.serialize.symbolize_keys ]} } 
 
-    specify 'success' ,:focus do
+    specify 'success' do
       get '/api/articles', { kbid:article.kbid }
 
       expect( parsed_response[ :results ][ 0 ]).to eq first_result
