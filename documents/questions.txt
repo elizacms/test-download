@@ -1,6 +1,10 @@
 Questions
 
 1. What is Qid and id? Which one is kbid?
-2. Why is type in the an aggregate? Each row has its own type.
+   Don't need Quid. id is kbid.
+2. Why is type in the an aggregate? Each kbid has one type: FAQ or Dialog
+   Because export is for NLU. Not DB.
 3. Can you have different types within 1 KBID.
+   No.
 4. What is Enabled?
+   Only enabled KBID's are exported to a file.

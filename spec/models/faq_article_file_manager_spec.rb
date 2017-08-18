@@ -36,27 +36,7 @@ describe 'FAQ::ArticleFileManager' do
                               versionId: "5" }}
   let( :article_file ){ Object.new.extend( FilePath ).faq_article_file }
 
-  before do
-    FileUtils.copy 'spec/data-files/german-faq-full.csv', article_file
-  end
-
-  specify 'Import dialogs' do
-    file_manager.import
-
-    expect( FAQ::Article.count ).to eq   4958
-    expect( first_article.query ).to eq 'Fsk.'
-    expect( first_article.kbid  ).to eq  442
-    
-    expect( first_article.response ).to eq expected_response
-  end
-
-  specify 'Each response has 1 answer' do
-    file_manager.import
-
-    expect( FAQ::Article.all.map{| a | a.response[ :Answers ].count }.uniq ).to eq [ 1 ]
-  end
-
-  specify 'Export dialogs' do
+  specify 'Export dialogs' ,:skip do
     file_manager.import
 
     FileUtils.rm article_file

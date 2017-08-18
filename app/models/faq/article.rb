@@ -5,20 +5,11 @@ class FAQ::Article
   index( kbid:1 )
 
   field :kbid,       type:Integer
-  field :query,      type:String
-  field :response,   type:Hash
+  field :enabled,    type:Boolean
 
-  validates_presence_of :kbid, :query, :response
+  validates_presence_of   :kbid
+  validates_uniqueness_of :kbid
 
-  default_scope { order( created_at:'ASC' )}
-
-
-  def self.update_for params
-    delete_all( kbid:params[ :kbid ].to_i )    
-  end
-
-  def response
-    attributes[ 'response' ].deep_symbolize_keys
-                            .merge( id:kbid.to_s )
-  end
+  has_many :questions
+  has_many :answers
 end
