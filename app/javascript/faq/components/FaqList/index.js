@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import shortid from 'shortid';
 
 export default class FaqList extends Component {
 	constructor(props) {
@@ -30,19 +31,19 @@ export default class FaqList extends Component {
           <tbody>
           {
             articles.map(article => (
-              <tr>
+              <tr key={shortid.generate()}>
                 <td>{article.kbid}</td>
                 <td>
                 {
-                  article.articles.map( (item, idx )=> (
-                    <p key={idx}>{item.query}</p>
+                  article.articles.map(item => (
+                    <p key={shortid.generate()}>{item.query}</p>
                   ))
                 }
                 </td>
                 <td>
                 {
-                  article.articles.map( (item, idx)  => (
-                    <p key={idx}>{item.response}</p>
+                  article.articles.map(item  => (
+                    <p key={shortid.generate()}>{item.response}</p>
                   ))
                 }
                 </td>

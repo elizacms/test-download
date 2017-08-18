@@ -13,8 +13,15 @@ export default class App extends Component {
   }
 
   render() {
-    const { pagesTotal, articleTotal, articles, heading, modalContent } = this.props;
+    const {heading, articles, pagesTotal, modalContent, articleTotal} = this.props;
     const testContent = <EditFaq />;
+    const data = {
+      kb_id:22,
+      queries: ['w-lan','w lan', 'wireless'],
+      responses: ['Da emmphaj'],
+      type: 'FAQ',
+      enabled: true,
+    }
 
     return (
       <div className="App">
@@ -27,10 +34,14 @@ export default class App extends Component {
 
         <SearchBar />
         <button className="add-faq" onClick={ () => this.ee.emit('openModal', testContent) }>
-          + Add New FAQ
+        + Add New FAQ
         </button>
-        <FaqList key={9} articles={articles} pagesTotal={pagesTotal} articleTotal={articleTotal}/>
-        <PagingControl itemCount={ 3 } />
+        <FaqList
+          articles={ articles }
+          articleTotal={ articleTotal }
+          pagesTotal={ pagesTotal }
+        />
+        <PagingControl itemCount={ pagesTotal } />
       </div>
     )
   }
