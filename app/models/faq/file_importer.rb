@@ -5,23 +5,46 @@ class FAQ::FileImporter
     answer_sheet   = doc.sheet_for( 'A' )
 
     # Iterate over questions and import
-    question_sheet.each_row do |row|
-      FAQ::Question.create(
-        kbid:   row[0],
-        query:  row[5],
-        is_faq: row[7]
-      )
+    question_sheet.each_row(offset:1) do |row|
+      next if cell_val( row, 1 ).nil?
+      article = FAQ::Article.find_or_create_by!(kbid: cell_val( row, 1 ))
+
+      article.questions.create( text: cell_val( row, 6 ) )
     end
 
     # Iterate over answers and import
-    answer_sheet.each_row do |row|
-      FAQ::Answer.create(
-        kbid:            row[0],
-        is_default:      row[2],
-        text:            row[4],
-        links:          [row[8], row[9], row[10], row[11], row[12], row[13], row[14]].compact,
-        output_metadata: row[16]
+    answer_sheet.each_row(offset:1) do |row|
+      next if cell_val( row, 1 ).nil?
+      article = FAQ::Article.find_or_create_by!(kbid: cell_val( row, 1 ))
+      article.update(enabled: cell_val( row, 3 ))
+
+      next if cell_val( row, 5 ) == '<dialog>'
+
+      begin
+        metadata = cell_val( row, 17 ).nil? ? {} : JSON.parse( cell_val( row, 17 ) )
+      rescue JSON::ParserError
+        ap "JSON::ParserError: row # #{row[17].coordinate.row}"
+      end
+
+      article.answers.create(
+        text:     cell_val( row, 5  ),
+        links:   [cell_val( row, 9  ),
+                  cell_val( row, 10 ),
+                  cell_val( row, 11 ),
+                  cell_val( row, 12 ),
+                  cell_val( row, 13 ),
+                  cell_val( row, 14 ),
+                  cell_val( row, 15 )].compact,
+        metadata: metadata
       )
     end
+  end
+
+
+  private
+
+  def cell_val( row, int )
+    ele = row.find{|e| e.coordinate.column == int}
+    ele.nil? ? nil : ( ele.value.nil? ? nil : ele.value )
   end
 end

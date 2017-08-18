@@ -37,7 +37,7 @@ module FAQ
 
     def create_for query, hash
       response = JSON.parse( hash, symbolize_names:true )[ :ResponseValue ]
-      
+
       params = { query:    query,
                  kbid:     response.delete( :id ),
                  response: response }
