@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 // components
 import App from './App';
 import TextEditor from './components/TextEditor';
+import {fetchArticles} from './api/articles';
 import ee from './EventEmitter'
 
 export default class AppContainer extends Component {
@@ -13,6 +14,7 @@ export default class AppContainer extends Component {
 		this.state = {
 			heading: 'FAQ Index',
 			modalContent: null,
+			articles: [],
 		};
 
 		this.openModal = this.openModal.bind(this);
@@ -23,6 +25,18 @@ export default class AppContainer extends Component {
 		this.ee = ee;
 		this.ee.on('openModal', this.openModal);
 		this.ee.on('closeModal', this.closeModal);
+
+		fetchArticles()
+			.then(articles => {
+
+				console.log(articles.results);
+
+				return this.setState({
+					articles: articles.results,
+					pagesTotal: articles.pages,
+					articleTotal: articles.total,
+				})
+			});
 	}
 
 	openModal(content) {
@@ -41,8 +55,16 @@ export default class AppContainer extends Component {
 
 	render() {
 
+		let appProps = {
+			heading: this.state.heading,
+			articles: this.state.articles,
+			modalContent: this.state.modalContent,
+			pagesTotal: this.state.pagesTotal,
+			articleTotal: this.state.articleTotal,
+		}
+
 		return (
-			<App heading={this.state.heading} modalContent={this.state.modalContent} />
+			<App {...appProps}  />
 		)
 	}
 }

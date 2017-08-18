@@ -21,8 +21,7 @@ export default class Responses extends Component {
             <input type="checkbox" />
           </label>
           <h4>Recommened Wireless Lan Product</h4>
-          <textarea>
-            {text}
+          <textarea defaultValue={text}>
           </textarea>
           <div className="buttonWrapper">
             <button>Edit Response</button>

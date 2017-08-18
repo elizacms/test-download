@@ -21,7 +21,7 @@ export default class SearchBar extends Component {
 		return (
 			<div className="SearchBar">
 				<label>
-					<input type="search" />
+					<input type="search" placeholder={`Search ${this.state.value}`} />
 				</label>
 				<label>
 					<select value={this.state.value} onChange={this.handleChange}>
