@@ -9,7 +9,12 @@ class FAQ::Answer
 
   belongs_to :article
 
-  def response
-    attributes[ 'response' ].deep_symbolize_keys
+  def serialize
+    attributes.dup.tap do | attrs |
+      attrs.delete '_id'
+      attrs.delete 'created_at'
+      attrs.delete 'updated_at'
+      attrs.delete 'article_id'
+    end
   end
 end

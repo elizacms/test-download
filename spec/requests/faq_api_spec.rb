@@ -7,7 +7,8 @@ describe 'FAQ API' do
     let( :first_result ){{  kbid:       article.kbid       ,
                             enabled:    article.enabled    ,
                             questions:[ question.text     ],
-                            answers:  [ answer.attributes ]} }
+                            answers:  [ answer.serialize.symbolize_keys ]} }
+
 
     specify 'success' do
       get '/api/articles', { kbid:article.kbid }
