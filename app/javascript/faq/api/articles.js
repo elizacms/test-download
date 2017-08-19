@@ -1,16 +1,29 @@
+var apiUrl = '/api/articles';
 
 export function fetchArticles(page) {
-  let apiUrl = '/api/articles';
+  let urlWithQuery = apiUrl;
   if(page) {
-    apiUrl = `${apiUrl}?page=${page}`
+    urlWithQuery = `${apiUrl}?page=${page}`
   }
-	return fetch(apiUrl)
-		.then(response => response.json())
+  return fetch(urlWithQuery)
+    .then(response => response.json())
     .then(json => {
-      console.log(json);
       return json;
     })
     .catch((err) => {
-			console.log('error', err);
-		});
+      console.log('error', err);
+    });
+}
+
+
+export function fetchSingleArticle(id) {
+  let urlWithQuery = `${apiUrl}?kbid=${id}`
+  return fetch(urlWithQuery)
+    .then(response => response.json())
+    .then(json => {
+      return json;
+    })
+    .catch((err) => {
+      console.log('error', err);
+    });
 }

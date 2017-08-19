@@ -14,7 +14,11 @@ export default class SearchBar extends Component {
 
 	handleChange(event) {
 		console.log(event);
+		let value = event.target.value;
 		this.setState({value: event.target.value});
+		if(value.length > 2) {
+			this.ee.emit('searchArticle', value);
+		}
 	}
 
 	render() {

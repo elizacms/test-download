@@ -4,7 +4,7 @@ import ee from './EventEmitter'
 import Modal from './components/Modal';
 import SearchBar from './components/SearchBar';
 import PagingControl from './components/PagingControl';
-import FaqList from './components/FaqList';
+import FaqListContainer from './components/FaqListContainer';
 import EditFaq from './components/EditFaq';
 
 export default class App extends Component {
@@ -13,15 +13,17 @@ export default class App extends Component {
   }
 
   render() {
-    const {heading, articles, pagesTotal, modalContent, articleTotal} = this.props;
+
+    const {
+      heading,
+      articles,
+      currentPage,
+      pagesTotal,
+      modalContent,
+      articleTotal
+    } = this.props;
+
     const testContent = <EditFaq />;
-    const data = {
-      kb_id:22,
-      queries: ['w-lan','w lan', 'wireless'],
-      responses: ['Da emmphaj'],
-      type: 'FAQ',
-      enabled: true,
-    }
 
     return (
       <div className="App">
@@ -36,11 +38,7 @@ export default class App extends Component {
         <button className="add-faq" onClick={ () => this.ee.emit('openModal', testContent) }>
         + Add New FAQ
         </button>
-        <FaqList
-          articles={ articles }
-          articleTotal={ articleTotal }
-          pagesTotal={ pagesTotal }
-        />
+        <FaqListContainer />
         <PagingControl itemCount={ pagesTotal } />
       </div>
     )

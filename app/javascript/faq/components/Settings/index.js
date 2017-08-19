@@ -7,12 +7,12 @@ export default class Settings extends Component {
   }
 
 	render() {
-    let kbId = 3;
+    const { kbId } = this.props;
 
 		return (
       <div className="Settings">
-        <h3>Settingibs</h3>
-      <span>KB ID {kbId}</span>
+        <h3>Settings</h3>
+      <span>KB ID: { kbId }</span>
       <select id="type-select">
         <option value="faq">faq</option>
         <option value="dialog">dialog</option>
