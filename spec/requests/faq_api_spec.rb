@@ -1,15 +1,13 @@
 describe 'FAQ API' do
-  let!( :article  ){ create :article  }
-  let!( :question ){ create :question, article:article }
-  let!( :answer   ){ create :answer,   article:article }
+  let!( :article      ){ create :article                   }
+  let!( :question     ){ create :question, article:article }
+  let!( :answer       ){ create :answer,   article:article }
+  let(  :first_result ){{ kbid:       article.kbid         ,
+                          enabled:    article.enabled      ,
+                          questions:[ question.text       ],
+                          answers:  [ answer.serialize.symbolize_keys ]} }
 
   describe 'Get Articles by KBID' do
-    let( :first_result ){{  kbid:       article.kbid       ,
-                            enabled:    article.enabled    ,
-                            questions:[ question.text     ],
-                            answers:  [ answer.serialize.symbolize_keys ]} }
-
-
     specify 'success' do
       get '/api/articles', { kbid:article.kbid }
 
@@ -29,23 +27,17 @@ describe 'FAQ API' do
 
     specify '1st page gets 2 KBIDs' do
       get '/api/articles'
-
       expect( parsed_response[ :results ].count ).to eq 2
-      expect( parsed_response[ :results ][ 0 ][ :kbid ]).to eq article.kbid
+      expect( parsed_response[ :results ][ 0 ][ :kbid ] ).to eq article.kbid
     end
 
-    describe '2nd page gets 7 KBIDs' ,:skip do
-      let( :first_query    ){ 'Htc One M 9.' }
-      let( :first_response ){ 'Aktuell bietet T-Mobile keine Geräte dieser Marke an. Das kann sich natürlich jederzeit ändern, fragen Sie mich in Zukunft also gerne wieder danach.' }
-
+    describe '2nd page gets 7 KBIDs' do
       specify do
+        15.times { |index| create :article, kbid: index }
+
         get '/api/articles', { page:2 }
 
         expect( parsed_response[ :results ].count ).to eq 7
-        expect( parsed_response[ :results ][ 0 ][ :kbid     ]).to eq 452
-        expect( parsed_response[ :results ][ 0 ][ :articles ][ 0 ][ :query    ]).to eq first_query
-        expect( parsed_response[ :results ][ 0 ][ :articles ][ 0 ][ :response ]).to eq first_response
-        expect( parsed_response[ :results ][ 0 ][ :articles ].count ).to eq 1
       end
     end
 
@@ -74,32 +66,58 @@ describe 'FAQ API' do
     end
   end
 
-  describe 'Put Articles' ,:skip do
-    let( :params   ){{ queries:queries, responses:[ updated_response ]}}
-    let( :queries  ){[ 'wlan', 'wireless' ]}
-    let( :updated_response ){ FAQ::Article.first.response.tap{| r | r[ :Answers ].first[ :Answer ] = 'Updated answer' }}
+  describe 'PUT Articles' do
+    let( :answer2   ){ create :answer,   article:article, text: 'Hot Dogs.'  }
+    let( :question2 ){ create :question, article:article, text: 'Test test.' }
+    let( :params    ){{ kbid:        article.kbid,
+                        enabled:     article.enabled,
+                        questions: [ question.text, question2.text ],
+                        answers:   [ answer.serialize.symbolize_keys,
+                                     answer2.serialize.symbolize_keys ] }}
 
-    let( :expected ){{ kbid:article.kbid, queries:queries, response:[ updated_response ]}}
-
-    specify 'PUT' do
+    specify 'can add questions and answers' do
       put "/api/articles/#{ article.kbid }", params
 
       expect( last_response.status ).to eq 200
       expect( last_response.body   ).to eq '{}'
-    end
 
-    specify 'GET'  ,:skip do
-      put "/api/articles/#{ article.kbid }", params
-      expect( last_response.status ).to eq 200
+      expect( article.questions.count ).to eq 2
+      expect( article.answers.count   ).to eq 2
+      expect( article.enabled         ).to eq true
 
       get '/api/articles', { kbid:article.kbid }
 
-      expect( parsed_response[ :articles ].first[ :kbid   ]).to eq expected[ :kbid     ]
-      expect( parsed_response[ :articles ].first[ :query  ]).to eq expected[ :query  ]
-      expect( parsed_response[ :articles ].first[ :response ]).to eq expected[ :response ]
+      expect( last_response.status ).to eq 200
+      expect( parsed_response[:results][0][:answers  ].count ).to eq 2
+      expect( parsed_response[:results][0][:questions].count ).to eq 2
     end
 
-    context 'PUT when no such article return 404'
-    context 'PUT when kbid is blank return 422'
+    specify 'can remove questions and answers' do
+      put "/api/articles/#{ article.kbid }", params.merge!( questions:[] )
+
+      expect( last_response.status ).to eq 200
+      expect( last_response.body   ).to eq '{}'
+
+      expect( article.questions.count ).to eq 0
+      expect( article.answers.count   ).to eq 2
+      expect( article.enabled         ).to eq true
+    end
+
+    specify 'can update enabled attribute' do
+      put "/api/articles/#{ article.kbid }", params.merge!( enabled:false )
+
+      expect( last_response.status ).to eq 200
+      expect( last_response.body   ).to eq '{}'
+
+      expect( article.questions.count ).to eq 2
+      expect( article.answers.count   ).to eq 2
+      expect( article.reload.enabled  ).to eq false
+    end
+
+    specify 'PUT when no such article return 404' do
+      put "/api/articles/99999999", params.merge!( kbid: 99999999 )
+
+      expect( last_response.status ).to eq 404
+    end
   end
 end

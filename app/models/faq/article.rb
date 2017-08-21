@@ -11,5 +11,5 @@ class FAQ::Article
   validates_uniqueness_of :kbid
 
   has_many :questions, class_name: 'FAQ::Question'
-  has_many :answers, class_name: 'FAQ::Answer'
+  has_many :answers,   class_name: 'FAQ::Answer'
 end

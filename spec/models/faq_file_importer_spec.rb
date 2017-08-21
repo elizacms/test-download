@@ -1,4 +1,4 @@
-describe 'FAQ::FileImporter',:focus do
+describe 'FAQ::FileImporter' do
   let( :links   ){
     ["<a id= '1' href='https://www.t-mobile.at/internet-zuhause-myhomenet/' target='_top'>Zum HomeNet</a>"]
   }
