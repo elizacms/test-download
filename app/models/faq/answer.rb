@@ -7,7 +7,7 @@ class FAQ::Answer
   field :links,    type:Array, default:[]
   field :metadata, type:Hash,  default:{}
 
-  belongs_to :article
+  belongs_to :article, class_name: 'FAQ::Article'
 
   def serialize
     attributes.dup.tap do | attrs |

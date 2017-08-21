@@ -4,5 +4,5 @@ class FAQ::Question
 
   field :text, type:String
 
-  belongs_to :article
+  belongs_to :article, class_name: 'FAQ::Article'
 end
