@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import shortid from 'shortid';
 
-import './responses.sass';
+import './answers.sass';
 
-export default class Responses extends Component {
+export default class Answers extends Component {
   constructor(props) {
     super(props);
   }
@@ -13,23 +13,23 @@ export default class Responses extends Component {
     const { data } = this.props;
 
     return (
-      <div className="Responses">
-        <h3>Responses</h3>
-        <button>+ Add New Response</button>
+      <div className="Answers">
+        <h3>Answers</h3>
+        <button>+ Add New Answer</button>
       <hr />
       {
-        data.map(response => (
-          <div key={shortid.generate()} className="responses-wrapper">
+        data.map(answer => (
+          <div key={shortid.generate()} className="answers-wrapper">
             <label>
               <span>Valid</span>
               <input type="checkbox" />
             </label>
             <h4>Recommened Wireless Lan Product</h4>
-            <textarea defaultValue={response}>
+            <textarea defaultValue={answer.text}>
             </textarea>
             <div className="buttonWrapper">
-              <button>Edit Response</button>
-              <button>Delete Response</button>
+              <button>Edit Answer</button>
+              <button>Delete Answer</button>
             </div>
           </div>
         ))

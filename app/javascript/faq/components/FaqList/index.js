@@ -35,8 +35,9 @@ export default class FaqList extends Component {
           <thead>
             <tr>
               <th>KB ID</th>
-              <th>Query</th>
-              <th colSpan="2">Response</th>
+              <th>Questions</th>
+              <th>Answers</th>
+              <th colSpan="2">Enabled</th>
             </tr>
           </thead>
           <tbody>
@@ -46,16 +47,21 @@ export default class FaqList extends Component {
                 <td>{article.kbid}</td>
                 <td>
                 {
-                  article.articles.map(item => (
-                    <p key={shortid.generate()}>{item.query}</p>
+                  article.questions.map(item => (
+                    <p key={shortid.generate()}>{item}</p>
                   ))
                 }
                 </td>
                 <td>
                 {
-                  article.articles.map(item  => (
-                    <p key={shortid.generate()}>{item.response}</p>
+                  article.answers.map(item  => (
+                    <p key={shortid.generate()}>{item.text}</p>
                   ))
+                }
+                </td>
+                <td>
+                {
+                  article.enabled ? 'Yes' : 'No'
                 }
                 </td>
                 <td>

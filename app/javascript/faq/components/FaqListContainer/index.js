@@ -5,6 +5,7 @@ import { fetchArticles, fetchSingleArticle } from '../../api/articles';
 import ee from '../../EventEmitter';
 import FaqList from '../FaqList';
 import EditFaq from '../EditFaq';
+import PagingControl from '../PagingControl';
 
 export default class FaqListContainer extends Component {
 	constructor(props) {
@@ -12,14 +13,15 @@ export default class FaqListContainer extends Component {
 
 		this.state = {
 			currentPage: 1,
+      pagesTotal:0,
 			articles: [],
 		};
 
     this.ee = ee;
-    this.fetchArticlesAndSetThemInState = this.fetchArticlesAndSetThemInState.bind(this);
     this.changePageNumber= this.changePageNumber.bind(this);
     this.pageForward = this.pageForward.bind(this);
     this.pageBack = this.pageBack.bind(this);
+    this.fetchArticlesAndSetThemInState = this.fetchArticlesAndSetThemInState.bind(this);
     this.editArticle = this.editArticle.bind(this);
 	}
 
@@ -36,16 +38,8 @@ export default class FaqListContainer extends Component {
 		this.ee.off('pageBack');
 	}
 
-	fetchArticlesAndSetThemInState(page){
-		fetchArticles(page)
-			.then(articles => {
-				return this.setState({
-					articles: articles.results,
-					currentPage: page ? page : 1,
-					pagesTotal: articles.pages,
-					articleTotal: articles.total,
-				});
-			});
+	changePageNumber(page) {
+		this.fetchArticlesAndSetThemInState(page);
 	}
 
 	pageForward() {
@@ -55,24 +49,33 @@ export default class FaqListContainer extends Component {
 
 	pageBack() {
 		let page = (this.state.currentPage - 1) === 0
-										? this.state.pagesTotal
-										: this.state.currentPage - 1;
+      ? this.state.pagesTotal
+      : this.state.currentPage - 1;
+
 		this.fetchArticlesAndSetThemInState(page);
 	}
 
-	changePageNumber(page) {
-    console.log('changePageNumber', page);
-		this.fetchArticlesAndSetThemInState(page);
+	fetchArticlesAndSetThemInState(page){
+		fetchArticles(page)
+			.then(articles => {
+        console.log(articles);
+				return this.setState({
+					articles: articles.results,
+					currentPage: page ? page : 1,
+					pagesTotal: articles.pages,
+					articleTotal: articles.total,
+				});
+			});
 	}
+
   editArticle(article){
-    let responses = article.articles.map(item => item.response);
-    let queries = article.articles.map(item => item.query);
-    let editFaqComponent = <EditFaq
-    kbId={article.kbid}
-    queries={queries} responses={responses}
-      />
-    this.ee.emit('openModal', editFaqComponent)
+    let answers = article.answers;
+    let questions = article.questions;
+    let editFaqComponent = (
+      <EditFaq kbId={article.kbid} questions={questions} answers={answers} />
+    );
 
+    this.ee.emit('openModal', editFaqComponent)
   }
 
   render() {
@@ -84,9 +87,11 @@ export default class FaqListContainer extends Component {
       currentPage:this.state.currentPage,
     };
 
-
 		return (
+      <span>
       <FaqList {...faqListProps} />
+        <PagingControl itemCount={ this.state.pagesTotal } />
+      </span>
 		);
 	}
 }
