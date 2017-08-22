@@ -19,6 +19,9 @@ textarea#intent_description {
 #name.disabledInput {
   visibility: hidden;
 }
+#name.intent-name-input {
+  margin-bottom: 37px;
+}
 
 #files {
   display: none;
@@ -64,20 +67,11 @@ textarea#intent_description {
 
 .intent-edit-update {
   position: absolute;
-  top: 391px;
+  top: 363px;
 }
 
 .intent-edit-clear {
   position: absolute;
   left: 628px;
   bottom: 50px;
-}
-
-.intent-name {
-    font-family: "FlamaCondensed-Light", sans-serif;
-    font-size: 20px;
-    color: #A0A0A0;
-    font-weight: 700;
-    vertical-align: baseline;
-    padding-right: 10px
 }
