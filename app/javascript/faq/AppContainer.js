@@ -14,8 +14,6 @@ export default class AppContainer extends Component {
 		this.state = {
 			heading: 'FAQ Index',
 			modalContent: null,
-			currentPage: 1,
-			articles: [],
 		};
 
 		this.openModal = this.openModal.bind(this);
@@ -51,11 +49,7 @@ export default class AppContainer extends Component {
 
 		let appProps = {
 			heading: this.state.heading,
-			articles: this.state.articles,
 			modalContent: this.state.modalContent,
-			pagesTotal: this.state.pagesTotal,
-			currentPage: this.state.currentPage,
-			articleTotal: this.state.articleTotal,
 		}
 
 		return (

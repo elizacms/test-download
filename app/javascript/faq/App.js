@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import ee from './EventEmitter'
 import Modal from './components/Modal';
 import SearchBar from './components/SearchBar';
-import PagingControl from './components/PagingControl';
 import FaqListContainer from './components/FaqListContainer';
 import EditFaq from './components/EditFaq';
 
@@ -39,7 +38,6 @@ export default class App extends Component {
         + Add New FAQ
         </button>
         <FaqListContainer />
-        <PagingControl itemCount={ pagesTotal } />
       </div>
     )
   }

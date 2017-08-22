@@ -8,14 +8,14 @@ import EditFaq from '../EditFaq';
 import PagingControl from '../PagingControl';
 
 export default class FaqListContainer extends Component {
-	constructor(props) {
-		super(props);
+  constructor(props) {
+    super(props);
 
-		this.state = {
-			currentPage: 1,
-      pagesTotal:0,
-			articles: [],
-		};
+    this.state = {
+      currentPage: 1,
+      pagesTotal: 0,
+      articles: [],
+    };
 
     this.ee = ee;
     this.changePageNumber= this.changePageNumber.bind(this);
@@ -23,61 +23,79 @@ export default class FaqListContainer extends Component {
     this.pageBack = this.pageBack.bind(this);
     this.fetchArticlesAndSetThemInState = this.fetchArticlesAndSetThemInState.bind(this);
     this.editArticle = this.editArticle.bind(this);
-	}
-
-	componentDidMount() {
-		this.ee.on('changePageNumber', this.changePageNumber);
-		this.ee.on('pageForward', this.pageForward);
-		this.ee.on('pageBack', this.pageBack);
-		this.ee.on('editArticle', this.editArticle);
-		this.fetchArticlesAndSetThemInState();
+    this.searchArticle = this.searchArticle.bind(this);
   }
-	componentWillUnmount() {
-		this.ee.off('changePageNumber');
-		this.ee.off('pageForward');
-		this.ee.off('pageBack');
-	}
 
-	changePageNumber(page) {
-		this.fetchArticlesAndSetThemInState(page);
-	}
+  componentDidMount() {
+    this.ee.on('changePageNumber', this.changePageNumber);
+    this.ee.on('pageForward', this.pageForward);
+    this.ee.on('pageBack', this.pageBack);
+    this.ee.on('pageBack', this.pageBack);
+    this.ee.on('editArticle', this.editArticle);
+    this.ee.on('searchArticle', this.searchArticle);
+    this.fetchArticlesAndSetThemInState();
+  }
 
-	pageForward() {
-		let page = (this.state.currentPage + 1) % this.state.pagesTotal;
-		this.fetchArticlesAndSetThemInState(page);
-	}
+  componentWillUnmount() {
+    this.ee.off('changePageNumber');
+    this.ee.off('pageForward');
+    this.ee.off('pageBack');
+  }
 
-	pageBack() {
-		let page = (this.state.currentPage - 1) === 0
+  changePageNumber(page) {
+    this.fetchArticlesAndSetThemInState(page);
+  }
+
+  pageForward() {
+    let page = (this.state.currentPage + 1) % this.state.pagesTotal;
+    this.fetchArticlesAndSetThemInState(page);
+  }
+
+  pageBack() {
+    let page = (this.state.currentPage - 1) === 0
       ? this.state.pagesTotal
       : this.state.currentPage - 1;
 
-		this.fetchArticlesAndSetThemInState(page);
-	}
+    this.fetchArticlesAndSetThemInState(page);
+  }
 
-	fetchArticlesAndSetThemInState(page){
-		fetchArticles(page)
-			.then(articles => {
-        console.log(articles);
-				return this.setState({
-					articles: articles.results,
-					currentPage: page ? page : 1,
-					pagesTotal: articles.pages,
-					articleTotal: articles.total,
-				});
-			});
-	}
+  fetchArticlesAndSetThemInState(page){
+    fetchArticles(page)
+      .then(articles => {
+	console.log(articles);
+	return this.setState({
+	  articles: articles.results,
+	  currentPage: page ? page : 1,
+	  pagesTotal: articles.pages,
+	  articleTotal: articles.total,
+	});
+      });
+  }
 
   editArticle(article){
     let answers = article.answers;
     let questions = article.questions;
     let editFaqComponent = (
-      <EditFaq kbId={article.kbid} questions={questions} answers={answers} />
+      <EditFaq
+      kbId={article.kbid}
+      questions={article.questions}
+      answers={article.answers}
+      />
     );
 
     this.ee.emit('openModal', editFaqComponent)
   }
 
+  searchArticle(article){
+    console.log(article);
+    fetchSingleArticle(article)
+      .then(article => {
+	this.setState({
+	  articles: article.results,
+	})
+      })
+
+  }
   render() {
 
     let faqListProps = {
@@ -87,11 +105,11 @@ export default class FaqListContainer extends Component {
       currentPage:this.state.currentPage,
     };
 
-		return (
+    return (
       <span>
       <FaqList {...faqListProps} />
-        <PagingControl itemCount={ this.state.pagesTotal } />
+      <PagingControl itemCount={ this.state.pagesTotal } />
       </span>
-		);
-	}
+    );
+  }
 }

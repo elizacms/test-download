@@ -11,6 +11,7 @@ export default class Answers extends Component {
   render() {
     let text="test";
     const { data } = this.props;
+    if(!data) return null;
 
     return (
       <div className="Answers">
@@ -22,7 +23,7 @@ export default class Answers extends Component {
           <div key={shortid.generate()} className="answers-wrapper">
             <label>
               <span>Valid</span>
-              <input type="checkbox" />
+              <input type="checkbox" defaultChecked={answer.active}/>
             </label>
             <h4>Recommened Wireless Lan Product</h4>
             <textarea defaultValue={answer.text}>

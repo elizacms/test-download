@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ee from '../../EventEmitter';
+import shortid from 'shortid';
 
 import './search-bar.sass';
 
@@ -7,35 +8,58 @@ export default class SearchBar extends Component {
 	constructor(props) {
 		super(props);
 		this.options = ['kb_id', 'type', 'enabled' ];
-		this.state = {value: this.options[0]};
+		this.state = {searchByType: this.options[0], searchTerm: ''};
 		this.ee = ee;
 		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
 	handleChange(event) {
-		console.log(event);
-		let value = event.target.value;
-		this.setState({value: event.target.value});
-		if(value.length > 2) {
-			this.ee.emit('searchArticle', value);
+		let target = event.target;
+		let value = target.type === 'checkbox' ? target.checked : target.value;
+		let name = target.name;
+		this.setState({
+			[name]: value
+		});
+	}
+
+	handleSubmit(e){
+		console.log(e);
+		e.preventDefault();
+		if(this.state.searchTerm){
+		 this.ee.emit('searchArticle', this.state.searchTerm );
 		}
 	}
 
 	render() {
 		return (
 			<div className="SearchBar">
+			<form onSubmit={this.handleSubmit}>
 				<label>
-					<input type="search" placeholder={`Search ${this.state.value}`} />
+					<input
+						name="searchTerm"
+						type="search"
+						value={this.state.searchTerm}
+						onChange={this.handleChange}
+						placeholder={`Search ${this.state.searchByType}`}
+					/>
 				</label>
 				<label>
-					<select value={this.state.value} onChange={this.handleChange}>
+					<select
+						name="searchByType"
+						value={this.state.searchByType}
+						onChange={this.handleChange}
+					>
 					{
-						this.options.map((option, index) => (
-							<option key={index} value={option}>{option}</option>)
+						this.options.map(option => (
+							<option key={shortid.generate()} value={option}>
+								{option}
+							</option>)
 						)
 					}
 					</select>
 				</label>
+				</form>
 			</div>
 		);
 	}
