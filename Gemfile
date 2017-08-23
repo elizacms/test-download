@@ -22,6 +22,7 @@ gem 'diffy', '>= 3.2.0'
 gem 'sprockets', '3.7.1'
 gem 'sidekiq'
 gem 'roo', '~> 2.4.0'
+gem 'mongoid_search', '~> 0.3.2'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.1.0'
