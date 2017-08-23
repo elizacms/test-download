@@ -7,4 +7,6 @@ Questions
 3. Can you have different types within 1 KBID.
    No.
 4. What is Enabled?
-   Only enabled KBID's are exported to a file.
+   Only enabled KBID's are exported to CSV file.
+5. How to handle invalid JSON in XLS.
+   We will look at it together on Monday.

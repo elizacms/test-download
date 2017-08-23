@@ -6,8 +6,8 @@ module FAQ
       total = Article.count
       pages = total / PAGE_LIMIT + 1
 
-      body = { total:   total,
-               pages:   pages,
+      body = { total:   total    ,
+               pages:   pages    ,
                results: articles }
 
       render json:body.to_json
