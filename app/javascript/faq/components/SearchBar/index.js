@@ -16,18 +16,36 @@ export default class SearchBar extends Component {
 
 	handleChange(event) {
 		let target = event.target;
-		let value = target.type === 'checkbox' ? target.checked : target.value;
+		let type = target.type;
 		let name = target.name;
+		let value = null;
+
+		if(type === 'checkbox' ) {
+			value = target.checked
+		}
+
+		if (type === 'select-one') {
+			value = target.options[target.selectedIndex].value;
+		}
+
+		if (type === 'search') {
+			value = target.value;
+		}
+
 		this.setState({
 			[name]: value
-		});
+		}, console.log(this.state));
 	}
 
 	handleSubmit(e){
 		console.log(e);
 		e.preventDefault();
-		if(this.state.searchTerm){
-		 this.ee.emit('searchArticle', this.state.searchTerm );
+		if(this.state.searchTerm && this.state.searchByType === 'kb_id'){
+			this.ee.emit('searchArticle', this.state.searchTerm );
+			this.setState({
+				searchByType: this.options[0],
+				searchTerm: ''
+			});
 		}
 	}
 
@@ -35,13 +53,13 @@ export default class SearchBar extends Component {
 		return (
 			<div className="SearchBar">
 			<form onSubmit={this.handleSubmit}>
-				<label>
-					<input
-						name="searchTerm"
-						type="search"
-						value={this.state.searchTerm}
-						onChange={this.handleChange}
-						placeholder={`Search ${this.state.searchByType}`}
+			<label>
+			<input
+			name="searchTerm"
+			type="search"
+			value={this.state.searchTerm}
+			onChange={this.handleChange}
+			placeholder={`Search ${this.state.searchByType}`}
 					/>
 				</label>
 				<label>

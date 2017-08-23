@@ -12,6 +12,7 @@ export default class FaqListContainer extends Component {
     super(props);
 
     this.state = {
+      currentArticle: null,
       currentPage: 1,
       pagesTotal: 0,
       articles: [],
@@ -24,6 +25,7 @@ export default class FaqListContainer extends Component {
     this.fetchArticlesAndSetThemInState = this.fetchArticlesAndSetThemInState.bind(this);
     this.editArticle = this.editArticle.bind(this);
     this.searchArticle = this.searchArticle.bind(this);
+    this.addQuestion = this.addQuestion.bind(this);
   }
 
   componentDidMount() {
@@ -33,6 +35,7 @@ export default class FaqListContainer extends Component {
     this.ee.on('pageBack', this.pageBack);
     this.ee.on('editArticle', this.editArticle);
     this.ee.on('searchArticle', this.searchArticle);
+    this.ee.on('addQuestion', this.addQuestion);
     this.fetchArticlesAndSetThemInState();
   }
 
@@ -74,16 +77,31 @@ export default class FaqListContainer extends Component {
 
   editArticle(article){
     let answers = article.answers;
+    let editFaqComponent = null;
     let questions = article.questions;
-    let editFaqComponent = (
-      <EditFaq
-      kbId={article.kbid}
-      questions={article.questions}
-      answers={article.answers}
-      />
+    let that = this;
+    this.setState({currentArticle: article}, () => {
+
+      editFaqComponent = (
+	<EditFaq
+	key={shortid.generate()}
+	kbId={this.state.currentArticle.kbid}
+	questions={this.state.currentArticle.questions}
+	answers={that.state.currentArticle.answers}
+	/>
+      );
+
+      this.ee.emit('openModal', editFaqComponent)
+    }
     );
 
-    this.ee.emit('openModal', editFaqComponent)
+  }
+
+  addQuestion(question) {
+    console.log(this.state.currentArticle);
+    let currentArticle = Object.assign({},this.state.currentArticle);
+    currentArticle.questions.push(question);
+    this.setState({currentArticle});
   }
 
   searchArticle(article){
@@ -91,7 +109,9 @@ export default class FaqListContainer extends Component {
     fetchSingleArticle(article)
       .then(article => {
 	this.setState({
+	  currentPage: 1,
 	  articles: article.results,
+	  currentArticle: article.results
 	})
       })
 
@@ -107,8 +127,8 @@ export default class FaqListContainer extends Component {
 
     return (
       <span>
-      <FaqList {...faqListProps} />
-      <PagingControl itemCount={ this.state.pagesTotal } />
+	<FaqList {...faqListProps} />
+	<PagingControl itemCount={ this.state.pagesTotal } />
       </span>
     );
   }

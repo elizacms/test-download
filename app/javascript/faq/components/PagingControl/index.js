@@ -22,29 +22,28 @@ export default class PagingControl extends Component {
     return pages;
   }
 
-    handleNumberClick(e) {
-      console.log();
-      this.ee.emit('changePageNumber', e.target.textContent);
-    }
+  handleNumberClick(e) {
+    this.ee.emit('changePageNumber', parseInt(e.target.textContent));
+  }
 
-    handleForwardClick(e) {
-      this.ee.emit('pageForward');
-      console.log(e);
-    }
+  handleForwardClick(e) {
+    this.ee.emit('pageForward');
+    console.log(e);
+  }
 
-    handleBackClick(e) {
-      this.ee.emit('pageBack');
-      console.log(e);
-    }
+  handleBackClick(e) {
+    this.ee.emit('pageBack');
+    console.log(e);
+  }
 
   render() {
     const {itemCount} = this.props;
 
     return (
       <div className="PagingControl">
-        <button onClick={this.handleBackClick}>{'<'}</button>
-        {this.renderButtons(itemCount)}
-        <button onClick={this.handleForwardClick}>{'>'}</button>
+      <button onClick={this.handleBackClick}>{'<'}</button>
+      {this.renderButtons(itemCount)}
+      <button onClick={this.handleForwardClick}>{'>'}</button>
       </div>
     );
   }
