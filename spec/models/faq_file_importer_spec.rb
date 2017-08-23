@@ -9,15 +9,17 @@ describe 'FAQ::FileImporter' do
 
   describe '::run(file)' do
     it 'should succeed' do
-      expect( FAQ::Article.count ).to eq 0
+      expect( FAQ::Article.count  ).to eq 0
       expect( FAQ::Question.count ).to eq 0
       expect( FAQ::Answer.count   ).to eq 0
 
       FAQ::FileImporter.new.run( 'documents/qa_datadump.xlsx' )
 
-      expect( FAQ::Article.count ).to eq 1397
+      expect( FAQ::Article.count  ).to eq 1397
       expect( FAQ::Question.count ).to eq 6088
       expect( FAQ::Answer.count   ).to eq 1796
+
+      expect( FAQ::Article.where(enabled: true).count ).to eq 1397
 
       expect( FAQ::Question.first.text    ).to eq 'Homenetbox verbinden'
       expect( FAQ::Question.first.article ).to be_an_instance_of FAQ::Article

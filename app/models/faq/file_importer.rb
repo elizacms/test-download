@@ -18,6 +18,7 @@ class FAQ::FileImporter
       next if cell_val( row, 1 ).nil?
 
       article = FAQ::Article.find_or_create_by!(kbid: cell_val( row, 1 ))
+      article.update(enabled: true)
 
       # next if cell_val( row, 5 ) == '<dialog>'
 
