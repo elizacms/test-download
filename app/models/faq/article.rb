@@ -7,7 +7,7 @@ class FAQ::Article
   field :kbid,    type:Integer
   field :enabled, type:Mongoid::Boolean
 
-  before_validation :increment_kbid, on: :create
+  before_validation :set_kbid, on: :create
 
   validates_presence_of   :kbid
   validates_uniqueness_of :kbid
@@ -18,10 +18,9 @@ class FAQ::Article
 
   private
 
-  def increment_kbid
-    if kbid.blank? || FAQ::Article.pluck(:kbid).include?( kbid )
-      max_kbid = FAQ::Article.pluck(:kbid).max.nil? ? 0 : FAQ::Article.pluck(:kbid).max
-      self.kbid = max_kbid + 1
-    end
+  def set_kbid
+    return if kbid.present?
+
+    self.kbid = FAQ::Article.order( kbid:'ASC' ).last.kbid + 1
   end
 end

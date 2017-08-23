@@ -33,7 +33,7 @@ describe 'FAQ API' do
 
     describe '2nd page gets 7 KBIDs' do
       specify do
-        15.times { |index| create :article, kbid: index }
+        15.times { create :article, kbid:nil }
 
         get '/api/articles', { page:2 }
 
