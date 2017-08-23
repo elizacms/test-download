@@ -13,6 +13,20 @@ module FAQ
       render json:body.to_json
     end
 
+    def post_articles
+      if article_params[:kbid]
+        headers['Warning'] = 'Cannot POST for an existing article.'\
+                             ' Call PUT to "/api/articles/:kbid".'
+        render body:{}.to_json, status: 422
+        return
+      end
+
+      article = Article.create(enabled: article_params[:enabled])
+      save_associations article, article_params[:questions], article_params[:answers]
+
+      render body:{}.to_json, status: 201
+    end
+
     def put_articles
       article = Article.find_by(kbid: article_params[:kbid])
 
@@ -22,25 +36,25 @@ module FAQ
         return
       end
 
-      article.answers.delete_all
-      article.questions.delete_all
-
-      if article_params[:answers]
-        article_params[:answers].each do |a|
-          article.answers.create( text: a[:text],
-                                  metadata: a[:metadata],
-                                  links: a[:links],
-                                  active: a[:active] )
-        end
-      end
-
-      if article_params[:questions]
-        article_params[:questions].each {|q| article.questions.create(text: q) }
-      end
-
+      delete_associations article
+      save_associations article, article_params[:questions], article_params[:answers]
       article.update( enabled: article_params[ :enabled ] )
 
       render body:{}.to_json, status: 200
+    end
+
+    def delete_articles
+      article = Article.find_by(kbid: article_params[:kbid])
+
+      if article
+        delete_associations article
+        article.delete
+
+        render body:{}.to_json, status: 200
+      else
+        headers['Warning'] = 'No article found. You must send an existing kbid.'
+        render body:{}.to_json, status: 404
+      end
     end
 
 
@@ -74,6 +88,16 @@ module FAQ
          enabled:   article.enabled,
          answers:   article.answers.map( &:serialize ),
          questions: article.questions.pluck( :text ) }
+    end
+
+    def save_associations article, questions, answers
+      questions.to_a.each { |q| article.questions.create(text: q) }
+      answers.to_a.each { |a| article.answers.create( a ) }
+    end
+
+    def delete_associations article
+      article.answers.delete_all
+      article.questions.delete_all
     end
   end
 end

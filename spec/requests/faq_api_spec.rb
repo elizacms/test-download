@@ -7,7 +7,7 @@ describe 'FAQ API' do
                           questions:[ question.text       ],
                           answers:  [ answer.serialize.symbolize_keys ]} }
 
-  describe 'Get Articles by KBID' do
+  describe 'GET Articles by KBID' do
     specify 'success' do
       get '/api/articles', { kbid:article.kbid }
 
@@ -22,7 +22,7 @@ describe 'FAQ API' do
     end
   end
 
-  describe 'Get Articles without KBID' do
+  describe 'GET Articles without KBID' do
     let!( :article_2 ){ create :article, kbid:222 }
 
     specify '1st page gets 2 KBIDs' do
@@ -63,6 +63,26 @@ describe 'FAQ API' do
       get '/api/articles'
 
       expect( parsed_response[ :pages ]).to eq 1
+    end
+  end
+
+  describe 'POST Articles' do
+    it 'should succeed' do
+      post '/api/articles', first_result.merge!(kbid: nil)
+
+      expect( last_response.status    ).to eq 201
+      expect( FAQ::Article.count      ).to eq 2
+
+      expect( FAQ::Article.last.kbid  ).to eq 124
+      expect( FAQ::Article.first.kbid ).to eq 123
+    end
+
+    it 'failure' do
+      post '/api/articles', first_result
+
+      expect( last_response.status             ).to eq 422
+      expect( last_response.headers['Warning'] ).to eq 'Cannot POST for an existing article.'\
+                                                       ' Call PUT to "/api/articles/:kbid".'
     end
   end
 
@@ -118,6 +138,26 @@ describe 'FAQ API' do
       put "/api/articles/99999999", params.merge!( kbid: 99999999 )
 
       expect( last_response.status ).to eq 404
+    end
+  end
+
+  describe 'DELETE Articles' do
+    it 'should succeed' do
+      delete "/api/articles/#{ article.kbid }"
+
+      expect( last_response.status ).to eq 200
+      expect( FAQ::Article.count   ).to eq 0
+      expect( FAQ::Answer.count    ).to eq 0
+      expect( FAQ::Question.count  ).to eq 0
+    end
+
+    it 'failure' do
+      delete "/api/articles/99999"
+
+      expect( last_response.status ).to eq 404
+      expect( FAQ::Article.count   ).to eq 1
+      expect( FAQ::Answer.count    ).to eq 1
+      expect( FAQ::Question.count  ).to eq 1
     end
   end
 end

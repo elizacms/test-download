@@ -140,8 +140,14 @@ require 'sidekiq/web'
       get '/articles',
         to: 'api#get_articles'
 
-      put '/articles/:kbid/',
+      post '/articles',
+        to: 'api#post_articles'
+
+      put '/articles/:kbid',
         to: 'api#put_articles'
+
+      delete 'articles/:kbid',
+        to: 'api#delete_articles'
     end
   end
 
