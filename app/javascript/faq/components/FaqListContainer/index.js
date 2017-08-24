@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import shortid from 'shortid';
 
-import { fetchArticles, fetchSingleArticle } from '../../api/articles';
+import { fetchArticles, fetchSingleArticle, putArticle } from '../../api/articles';
 import ee from '../../EventEmitter';
 import FaqList from '../FaqList';
 import EditFaq from '../EditFaq';
@@ -13,6 +13,8 @@ export default class FaqListContainer extends Component {
 
     this.state = {
       currentArticle: null,
+      currentQuestions: [],
+      currentAnswers: [],
       currentPage: 1,
       pagesTotal: 0,
       articles: [],
@@ -65,7 +67,6 @@ export default class FaqListContainer extends Component {
   fetchArticlesAndSetThemInState(page){
     fetchArticles(page)
       .then(articles => {
-	console.log(articles);
 	return this.setState({
 	  articles: articles.results,
 	  currentPage: page ? page : 1,
@@ -77,17 +78,19 @@ export default class FaqListContainer extends Component {
 
   editArticle(article){
     let answers = article.answers;
-    let editFaqComponent = null;
     let questions = article.questions;
-    let that = this;
-    this.setState({currentArticle: article}, () => {
+    this.setState({
+      currentArticle: article,
+      currentAnswers: answers,
+      currentQuestions: questions,
+    }, () => {
 
-      editFaqComponent = (
+    let editFaqComponent = (
 	<EditFaq
 	key={shortid.generate()}
 	kbId={this.state.currentArticle.kbid}
-	questions={this.state.currentArticle.questions}
-	answers={that.state.currentArticle.answers}
+	questions={this.state.currentQuestions}
+	answers={this.state.currentAnswers}
 	/>
       );
 
@@ -98,14 +101,15 @@ export default class FaqListContainer extends Component {
   }
 
   addQuestion(question) {
-    console.log(this.state.currentArticle);
-    let currentArticle = Object.assign({},this.state.currentArticle);
+    let currentArticle = this.state.currentArticle;
     currentArticle.questions.push(question);
-    this.setState({currentArticle});
+    this.setState({
+      currentArticle,
+      currentQuestions: currentArticle.questions,
+    }, () => putArticle(this.state.currentArticle));
   }
 
   searchArticle(article){
-    console.log(article);
     fetchSingleArticle(article)
       .then(article => {
 	this.setState({

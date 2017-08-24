@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import shortid from 'shortid';
 
 import Settings from '../Settings';
 import Questions from '../Questions';

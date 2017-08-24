@@ -27,3 +27,18 @@ export function fetchSingleArticle(id) {
       console.log('error', err);
     });
 }
+export function putArticle(article) {
+  let urlWithPath = `${apiUrl}/${article.kbid}/`
+  return fetch(urlWithPath, {
+    method: 'PUT' ,
+    body: JSON.stringify(article)
+  })
+    .then(response => response.json())
+    .then(json => {
+      console.log(json);
+      return json;
+    })
+    .catch((err) => {
+      console.log('error', err);
+    });
+}

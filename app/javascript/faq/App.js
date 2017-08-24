@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import shortid from 'shortid';
 
 import ee from './EventEmitter'
 import Modal from './components/Modal';
@@ -15,14 +16,9 @@ export default class App extends Component {
 
     const {
       heading,
-      articles,
-      currentPage,
-      pagesTotal,
       modalContent,
-      articleTotal
     } = this.props;
 
-    const testContent = <EditFaq />;
 
     return (
       <div className="App">

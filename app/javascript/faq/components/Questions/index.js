@@ -14,7 +14,6 @@ export default class Questions extends Component {
   }
 
   handleChange(event) {
-    console.log(event.target.value);
     this.setState({
       value: event.target.value
     })
@@ -22,8 +21,8 @@ export default class Questions extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state.value);
     this.ee.emit('addQuestion', this.state.value);
+    this.setState({ value: '' });
   }
 
 	render() {
@@ -32,23 +31,21 @@ export default class Questions extends Component {
 		return (
       <div className="Questions">
         <h3>Questions</h3>
-      <form onSubmit={this.handleSubmit}>
-        <input
+        <form onSubmit={this.handleSubmit}>
+          <input
             type="search"
             value={this.state.value}
             placeholder="Question"
             onChange={this.handleChange}
-        />
-        <button>Add</button>
-        {
-          data.map(question => (
-           <p key={ shortid.generate() }>{ question }</p>)
-          )
-        }
-      </form>
-        <div>
+          />
+          <button>Add</button>
+          {
+            data.map(question => (
+             <p key={ shortid.generate() }>{ question }</p>)
+            )
+          }
+        </form>
           <button>Save Queries</button>
-        </div>
       </div>
 		)
 	}

@@ -9,7 +9,6 @@ export default class Answers extends Component {
   }
 
   render() {
-    let text="test";
     const { data } = this.props;
     if(!data) return null;
 
@@ -26,8 +25,7 @@ export default class Answers extends Component {
               <input type="checkbox" defaultChecked={answer.active}/>
             </label>
             <h4>Recommened Wireless Lan Product</h4>
-            <textarea defaultValue={answer.text}>
-            </textarea>
+            <textarea defaultValue={answer.text}></textarea>
             <div className="buttonWrapper">
               <button>Edit Answer</button>
               <button>Delete Answer</button>
