@@ -161,7 +161,7 @@ describe 'FAQ API' do
     end
   end
 
-  describe 'search',:focus do
+  describe 'search' do
     let!( :article2  ){ create :article, kbid: 125, enabled: true              }
     let!( :question2 ){ create :question, article:article2, text: 'Test test.' }
     let!( :answer2   ){ create :answer,   article:article2, text: 'Hot Dogs.'  }
@@ -172,6 +172,7 @@ describe 'FAQ API' do
 
     it 'KBID' do
       params = {search_type: 'kbid', input_text: '123'}
+
       get '/api/articles/search', params
 
       expect( last_response.status ).to eq 200

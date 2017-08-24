@@ -7,19 +7,23 @@ module FAQ
     def search
       case params[:search_type]
       when 'kbid'
-        results = Article.where(kbid: params[:input_text]).map { |a| format_one a }
+        results = Article.includes( :answers, :questions )
+                         .where(kbid: params[:input_text])
+                         .map { |a| format_one a }
       when 'query'
-        results = Question.full_text_search(params[:input_text])
-                        .offset( offset    )
-                        .limit( PAGE_LIMIT )
-                        .map{|a| format_one( a.article ) }
-                        .uniq
-      when 'response'
-        results = Answer.full_text_search(params[:input_text])
+        results = Question.includes( :article )
+                          .full_text_search(params[:input_text])
                           .offset( offset    )
                           .limit( PAGE_LIMIT )
-                          .map{|q| format_one( q.article ) }
+                          .map{|a| format_one( a.article ) }
                           .uniq
+      when 'response'
+        results = Answer.includes( :article )
+                        .full_text_search(params[:input_text])
+                        .offset( offset    )
+                        .limit( PAGE_LIMIT )
+                        .map{|q| format_one( q.article ) }
+                        .uniq
       end
 
       pages = results.count / PAGE_LIMIT + 1
