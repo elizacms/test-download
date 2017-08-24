@@ -30,5 +30,10 @@
 #ignore mongo folder
 data/
 
+
+
 #redis dump
 dump.rdb
+/public/packs
+/public/assets
+/node_modules

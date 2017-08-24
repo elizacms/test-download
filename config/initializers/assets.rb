@@ -9,4 +9,4 @@ Rails.application.config.assets.version = '1.0'
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
-Rails.application.config.assets.precompile = %w( dialogs/manifest.js fields/manifest.js test_queries/manifest.js intents/manifest.js dialog_upload/dialog_upload.js releases/releases_index.js application.js application.css favicon.png )
+Rails.application.config.assets.precompile = %w( react/manifest.js dialogs/manifest.js fields/manifest.js test_queries/manifest.js intents/manifest.js dialog_upload/dialog_upload.js releases/releases_index.js application.js application.css favicon.png )

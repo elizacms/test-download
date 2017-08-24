@@ -91,6 +91,9 @@ require 'sidekiq/web'
     to: 'users#invite_developer',
     as: :invite_dev
 
+  get '/faqs',
+    to: 'faqs#index'
+
   resources :skills do
     resources :intents
 
@@ -135,6 +138,23 @@ require 'sidekiq/web'
 
     get '/intents',
       to: 'api#get_intents'
+
+    scope module:'faq' do
+      get '/articles/search',
+        to: 'api#search'
+
+      get '/articles',
+        to: 'api#get_articles'
+
+      post '/articles',
+        to: 'api#post_articles'
+
+      put '/articles/:kbid',
+        to: 'api#put_articles'
+
+      delete 'articles/:kbid',
+        to: 'api#delete_articles'
+    end
   end
 
   post '/process_training_data_upload',
