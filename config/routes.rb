@@ -137,6 +137,9 @@ require 'sidekiq/web'
       to: 'api#get_intents'
 
     scope module:'faq' do
+      get '/articles/search',
+        to: 'api#search'
+
       get '/articles',
         to: 'api#get_articles'
 

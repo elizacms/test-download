@@ -2,6 +2,34 @@ module FAQ
   class APIController < ApplicationController
     PAGE_LIMIT = 10
 
+    skip_before_action :verify_authenticity_token
+
+    def search
+      case params[:search_type]
+      when 'kbid'
+        results = Article.where(kbid: params[:input_text]).map { |a| format_one a }
+      when 'query'
+        results = Question.full_text_search(params[:input_text])
+                        .offset( offset    )
+                        .limit( PAGE_LIMIT )
+                        .map{|a| format_one( a.article ) }
+                        .uniq
+      when 'response'
+        results = Answer.full_text_search(params[:input_text])
+                          .offset( offset    )
+                          .limit( PAGE_LIMIT )
+                          .map{|q| format_one( q.article ) }
+                          .uniq
+      end
+
+      pages = results.count / PAGE_LIMIT + 1
+      body = { total:   results.count,
+               pages:   pages,
+               results: results }
+
+      render json:body.to_json
+    end
+
     def get_articles
       total = Article.count
       pages = total / PAGE_LIMIT + 1
@@ -84,10 +112,10 @@ module FAQ
     end
 
     def format_one article
-       { kbid:      article.kbid,
-         enabled:   article.enabled,
-         answers:   article.answers.map( &:serialize ),
-         questions: article.questions.pluck( :text ) }
+      { kbid:      article.kbid,
+        enabled:   article.enabled,
+        answers:   article.answers.map( &:serialize ),
+        questions: article.questions.pluck( :text ) }
     end
 
     def save_associations article, questions, answers

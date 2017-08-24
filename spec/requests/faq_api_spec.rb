@@ -160,4 +160,40 @@ describe 'FAQ API' do
       expect( FAQ::Question.count  ).to eq 1
     end
   end
+
+  describe 'search',:focus do
+    let!( :article2  ){ create :article, kbid: 125, enabled: true              }
+    let!( :question2 ){ create :question, article:article2, text: 'Test test.' }
+    let!( :answer2   ){ create :answer,   article:article2, text: 'Hot Dogs.'  }
+    let(  :output    ){{ kbid:       125,
+                         enabled:    true,
+                         questions:[ question2.text ],
+                         answers:  [ answer2.serialize.symbolize_keys ]}}
+
+    it 'KBID' do
+      params = {search_type: 'kbid', input_text: '123'}
+      get '/api/articles/search', params
+
+      expect( last_response.status ).to eq 200
+      expect( parsed_response[:results][0][:kbid] ).to eq 123
+      expect( parsed_response[:results][0][:enabled] ).to eq true
+      expect( parsed_response[:results][0][:questions] ).to eq ['What is wrong with my phone?']
+    end
+
+    it 'Query' do
+      params = {search_type: 'query', input_text: 'test'}
+      get '/api/articles/search', params
+
+      expect( last_response.status ).to eq 200
+      expect( parsed_response[:results][0] ).to eq output
+    end
+
+    it 'Response' do
+      params = {search_type: 'response', input_text: 'Hot Dog'}
+      get '/api/articles/search', params
+
+      expect( last_response.status ).to eq 200
+      expect( parsed_response[:results][0] ).to eq output
+    end
+  end
 end
