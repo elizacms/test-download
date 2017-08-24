@@ -7,9 +7,10 @@ export default class Questions extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {value: ''};
+		this.state = {value: '', canSave: false};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAddClick = this.handleAddClick.bind(this);
     this.ee = ee;
   }
 
@@ -22,7 +23,11 @@ export default class Questions extends Component {
   handleSubmit(e) {
     e.preventDefault();
     this.ee.emit('addQuestion', this.state.value);
-    this.setState({ value: '' });
+    this.setState({ value: '', canSave: true });
+  }
+
+  handleAddClick() {
+    this.ee.emit('saveQuestions');
   }
 
 	render() {
@@ -39,13 +44,17 @@ export default class Questions extends Component {
             onChange={this.handleChange}
           />
           <button>Add</button>
+        </form>
           {
             data.map(question => (
              <p key={ shortid.generate() }>{ question }</p>)
             )
           }
-        </form>
-          <button>Save Queries</button>
+          {
+            this.state.canSave && (
+              <button onClick={this.handleAddClick}>Save Questions</button>
+            )
+          }
       </div>
 		)
 	}

@@ -29,13 +29,20 @@ export function fetchSingleArticle(id) {
 }
 export function putArticle(article) {
   let urlWithPath = `${apiUrl}/${article.kbid}/`
+  console.log(article);
   return fetch(urlWithPath, {
     method: 'PUT' ,
+    headers: {
+      'Content-type': 'application/json'
+    },
     body: JSON.stringify(article)
   })
-    .then(response => response.json())
+    .then(response => {
+      console.log('put response', response);
+      return response.json();
+    })
     .then(json => {
-      console.log(json);
+      console.log('put json', json);
       return json;
     })
     .catch((err) => {

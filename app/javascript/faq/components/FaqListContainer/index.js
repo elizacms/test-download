@@ -28,6 +28,10 @@ export default class FaqListContainer extends Component {
     this.editArticle = this.editArticle.bind(this);
     this.searchArticle = this.searchArticle.bind(this);
     this.addQuestion = this.addQuestion.bind(this);
+    this.setCurrentArticleEnabled = this.setCurrentArticleEnabled.bind(this);
+    this.saveQuestions  = this.saveQuestions.bind(this);
+    this.saveAnswers = this.saveAnswers.bind(this);
+    this.addAnswer = this.addAnswer.bind(this);
   }
 
   componentDidMount() {
@@ -38,6 +42,9 @@ export default class FaqListContainer extends Component {
     this.ee.on('editArticle', this.editArticle);
     this.ee.on('searchArticle', this.searchArticle);
     this.ee.on('addQuestion', this.addQuestion);
+    this.ee.on('saveQuestions', this.saveQuestions);
+    this.ee.on('setCurrentArticleEnabled', this.setCurrentArticleEnabled);
+    this.ee.on('addAnswer', this.addAnswer);
     this.fetchArticlesAndSetThemInState();
   }
 
@@ -45,6 +52,12 @@ export default class FaqListContainer extends Component {
     this.ee.off('changePageNumber');
     this.ee.off('pageForward');
     this.ee.off('pageBack');
+    this.ee.off('editArticle');
+    this.ee.off('searchArticle');
+    this.ee.off('addQuestion');
+    this.ee.off('saveQuestions');
+    this.ee.off('setCurrentArticleEnabled');
+    this.ee.off('addAnswer');
   }
 
   changePageNumber(page) {
@@ -85,7 +98,7 @@ export default class FaqListContainer extends Component {
       currentQuestions: questions,
     }, () => {
 
-    let editFaqComponent = (
+      let editFaqComponent = (
 	<EditFaq
 	key={shortid.generate()}
 	kbId={this.state.currentArticle.kbid}
@@ -106,7 +119,11 @@ export default class FaqListContainer extends Component {
     this.setState({
       currentArticle,
       currentQuestions: currentArticle.questions,
-    }, () => putArticle(this.state.currentArticle));
+    });
+  }
+
+  saveQuestions() {
+    putArticle(this.state.currentArticle)
   }
 
   searchArticle(article){
@@ -120,6 +137,35 @@ export default class FaqListContainer extends Component {
       })
 
   }
+
+  setCurrentArticleEnabled(isEnabled){
+    let currentArticle = this.state.currentArticle;
+    currentArticle.enabled = isEnabled;
+    this.setState({currentArticle });
+  }
+
+  saveAnswers() {
+    let currentAnswers = this.state.currentArticle.answers;
+  }
+
+  addAnswer(answerData) {
+
+    let currentArticle = this.state.currentArticle;
+
+    let answer = {
+      active: answerData.active,
+      links: [],
+      metadata: {},
+      text: answerData.text
+    }
+
+    currentArticle.answers.push(answer);
+
+    console.log(this.state.currentArticle.answers);
+
+    this.setState({currentArticle }, this.saveQuestions);
+  }
+
   render() {
 
     let faqListProps = {
@@ -130,9 +176,9 @@ export default class FaqListContainer extends Component {
     };
 
     return (
-      <span>
-	<FaqList {...faqListProps} />
-	<PagingControl itemCount={ this.state.pagesTotal } />
+      <span >
+      <FaqList {...faqListProps} />
+      <PagingControl itemCount={ this.state.pagesTotal } />
       </span>
     );
   }
