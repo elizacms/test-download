@@ -5,44 +5,38 @@ module FAQ
     skip_before_action :verify_authenticity_token
 
     def search
-      case params[:search_type]
+      results = case params[:search_type]
       when 'kbid'
-        results = Article.includes( :answers, :questions )
-                         .where(kbid: params[:input_text])
-                         .map { |a| format_one a }
+        Article.includes( :answers, :questions )
+               .where(kbid: params[:input_text])
+               .map { |a| format_one a }
       when 'query'
-        results = Question.includes( :article )
-                          .full_text_search(params[:input_text])
-                          .offset( offset    )
-                          .limit( PAGE_LIMIT )
-                          .map{|a| format_one( a.article ) }
-                          .uniq
+        Question.includes( :article )
+                .full_text_search(params[:input_text])
+                .offset( offset    )
+                .limit( PAGE_LIMIT )
+                .map{|a| format_one( a.article ) }
+                .uniq
       when 'response'
-        results = Answer.includes( :article )
-                        .full_text_search(params[:input_text])
-                        .offset( offset    )
-                        .limit( PAGE_LIMIT )
-                        .map{|q| format_one( q.article ) }
-                        .uniq
+        Answer.includes( :article )
+              .full_text_search(params[:input_text])
+              .offset( offset    )
+              .limit( PAGE_LIMIT )
+              .map{|q| format_one( q.article ) }
+              .uniq
       end
 
-      pages = results.count / PAGE_LIMIT + 1
-      body = { total:   results.count,
-               pages:   pages,
-               results: results }
-
-      render json:body.to_json
+      render json:results_for( results ).to_json
     end
 
     def get_articles
-      total = Article.count
-      pages = total / PAGE_LIMIT + 1
+      render json:results_for( articles ).to_json
+    end
 
-      body = { total:   total    ,
-               pages:   pages    ,
-               results: articles }
-
-      render json:body.to_json
+    def results_for articles
+      { total:   articles.count,
+        pages:   articles.count / PAGE_LIMIT + 1,
+        results: articles }
     end
 
     def post_articles
