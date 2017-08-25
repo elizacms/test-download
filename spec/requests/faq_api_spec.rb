@@ -165,10 +165,10 @@ describe 'FAQ API' do
     let!( :article2  ){ create :article, kbid: 125, enabled: true              }
     let!( :question2 ){ create :question, article:article2, text: 'Test test.' }
     let!( :answer2   ){ create :answer,   article:article2, text: 'Hot Dogs.'  }
-    let(  :output    ){{ kbid:       125,
-                         enabled:    true,
-                         questions:[ question2.text ],
-                         answers:  [ answer2.serialize.symbolize_keys ]}}
+    let(  :expected_results ){{ kbid:       125,
+                                enabled:    true,
+                                questions:[ question2.text ],
+                                answers:  [ answer2.serialize.symbolize_keys ]}}
 
     it 'KBID' do
       params = {search_type: 'kbid', input_text: '123'}
@@ -176,9 +176,7 @@ describe 'FAQ API' do
       get '/api/articles/search', params
 
       expect( last_response.status ).to eq 200
-      expect( parsed_response[:results][0][:kbid] ).to eq 123
-      expect( parsed_response[:results][0][:enabled] ).to eq true
-      expect( parsed_response[:results][0][:questions] ).to eq ['What is wrong with my phone?']
+      expect( parsed_response[:results][0] ).to eq first_result
     end
 
     it 'Query' do
@@ -186,7 +184,7 @@ describe 'FAQ API' do
       get '/api/articles/search', params
 
       expect( last_response.status ).to eq 200
-      expect( parsed_response[:results][0] ).to eq output
+      expect( parsed_response[:results][0] ).to eq expected_results
     end
 
     it 'Response' do
@@ -194,7 +192,7 @@ describe 'FAQ API' do
       get '/api/articles/search', params
 
       expect( last_response.status ).to eq 200
-      expect( parsed_response[:results][0] ).to eq output
+      expect( parsed_response[:results][0] ).to eq expected_results
     end
   end
 end
