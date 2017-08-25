@@ -7,5 +7,9 @@ class AppConfig
     def aneeda?
       ! eliza?
     end
+
+    def faq_enabled?
+      ENV['FAQ_ENABLED'] == 'true'
+    end
   end
 end

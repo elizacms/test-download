@@ -33,7 +33,9 @@
           <%= link_to 'Skills', skills_path %>
         <% end %>
 
-        <%= link_to 'FAQs', faqs_path %>
+        <% if AppConfig.faq_enabled? %>
+          <%= link_to 'FAQs', faqs_path %>
+        <% end %>
 
         <div id="regularLogout" class="dropdown pull-right">
           <a id="userMenu" class="navlink dropdown-toggle" href="javascript:void(0);" data-toggle="dropdown">
