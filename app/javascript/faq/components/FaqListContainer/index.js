@@ -30,7 +30,8 @@ export default class FaqListContainer extends Component {
     this.addQuestion = this.addQuestion.bind(this);
     this.setCurrentArticleEnabled = this.setCurrentArticleEnabled.bind(this);
     this.saveQuestions  = this.saveQuestions.bind(this);
-    this.saveAnswers = this.saveAnswers.bind(this);
+    this.saveArticle = this.saveArticle.bind(this);
+    this.editAnswers = this.editAnswers.bind(this);
     this.addAnswer = this.addAnswer.bind(this);
   }
 
@@ -44,6 +45,7 @@ export default class FaqListContainer extends Component {
     this.ee.on('addQuestion', this.addQuestion);
     this.ee.on('saveQuestions', this.saveQuestions);
     this.ee.on('setCurrentArticleEnabled', this.setCurrentArticleEnabled);
+    this.ee.on('editAnswers', this.editAnswers);
     this.ee.on('addAnswer', this.addAnswer);
     this.fetchArticlesAndSetThemInState();
   }
@@ -57,6 +59,7 @@ export default class FaqListContainer extends Component {
     this.ee.off('addQuestion');
     this.ee.off('saveQuestions');
     this.ee.off('setCurrentArticleEnabled');
+    this.ee.off('editAnswers');
     this.ee.off('addAnswer');
   }
 
@@ -123,6 +126,10 @@ export default class FaqListContainer extends Component {
   }
 
   saveQuestions() {
+    this.saveArticle();
+  }
+
+  saveArticle() {
     putArticle(this.state.currentArticle)
   }
 
@@ -144,8 +151,14 @@ export default class FaqListContainer extends Component {
     this.setState({currentArticle });
   }
 
-  saveAnswers() {
-    let currentAnswers = this.state.currentArticle.answers;
+  editAnswers(answerData) {
+    debugger;
+    console.log(answerData);
+    let currentArticle = this.state.currentArticle;
+    let currentAnswers = this.state.currentAnswers;
+    currentAnswers[answerData.index].text = answerData.text;
+    currentArticle.answers = currentAnswers;
+    this.setState({currentArticle}, this.saveArticle);
   }
 
   addAnswer(answerData) {
@@ -163,7 +176,7 @@ export default class FaqListContainer extends Component {
 
     console.log(this.state.currentArticle.answers);
 
-    this.setState({currentArticle }, this.saveQuestions);
+    this.setState({ currentArticle }, this.saveArticle);
   }
 
   render() {
