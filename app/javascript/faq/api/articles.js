@@ -49,3 +49,24 @@ export function putArticle(article) {
       console.log('error', err);
     });
 }
+
+export function deleteArticle(kbid) {
+  let urlWithPath = `${apiUrl}/${kbid}/`;
+
+  return fetch(urlWithPath, {
+    method: 'Delete' ,
+  })
+    .then(response => {
+      console.log('delete response', response);
+      debugger;
+      return response.json();
+    })
+    .then(json => {
+      console.log('delete json', json);
+      return json;
+    })
+    .catch((err) => {
+      console.log('error', err);
+    });
+
+}

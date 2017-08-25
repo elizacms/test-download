@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import shortid from 'shortid';
 
-import { fetchArticles, fetchSingleArticle, putArticle } from '../../api/articles';
+import { fetchArticles, deleteArticle, fetchSingleArticle, putArticle } from '../../api/articles';
 import ee from '../../EventEmitter';
 import FaqList from '../FaqList';
 import EditFaq from '../EditFaq';
@@ -33,6 +33,7 @@ export default class FaqListContainer extends Component {
     this.saveArticle = this.saveArticle.bind(this);
     this.editAnswers = this.editAnswers.bind(this);
     this.addAnswer = this.addAnswer.bind(this);
+    this.deleteArticle = this.deleteArticle.bind(this);
   }
 
   componentDidMount() {
@@ -47,6 +48,7 @@ export default class FaqListContainer extends Component {
     this.ee.on('setCurrentArticleEnabled', this.setCurrentArticleEnabled);
     this.ee.on('editAnswers', this.editAnswers);
     this.ee.on('addAnswer', this.addAnswer);
+    this.ee.on('deleteArticle',this.deleteArticle )
     this.fetchArticlesAndSetThemInState();
   }
 
@@ -177,6 +179,12 @@ export default class FaqListContainer extends Component {
     console.log(this.state.currentArticle.answers);
 
     this.setState({ currentArticle }, this.saveArticle);
+  }
+
+  deleteArticle(kbid) {
+    return deleteArticle(kbid)
+      .then((response) => this.fetchArticlesAndSetThemInState())
+
   }
 
   render() {

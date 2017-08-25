@@ -52,4 +52,14 @@ The tests can be run with
 or,
 `$ bundle exec guard`
 
+Development javascript setup
+Requires node version 6.4+ and yarn package manager
+
+brew install yarn
+brew install nodejs
+
+bin/webpack-dev-server in rails root otherwise run rake assets:precompile
+
+
+
 [![Code Climate](https://lima.codeclimate.com/repos/58c1e8b8d82e680271000012/badges/713d59757be9dc026ee8/gpa.svg)](https://lima.codeclimate.com/repos/58c1e8b8d82e680271000012/feed)

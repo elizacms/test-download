@@ -17,8 +17,11 @@ export default class FaqList extends Component {
     }
   }
 
-  handleDelete(e) {
+  handleDelete(kbid, e) {
     console.log(e);
+    return () => {
+      this.ee.emit('deleteArticle', kbid);
+    }
   }
 
   render() {
@@ -66,7 +69,7 @@ export default class FaqList extends Component {
                 </td>
                 <td>
                   <button onClick={this.handleEdit(article)}>Edit</button>
-                  <button onClick={this.handleDelete}>Delete</button>
+                  <button onClick={this.handleDelete(article.kbid, event)}>Delete</button>
                 </td>
               </tr>
             ))
