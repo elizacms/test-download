@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import ee from '../../EventEmitter';
+import './settings.sass';
 
 export default class Settings extends Component {
 	constructor(props) {
@@ -24,12 +25,16 @@ export default class Settings extends Component {
 		return (
       <div className="Settings">
         <h3>Settings</h3>
-      <span>KB ID: { kbId }</span>
-      <label>
-        <span>Enabled?</span>
-        <input type="checkbox" onChange={this.handleChange} checked={this.state.isEnabled} />
-      </label>
-      <button>Save</button>
+        <div className="flex-container well">
+          <span className="flex-left">KB ID: { kbId }</span>
+          <div className="flex-center">
+            <span>Enabled?&nbsp;&nbsp;</span>
+            <input type="checkbox" onChange={this.handleChange} checked={this.state.isEnabled} />
+          </div>
+          <div className="flex-right">
+            <button className="btn md black">Save</button>
+          </div>
+        </div>
       </div>
 		)
 	}

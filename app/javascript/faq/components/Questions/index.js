@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import shortid from 'shortid';
 
 import ee from '../../EventEmitter';
+import './questions.sass';
 
 export default class Questions extends Component {
 	constructor(props) {
@@ -36,25 +37,34 @@ export default class Questions extends Component {
 		return (
       <div className="Questions">
         <h3>Questions</h3>
-        <form onSubmit={this.handleSubmit}>
-          <input
-            type="search"
-            value={this.state.value}
-            placeholder="Question"
-            onChange={this.handleChange}
-          />
-          <button>Add</button>
-        </form>
-          {
-            data.map(question => (
-             <p key={ shortid.generate() }>{ question }</p>)
-            )
-          }
-          {
-            this.state.canSave && (
-              <button onClick={this.handleAddClick}>Save Questions</button>
-            )
-          }
+        <div className="well">
+          <form onSubmit={this.handleSubmit}>
+            <input
+              type="search"
+              value={this.state.value}
+              placeholder="Question"
+              onChange={this.handleChange}
+            />
+            <button className="add-btn btn md black">Add</button>
+          </form>
+            {
+              data.map(question => (
+               <p key={ shortid.generate() }>{ question }</p>)
+              )
+            }
+            {
+              this.state.canSave && (
+                <div className="save-btn">
+                  <button
+                    onClick={this.handleAddClick}
+                    className="btn md black flex-right"
+                  >
+                    Save Questions
+                  </button>
+                </div>
+              )
+            }
+        </div>
       </div>
 		)
 	}

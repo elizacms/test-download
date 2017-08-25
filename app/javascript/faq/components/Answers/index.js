@@ -75,47 +75,57 @@ export default class Answers extends Component {
     let id = shortid.generate();
 
     return (
-      <div key={id} className="answers-wrapper">
-      <label>
-      <span>Valid</span>
-      <input
-      type="checkbox"
-      defaultChecked={answer.active}
-      ref={
-        checkbox => {
-          this.checkboxes.set(id, checkbox);
+      <div key={id} className="well">
+        <div>
+          <input
+          type="checkbox"
+          defaultChecked={answer.active}
+          ref={
+            checkbox => {
+              this.checkboxes.set(id, checkbox);
+            }
+          }
+          />
+          &nbsp;&nbsp;
+          <span>Valid</span>
+        </div>
+        <textarea
+        defaultValue={answer.text}
+        ref={
+          textArea => {
+            this.textAreas.set(id, textArea);
+          }
         }
-      }
-      />
-      </label>
-      <textarea
-      defaultValue={answer.text}
-      ref={
-        textArea => {
-          this.textAreas.set(id, textArea);
-        }
-      }
-      />
-      <div className="buttonWrapper">
-      <button onClick={this.handleEditClick(id,index, event)}>Save Answer</button>
-      <button>Delete Answer</button>
-      </div>
+        />
+        <div className="flex-container">
+          <button className="flex-left btn md black" onClick={this.handleEditClick(id,index, event)}>
+            Save Answer
+          </button>
+          <button className="flex-right btn md black">
+            Delete Answer
+          </button>
+        </div>
       </div>
     );
   }
 
   renderNewAnswer() {
     return(
-      <div key={shortid.generate()} className="answers-wrapper">
-      <label>
-      <span>Valid</span>
-      <input type="checkbox" onChange={this.handleCheckboxChange} checked={this.state.newAnswerActive}/>
-      </label>
-      <textarea ref={textArea => this.editableTextArea = textArea} />
-      <div className="buttonWrapper">
-      <button onClick={this.handleSaveNewClick}>Save Answer</button>
-      <button>Delete Answer</button>
-      </div>
+      <div key={shortid.generate()} className="well">
+        <div>
+          <input type="checkbox" onChange={this.handleCheckboxChange} checked={this.state.newAnswerActive}/>
+          &nbsp;&nbsp;
+          <span>Valid</span>
+        </div>
+        <textarea ref={textArea => this.editableTextArea = textArea} />
+        <div className="flex-container">
+          <button className="flex-left btn md black" onClick={this.handleSaveNewClick}>
+            Save Answer
+          </button>
+          <button className="flex-right btn md black">
+            Delete Answer
+          </button>
+        </div>
       </div>
     )
   }
@@ -126,23 +136,25 @@ export default class Answers extends Component {
 
     return (
       <div className="Answers">
-      <h3>Answers</h3>
-      <button onClick={this.handleAddClick}>+ Add New Answer</button>
-      <hr />
-
-      {
-        this.state.addingNewAnswer && (
-          this.renderNewAnswer()
-        )
-      }
-
-      {
-        data.length === 0  && !this.state.addingNewAnswer
-          ? (<p>You don't have any answers</p>)
-          : data.map((answer, index) => this.renderAnswer(answer,index))
-      }
+        <div className="flex-container">
+          <h3 className="flex-left">Answers</h3>
+          <button
+            onClick={this.handleAddClick}
+            className="btn md grey flex-right"
+          >+ Add New Answer
+          </button>
+        </div>
+        {
+          this.state.addingNewAnswer && (
+            this.renderNewAnswer()
+          )
+        }
+        {
+          data.length === 0  && !this.state.addingNewAnswer
+            ? (<p>You don't have any answers</p>)
+            : data.map((answer, index) => this.renderAnswer(answer,index))
+        }
       </div>
     )
   }
 }
-

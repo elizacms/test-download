@@ -18,9 +18,12 @@ export default class EditFaq extends Component {
 		return (
       <div className="EditFaq">
         <h2>Edit Faq</h2>
-        <Settings kbId={kbId} />
+        <br />
+        <Settings  kbId={kbId}      />
+        <br /><br />
         <Questions data={questions} />
-        <Answers data={answers} />
+        <br /><br />
+        <Answers   data={answers}   />
       </div>
 		)
 	}
