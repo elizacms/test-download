@@ -33,7 +33,6 @@ export default class FaqList extends Component {
 		return (
 
       <div className="FaqList">
-        <p>{pText}</p>
         <table>
           <thead>
             <tr>

@@ -106,6 +106,7 @@ export default class FaqListContainer extends Component {
       let editFaqComponent = (
 	<EditFaq
 	key={shortid.generate()}
+	isEnabled={this.state.currentArticle.enabled}
 	kbId={this.state.currentArticle.kbid}
 	questions={this.state.currentQuestions}
 	answers={this.state.currentAnswers}

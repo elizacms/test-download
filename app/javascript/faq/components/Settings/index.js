@@ -8,7 +8,7 @@ export default class Settings extends Component {
 		super(props);
     this.ee = ee;
     this.state = {
-      isEnabled: false
+      isEnabled: props.isEnabled
     }
     this.handleChange = this.handleChange.bind(this);
   }
@@ -20,7 +20,7 @@ export default class Settings extends Component {
   }
 
 	render() {
-    const { kbId } = this.props;
+    const { kbId, isEnabled } = this.props;
 
 		return (
       <div className="Settings">

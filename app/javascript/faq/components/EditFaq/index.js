@@ -13,13 +13,13 @@ export default class EditFaq extends Component {
   }
 
 	render() {
-    const {kbId, questions, answers} = this.props;
+    const {kbId, isEnabled, questions, answers} = this.props;
 
 		return (
       <div className="EditFaq">
         <h2>Edit Faq</h2>
         <br />
-        <Settings  kbId={kbId}      />
+        <Settings kbId={kbId} isEnabled={isEnabled} />
         <br /><br />
         <Questions data={questions} />
         <br /><br />
