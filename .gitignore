@@ -30,7 +30,11 @@
 #ignore mongo folder
 data/
 
+# Yarn
+yarn.lock
 
+# Webpacker
+app/javascript/faq/node_modules/*
 
 #redis dump
 dump.rdb
