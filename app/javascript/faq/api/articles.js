@@ -50,11 +50,33 @@ export function putArticle(article) {
     });
 }
 
+
+export function searchArticleByType(searchType, searchTerm) {
+  let urlWithQuery = `${apiUrl}/search?search_type=${searchType}&input_text=${searchTerm}`
+  return fetch(urlWithQuery, {
+    method: 'GET' ,
+    headers: {
+      'Content-type': 'application/json'
+    }
+  })
+    .then(response => {
+      console.log('searchArticleByType response', response);
+      return response.json();
+    })
+    .then(json => {
+      console.log('searchArticleByType json', json);
+      return json;
+    })
+    .catch((err) => {
+      console.log('error', err);
+    });
+}
+
 export function deleteArticle(kbid) {
   let urlWithPath = `${apiUrl}/${kbid}/`;
 
   return fetch(urlWithPath, {
-    method: 'Delete' ,
+    method: 'Delete',
   })
     .then(response => {
       console.log('delete response', response);
@@ -68,5 +90,6 @@ export function deleteArticle(kbid) {
     .catch((err) => {
       console.log('error', err);
     });
-
 }
+
+

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import shortid from 'shortid';
 
-import { fetchArticles, deleteArticle, fetchSingleArticle, putArticle } from '../../api/articles';
+import { searchArticleByType, fetchArticles, deleteArticle, fetchSingleArticle, putArticle } from '../../api/articles';
 import ee from '../../EventEmitter';
 import FaqList from '../FaqList';
 import EditFaq from '../EditFaq';
@@ -136,13 +136,13 @@ export default class FaqListContainer extends Component {
     putArticle(this.state.currentArticle)
   }
 
-  searchArticle(article){
-    fetchSingleArticle(article)
+  searchArticle(searchData){
+    searchArticleByType(searchData.searchType, searchData.inputText)
       .then(article => {
-	this.setState({
-	  currentPage: 1,
-	  articles: article.results,
-	  currentArticle: article.results
+	return this.setState({
+	  articles: article.results ,
+	  pagesTotal: article.pages,
+	  articleTotal: article.total,
 	})
       })
 
