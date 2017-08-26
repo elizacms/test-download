@@ -11,13 +11,18 @@ export default class Settings extends Component {
       isEnabled: props.isEnabled
     }
     this.handleChange = this.handleChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleChange(e) {
-    console.log(e.nativeEvent);
     this.ee.emit('setCurrentArticleEnabled', !this.state.isEnabled);
     this.setState({isEnabled: !this.state.isEnabled});
   }
+
+  handleClick(e){
+
+  }
+
 
 	render() {
     const { kbId, isEnabled } = this.props;

@@ -151,11 +151,10 @@ export default class FaqListContainer extends Component {
   setCurrentArticleEnabled(isEnabled){
     let currentArticle = this.state.currentArticle;
     currentArticle.enabled = isEnabled;
-    this.setState({currentArticle });
+    this.setState({ currentArticle }, this.saveArticle);
   }
 
   editAnswers(answerData) {
-    debugger;
     console.log(answerData);
     let currentArticle = this.state.currentArticle;
     let currentAnswers = this.state.currentAnswers;
