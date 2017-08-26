@@ -90,6 +90,10 @@ module GitControls
     repo.head.name.sub(/^refs\/heads\//, '')
   end
 
+  def git_tag commit_sha, message
+    `cd #{ENV['NLU_CMS_PERSISTENCE_PATH']} ; git tag -a #{commit_sha.first(7)} -m "#{message}" ; cd -`
+  end
+
 
   private
 

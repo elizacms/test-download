@@ -298,4 +298,14 @@ describe 'User git controls' do
       expect( repo.status( 'intent_responses_csv/get_ride.csv'       ) ).to eq []
     end
   end
+
+  describe '#git_tag commit_sha, message' ,:focus do
+    let(:message){Rugged::TagCollection.new(repo)[repo.last_commit.oid.first(7)].annotation.message}
+
+    specify do
+      user.git_tag repo.last_commit.oid, 'my descriptive message'
+
+      expect( message ).to eq "my descriptive message\n"
+    end
+  end
 end
