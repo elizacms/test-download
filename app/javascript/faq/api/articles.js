@@ -15,7 +15,6 @@ export function fetchArticles(page) {
     });
 }
 
-
 export function fetchSingleArticle(id) {
   let urlWithQuery = `${apiUrl}?kbid=${id}`
   return fetch(urlWithQuery)
@@ -27,6 +26,7 @@ export function fetchSingleArticle(id) {
       console.log('error', err);
     });
 }
+
 export function putArticle(article) {
   let urlWithPath = `${apiUrl}/${article.kbid}/`
   console.log(article);
@@ -50,6 +50,28 @@ export function putArticle(article) {
     });
 }
 
+export function postArticle(article) {
+  let urlWithPath = `${apiUrl}/`
+
+  return fetch(urlWithPath, {
+    method: 'POST' ,
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify(article)
+  })
+    .then(response => {
+      console.log('post response', response);
+      return response.json();
+    })
+    .then(json => {
+      console.log('post json', json);
+      return json.article;
+    })
+    .catch((err) => {
+      console.log('error', err);
+    });
+}
 
 export function searchArticleByType(searchType, searchTerm) {
   let urlWithQuery = `${apiUrl}/search?search_type=${searchType}&input_text=${searchTerm}`
@@ -91,5 +113,4 @@ export function deleteArticle(kbid) {
       console.log('error', err);
     });
 }
-
 

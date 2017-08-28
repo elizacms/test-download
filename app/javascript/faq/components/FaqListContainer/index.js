@@ -5,6 +5,7 @@ import { searchArticleByType, fetchArticles, deleteArticle, fetchSingleArticle, 
 import ee from '../../EventEmitter';
 import FaqList from '../FaqList';
 import EditFaq from '../EditFaq';
+import AddFaq from '../AddFaq';
 import PagingControl from '../PagingControl';
 
 export default class FaqListContainer extends Component {
@@ -13,27 +14,20 @@ export default class FaqListContainer extends Component {
 
     this.state = {
       currentArticle: null,
-      currentQuestions: [],
-      currentAnswers: [],
       currentPage: 1,
       pagesTotal: 0,
       articles: [],
     };
 
     this.ee = ee;
+    this.fetchArticlesAndSetThemInState = this.fetchArticlesAndSetThemInState.bind(this);
     this.changePageNumber= this.changePageNumber.bind(this);
     this.pageForward = this.pageForward.bind(this);
     this.pageBack = this.pageBack.bind(this);
-    this.fetchArticlesAndSetThemInState = this.fetchArticlesAndSetThemInState.bind(this);
     this.editArticle = this.editArticle.bind(this);
-    this.searchArticle = this.searchArticle.bind(this);
-    this.addQuestion = this.addQuestion.bind(this);
-    this.setCurrentArticleEnabled = this.setCurrentArticleEnabled.bind(this);
-    this.saveQuestions  = this.saveQuestions.bind(this);
-    this.saveArticle = this.saveArticle.bind(this);
-    this.editAnswers = this.editAnswers.bind(this);
-    this.addAnswer = this.addAnswer.bind(this);
     this.deleteArticle = this.deleteArticle.bind(this);
+    this.addArticle = this.addArticle.bind(this);
+    this.searchArticle = this.searchArticle.bind(this);
   }
 
   componentDidMount() {
@@ -42,13 +36,9 @@ export default class FaqListContainer extends Component {
     this.ee.on('pageBack', this.pageBack);
     this.ee.on('pageBack', this.pageBack);
     this.ee.on('editArticle', this.editArticle);
-    this.ee.on('searchArticle', this.searchArticle);
-    this.ee.on('addQuestion', this.addQuestion);
-    this.ee.on('saveQuestions', this.saveQuestions);
-    this.ee.on('setCurrentArticleEnabled', this.setCurrentArticleEnabled);
-    this.ee.on('editAnswers', this.editAnswers);
-    this.ee.on('addAnswer', this.addAnswer);
     this.ee.on('deleteArticle',this.deleteArticle )
+    this.ee.on('addArticle',this.addArticle )
+    this.ee.on('searchArticle', this.searchArticle);
     this.fetchArticlesAndSetThemInState();
   }
 
@@ -57,12 +47,9 @@ export default class FaqListContainer extends Component {
     this.ee.off('pageForward');
     this.ee.off('pageBack');
     this.ee.off('editArticle');
+    this.ee.off('deleteArticle');
+    this.ee.off('addArticle');
     this.ee.off('searchArticle');
-    this.ee.off('addQuestion');
-    this.ee.off('saveQuestions');
-    this.ee.off('setCurrentArticleEnabled');
-    this.ee.off('editAnswers');
-    this.ee.off('addAnswer');
   }
 
   changePageNumber(page) {
@@ -95,21 +82,14 @@ export default class FaqListContainer extends Component {
   }
 
   editArticle(article){
-    let answers = article.answers;
-    let questions = article.questions;
     this.setState({
       currentArticle: article,
-      currentAnswers: answers,
-      currentQuestions: questions,
     }, () => {
 
       let editFaqComponent = (
 	<EditFaq
-	key={shortid.generate()}
-	isEnabled={this.state.currentArticle.enabled}
-	kbId={this.state.currentArticle.kbid}
-	questions={this.state.currentQuestions}
-	answers={this.state.currentAnswers}
+	  key={shortid.generate()}
+	  currentArticle={this.state.currentArticle}
 	/>
       );
 
@@ -117,23 +97,6 @@ export default class FaqListContainer extends Component {
     }
     );
 
-  }
-
-  addQuestion(question) {
-    let currentArticle = this.state.currentArticle;
-    currentArticle.questions.push(question);
-    this.setState({
-      currentArticle,
-      currentQuestions: currentArticle.questions,
-    });
-  }
-
-  saveQuestions() {
-    this.saveArticle();
-  }
-
-  saveArticle() {
-    putArticle(this.state.currentArticle)
   }
 
   searchArticle(searchData){
@@ -148,43 +111,21 @@ export default class FaqListContainer extends Component {
 
   }
 
-  setCurrentArticleEnabled(isEnabled){
-    let currentArticle = this.state.currentArticle;
-    currentArticle.enabled = isEnabled;
-    this.setState({ currentArticle }, this.saveArticle);
-  }
-
-  editAnswers(answerData) {
-    console.log(answerData);
-    let currentArticle = this.state.currentArticle;
-    let currentAnswers = this.state.currentAnswers;
-    currentAnswers[answerData.index].text = answerData.text;
-    currentArticle.answers = currentAnswers;
-    this.setState({currentArticle}, this.saveArticle);
-  }
-
-  addAnswer(answerData) {
-
-    let currentArticle = this.state.currentArticle;
-
-    let answer = {
-      active: answerData.active,
-      links: [],
-      metadata: {},
-      text: answerData.text
-    }
-
-    currentArticle.answers.push(answer);
-
-    console.log(this.state.currentArticle.answers);
-
-    this.setState({ currentArticle }, this.saveArticle);
-  }
 
   deleteArticle(kbid) {
     return deleteArticle(kbid)
       .then((response) => this.fetchArticlesAndSetThemInState())
 
+  }
+
+  addArticle() {
+      let addFaqComponent = (
+	<EditFaq
+	  key={shortid.generate()}
+	/>
+      );
+
+      this.ee.emit('openModal', addFaqComponent);
   }
 
   render() {

@@ -40,20 +40,17 @@ export default class Questions extends Component {
         <div className="well">
           <form onSubmit={this.handleSubmit}>
             <input
-              type="search"
+              type="text"
               value={this.state.value}
               placeholder="Question"
               onChange={this.handleChange}
             />
             <button className="add-btn btn md black">Add</button>
-          </form>
             {
               data.map(question => (
                <p key={ shortid.generate() }>{ question }</p>)
               )
             }
-            {
-              this.state.canSave && (
                 <div className="save-btn">
                   <button
                     onClick={this.handleAddClick}
@@ -62,8 +59,7 @@ export default class Questions extends Component {
                     Save Questions
                   </button>
                 </div>
-              )
-            }
+          </form>
         </div>
       </div>
 		)

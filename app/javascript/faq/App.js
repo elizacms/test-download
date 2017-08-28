@@ -30,6 +30,9 @@ export default class App extends Component {
         <h2>{heading}</h2>
 
         <SearchBar />
+        <button className="add-faq" onClick={ () => this.ee.emit('addArticle') }>
+        + Add New FAQ
+        </button>
         <FaqListContainer />
       </div>
     )
