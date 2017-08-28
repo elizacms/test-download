@@ -50,7 +50,7 @@ module FAQ
       article = Article.create(enabled: article_params[:enabled])
       save_associations article, article_params[:questions], article_params[:answers]
 
-      render body:{}.to_json, status: 201
+      render body:{ article: format_one( article ) }.to_json, status: 201
     end
 
     def put_articles

@@ -72,9 +72,13 @@ describe 'FAQ API' do
 
       expect( last_response.status    ).to eq 201
       expect( FAQ::Article.count      ).to eq 2
-
       expect( FAQ::Article.last.kbid  ).to eq 124
       expect( FAQ::Article.first.kbid ).to eq 123
+
+      expect( parsed_response[:article][:kbid]      ).to eq 124
+      expect( parsed_response[:article][:enabled]   ).to eq true
+      expect( parsed_response[:article][:questions] ).to eq [ question.text ]
+      expect( parsed_response[:article][:answers]   ).to eq [ answer.serialize.symbolize_keys ]
     end
 
     it 'failure' do
