@@ -14,7 +14,7 @@ export default class Modal extends Component {
 	render() {
 		const modalContentStyle = {
 			background: 'white',
-			margin: '13% auto',
+			margin: '3.14% auto',
       maxWidth: '95%',
 			padding: '25px',
 		}

@@ -47,31 +47,33 @@ export default class Questions extends Component {
       <div className="Questions">
         <h3>Questions</h3>
         <div className="well">
-          <form onSubmit={this.handleSubmit}>
-            <input
-              type="text"
-              value={this.state.value}
-              placeholder="Question"
-              onChange={this.handleChange}
-            />
-            <button className="add-btn btn md black">Add</button>
-          </form>
+          <div className="form-wrapper">
+            <form onSubmit={this.handleSubmit}>
+              <input
+                type="text"
+                value={this.state.value}
+                placeholder="Question"
+                onChange={this.handleChange}
+              />
+              <button className="add-btn btn md black">Add</button>
+            </form>
+          </div>
             {
               data.map((question, idx) => (
-                <div>
-                 <button onClick={this.handleDeleteClick(event, idx)} className="delete-btn">X</button>
-                  <span key={ shortid.generate() }>{ question }</span>
+                <div key={ shortid.generate() }>
+                 <button onClick={this.handleDeleteClick(event, idx)} className="delete-btn"><span>x</span></button>
+                  <span>{ question }</span>
                 </div>
               ))
             }
-                <div className="save-btn">
-                  <button
-                    onClick={this.handleAddClick}
-                    className="btn md black flex-right"
-                  >
-                    Save Questions
-                  </button>
-                </div>
+            <div className="save-btn">
+              <button
+                onClick={this.handleAddClick}
+                className="btn md black flex-right"
+              >
+                Save Questions
+              </button>
+            </div>
         </div>
       </div>
 		)

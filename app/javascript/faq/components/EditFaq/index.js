@@ -21,6 +21,7 @@ export default class EditFaq extends Component {
     this.ee = ee;
     this.addQuestion = this.addQuestion.bind(this);
     this.setCurrentArticleEnabled = this.setCurrentArticleEnabled.bind(this);
+    this.setAnswerActive = this.setAnswerActive.bind(this);
     this.saveQuestions  = this.saveQuestions.bind(this);
     this.saveArticle = this.saveArticle.bind(this);
     this.editAnswers = this.editAnswers.bind(this);
@@ -29,8 +30,10 @@ export default class EditFaq extends Component {
     this.deleteAnswer = this.deleteAnswer.bind(this);
   }
   componentDidMount() {
+
     this.ee.on('addQuestion', this.addQuestion);
     this.ee.on('setCurrentArticleEnabled', this.setCurrentArticleEnabled);
+    this.ee.on('setAnswerActive', this.setAnswerActive);
     this.ee.on('saveQuestions', this.saveQuestions);
     this.ee.on('editAnswers', this.editAnswers);
     this.ee.on('addAnswer', this.addAnswer);
@@ -59,7 +62,17 @@ export default class EditFaq extends Component {
     currentArticle.enabled = isEnabled;
     this.setState({ currentArticle }, this.saveArticle);
   }
+  setAnswerActive(indexToChange) {
+    let currentArticle = this.state.currentArticle;
+    currentArticle.answers.forEach((answer, index) => {
+      if(indexToChange === index) {
+        answer.active = true;
+      } else {
+        answer.active = false;
+      }
+    })
 
+  }
   saveQuestions() {
     this.saveArticle();
   }
@@ -99,8 +112,6 @@ export default class EditFaq extends Component {
 
     currentArticle.answers.push(answer);
 
-    console.log(this.state.currentArticle.answers);
-
     this.setState({ currentArticle }, this.saveArticle);
   }
 
@@ -115,6 +126,7 @@ export default class EditFaq extends Component {
     currentArticle.answers.splice(indexToDelete, 1);
     this.setState({ currentArticle }, this.saveArticle);
   }
+
 	render() {
     const {currentArticle} =  this.state;
 		return (

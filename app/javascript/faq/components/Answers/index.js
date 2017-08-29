@@ -13,11 +13,13 @@ export default class Answers extends Component {
       value: '',
       canSave: false,
       newAnswerActive: false,
+      active: false,
       addingNewAnswer: false
     };
     this.ee = ee;
     this.handleChange = this.handleChange.bind(this);
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+    this.handleRadioChange = this.handleRadioChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleEditClick = this.handleEditClick.bind(this);
     this.handleAddClick = this.handleAddClick.bind(this);
@@ -35,6 +37,13 @@ export default class Answers extends Component {
 
   handleCheckboxChange(e) {
     this.setState({ newAnswerActive: e.target.checked});
+  }
+
+  handleRadioChange(e, index) {
+    return () => {
+      this.setState({ active: e.target.checked});
+      this.ee.emit('setAnswerActive', index)
+    }
   }
 
   handleSubmit(e) {
@@ -85,24 +94,25 @@ export default class Answers extends Component {
       <div key={id} className="well">
         <div>
           <input
-          type="checkbox"
-          defaultChecked={answer.active}
-          ref={
-            checkbox => {
-              this.checkboxes.set(id, checkbox);
-            }
-          }
+            name="active"
+            type="radio"
+            onChange={this.handleRadioChange(event, index)}
+            defaultChecked={answer.active}
+            value={answer.active || this.state.active}
+            ref={
+              checkbox => {
+                this.checkboxes.set(id, checkbox);
+            }}
           />
           &nbsp;&nbsp;
           <span>Valid</span>
         </div>
         <textarea
-        defaultValue={answer.text}
-        ref={
-          textArea => {
-            this.textAreas.set(id, textArea);
-          }
-        }
+          defaultValue={answer.text}
+          ref={
+            textArea => {
+              this.textAreas.set(id, textArea);
+          }}
         />
         <div className="flex-container">
           <button className="flex-left btn md black" onClick={this.handleEditClick(id,index, event)}>

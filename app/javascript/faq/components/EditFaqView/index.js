@@ -17,7 +17,7 @@ export default class EditFaqView extends Component {
 
 		return (
       <div className="EditFaq">
-      <h2>{kbId ? 'Edit ' : 'Add New'}FAQ</h2>
+      <h2>{kbId ? 'Edit ' : 'Add New '}FAQ</h2>
         <br />
         <Settings kbId={kbId} isEnabled={isEnabled} />
         <br /><br />
