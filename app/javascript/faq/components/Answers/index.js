@@ -21,6 +21,7 @@ export default class Answers extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleEditClick = this.handleEditClick.bind(this);
     this.handleAddClick = this.handleAddClick.bind(this);
+    this.handleDeleteClick = this.handleDeleteClick.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
     this.handleSaveNewClick = this.handleSaveNewClick.bind(this);
     this.renderAnswer = this.renderAnswer.bind(this);
@@ -71,6 +72,12 @@ export default class Answers extends Component {
     this.setState({ addingNewAnswer: false});
   }
 
+  handleDeleteClick(e, index){
+    return () => {
+      this.ee.emit('deleteAnswer', index);
+    }
+  }
+
   renderAnswer(answer, index) {
     let id = shortid.generate();
 
@@ -101,7 +108,7 @@ export default class Answers extends Component {
           <button className="flex-left btn md black" onClick={this.handleEditClick(id,index, event)}>
             Save Answer
           </button>
-          <button className="flex-right btn md black">
+          <button onClick={this.handleDeleteClick(event, index)} className="flex-right btn md black">
             Delete Answer
           </button>
         </div>

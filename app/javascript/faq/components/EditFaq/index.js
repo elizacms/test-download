@@ -25,6 +25,8 @@ export default class EditFaq extends Component {
     this.saveArticle = this.saveArticle.bind(this);
     this.editAnswers = this.editAnswers.bind(this);
     this.addAnswer = this.addAnswer.bind(this);
+    this.deleteQuestion = this.deleteQuestion.bind(this);
+    this.deleteAnswer = this.deleteAnswer.bind(this);
   }
   componentDidMount() {
     this.ee.on('addQuestion', this.addQuestion);
@@ -32,6 +34,8 @@ export default class EditFaq extends Component {
     this.ee.on('saveQuestions', this.saveQuestions);
     this.ee.on('editAnswers', this.editAnswers);
     this.ee.on('addAnswer', this.addAnswer);
+    this.ee.on('deleteQuestion', this.deleteQuestion);
+    this.ee.on('deleteAnswer', this.deleteAnswer);
   }
 
   componentWillUnmount() {
@@ -40,6 +44,8 @@ export default class EditFaq extends Component {
     this.ee.off('setCurrentArticleEnabled');
     this.ee.off('editAnswers');
     this.ee.off('addAnswer');
+    this.ee.off('deleteQuestion');
+    this.ee.off('deleteAnswer');
   }
 
   addQuestion(question) {
@@ -98,6 +104,17 @@ export default class EditFaq extends Component {
     this.setState({ currentArticle }, this.saveArticle);
   }
 
+  deleteQuestion(indexToDelete) {
+    let currentArticle = this.state.currentArticle;
+    currentArticle.questions.splice(indexToDelete, 1);
+    this.setState({ currentArticle }, this.saveArticle);
+  }
+
+  deleteAnswer(indexToDelete) {
+    let currentArticle = this.state.currentArticle;
+    currentArticle.answers.splice(indexToDelete, 1);
+    this.setState({ currentArticle }, this.saveArticle);
+  }
 	render() {
     const {currentArticle} =  this.state;
 		return (

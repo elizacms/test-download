@@ -12,6 +12,7 @@ export default class Questions extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleAddClick = this.handleAddClick.bind(this);
+    this.handleDeleteClick = this.handleDeleteClick.bind(this);
     this.ee = ee;
   }
 
@@ -27,8 +28,16 @@ export default class Questions extends Component {
     this.setState({ value: '', canSave: true });
   }
 
-  handleAddClick() {
+  handleAddClick(e) {
+    e.preventDefault();
     this.ee.emit('saveQuestions');
+  }
+
+  handleDeleteClick(e, idx) {
+    e.preventDefault();
+    return () => {
+      this.ee.emit('deleteQuestion', idx);
+    }
   }
 
 	render() {
@@ -46,10 +55,14 @@ export default class Questions extends Component {
               onChange={this.handleChange}
             />
             <button className="add-btn btn md black">Add</button>
+          </form>
             {
-              data.map(question => (
-               <p key={ shortid.generate() }>{ question }</p>)
-              )
+              data.map((question, idx) => (
+                <div>
+                 <button onClick={this.handleDeleteClick(event, idx)} className="delete-btn">X</button>
+                  <span key={ shortid.generate() }>{ question }</span>
+                </div>
+              ))
             }
                 <div className="save-btn">
                   <button
@@ -59,7 +72,6 @@ export default class Questions extends Component {
                     Save Questions
                   </button>
                 </div>
-          </form>
         </div>
       </div>
 		)
