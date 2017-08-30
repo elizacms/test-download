@@ -299,13 +299,13 @@ describe 'User git controls' do
     end
   end
 
-  describe '#git_tag commit_sha, message' ,:focus do
-    let(:message){Rugged::TagCollection.new(repo)[repo.last_commit.oid.first(7)].annotation.message}
+  describe '#git_tag name, target' do
+    let( :tag_sha ){ Rugged::TagCollection.new(repo)['v1.0'].target.oid }
 
     specify do
-      user.git_tag repo.last_commit.oid, 'my descriptive message'
+      user.git_tag( 'v1.0', repo.last_commit.oid )
 
-      expect( message ).to eq "my descriptive message\n"
+      expect( tag_sha ).to eq repo.last_commit.oid
     end
   end
 end

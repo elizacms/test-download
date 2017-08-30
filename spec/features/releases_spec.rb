@@ -99,12 +99,14 @@ describe 'Release Feature Specs' do
     click_button 'Submit for training'
 
     page.all('#allReleasesTable tr')[1].click
+    fill_in :git_tag, with: 'v1.0'
     click_button 'Accept'
 
     page.all('#allReleasesTable tr')[1].click
 
     expect( page ).to_not have_content 'Accept'
     expect( page ).to_not have_content 'Reject'
+    expect( page ).to have_content 'v1.0'
   end
 
   specify 'accepting a release candidate unlocks the intent' ,:js do

@@ -60,8 +60,9 @@ class ReleasesController < ApplicationController
     @release.field_data_types.each { |fdt| fdt.unlock }
 
     if params[:commit] == 'Accept'
-      @release.update(state: 'approved')
+      @release.update(state: 'approved', git_tag: params[:git_tag])
       current_user.git_rebase(@release.branch_name)
+      current_user.git_tag( params[:git_tag], @release.commit_sha )
 
       redirect_to releases_path, notice: 'Release has been accepted and merged.'
     else

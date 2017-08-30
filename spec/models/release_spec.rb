@@ -63,4 +63,19 @@ describe Release do
       expect( release.intents.first ).to_not eq @billing_intent
     end
   end
+
+  describe '#update, can update state and git_tag' do
+    specify do
+      dialog.update(priority: 777)
+      release = Release.create( user: user,
+                                files: ["intent_responses_csv/#{intent.name}.csv",
+                                        "eliza_de/actions/#{intent.name.downcase}.action"],
+                                message: '2nd Commit')
+
+      release.update( state: 'active', git_tag: 'v1.0' )
+      expect( Release.count ).to eq 1
+      expect( Release.first.state   ).to eq 'active'
+      expect( Release.first.git_tag ).to eq 'v1.0'
+    end
+  end
 end

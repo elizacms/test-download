@@ -6,14 +6,14 @@
 <table class='table table-hover' id='allReleasesTable'>
   <thead class='thead-default'>
     <th>Message</th>
+    <th>Git Tag</th>
     <th>State</th>
   </thead>
   <tbody>
     <% @releases.each do |release| %>
       <tr data-href="<%= release.state == 'unreviewed' ? review_release_path( release ) : accept_or_reject_path( release ) %>" >
-        <td>
-          <%= @repo.lookup(release.commit_sha).message %>
-        </td>
+        <td><%= @repo.lookup(release.commit_sha).message %></td>
+        <td><%= release.git_tag %></td>
         <td><%= release.state %></td>
       </tr>
     <% end %>

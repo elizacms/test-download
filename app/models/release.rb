@@ -7,6 +7,7 @@ class Release
 
   field :branch_name,  type:String
   field :commit_sha,   type:String
+  field :git_tag,      type:String
   field :build_number, type:Integer
   field :build_url,    type:String
   field :state,        type:String, default:STATES.first
