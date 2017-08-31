@@ -62,6 +62,7 @@ export default class EditFaq extends Component {
     currentArticle.enabled = isEnabled;
     this.setState({ currentArticle }, this.saveArticle);
   }
+
   setAnswerActive(indexToChange) {
     let currentArticle = this.state.currentArticle;
     currentArticle.answers.forEach((answer, index) => {
@@ -91,9 +92,7 @@ export default class EditFaq extends Component {
   }
 
   editAnswers(answerData) {
-    console.log(answerData);
     let currentArticle = this.state.currentArticle;
-    let currentAnswers = this.state.currentArticle.answers;
     currentArticle.answers[answerData.index].text = answerData.text;
 
     this.setState({currentArticle}, this.saveArticle);

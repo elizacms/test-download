@@ -102,7 +102,6 @@ export function deleteArticle(kbid) {
   })
     .then(response => {
       console.log('delete response', response);
-      debugger;
       return response.json();
     })
     .then(json => {
