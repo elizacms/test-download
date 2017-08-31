@@ -302,10 +302,16 @@ describe 'User git controls' do
   describe '#git_tag name, target' do
     let( :tag_sha ){ Rugged::TagCollection.new(repo)['v1.0'].target.oid }
 
-    specify do
+    specify 'it should tag' do
       user.git_tag( 'v1.0', repo.last_commit.oid )
 
       expect( tag_sha ).to eq repo.last_commit.oid
+    end
+
+    specify 'it handles blank' do
+      user.git_tag( '', repo.last_commit.oid )
+
+      expect( Rugged::TagCollection.new(repo).count ).to eq 0
     end
   end
 end

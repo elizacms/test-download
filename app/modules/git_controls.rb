@@ -91,6 +91,7 @@ module GitControls
   end
 
   def git_tag name, target
+    return unless name.present?
     Rugged::TagCollection.new(repo).create(name, target)
   end
 
