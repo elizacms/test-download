@@ -8,7 +8,7 @@ export default class TextEditor extends Component {
 
     this.state = { editorState: props.editorState };
     this.focus = () => this.editor.focus();
-    this.onChange = throttle(this.onChange, 100).bind(this);
+    this.onChange = throttle(this.onChange, 200).bind(this);
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
     this.onTab = this.onTab.bind(this);
     this.toggleBlockType = this.toggleBlockType.bind(this);
@@ -179,7 +179,6 @@ var INLINE_STYLES = [
   {label: 'Bold', style: 'BOLD'},
   {label: 'Italic', style: 'ITALIC'},
   {label: 'Underline', style: 'UNDERLINE'},
-  {label: 'Monospace', style: 'CODE'},
 ];
 
 const InlineStyleControls = (props) => {
