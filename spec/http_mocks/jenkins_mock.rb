@@ -2,7 +2,7 @@ def stub_jenkins_for release
   queue_location = "#{ ENV[ 'NLU_TRAINER_URL' ]}/queue/item/24743"
   headers = { 'Accept'=>'*/*',
               'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-              'Authorization'=>'Basic bWlsYW5pajphNGRhYjQ4MDlhMzVkZmQyZjNiZjliMmMwZmJlNDc0ZDU4NWY3MWE1',
+              'Authorization'=>'Basic Og==',
               'User-Agent'=>'Ruby' }
 
   # Create build
@@ -40,7 +40,7 @@ end
 def stub_jenkins_error_for release
   headers = { 'Accept'=>'*/*',
               'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-              'Authorization'=>'Basic bWlsYW5pajphNGRhYjQ4MDlhMzVkZmQyZjNiZjliMmMwZmJlNDc0ZDU4NWY3MWE1',
+              'Authorization'=>'Basic Og==',
               'User-Agent'=>'Ruby' }
 
   WebMock.stub_request(:post, "#{ ENV[ 'NLU_TRAINER_URL' ]}/buildWithParameters" )
