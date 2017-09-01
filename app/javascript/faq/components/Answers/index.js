@@ -56,19 +56,26 @@ export default class Answers extends Component {
 
 
   handleChange(e) {
+    if(!e) return ;
+    e.persist();
     console.log(e.target.value);
     this.setState({ value: e.target.value});
   }
 
   handleCheckboxChange(e) {
+    if(!e) return ;
+    e.persist();
     this.setState({ newAnswerActive: e.target.checked});
   }
 
-  handleRadioChange(e, index) {
+  handleRadioChange(id, index, e) {
+
     return () => {
-      this.setState({ active: e.target.checked});
-      this.ee.emit('setAnswerActive', index)
+
+      this.ee.emit('setAnswerActive', index);
+      this.setState({ active: this.radios.get(id).checked});
     }
+
   }
 
   handleSubmit(e) {
@@ -130,8 +137,8 @@ export default class Answers extends Component {
         <div>
           <input
             name="active"
-            type="radio"
-            onChange={this.handleRadioChange(event, index)}
+            type="checkbox"
+            onChange={this.handleRadioChange(id, index)}
             defaultChecked={answer.active}
             value={answer.active || this.state.active}
             ref={

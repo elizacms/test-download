@@ -72,9 +72,11 @@ export default class EditFaq extends Component {
       } else {
         answer.active = false;
       }
-    })
+    });
 
+    this.setState({ currentArticle }, this.saveArticle);
   }
+
   saveQuestions() {
     this.saveArticle();
   }
