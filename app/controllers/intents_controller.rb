@@ -94,6 +94,7 @@ class IntentsController < ApplicationController
     intent = Intent.find( params[:id] )
     message = "You cleared the #{intent.name} intent of changes. It can be edited by other users."
     current_user.clear_changes_for intent
+    intent.files.all?{|f| !File.exist?( f )}
 
     if AppConfig.eliza?
       redirect_to skill_intents_path(skill_id: Skill.first), notice: message

@@ -5,6 +5,7 @@ describe User do
   let!( :skill2      ){ create :skill, name: 'OtherSkill', web_hook: 'bite.me'    }
   let!( :intent      ){ create :intent, skill: skill                              }
   let!( :intent2     ){ create :intent, skill: skill, name: 'some other intent'   }
+  let!( :fdt         ){ create :field_data_type, name: 'yes_or_no'                }
   let!( :file_lock   ){ create :file_lock, intent: intent, user_id: user.id.to_s  }
   let!( :field       ){ build  :field                                             }
   let!( :dialog      ){ build  :dialog, intent: intent                            }
@@ -130,5 +131,18 @@ describe User do
                                             "intent_responses_csv/#{intent.name}.csv"])
     user.clear_changes_for intent
     expect( user.changed_files ).to eq([])
+  end
+
+  specify '#clear_changes_for field_data_type' do
+    fdt.lock( user.id )
+    File.write( entity_data_file_for( fdt ), "testing" )
+
+    expect( user.list_locked_files ).to eq(["eliza_de/actions/#{intent.name.downcase}.action",
+                                            "intent_responses_csv/#{intent.name}.csv",
+                                            "raw_knowledge/entity_data/yes_or_no.csv"])
+
+    user.clear_changes_for fdt
+    expect( user.list_locked_files ).to eq(["eliza_de/actions/#{intent.name.downcase}.action",
+                                            "intent_responses_csv/#{intent.name}.csv"])
   end
 end
