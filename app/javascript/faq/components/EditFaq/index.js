@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import shortid from 'shortid';
+import toMarkdown from 'to-markdown';
 
 import { postArticle, searchArticleByType, fetchArticles, deleteArticle, fetchSingleArticle, putArticle } from '../../api/articles';
 import EditFaqView from '../EditFaqView/';
@@ -93,7 +94,9 @@ export default class EditFaq extends Component {
 
   editAnswers(answerData) {
     let currentArticle = this.state.currentArticle;
-    currentArticle.answers[answerData.index].text = answerData.text;
+    let text =  toMarkdown(answerData.text);
+    console.log("are these different?", answerData.text, "or",  text);
+    currentArticle.answers[answerData.index].text = text;
 
     this.setState({currentArticle}, this.saveArticle);
   }
