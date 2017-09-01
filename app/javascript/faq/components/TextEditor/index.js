@@ -7,7 +7,7 @@ export default class TextEditor extends Component {
     super(props);
 
     this.state = { editorState: props.editorState };
-    this.focus = () => this.editor.focus();
+    this.focus = this.focus.bind(this);
     this.onChange = throttle(this.onChange, 200).bind(this);
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
     this.onTab = this.onTab.bind(this);
@@ -24,6 +24,9 @@ export default class TextEditor extends Component {
     })
   }
 
+  focus() {
+    this.editor.focus();
+  }
   handleKeyCommand(command) {
     const {editorState} = this.state;
     const newState = RichUtils.handleKeyCommand(editorState, command);

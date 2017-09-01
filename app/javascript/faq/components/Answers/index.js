@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import shortid from 'shortid';
-import { ContentState, EditorState, convertToRaw } from 'draft-js';
+import marked from 'marked';
+import { ContentState, EditorState, convertToRaw, convertFromHTML } from 'draft-js';
+import { stateToHTML } from 'draft-js-export-html';
+
 
 import ee from '../../EventEmitter';
 import TextEditor from '../TextEditor';
@@ -22,9 +25,14 @@ export default class Answers extends Component {
 
     props.data && props.data.forEach((answer, index) => {
       if(!answer) return;
-      console.log(answer, index);
+      const parsedToHtml = marked(answer.text);
+      let blocksFromHtml = convertFromHTML(parsedToHtml);
+      let state = ContentState.createFromBlockArray(
+      blocksFromHtml.contentBlocks,
+        blocksFromHtml.entityMap
+      );
       defaultState['editorState' + index] = (answer.text && answer.text.length > 0)
-          ? EditorState.createWithContent(ContentState.createFromText(answer.text, '\n\n'))
+          ? EditorState.createWithContent(state)
           : EditorState.createEmpty()
     });
 
@@ -105,7 +113,8 @@ export default class Answers extends Component {
 
   handleTextEditorChange(editorState, index){
 
-    let currentAnswerText = editorState.getCurrentContent().getPlainText();
+    console.log(editorState.getCurrentContent().getBlocksAsArray());
+    let currentAnswerText = stateToHTML(editorState.getCurrentContent());
       this.setState({
         currentAnswerText,
         ['editorState' + index]: editorState,
