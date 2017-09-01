@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ContentState, Editor, EditorState, RichUtils, convertFromRaw } from 'draft-js';
-import throttle from 'lodash/throttle';
+import debounce from 'lodash/debounce';
 
 export default class TextEditor extends Component {
   constructor(props) {
@@ -8,7 +8,7 @@ export default class TextEditor extends Component {
 
     this.state = { editorState: props.editorState };
     this.focus = this.focus.bind(this);
-    this.onChange = throttle(this.onChange, 200).bind(this);
+    this.onChange = debounce(this.onChange, 100).bind(this);
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
     this.onTab = this.onTab.bind(this);
     this.toggleBlockType = this.toggleBlockType.bind(this);
@@ -60,6 +60,18 @@ export default class TextEditor extends Component {
     );
   }
 
+  handleMouseOver = e => {
+    e.persist();
+    this.editor.focus();
+  }
+
+  handleMouseOut = (e) => {
+    e.persist();
+    let button = e.target.parentNode.querySelectorAll('button')[0];
+    if(!button) return false;
+    button.focus();
+  }
+
   render() {
     const {editorState} = this.state;
     if(!editorState) return null;
@@ -74,7 +86,7 @@ export default class TextEditor extends Component {
     }
 
     return (
-      <div className="RichEditor-root">
+      <div onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} className="RichEditor-root">
         <BlockStyleControls
           editorState={editorState}
           onToggle={this.toggleBlockType}
