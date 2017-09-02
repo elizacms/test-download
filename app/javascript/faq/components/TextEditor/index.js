@@ -87,13 +87,13 @@ export default class TextEditor extends Component {
 
     return (
       <div onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} className="RichEditor-root">
-        <BlockStyleControls
-          editorState={editorState}
-          onToggle={this.toggleBlockType}
-        />
         <InlineStyleControls
           editorState={editorState}
           onToggle={this.toggleInlineStyle}
+        />
+        <BlockStyleControls
+          editorState={editorState}
+          onToggle={this.toggleBlockType}
         />
         <div className={className} onClick={this.focus}>
           <Editor

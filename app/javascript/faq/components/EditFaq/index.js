@@ -114,7 +114,7 @@ export default class EditFaq extends Component {
       text: answerData.text
     }
 
-    currentArticle.answers.push(answer);
+    currentArticle.answers.unshift(answer);
 
     this.setState({ currentArticle }, this.saveArticle);
   }
