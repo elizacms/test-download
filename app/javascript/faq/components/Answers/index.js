@@ -36,13 +36,13 @@ export default class Answers extends Component {
           : EditorState.createEmpty()
     });
 
-    this.radios = new Map();
+    this.checkboxes = new Map();
     this.state = Object.assign({}, defaultState, restOfState);
 
     this.ee = ee;
     this.handleChange = this.handleChange.bind(this);
-    this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
-    this.handleRadioChange = this.handleRadioChange.bind(this);
+    this.handleNewAnswerCheckboxChange = this.handleNewAnswerCheckboxChange.bind(this);
+    this.handleEditAnswerCheckboxChange = this.handleEditAnswerCheckboxChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleEditClick = this.handleEditClick.bind(this);
     this.handleAddClick = this.handleAddClick.bind(this);
@@ -62,18 +62,21 @@ export default class Answers extends Component {
     this.setState({ value: e.target.value});
   }
 
-  handleCheckboxChange(e) {
-    if(!e) return ;
-    e.persist();
-    this.setState({ newAnswerActive: e.target.checked});
+  handleNewAnswerCheckboxChange(id, e) {
+    return () => {
+
+      this.ee.emit('addAnswer', {text: this.state.currentAnswerText, active: !this.state.newAnswerActive})
+      this.setState({ newAnswerActive: !this.state.newAnswerActive});
+
+    }
   }
 
-  handleRadioChange(id, index, e) {
+  handleEditAnswerCheckboxChange(id, index, e) {
 
     return () => {
 
       this.ee.emit('setAnswerActive', index);
-      this.setState({ active: this.radios.get(id).checked});
+      this.setState({ active: this.checkboxes.get(id).checked});
     }
 
   }
@@ -89,20 +92,24 @@ export default class Answers extends Component {
       let config = {
         index,
         text: this.state.currentAnswerText,
-        active: this.radios.get(id).checked,
+        active: this.checkboxes.get(id).checked,
       }
       this.ee.emit('editAnswers', config);
     }
   }
 
   handleAddClick(e) {
-    this.setState({ addingNewAnswer: true});
+    this.setState({
+      addingNewAnswer: true,
+      ['editorState' + this.props.data.length]: EditorState.createEmpty(),
+    },() => this.ee.emit('addAnswer', {text: '', active: false})
+    );
   }
 
   handleSaveClick(id, e){
     console.log(e.target);
     return () => {
-      this.ee.emit('addAnswer', {text: this.state.currentAnswerText, active: this.radios.get(id).checked});
+      this.ee.emit('addAnswer', {text: this.state.currentAnswerText, active: this.checkboxes.get(id).checked});
       this.setState({ addingNewAnswer: false});
     }
   }
@@ -138,12 +145,12 @@ export default class Answers extends Component {
           <input
             name="active"
             type="checkbox"
-            onChange={this.handleRadioChange(id, index)}
+            onChange={this.handleEditAnswerCheckboxChange(id, index)}
             defaultChecked={answer.active}
-            value={answer.active || this.state.active}
+            value={this.state.active || answer.active }
             ref={
               radio => {
-                this.radios.set(id, radio);
+                this.checkboxes.set(id, radio);
             }}
           />
           &nbsp;&nbsp;
@@ -168,14 +175,29 @@ export default class Answers extends Component {
   }
 
   renderNewAnswer() {
+    let id = shortid.generate();
+    let index = this.props.data.length - 1;
     return(
-      <div key={shortid.generate()} className="well">
+      <div key={id} className="well">
         <div>
-          <input type="radio" onChange={this.handleCheckboxChange} checked={this.state.newAnswerActive}/>
+          <input
+            type="checkbox"
+            onChange={this.handleNewAnswerCheckboxChange(id)}
+            checked={this.state.newAnswerActive}
+            ref={
+              radio => {
+                this.checkboxes.set(id, radio);
+            }}
+          />
           &nbsp;&nbsp;
           <span>Valid</span>
         </div>
-        <textarea ref={textArea => this.editableTextArea = textArea} />
+        <TextEditor
+          key={id}
+          handleChange={this.handleTextEditorChange}
+          index={index}
+          editorState={this.state['editorState' + index]}
+        />
         <div className="flex-container">
           <button className="flex-left btn md black" onClick={this.handleSaveNewClick}>
             Save Answer
