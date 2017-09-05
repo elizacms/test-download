@@ -154,7 +154,7 @@ class StyleButton extends React.Component {
 
 const BLOCK_TYPES = [
   {label: 'Blockquote', style: 'blockquote'},
-  {label: 'UL', style: 'unordered-list-item'},
+  {label: 'List', style: 'unordered-list-item'},
 ];
 
 const BlockStyleControls = (props) => {

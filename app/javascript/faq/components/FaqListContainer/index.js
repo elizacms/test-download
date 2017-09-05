@@ -28,6 +28,7 @@ export default class FaqListContainer extends Component {
     this.deleteArticle = this.deleteArticle.bind(this);
     this.addArticle = this.addArticle.bind(this);
     this.searchArticle = this.searchArticle.bind(this);
+    this.sortByKbid = this.sortByKbid.bind(this);
   }
 
   componentDidMount() {
@@ -39,6 +40,7 @@ export default class FaqListContainer extends Component {
     this.ee.on('deleteArticle',this.deleteArticle )
     this.ee.on('addArticle',this.addArticle )
     this.ee.on('searchArticle', this.searchArticle);
+    this.ee.on('sortByKbid', this.sortByKbid);
     this.fetchArticlesAndSetThemInState();
   }
 
@@ -126,6 +128,41 @@ export default class FaqListContainer extends Component {
       );
 
       this.ee.emit('openModal', addFaqComponent);
+  }
+
+  sortByKbid(direction) {
+    console.log(direction);
+    let articles = this.state.articles;
+
+    if(direction === 'desc') {
+
+      articles.sort((a, b) => {
+	if(a.kbid > b.kbid) {
+	  return 1;
+	}
+	if( a.kbid < b.kbid ) {
+	  return -1;
+	}
+	if(a.kbid === b.kbid ) {
+	  return 0;
+	}
+      })
+    } else {
+      articles.sort((a, b) => {
+	if(a.kbid > b.kbid) {
+	  return -1;
+	}
+	if( a.kbid < b.kbid ) {
+	  return 1;
+	}
+	if(a.kbid === b.kbid ) {
+	  return 0;
+	}
+      })
+    }
+
+    return this.setState({ articles });
+
   }
 
   render() {

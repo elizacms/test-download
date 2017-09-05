@@ -8,6 +8,7 @@ export default class FaqList extends Component {
 		super(props);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleSortByKbidClick= this.handleSortByKbidClick.bind(this);
     this.ee = ee;
 	}
 
@@ -24,6 +25,12 @@ export default class FaqList extends Component {
     }
   }
 
+  handleSortByKbidClick(e) {
+
+    console.log(e);
+     this.ee.emit('sortByKbid', 'asc');
+  }
+
   render() {
     const {articles, pagesTotal, articleTotal, currentPage} = this.props;
     if(!articles || articles.length === 0) return null;
@@ -36,7 +43,7 @@ export default class FaqList extends Component {
         <table>
           <thead>
             <tr>
-              <th>KB ID</th>
+              <th>KB ID <button onClick={this.handleSortByKbidClick}>Sort</button></th>
               <th>Questions</th>
               <th>Answers</th>
               <th colSpan="2">Enabled</th>
