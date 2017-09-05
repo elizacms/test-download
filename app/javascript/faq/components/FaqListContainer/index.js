@@ -29,6 +29,7 @@ export default class FaqListContainer extends Component {
     this.addArticle = this.addArticle.bind(this);
     this.searchArticle = this.searchArticle.bind(this);
     this.sortByKbid = this.sortByKbid.bind(this);
+    this.sortByEnabled = this.sortByEnabled.bind(this);
   }
 
   componentDidMount() {
@@ -41,6 +42,7 @@ export default class FaqListContainer extends Component {
     this.ee.on('addArticle',this.addArticle )
     this.ee.on('searchArticle', this.searchArticle);
     this.ee.on('sortByKbid', this.sortByKbid);
+    this.ee.on('sortByEnabled', this.sortByEnabled);
     this.fetchArticlesAndSetThemInState();
   }
 
@@ -52,6 +54,8 @@ export default class FaqListContainer extends Component {
     this.ee.off('deleteArticle');
     this.ee.off('addArticle');
     this.ee.off('searchArticle');
+    this.ee.off('sortByKbid');
+    this.ee.off('sortByEnabled');
   }
 
   changePageNumber(page) {
@@ -134,8 +138,7 @@ export default class FaqListContainer extends Component {
     console.log(direction);
     let articles = this.state.articles;
 
-    if(direction === 'desc') {
-
+    if(direction) {
       articles.sort((a, b) => {
 	if(a.kbid > b.kbid) {
 	  return 1;
@@ -162,9 +165,41 @@ export default class FaqListContainer extends Component {
     }
 
     return this.setState({ articles });
-
   }
 
+  sortByEnabled(direction) {
+    console.log(direction);
+    let articles = this.state.articles;
+
+    if(direction) {
+      articles.sort((a, b) => {
+	if(a.enabled && !b.enabled) {
+	  return 1;
+	}
+	if( !a.enabled && b.enabled) {
+	  return -1;
+	}
+	if(a.enabled === b.enabled) {
+	  return 0;
+	}
+      })
+    } else {
+      articles.sort((a, b) => {
+	if(a.enabled && !b.enabled) {
+	  return -1;
+	}
+	if( !a.enabled && b.enabled) {
+	  return 1;
+	}
+	if(a.enabled === b.enabled) {
+	  return 0;
+	}
+      })
+    }
+
+    return this.setState({ articles });
+
+  }
   render() {
 
     let faqListProps = {

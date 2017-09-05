@@ -2,20 +2,28 @@ import React, { Component } from 'react';
 import shortid from 'shortid';
 
 import ee from '../../EventEmitter';
+import './faq-list.sass';
+import angleDown from '../../images/angle-down.svg';
+import angleUp from '../../images/angle-up.svg';
 
 export default class FaqList extends Component {
 	constructor(props) {
 		super(props);
+    this.state = {
+      kbidSortDirection: true,
+      enabledSortDirection: true,
+    };
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleSortByKbidClick= this.handleSortByKbidClick.bind(this);
+    this.handleSortByEnabledClick= this.handleSortByEnabledClick.bind(this);
     this.ee = ee;
 	}
 
   handleEdit(article) {
     return () => {
       this.ee.emit('editArticle', article)
-    }
+    };
   }
 
   handleDelete(kbid, e) {
@@ -26,16 +34,29 @@ export default class FaqList extends Component {
   }
 
   handleSortByKbidClick(e) {
-
     console.log(e);
-     this.ee.emit('sortByKbid', 'asc');
+    return () => {
+      this.setState({
+        kbidSortDirection: !this.state.kbidSortDirection
+      }, () => this.ee.emit('sortByKbid', this.state.kbidSortDirection));
+
+    }
+  }
+
+  handleSortByEnabledClick(e) {
+    console.log(e);
+    return () => {
+      this.setState({
+        enabledSortDirection: !this.state.enabledSortDirection
+      }, () => this.ee.emit('sortByEnabled', this.state.enabledSortDirection));
+    }
   }
 
   render() {
     const {articles, pagesTotal, articleTotal, currentPage} = this.props;
     if(!articles || articles.length === 0) return null;
 
-    const pText = `Page ${currentPage} of ${pagesTotal} (${articleTotal} records total)`
+    const pText = `Page ${currentPage} of ${pagesTotal} (${articleTotal} records total)`;
 
 		return (
 
@@ -43,10 +64,24 @@ export default class FaqList extends Component {
         <table>
           <thead>
             <tr>
-              <th>KB ID <button onClick={this.handleSortByKbidClick}>Sort</button></th>
+              <th>
+                <span>KB ID </span>
+                {
+                  this.state.kbidSortDirection
+                    ? <button className="btn-desc" onClick={this.handleSortByKbidClick(false)}><img src={angleUp} /></button>
+                    : <button className="btn-asc" onClick={this.handleSortByKbidClick(true)}><img src={angleDown} /></button>
+                }
+              </th>
               <th>Questions</th>
               <th>Answers</th>
-              <th colSpan="2">Enabled</th>
+              <th colSpan="2">
+                <span>Enabled </span>
+                {
+                  this.state.enabledSortDirection
+                    ? <button className="btn-desc" onClick={this.handleSortByEnabledClick(false)}><img src={angleUp} /></button>
+                    : <button className="btn-asc" onClick={this.handleSortByEnabledClick(true)}><img src={angleDown} /></button>
+                }
+              </th>
             </tr>
           </thead>
           <tbody>
