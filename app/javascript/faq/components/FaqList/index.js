@@ -7,8 +7,8 @@ import angleDown from '../../images/angle-down.svg';
 import angleUp from '../../images/angle-up.svg';
 
 export default class FaqList extends Component {
-	constructor(props) {
-		super(props);
+  constructor(props) {
+    super(props);
     this.state = {
       kbidSortDirection: true,
       enabledSortDirection: true,
@@ -18,7 +18,7 @@ export default class FaqList extends Component {
     this.handleSortByKbidClick= this.handleSortByKbidClick.bind(this);
     this.handleSortByEnabledClick= this.handleSortByEnabledClick.bind(this);
     this.ee = ee;
-	}
+  }
 
   handleEdit(article) {
     return () => {
@@ -37,9 +37,8 @@ export default class FaqList extends Component {
     console.log(e);
     return () => {
       this.setState({
-        kbidSortDirection: !this.state.kbidSortDirection
+	kbidSortDirection: !this.state.kbidSortDirection
       }, () => this.ee.emit('sortByKbid', this.state.kbidSortDirection));
-
     }
   }
 
@@ -47,7 +46,7 @@ export default class FaqList extends Component {
     console.log(e);
     return () => {
       this.setState({
-        enabledSortDirection: !this.state.enabledSortDirection
+	enabledSortDirection: !this.state.enabledSortDirection
       }, () => this.ee.emit('sortByEnabled', this.state.enabledSortDirection));
     }
   }
@@ -58,66 +57,62 @@ export default class FaqList extends Component {
 
     const pText = `Page ${currentPage} of ${pagesTotal} (${articleTotal} records total)`;
 
-		return (
-
+    return (
       <div className="FaqList">
-        <table>
-          <thead>
-            <tr>
-              <th>
-                <span>KB ID </span>
-                {
-                  this.state.kbidSortDirection
-                    ? <button className="btn-desc" onClick={this.handleSortByKbidClick(false)}><img src={angleUp} /></button>
-                    : <button className="btn-asc" onClick={this.handleSortByKbidClick(true)}><img src={angleDown} /></button>
-                }
-              </th>
-              <th>Questions</th>
-              <th>Answers</th>
-              <th colSpan="2">
-                <span>Enabled </span>
-                {
-                  this.state.enabledSortDirection
-                    ? <button className="btn-desc" onClick={this.handleSortByEnabledClick(false)}><img src={angleUp} /></button>
-                    : <button className="btn-asc" onClick={this.handleSortByEnabledClick(true)}><img src={angleDown} /></button>
-                }
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-          {
-            articles.map(article => (
-              <tr key={shortid.generate()}>
-                <td>{article.kbid}</td>
-                <td>
-                {
-                  article.questions.map(item => (
-                    <p key={shortid.generate()}>{item}</p>
-                  ))
-                }
-                </td>
-                <td>
-                {
-                  article.answers.map(item  => (
-                    <p key={shortid.generate()}>{item.text}</p>
-                  ))
-                }
-                </td>
-                <td>
-                {
-                  article.enabled ? 'Yes' : 'No'
-                }
-                </td>
-                <td>
-                  <button onClick={this.handleEdit(article)}>Edit</button>
-                  <button onClick={this.handleDelete(article.kbid, event)}>Delete</button>
-                </td>
-              </tr>
-            ))
-          }
-          </tbody>
-        </table>
+	<table>
+	  <thead>
+	    <tr>
+	      <th>
+		<span>KB ID </span>
+		{
+		  this.state.kbidSortDirection
+		    ? <button className="btn-desc" onClick={this.handleSortByKbidClick(false)}><img src={angleUp} alt={angleUp} /></button>
+		    : <button className="btn-asc" onClick={this.handleSortByKbidClick(true)}><img src={angleDown} alt={angleDown} /></button>
+		}
+	      </th>
+	      <th>Questions</th>
+	      <th>Answers</th>
+	      <th colSpan="2">
+		<span>Enabled </span>
+		{
+		  this.state.enabledSortDirection
+		  ? <button className="btn-desc" onClick={this.handleSortByEnabledClick(false)}><img src={angleUp} alt={angleUp} /></button>
+		  : <button className="btn-asc" onClick={this.handleSortByEnabledClick(true)}><img src={angleDown} alt={angleDownDownDown} /></button>
+		}
+	      </th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    {
+	      articles.map(article => (
+
+		<tr key={shortid.generate()}>
+		<td>{article.kbid}</td>
+		<td>
+		{
+		  article.questions.map(item => (
+		    <p key={shortid.generate()}>{item}</p>
+		  ))
+		}
+		</td>
+		<td className="answers">
+		{
+		  article.answers.map(item => (
+		    <p key={shortid.generate()}>{item.text.replace(/(\\n)?\\n/, '\r\n')}</p>
+		  ))
+		}
+		</td>
+		<td> { article.enabled ? 'Yes' : 'No' } </td>
+		<td>
+		  <button onClick={this.handleEdit(article)}>Edit</button>
+		  <button onClick={this.handleDelete(article.kbid, event)}>Delete</button>
+		</td>
+		</tr>
+	    ))
+	  }
+	  </tbody>
+	</table>
       </div>
-		);
-	}
+    );
+  }
 }

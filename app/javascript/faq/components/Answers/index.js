@@ -25,7 +25,9 @@ export default class Answers extends Component {
 
     props.data && props.data.forEach((answer, index) => {
       if(!answer) return;
-      const parsedToHtml = marked(answer.text);
+
+      let answerText = answer.text.replace(/(\\n)?\\n/, '\r\n');
+      const parsedToHtml = marked(answerText);
       let blocksFromHtml = convertFromHTML(parsedToHtml);
       let state = ContentState.createFromBlockArray(
       blocksFromHtml.contentBlocks,

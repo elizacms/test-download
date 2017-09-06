@@ -97,7 +97,6 @@ export default class EditFaq extends Component {
   editAnswers(answerData) {
     let currentArticle = this.state.currentArticle;
     let text =  toMarkdown(answerData.text);
-    console.log("are these different?", answerData.text, "or",  text);
     currentArticle.answers[answerData.index].text = text;
 
     this.setState({currentArticle}, this.saveArticle);
