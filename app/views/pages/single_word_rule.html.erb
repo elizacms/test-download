@@ -1,11 +1,11 @@
 <div>
   <h1>Single Word Rule</h1>
 
-  <table class="full">
+  <table>
     <colgroup>
-      <col width="250">
+      <col width="300">
       <col width="450">
-      <col width="200">
+      <col width="150">
     </colgroup>
     <tr>
       <td>
@@ -22,11 +22,11 @@
 
   <br>
 
-  <table class="full">
+  <table>
     <colgroup>
-      <col width="250">
+      <col width="300">
       <col width="450">
-      <col width="200">
+      <col width="150">
     </colgroup>
     <thead>
       <tr>
@@ -35,32 +35,7 @@
         <th></th>
       </tr>
     </thead>
-    <tbody>
-      <% @data.each_with_index do |data, index| %>
-        <tr class="single_word_row" data-id=<%= data[:id] %> >
-          <!-- Table View -->
-          <td class="table-view">
-            <%= data[:word] %>
-          </td>
-          <td class="table-view">
-            <%= data[:intent][:intent] %>
-          </td>
-          <td class="table-view single-word-rule-padL100">
-            <a href="#" class='edit-btn btn md grey'>Edit</a>
-          </td>
-
-          <!-- Edit View -->
-          <td class="input-view displayNone">
-            <input type="text" class="single-word-rule-input width200" value=<%= data[:word] %> />
-          </td>
-          <td class="input-view displayNone">
-            <select class="intents-options"></select>
-          </td>
-          <td class="input-view displayNone" style="padding-left: 100px">
-            <a href="#" class='save-btn btn md black'>Save</a>
-          </td>
-        </tr>
-      <% end %>
+    <tbody id="singleWordTable">
     </tbody>
   </table>
 </div>

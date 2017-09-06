@@ -32,23 +32,6 @@ class PagesController < ApplicationController
   end
 
   def single_word_rule
-    @data = [
-      {
-        id: "10",
-        word: "infodienste",
-        intent: {intent: "need_help"}
-      },
-      {
-        id: "20",
-        word: "kundendienst",
-        intent: {intent: "connect_to_agent"}
-      },
-      {
-        id: "30",
-        word: "Zeige meine Rechnung ",
-        intent: {intent: "billing_mybill"}
-      }
-    ]
   end
 
   private
