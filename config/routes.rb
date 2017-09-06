@@ -94,6 +94,9 @@ require 'sidekiq/web'
   get '/faqs',
     to: 'faqs#index'
 
+  get '/single-word-rule',
+    to: 'pages#single_word_rule'
+
   resources :skills do
     resources :intents
 

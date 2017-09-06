@@ -1,0 +1,66 @@
+<div>
+  <h1>Single Word Rule</h1>
+
+  <table class="full">
+    <colgroup>
+      <col width="250">
+      <col width="450">
+      <col width="200">
+    </colgroup>
+    <tr>
+      <td>
+        <input type="text" class="single-word-rule-input add width200" />
+      </td>
+      <td>
+        <select class="intents-options add"></select>
+      </td>
+      <td class="input-view single-word-rule-padL100">
+        <a href="#" class='add-btn btn md black'>Add</a>
+      </td>
+    </tr>
+  </table>
+
+  <br>
+
+  <table class="full">
+    <colgroup>
+      <col width="250">
+      <col width="450">
+      <col width="200">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Word</th>
+        <th>Intent</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @data.each_with_index do |data, index| %>
+        <tr class="single_word_row" data-id=<%= data[:id] %> >
+          <!-- Table View -->
+          <td class="table-view">
+            <%= data[:word] %>
+          </td>
+          <td class="table-view">
+            <%= data[:intent][:intent] %>
+          </td>
+          <td class="table-view single-word-rule-padL100">
+            <a href="#" class='edit-btn btn md grey'>Edit</a>
+          </td>
+
+          <!-- Edit View -->
+          <td class="input-view displayNone">
+            <input type="text" class="single-word-rule-input width200" value=<%= data[:word] %> />
+          </td>
+          <td class="input-view displayNone">
+            <select class="intents-options"></select>
+          </td>
+          <td class="input-view displayNone" style="padding-left: 100px">
+            <a href="#" class='save-btn btn md black'>Save</a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
