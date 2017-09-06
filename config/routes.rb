@@ -139,6 +139,15 @@ require 'sidekiq/web'
     get '/intents',
       to: 'api#get_intents'
 
+    get '/single_word_rules',
+      to: 'single_word_rule#index'
+
+    post '/single_word_rules',
+      to: 'single_word_rule#create'
+
+    put '/single_word_rules',
+      to: 'single_word_rule#update'
+
     scope module:'faq' do
       get '/articles/search',
         to: 'api#search'
