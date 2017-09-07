@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { CompositeDecorator, ContentState, Editor, EditorState, RichUtils, convertFromRaw } from 'draft-js';
-import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
 
 const styles = {
   root: {
@@ -50,31 +50,37 @@ export default class TextEditor extends Component {
     };
 
 
-    this.focus = this.focus.bind(this);
-    this.onChange = debounce(this.onChange, 100).bind(this);
+    this.focus = () => this.editor && this.editor.focus();
+    this.onChange = this.onChange.bind(this);
+    this.throttledOnChange = throttle(this.throttledOnChange.bind(this), 75);
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
     this.onTab = this.onTab.bind(this);
     this.toggleBlockType = this.toggleBlockType.bind(this);
     this.toggleInlineStyle = this.toggleInlineStyle.bind(this);
     this.promptForLink = this.promptForLink.bind(this);
-    this.onURLChange = (e) => this.setState({urlValue: e.target.value});
+    this.onURLChange = (e) =>  this.setState({urlValue: e.target.value ? e.target.value : '', showURLInput: true});
     this.confirmLink = this.confirmLink.bind(this);
     this.onLinkInputKeyDown = this.onLinkInputKeyDown.bind(this);
     this.removeLink = this.removeLink.bind(this);
+    this.handleMouseOver = this.handleMouseOver.bind(this);
+    this.throttledHandleMouseOver = throttle(this.throttledHandleMouseOver, 75).bind(this);
   }
 
   onChange(editorState) {
+    this.throttledOnChange(editorState);
+  }
+
+  throttledOnChange(editorState) {
     let content = editorState.getCurrentContent();
-    let text = content.getPlainText();
 
-    this.setState({ editorState }, () => {
-      this.props.handleChange(this.state.editorState, this.props.index)
-    })
+    if(editorState) {
+      this.setState({ editorState }, () => {
+        this.props.handleChange(this.state.editorState, this.props.index)
+      });
+    }
   }
 
-  focus() {
-    this.editor.focus();
-  }
+
   handleKeyCommand(command) {
     const {editorState} = this.state;
     const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -108,42 +114,47 @@ export default class TextEditor extends Component {
     );
   }
 
-  handleMouseOver = (e) => {
+  handleMouseOver(e) {
     e.persist();
-    this.editor.focus();
+    this.throttledHandleMouseOver(e);
   }
 
-  handleMouseOut = (e) => {
-    e.persist();
-    let button = e.target.parentNode.querySelectorAll('button')[0];
-    if(!button) return false;
-    button.focus();
+  throttledHandleMouseOver(e) {
+    console.log('throttledHandleMouseOver', e.target);
+    this.focus();
+
   }
 
   promptForLink(e) {
     e.preventDefault();
-    e.stopPropagation();
     const {editorState} = this.state;
     const selection = editorState.getSelection();
-    if (!selection.isCollapsed()) {
-      const contentState = editorState.getCurrentContent();
-      const startKey = editorState.getSelection().getStartKey();
-      const startOffset = editorState.getSelection().getStartOffset();
-      const blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
-      const linkKey = blockWithLinkAtBeginning.getEntityAt(startOffset);
-      let url = '';
-      if (linkKey) {
-        const linkInstance = contentState.getEntity(linkKey);
-        url = linkInstance.getData().url;
+
+    function createLinkEntity() {
+      if (!selection.isCollapsed()) {
+        const contentState = editorState.getCurrentContent();
+        const startKey = editorState.getSelection().getStartKey();
+        const startOffset = editorState.getSelection().getStartOffset();
+        const blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
+        const linkKey = blockWithLinkAtBeginning.getEntityAt(startOffset);
+        let url = '';
+        if (linkKey) {
+          const linkInstance = contentState.getEntity(linkKey);
+          url = linkInstance.getData().url;
+        }
+        let that = this;
+        this.setState({
+          showURLInput: true,
+          urlValue: url,
+        }, () => {
+          that.urlComponent && that.urlComponent.focus();
+        });
       }
-      let that = this;
+
+    }
       this.setState({
         showURLInput: true,
-        urlValue: url,
-      }, () => {
-        that.urlComponent && that.urlComponent.focus();
-      });
-    }
+      }, createLinkEntity);
   }
 
   confirmLink(e) {
@@ -157,6 +168,7 @@ export default class TextEditor extends Component {
     );
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
     const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
+
     this.setState({
       editorState: RichUtils.toggleLink(
         newEditorState,
@@ -165,9 +177,8 @@ export default class TextEditor extends Component {
       ),
       showURLInput: false,
       urlValue: '',
-    }, () => {
-      this.editor.focus();
-    });
+    }, this.focus )
+
   }
   onLinkInputKeyDown(e) {
     if (e.which === 13) {
@@ -193,17 +204,20 @@ export default class TextEditor extends Component {
     if (this.state.showURLInput) {
       urlInput =
         <div style={styles.urlInputContainer}>
-        <input
-      onChange={this.onURLChange}
-      ref={ urlComponent => this.urlComponent = urlComponent }
-      style={styles.urlInput}
-      type="text"
-      value={this.state.urlValue}
-      onKeyDown={this.onLinkInputKeyDown}
-        />
-        <button onClick={this.confirmLink}>
-        Confirm
-        </button>
+        <form onSubmit={this.onURLChange}>
+        <p>Add Url (http://example.com):</p>
+          <input
+            onInput={this.onURLChange}
+            ref={ urlComponent => this.urlComponent = urlComponent }
+            style={styles.urlInput}
+            type="text"
+            value={this.state.urlValue}
+            onKeyDown={this.onLinkInputKeyDown}
+          />
+          <button onClick={this.confirmLink}>
+          Confirm
+          </button>
+          </form>
         </div>;
     }
     let className = 'RichEditor-editor';
@@ -240,23 +254,27 @@ export default class TextEditor extends Component {
             </div>
           )
         }
-        <div
+        <div tabIndex={0}
           onMouseOver={this.handleMouseOver}
-          onMouseOut={this.handleMouseOut}
-          className={className}
           onClick={this.focus}
         >
-          <Editor
-            blockStyleFn={getBlockStyle}
-            editorState={editorState}
-            handleKeyCommand={this.handleKeyCommand}
-            onChange={this.onChange}
-            onTab={this.onTab}
-            placeholder="Tell a story."
-            ref={ editor => this.editor = editor }
-            spellCheck={true}
-        />
-        </div>
+        {
+          !urlInput &&  (
+
+            <Editor
+              blockStyleFn={getBlockStyle}
+              tabIndex={0}
+              editorState={editorState}
+              handleKeyCommand={this.handleKeyCommand}
+              onChange={this.onChange}
+              onTab={this.onTab}
+              placeholder="Tell a story."
+              ref={ editor => this.editor = editor }
+          />
+
+          )
+        }
+    </div>
       </div>
     );
   }
@@ -359,11 +377,11 @@ const InlineStyleControls = (props) => {
     {
       INLINE_STYLES.map(type =>
         <StyleButton
-        key={type.label}
-        active={currentStyle.has(type.style)}
-        label={type.label}
-        onToggle={props.onToggle}
-        style={type.style}
+          key={type.label}
+          active={currentStyle.has(type.style)}
+          label={type.label}
+          onToggle={props.onToggle}
+          style={type.style}
         />
       )
     }

@@ -51,6 +51,7 @@ export default class Answers extends Component {
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
     this.handleSaveNewClick = this.handleSaveNewClick.bind(this);
+    this.handleMouseOver = this.handleMouseOver.bind(this);
     this.renderAnswer = this.renderAnswer.bind(this);
     this.renderNewAnswer = this.renderNewAnswer.bind(this);
     this.handleTextEditorChange = this.handleTextEditorChange.bind(this);
@@ -122,6 +123,11 @@ export default class Answers extends Component {
     this.setState({ addingNewAnswer: false});
   }
 
+  handleMouseOver(e) {
+    e.target.focus();
+    console.log(e.target)
+  }
+
   handleDeleteClick(e, index){
     return () => {
       this.ee.emit('deleteAnswer', index);
@@ -130,12 +136,14 @@ export default class Answers extends Component {
 
   handleTextEditorChange(editorState, index){
 
-    console.log(editorState.getCurrentContent().getBlocksAsArray());
+    console.log('handleTextEditorChange', stateToHTML(editorState.getCurrentContent()));
     let currentAnswerText = stateToHTML(editorState.getCurrentContent());
-    this.setState({
-      currentAnswerText,
-      ['editorState' + index]: editorState,
-    });
+    if(editorState) {
+      this.setState({
+        currentAnswerText,
+        ['editorState' + index]: editorState,
+      });
+    }
   }
 
   renderAnswer(answer, index) {
@@ -143,36 +151,43 @@ export default class Answers extends Component {
     let editorState = this.state['editorState' + index];
 
     return (
-      <div key={id} className="well">
-      <div>
-      <input
-      name="active"
-      type="checkbox"
-      onChange={this.handleEditAnswerCheckboxChange(id, index)}
-      defaultChecked={answer.active}
-      value={this.state.active || answer.active }
-      ref={
-        radio => {
-          this.checkboxes.set(id, radio);
-        }}
-      />
-      &nbsp;&nbsp;
-      <span>Valid</span>
-      </div>
-      <TextEditor
-      key={id}
-      handleChange={this.handleTextEditorChange}
-      index={index}
-      editorState={editorState}
-      />
-      <div className="flex-container">
-      <button className="flex-left btn md black" onClick={this.handleEditClick(id, index, event)}>
-      Save Answer
-      </button>
-      <button onClick={this.handleDeleteClick(event, index)} className="flex-right btn md black">
-      Delete Answer
-      </button>
-      </div>
+      <div tabIndex={0} key={id} className="well">
+        <div>
+          <input
+            name="active"
+            type="checkbox"
+            onChange={this.handleEditAnswerCheckboxChange(id, index)}
+            defaultChecked={answer.active}
+            value={this.state.active || answer.active }
+            ref={
+              radio => {
+                this.checkboxes.set(id, radio);
+              }
+            }
+          />
+          &nbsp;&nbsp;
+          <span>Valid</span>
+        </div>
+        <TextEditor
+          key={id}
+          handleChange={this.handleTextEditorChange}
+          index={index}
+          editorState={editorState}
+        />
+        <div className="flex-container">
+          <button
+            onMouseOver={this.handleMouseOver}
+            className="flex-left btn md black"
+            onClick={this.handleEditClick(id, index, event)}>
+            Save Answer
+          </button>
+          <button
+            onMouseOver={this.handleMouseOver}
+            onClick={this.handleDeleteClick(event, index)}
+            className="flex-right btn md black">
+            Delete Answer
+          </button>
+        </div>
       </div>
     );
   }
