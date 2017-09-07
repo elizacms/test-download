@@ -1,4 +1,8 @@
 class SingleWordRuleController < ApplicationController
+  before_action :validate_current_user, only: [ :landing ]
+
+  def landing
+  end
 
   # GET /api/single_word_rules
   def index
