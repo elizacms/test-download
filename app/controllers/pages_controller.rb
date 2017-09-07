@@ -31,8 +31,6 @@ class PagesController < ApplicationController
     end
   end
 
-  def single_word_rule
-  end
 
   private
 
