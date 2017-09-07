@@ -1,6 +1,6 @@
 var buildTable = function(data) {
   data.forEach(function(d, index){
-    $('#singleWordTable').append( '<tr class="single_word_row" data-id="'+index+'">'
+    $('#singleWordTable').append( '<tr class="single_word_row" data-index="'+index+'">'
                                 +   '<td class="table-view">'
                                 +     d[0]
                                 +   '</td>'
@@ -75,12 +75,25 @@ var getIntents = function() {
 var addAction = function() {
   $('.add-btn').click(function(e){
     e.preventDefault();
+
     var new_word = $('.single-word-rule-input.add').val();
     var new_word_intent = $('select.intents-options.add').val();
 
-    console.log( "Add this." );
-    console.log( new_word );
-    console.log( new_word_intent );
+    var data = { "text": new_word, "intent_ref": "{{intent:"+new_word_intent+"}}" };
+    console.log( data );
+
+    $.ajax({
+      type: 'POST',
+      url: '/api/single_word_rules',
+      data: data
+    })
+    .done(function(res){
+      console.log( res );
+      window.location.reload();
+    })
+    .fail(function(err){
+      console.log( err );
+    });
   });
 };
 
@@ -120,15 +133,28 @@ var editAction = function() {
 var saveAction = function() {
   $('.save-btn').click(function(e){
     e.preventDefault();
-    var edit_word =  $(this).parents().eq(1).find('input').val();
+
+    var row_num          = $(this).parents().eq(1).data('index');
+    var edit_word        = $(this).parents().eq(1).find('input').val();
     var edit_word_intent = $(this).parents().eq(1).find('select').val();
 
-    console.log( "Save this." );
-    console.log( edit_word );
-    console.log( edit_word_intent );
+    var data = { "row_num": row_num, "text": edit_word, "intent_ref": "{{intent:"+edit_word_intent+"}}" };
+    console.log( data );
+
+    $.ajax({
+      type: 'PUT',
+      url: '/api/single_word_rules',
+      data: data
+    })
+    .done(function(res){
+      console.log( res );
+      window.location.reload();
+    })
+    .fail(function(err){
+      console.log( err );
+    });
   });
 };
-
 
 $(document).on('turbolinks:load', function() {
   getData();
