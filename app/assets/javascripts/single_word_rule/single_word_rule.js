@@ -7,7 +7,7 @@ var buildTable = function(data) {
                                 +   '<td class="table-view">'
                                 +     d[1].split("{{")[1].split("}}")[0].split(":")[1]
                                 +   '</td>'
-                                +   '<td class="table-view single-word-rule-padL100">'
+                                +   '<td class="table-view single-word-rule-edit-save-btn">'
                                 +     '<a href="#" class="edit-btn btn md grey">Edit</a>'
                                 +   '</td>'
 
@@ -17,7 +17,7 @@ var buildTable = function(data) {
                                 +   '<td class="input-view displayNone">'
                                 +     '<select class="intents-options"></select>'
                                 +   '</td>'
-                                +   '<td class="input-view single-word-rule-padL100 displayNone">'
+                                +   '<td class="input-view single-word-rule-edit-save-btn displayNone">'
                                 +     '<a href="#" class="save-btn btn md black">Save</a>'
                                 +   '</td>'
                                 + '</tr>'
