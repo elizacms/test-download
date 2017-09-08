@@ -78,6 +78,14 @@ h4 {
   }
 }
 
+.page-head{
+  position: relative;
+}
+.clear-changes-btn{
+  position: absolute;
+  right: 0;
+  top: 14px;
+}
 .single-word-rule-input.width200 {
   min-width: 240px !important;
 }
@@ -90,4 +98,7 @@ h4 {
 }
 .intents-options{
   margin-bottom: 0;
+}
+.hide-visibility{
+  visibility: hidden;
 }

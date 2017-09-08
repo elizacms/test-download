@@ -8,7 +8,7 @@ var buildTable = function(data) {
                                 +     d[1].split("{{")[1].split("}}")[0].split(":")[1]
                                 +   '</td>'
                                 +   '<td class="table-view single-word-rule-edit-save-btn">'
-                                +     '<a href="#" class="edit-btn btn md grey">Edit</a>'
+                                +     '<a href="#" class="edit-btn hide-visibility btn md grey">Edit</a>'
                                 +   '</td>'
 
                                 +   '<td class="input-view displayNone">'
@@ -38,6 +38,8 @@ var getData = function() {
     buildTable(data);
 
     getIntents();
+
+    checkLock();
 
     addAction();
 
@@ -70,6 +72,23 @@ var getIntents = function() {
   .fail(function(err){
     console.log( err );
   });
+};
+
+var checkLock = function() {
+  $.ajax({
+    type: 'GET',
+    url:  '/api/single_word_rules/check_lock'
+  })
+  .done(function(res){
+    if (res.is_locked == false){
+      $('.edit-btn').removeClass("hide-visibility");
+    } else {
+      $('.edit-btn').addClass("hide-visibility");
+    }
+  })
+  .fail(function(err){
+    console.log( err );
+  })
 };
 
 var addAction = function() {
