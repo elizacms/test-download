@@ -27,6 +27,8 @@
 
         <%= link_to 'Entities', field_data_types_path %>
 
+        <%= link_to 'Single Word', single_word_rules_path %>
+
         <% if AppConfig.eliza? %>
           <%= link_to 'Intents', skill_intents_path(skill_id: Skill.first) %>
         <% else %>
@@ -40,7 +42,7 @@
         <div id="regularLogout" class="dropdown pull-right">
           <a id="userMenu" class="navlink dropdown-toggle" href="javascript:void(0);" data-toggle="dropdown">
             <span class="icon-contacts"></span>
-            <span class="txt"><%= @current_user.email %></span>
+            <span class="txt"><%= @current_user.email.split("@")[0] %></span>
           </a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="userMenu">
             <li><%= link_to 'Logout', '/logout', method: :post %></li>

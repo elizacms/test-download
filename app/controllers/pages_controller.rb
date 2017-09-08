@@ -31,6 +31,7 @@ class PagesController < ApplicationController
     end
   end
 
+
   private
 
   def identity_login_page

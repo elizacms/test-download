@@ -31,7 +31,15 @@ module FilePath
     "#{entity_data_upload_location}/#{ file_data_type.name.downcase }.csv"
   end
 
+  def de_language_path
+    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/language_rule_csv/de"
+  end
+
   def faq_article_file
-    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/language_rule_csv/de/german-faq.csv"
+    "#{de_language_path}/german-faq.csv"
+  end
+
+  def single_word_rule_file
+    "#{de_language_path}/german-intents-singleword-rules.csv"
   end
 end

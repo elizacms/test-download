@@ -15,5 +15,6 @@
 //= require tether
 //= require bootstrap
 //= require jquery_ujs
+//= require_tree ./single_word_rule
 //= require turbolinks
 //= require data_uploader

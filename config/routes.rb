@@ -94,6 +94,13 @@ require 'sidekiq/web'
   get '/faqs',
     to: 'faqs#index'
 
+  get '/single-word-rules',
+    to: 'single_word_rule#landing'
+
+  post '/single-word-rules/clear-changes',
+    to: 'single_word_rule#clear_changes',
+    as: :clear_single_word_rule_changes
+
   resources :skills do
     resources :intents
 
@@ -138,6 +145,18 @@ require 'sidekiq/web'
 
     get '/intents',
       to: 'api#get_intents'
+
+    get '/single_word_rules',
+      to: 'single_word_rule#index'
+
+    post '/single_word_rules',
+      to: 'single_word_rule#create'
+
+    put '/single_word_rules',
+      to: 'single_word_rule#update'
+
+    get '/single_word_rules/check_lock',
+      to: 'single_word_rule#check_lock'
 
     scope module:'faq' do
       get '/articles/search',

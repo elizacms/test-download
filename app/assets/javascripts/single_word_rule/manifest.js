@@ -1,0 +1,1 @@
+//= require single_word_rule/single_word_rule

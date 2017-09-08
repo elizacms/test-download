@@ -53,7 +53,7 @@ feature 'Skills pages' do
         visit '/login/success?code=0123abc'
         visit '/skills'
 
-        expect( page ).to have_content 'non_dev@iamplus.com'
+        expect( page ).to have_content 'non_dev'
         expect( page ).to have_content '0 Skills'
       end
     end

@@ -4,6 +4,7 @@ class FileLock
 
   embedded_in :intent
   embedded_in :field_data_type
+  embedded_in :single_word_rule
 
   field :user_id, type:String
 

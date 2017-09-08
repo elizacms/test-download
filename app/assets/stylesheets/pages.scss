@@ -77,3 +77,28 @@ h4 {
     color: red;
   }
 }
+
+.page-head{
+  position: relative;
+}
+.clear-changes-btn{
+  position: absolute;
+  right: 0;
+  top: 14px;
+}
+.single-word-rule-input.width200 {
+  min-width: 240px !important;
+}
+.single-word-rule-add-btn{
+  padding-left: 72px;
+  padding-right: 12px !important;
+}
+.single-word-rule-edit-save-btn{
+  padding-left: 73px;
+}
+.intents-options{
+  margin-bottom: 0;
+}
+.hide-visibility{
+  visibility: hidden;
+}
