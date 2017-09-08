@@ -1,4 +1,4 @@
-describe SingleWordRuleFileManager,:focus do
+describe SingleWordRuleFileManager do
   before do
     File.write(single_word_rule_file, File.read('spec/data-files/german-intents-singleword-rules.csv'))
   end
