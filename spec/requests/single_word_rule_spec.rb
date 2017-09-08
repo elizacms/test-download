@@ -1,8 +1,4 @@
 describe 'Requests for single word controller' do
-  before do
-    File.write(single_word_rule_file, File.read('spec/data-files/german-intents-singleword-rules.csv'))
-  end
-
   describe 'GET /api/single_word_rules' do
     it 'should succeed' do
       get '/api/single_word_rules'

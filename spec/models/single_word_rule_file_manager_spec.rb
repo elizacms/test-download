@@ -1,8 +1,4 @@
 describe SingleWordRuleFileManager do
-  before do
-    File.write(single_word_rule_file, File.read('spec/data-files/german-intents-singleword-rules.csv'))
-  end
-
   describe '#load_file' do
     it 'should succeed' do
       expect( SingleWordRuleFileManager.new.load_file ).to eq [['bunny', '{{intent:fiver}}'],

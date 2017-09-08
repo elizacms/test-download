@@ -59,6 +59,8 @@ RSpec.configure do |config|
     Dir.mkdir( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/raw_knowledge/entity_data" )
 
     FileUtils.mkpath( "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/language_rule_csv/de" )
+    File.write( single_word_rule_file,
+                File.read('spec/data-files/german-intents-singleword-rules.csv') )
 
     Rugged::Repository.init_at( ENV['NLU_CMS_PERSISTENCE_PATH'] )
     ActionMailer::Base.deliveries = []

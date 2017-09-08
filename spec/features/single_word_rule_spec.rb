@@ -4,8 +4,6 @@ feature 'Single Word Rule Feature Specs',:js do
   let!( :role      ){ create :role, skill: skill, user: developer }
 
   before do
-    File.write(single_word_rule_file, File.read('spec/data-files/german-intents-singleword-rules.csv'))
-
     stub_identity_token
     stub_identity_account_for developer.email
     visit '/login/success?code=0123abc'
