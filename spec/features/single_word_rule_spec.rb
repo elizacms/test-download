@@ -1,4 +1,4 @@
-feature 'Single Word Rule Feature Specs' ,:js ,:focus do
+feature 'Single Word Rule Feature Specs',:js do
   let!( :developer ){ create :user  }
   let!( :skill     ){ create :skill }
   let!( :role      ){ create :role, skill: skill, user: developer }
@@ -10,16 +10,16 @@ feature 'Single Word Rule Feature Specs' ,:js ,:focus do
     stub_identity_account_for developer.email
     visit '/login/success?code=0123abc'
   end
-  
+
 
   specify 'Render page' do
-    visit '/single-word-rules-landing'
+    visit '/single-word-rules'
 
     expect( page ).to have_content "fiver"
   end
 
   specify 'Add' do
-    visit '/single-word-rules-landing'
+    visit '/single-word-rules'
 
     execute_script('$("input.single-word-rule-input.add").val("Wie geht es dir?");')
     execute_script('$("a.add-btn").click();')
@@ -28,7 +28,7 @@ feature 'Single Word Rule Feature Specs' ,:js ,:focus do
   end
 
   specify 'Edit' do
-    visit '/single-word-rules-landing'
+    visit '/single-word-rules'
     expect( page ).to have_content "bunny"
 
     execute_script('$("a.edit-btn")[0].click();')

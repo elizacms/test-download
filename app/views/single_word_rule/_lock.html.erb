@@ -1,0 +1,28 @@
+<% if SingleWordRule.first.locked_by_other_user?( @current_user ) %>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div class='file-locked'>
+        The Single Word Rules are currently being edited by <%= SingleWordRule.first.file_lock.user_email %>.
+        You are able to view it but not save any changes.
+      </div>
+    </div>
+  </div>
+<% elsif SingleWordRule.first.has_open_release? %>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div class='file-locked'>
+        There is already a release candidate pertaining to the Single Word Rules. That candidate must be
+        accepted or rejected before you can further edit the Single Word Rules.
+      </div>
+    </div>
+  </div>
+<% elsif SingleWordRule.first.locked_by_current_user?( @current_user ) %>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div class='file-locked'>
+        <strong>You have locked the Single Word Rules.</strong><br>
+        Other user's cannot modify these rules unless you click the 'Clear Changes' button.
+      </div>
+    </div>
+  </div>
+<% end %>

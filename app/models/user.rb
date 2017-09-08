@@ -28,7 +28,16 @@ class User
 
   def list_locked_files
     [ locked_intents.map { |i| i.files },
-      locked_field_data_types.map{ |fdt| fdt.files} ].flatten.compact
+      locked_field_data_types.map{ |fdt| fdt.files},
+      locked_single_word_rules ].flatten.compact
+  end
+
+  def locked_single_word_rules
+    swr = SingleWordRule.first
+
+    if swr.try(:file_lock).try(:user_id) == id.to_s && !swr.has_open_release?
+      relative_path_for single_word_rule_file
+    end
   end
 
   def locked_intents

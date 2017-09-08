@@ -15,6 +15,7 @@ class Release
   belongs_to :user
   has_many :intents
   has_many :field_data_types
+  has_many :single_word_rules
 
   before_create :setup_release
 
@@ -37,15 +38,20 @@ class Release
         FieldDataType.find_by( name: /\A#{ File.basename(obj[:field_data_type]) }\z/i )
       end
 
+      single_word_rule = aggregate_db_objects_for( attributes[:files], :single_word_rule ).map do |obj|
+        SingleWordRule.first
+      end
+
       git_add_commit_push_checkout_master( @branch_name, attributes[:files], attributes[:message] )
 
-      self.files            = nil
-      self.message          = nil
-      self.intents          = intents
-      self.field_data_types = field_data_types
-      self.user             = user
-      self.branch_name      = @branch_name
-      self.commit_sha       = @commit
+      self.files             = nil
+      self.message           = nil
+      self.intents           = intents
+      self.field_data_types  = field_data_types
+      self.single_word_rules = single_word_rule
+      self.user              = user
+      self.branch_name       = @branch_name
+      self.commit_sha        = @commit
 
       RepoLock.unlock
     rescue => e
@@ -76,13 +82,17 @@ class Release
         {dialog: file}
       elsif file =~ /raw_knowledge\/entity_data/
         {field_data_type: file}
+      elsif file =~ /german-intents-singleword-rules.csv/
+        {single_word_rule: file}
       end
     end.uniq
 
     if section == :intents
-      groups.select{|hsh| !hsh.has_key?(:field_data_type) }
+      groups.select{|hsh| hsh.has_key?(:action) || hsh.has_key?(:dialog) }
     elsif section == :field_data_types
-      groups.select{|hsh|  hsh.has_key?(:field_data_type) }
+      groups.select{|hsh| hsh.has_key?(:field_data_type) }
+    elsif section == :single_word_rule
+      groups.select{|hsh| hsh.has_key?(:single_word_rule) }
     end
   end
 end

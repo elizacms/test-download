@@ -27,7 +27,7 @@
 
         <%= link_to 'Entities', field_data_types_path %>
 
-        <%= link_to 'Single Word', single_word_rules_landing_path %>
+        <%= link_to 'Single Word', single_word_rules_path %>
 
         <% if AppConfig.eliza? %>
           <%= link_to 'Intents', skill_intents_path(skill_id: Skill.first) %>

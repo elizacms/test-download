@@ -1,5 +1,18 @@
+<%= render partial: 'lock' %>
+
 <div>
-  <h1>Single Word Rule</h1>
+  <h1>
+    Single Word Rule
+    <% if !SingleWordRule.first.locked_for?( @current_user ) %>
+      <%= form_tag( clear_single_word_rule_changes_path ) do %>
+        <%= submit_tag(
+          'Clear Changes',
+          data: { confirm: "Are you sure you would like to delete your changes?\nThis will allow other users to edit the Single Word Rules.".html_safe },
+          class: 'btn lg ghost pull-right'
+        ) %>
+      <% end %>
+    <% end %>
+  </h1>
 
   <table>
     <colgroup>
@@ -14,8 +27,10 @@
       <td>
         <select class="intents-options add"></select>
       </td>
-      <td class="input-view single-word-rule-add-btn">
-        <a href="#" class='add-btn btn md black'>Add</a>
+      <td class="input-view single-word-rule-padL100">
+        <% if SingleWordRule.first.locked_by_current_user?( @current_user ) %>
+          <a href="#" class='add-btn btn md black'>Add</a>
+        <% end %>
       </td>
     </tr>
   </table>
