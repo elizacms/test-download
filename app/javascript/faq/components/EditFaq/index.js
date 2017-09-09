@@ -7,8 +7,8 @@ import EditFaqView from '../EditFaqView/';
 import ee from '../../EventEmitter';
 
 export default class EditFaq extends Component {
-	constructor(props) {
-		super(props);
+  constructor(props) {
+    super(props);
 
     //const {kbId, isEnabled, questions, answers} = props;
     this.state = {
@@ -130,9 +130,9 @@ export default class EditFaq extends Component {
     this.setState({ currentArticle }, this.saveArticle);
   }
 
-	render() {
+  render() {
     const {currentArticle} =  this.state;
-		return (
+    return (
       <EditFaqView
         key={shortid.generate()}
         isEnabled={currentArticle ? currentArticle.enabled : false}
@@ -140,7 +140,6 @@ export default class EditFaq extends Component {
         questions={currentArticle ? currentArticle.questions : []}
         answers={currentArticle ? currentArticle.answers : []}
       />
-		)
-	}
+    )
+  }
 }
-
