@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CompositeDecorator, ContentState, Editor, EditorState, RichUtils, convertFromRaw } from 'draft-js';
+import { AtomicBlockUtils, CompositeDecorator, ContentState, Editor, EditorState, RichUtils, convertFromRaw } from 'draft-js';
 import throttle from 'lodash/throttle';
 
 const styles = {
@@ -34,6 +34,45 @@ const styles = {
     color: '#3b5998',
     textDecoration: 'underline',
   },
+      media: {
+        width: '100%',
+        // Fix an issue with Firefox rendering video controls
+        // with 'pre-wrap' white-space
+        whiteSpace: 'initial'
+      },
+};
+
+const Audio = (props) => {
+  return <audio controls src={props.src} style={styles.media} />;
+};
+
+const Image = (props) => {
+  return <img src={props.src} style={styles.media} title={props.src} alt={props.src} />;
+};
+
+const Video = (props) => {
+  return <video controls src={props.src} style={styles.media} />;
+};
+
+const Media = (props) => {
+  const entity = props.contentState.getEntity(
+    props.block.getEntityAt(0)
+  );
+  const {src} = entity.getData();
+  const type = entity.getType();
+  let media = null;
+  if (type === 'audio') {
+    media = <Audio src={src} />;
+  }
+
+  if (type === 'image') {
+    media = <Image src={src} />;
+  }
+
+  if (type === 'video') {
+    media = <Video src={src} />;
+  }
+  return media;
 };
 
 export default class TextEditor extends Component {
@@ -42,12 +81,15 @@ export default class TextEditor extends Component {
 
     const addLinkDecorator = new CompositeDecorator([
       { strategy: findLinkEntities, component: Link },
+      { strategy: findImageEntities, component: Image},
     ]);
 
     this.state = {
       editorState: EditorState.set(props.editorState, {decorator: addLinkDecorator}),
       showURLInput: false,
+      showImageInput: false,
       urlValue: '',
+      urlType: '',
     };
 
 
@@ -59,8 +101,11 @@ export default class TextEditor extends Component {
     this.toggleBlockType = this.toggleBlockType.bind(this);
     this.toggleInlineStyle = this.toggleInlineStyle.bind(this);
     this.promptForLink = this.promptForLink.bind(this);
+    this.promptForImage = this.promptForImage.bind(this);
     this.onURLChange = (e) =>  this.setState({urlValue: e.target.value ? e.target.value : '', showURLInput: true});
+    this.onURLForImageChange = (e) =>  this.setState({urlValue: e.target.value ? e.target.value : '', showImageInput: true});
     this.confirmLink = this.confirmLink.bind(this);
+    this.confirmImage = this.confirmImage.bind(this);
     this.onLinkInputKeyDown = this.onLinkInputKeyDown.bind(this);
     this.removeLink = this.removeLink.bind(this);
     this.handleMouseOver = this.handleMouseOver.bind(this);
@@ -80,7 +125,6 @@ export default class TextEditor extends Component {
       });
     }
   }
-
 
   handleKeyCommand(command) {
     const {editorState} = this.state;
@@ -129,7 +173,7 @@ export default class TextEditor extends Component {
     const {editorState} = this.state;
     const selection = editorState.getSelection();
 
-    function createLinkEntity() {
+    const createLinkEntity = () => {
       if (!selection.isCollapsed()) {
         const contentState = editorState.getCurrentContent();
         const startKey = editorState.getSelection().getStartKey();
@@ -141,19 +185,18 @@ export default class TextEditor extends Component {
           const linkInstance = contentState.getEntity(linkKey);
           url = linkInstance.getData().url;
         }
-        let that = this;
         this.setState({
           showURLInput: true,
           urlValue: url,
         }, () => {
-          that.urlComponent && that.urlComponent.focus();
+          this.urlComponent && this.urlComponent.focus();
         });
       }
 
     }
-      this.setState({
-        showURLInput: true,
-      }, createLinkEntity);
+    this.setState({
+      showURLInput: true,
+    }, createLinkEntity);
   }
 
   confirmLink(e) {
@@ -179,11 +222,13 @@ export default class TextEditor extends Component {
     }, this.focus )
 
   }
+
   onLinkInputKeyDown(e) {
     if (e.which === 13) {
       this.confirmLink(e);
     }
   }
+
   removeLink(e) {
     e.preventDefault();
     const {editorState} = this.state;
@@ -194,8 +239,64 @@ export default class TextEditor extends Component {
       });
     }
   }
+
+  promptForImage(e) {
+    e.preventDefault();
+    const {editorState} = this.state;
+    const selection = editorState.getSelection();
+
+    const createImageEntity = () => {
+      if (!selection.isCollapsed()) {
+        const contentState = editorState.getCurrentContent();
+        const startKey = editorState.getSelection().getStartKey();
+        const startOffset = editorState.getSelection().getStartOffset();
+        const blockWithImageAtBeginning = contentState.getBlockForKey(startKey);
+        const imageKey = blockWithImageAtBeginning.getEntityAt(startOffset);
+        let url = '';
+        if (imageKey) {
+          const imageInstance = contentState.getEntity(imageKey);
+          url = imageInstance.getData().url;
+        }
+        this.setState({
+          showImageInput: true,
+          urlValue: url,
+          urlType: 'image',
+        }, () => {
+          this.urlComponent && this.urlComponent.focus();
+        });
+      }
+    }
+    this.setState({
+          showImageInput: true,
+    }, createImageEntity);
+  }
+
+  confirmImage(e) {
+    e.preventDefault();
+    const {editorState, urlValue} = this.state;
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
+      'image',
+      'IMMUTABLE',
+      {src: urlValue}
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
+
+    this.setState({
+      editorState: AtomicBlockUtils.insertAtomicBlock(
+        newEditorState,
+        entityKey,
+        ' ',
+      ),
+      showImageInput: false,
+      urlValue: '',
+    }, this.focus )
+  }
+
   render() {
     let urlInput = null;
+    let imageInput = null;
     const {editorState} = this.state;
     if(!editorState) return null;
     // If the user changes block type before entering any text, we can
@@ -206,19 +307,20 @@ export default class TextEditor extends Component {
         <form onSubmit={this.onURLChange}>
         <p>Add Url (http://example.com):</p>
           <input
-            onInput={this.onURLChange}
-            ref={ urlComponent => this.urlComponent = urlComponent }
-            style={styles.urlInput}
-            type="text"
-            value={this.state.urlValue}
-            onKeyDown={this.onLinkInputKeyDown}
+          onInput={this.onURLChange}
+          ref={ urlComponent => this.urlComponent = urlComponent }
+          style={styles.urlInput}
+          type="text"
+          value={this.state.urlValue}
+          onKeyDown={this.onLinkInputKeyDown}
           />
-          <button onClick={this.confirmLink}>
+          <button onClick={this.confirmLink }>
           Confirm
           </button>
           </form>
-        </div>;
+          </div>;
     }
+
     let className = 'RichEditor-editor';
     var contentState = editorState.getCurrentContent();
     if (!contentState.hasText()) {
@@ -227,46 +329,85 @@ export default class TextEditor extends Component {
       }
     }
 
+    if (this.state.showImageInput) {
+      imageInput =
+        <div style={styles.urlInputContainer}>
+        <form onSubmit={this.onURLForImageChange}>
+        <p>Add Src (http://example.com):</p>
+          <input
+            onInput={this.onURLForImageChange}
+            ref={ imageComponent => this.imageComponent = imageComponent }
+            style={styles.urlInput}
+            type="text"
+            value={this.state.urlValue}
+            onKeyDown={this.onImageInputKeyDown}
+          />
+          <button onClick={this.confirmImage}>
+            Confirm
+          </button>
+          </form>
+          </div>;
+        }
+
+    var contentState = editorState.getCurrentContent();
+    if (!contentState.hasText()) {
+      if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+        className += ' RichEditor-hidePlaceholder';
+      }
+    }
     return (
       <div className="RichEditor-root">
-        <InlineStyleControls
-          editorState={editorState}
-          onToggle={this.toggleInlineStyle}
-        />
-        <BlockStyleControls
-          editorState={editorState}
-          onToggle={this.toggleBlockType}
-        />
-        {urlInput}
-        {
-          !urlInput && (
-            <div style={styles.buttons}>
+      <InlineStyleControls
+      editorState={editorState}
+      onToggle={this.toggleInlineStyle}
+      />
+      <BlockStyleControls
+      editorState={editorState}
+      onToggle={this.toggleBlockType}
+      />
+      {urlInput}
+      {imageInput}
+      {
+        !urlInput && !imageInput && (
+          <div style={styles.buttons}>
 
-              <button
-                onMouseDown={this.promptForLink}
-                className='RichEditor-styleButton'
-                style={{marginRight: 10}}
-              >
-                Add Link
-              </button>
-              <button
-                className='RichEditor-styleButton'
-                onMouseDown={this.removeLink}
-              >
-                Remove Link
-              </button>
-            </div>
-          )
-        }
-        <div tabIndex={0}
-          onMouseOver={this.handleMouseOver}
-          onClick={this.focus}
-        >
-        {
-          !urlInput &&  (
+          <button
+            onMouseDown={this.promptForLink}
+            className='RichEditor-styleButton'
+            style={{marginRight: 10}}
+          >
+          Add Link
+          </button>
+          <button
+            className='RichEditor-styleButton'
+            onMouseDown={this.removeLink}
+          >
+          Remove Link
+          </button>
+          </div>
+        )
+      }
+      {
+        !urlInput && !imageInput && (
 
+          <button
+            onMouseDown={this.promptForImage}
+            className='RichEditor-styleButton'
+            style={{marginRight: 10}}
+          >
+          Add Image
+          </button>
+        )
+      }
+      <div tabIndex={0}
+        onMouseOver={this.handleMouseOver}
+        onClick={this.focus}
+      >
+        {
+          !urlInput && !imageInput && (
             <Editor
               blockStyleFn={getBlockStyle}
+              blockRendererFn={mediaBlockRenderer}
               tabIndex={0}
               editorState={editorState}
               handleKeyCommand={this.handleKeyCommand}
@@ -274,16 +415,24 @@ export default class TextEditor extends Component {
               onTab={this.onTab}
               placeholder="Tell a story."
               ref={ editor => this.editor = editor }
-          />
-
+            />
           )
         }
-    </div>
       </div>
-    );
+    </div>
+  );
   }
 }
 
+function mediaBlockRenderer(block) {
+        if (block.getType() === 'atomic') {
+          return {
+            component: Media,
+            editable: false,
+          };
+        }
+        return null;
+      }
 // Custom overrides for "code" style.
 
 function getBlockStyle(block) {
@@ -338,6 +487,19 @@ const Link = (props) => {
   );
 };
 
+function findImageEntities(contentBlock, callback, contentState) {
+  contentBlock.findEntityRanges(
+    (character) => {
+      const entityKey = character.getEntity();
+      return (
+        entityKey !== null &&
+        contentState.getEntity(entityKey).getType() === 'IMAGE'
+      );
+    },
+    callback
+  );
+}
+
 const BLOCK_TYPES = [
   {label: 'Blockquote', style: 'blockquote'},
   {label: 'List', style: 'unordered-list-item'},
@@ -356,11 +518,11 @@ const BlockStyleControls = (props) => {
     {
       BLOCK_TYPES.map((type) => (
         <StyleButton
-          key={type.label}
-          active={type.style === blockType}
-          label={type.label}
-          onToggle={props.onToggle}
-          style={type.style}
+        key={type.label}
+        active={type.style === blockType}
+        label={type.label}
+        onToggle={props.onToggle}
+        style={type.style}
         />
       ))
     }
@@ -381,14 +543,15 @@ const InlineStyleControls = (props) => {
     {
       INLINE_STYLES.map(type =>
         <StyleButton
-          key={type.label}
-          active={currentStyle.has(type.style)}
-          label={type.label}
-          onToggle={props.onToggle}
-          style={type.style}
+        key={type.label}
+        active={currentStyle.has(type.style)}
+        label={type.label}
+        onToggle={props.onToggle}
+        style={type.style}
         />
       )
     }
     </div>
   );
 };
+

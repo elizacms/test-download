@@ -30,6 +30,7 @@ export default class EditFaq extends Component {
     this.deleteQuestion = this.deleteQuestion.bind(this);
     this.deleteAnswer = this.deleteAnswer.bind(this);
   }
+
   componentDidMount() {
 
     this.ee.on('addQuestion', this.addQuestion);
