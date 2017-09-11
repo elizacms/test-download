@@ -99,4 +99,44 @@ describe 'File Lock Spec' do
       expect( page ).to_not have_content "This intent is currently being edited by #{ admin.email }"
     end
   end
+
+  describe 'should lock Single Word Rules on click' do
+    specify 'success' do
+      click_link 'Single Word'
+
+      expect( page ).to have_content 'You have locked the Single Word Rules.'
+    end
+
+    specify 'should show in readonly mode to another user' do
+      click_link 'Single Word'
+
+      stub_identity_token
+      stub_identity_account_for user.email
+      visit '/login/success?code=0123abc'
+
+      click_link 'Single Word'
+
+      expect( page ).to have_content 'The Single Word Rules are currently being edited by admin@iamplus.com.'
+    end
+  end
+
+  describe 'should lock Stop Words on click' do
+    specify 'success' do
+      click_link 'Stop Words'
+
+      expect( page ).to have_content 'You have locked the Stop Words.'
+    end
+
+    specify 'should show in readonly mode to another user' do
+      click_link 'Stop Words'
+
+      stub_identity_token
+      stub_identity_account_for user.email
+      visit '/login/success?code=0123abc'
+
+      click_link 'Stop Words'
+
+      expect( page ).to have_content 'The Stop Words are currently being edited by admin@iamplus.com.'
+    end
+  end
 end

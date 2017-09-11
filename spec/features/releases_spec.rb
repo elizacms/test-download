@@ -224,6 +224,34 @@ describe 'Release Feature Specs' do
     end
   end
 
+  describe 'Single Word Rule',:js do
+    specify do
+      click_link 'Single Word'
+
+      execute_script('$("input.single-word-rule-input.add").val("Wie geht es dir?");')
+      execute_script('$("a.add-btn").click();')
+
+      click_link 'Releases'
+      click_link 'Create New Release Candidate'
+
+      expect( page ).to have_content '+Wie geht es dir?'
+    end
+  end
+
+  describe 'Stop Words',:js do
+    specify do
+      click_link 'Stop Words'
+
+      execute_script('$("input.stop-words-input.add").val("Wie geht es dir?");')
+      execute_script('$("a.add-btn").click();')
+
+      click_link 'Releases'
+      click_link 'Create New Release Candidate'
+
+      expect( page ).to have_content '+Wie geht es dir?'
+    end
+  end
+
   describe 'User submits for training' do
     let( :release ){ Release.last }
 
