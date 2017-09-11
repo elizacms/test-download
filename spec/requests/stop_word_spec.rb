@@ -1,4 +1,4 @@
-describe 'Requests for stop word controller',:focus do
+describe 'Requests for stop word controller' do
   describe 'GET /api/stop_words' do
     it 'should succeed' do
       get '/api/stop_words'
@@ -16,7 +16,7 @@ describe 'Requests for stop word controller',:focus do
 
       expect( last_response.status ).to eq 201
       expect( StopWordFileManager.new.load_file.count ).to eq 4
-      expect( StopWordFileManager.new.load_file       ).to eq [ ["aber"], ["zwischen"], ["zwölf"], ["cinco"] ]
+      expect( StopWordFileManager.new.load_file       ).to eq [ ["aber"], ["cinco"], ["zwischen"], ["zwölf"] ]
     end
   end
 
