@@ -42,4 +42,8 @@ module FilePath
   def single_word_rule_file
     "#{de_language_path}/german-intents-singleword-rules.csv"
   end
+
+  def stop_words_file
+    "#{ENV['NLU_CMS_PERSISTENCE_PATH']}/stop_words/stop_word_de.txt"
+  end
 end

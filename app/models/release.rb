@@ -16,6 +16,7 @@ class Release
   has_many :intents
   has_many :field_data_types
   has_many :single_word_rules
+  has_many :stop_words
 
   before_create :setup_release
 
@@ -42,6 +43,10 @@ class Release
         SingleWordRule.first
       end
 
+      stop_word = aggregate_db_objects_for( attributes[:files], :single_word_rule ).map do |obj|
+        StopWord.first
+      end
+
       git_add_commit_push_checkout_master( @branch_name, attributes[:files], attributes[:message] )
 
       self.files             = nil
@@ -49,6 +54,7 @@ class Release
       self.intents           = intents
       self.field_data_types  = field_data_types
       self.single_word_rules = single_word_rule
+      self.stop_word         = stop_word
       self.user              = user
       self.branch_name       = @branch_name
       self.commit_sha        = @commit
@@ -84,6 +90,8 @@ class Release
         {field_data_type: file}
       elsif file =~ /german-intents-singleword-rules.csv/
         {single_word_rule: file}
+      elsif file =~ /stop_words\/stop_word_de.text/
+        {stop_word: file}
       end
     end.uniq
 
@@ -93,6 +101,8 @@ class Release
       groups.select{|hsh| hsh.has_key?(:field_data_type) }
     elsif section == :single_word_rule
       groups.select{|hsh| hsh.has_key?(:single_word_rule) }
+    elsif section == :stop_word
+      groups.select{|hsh| hsh.has_key?(:stop_word) }
     end
   end
 end

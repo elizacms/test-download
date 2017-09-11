@@ -101,6 +101,13 @@ require 'sidekiq/web'
     to: 'single_word_rule#clear_changes',
     as: :clear_single_word_rule_changes
 
+  get '/stop-words',
+    to: 'stop_words#index'
+
+  post '/stop-words/clear-changes',
+    to: 'stop_words#clear_changes',
+    as: :clear_stop_word_changes
+
   resources :skills do
     resources :intents
 
@@ -157,6 +164,18 @@ require 'sidekiq/web'
 
     get '/single_word_rules/check_lock',
       to: 'single_word_rule#check_lock'
+
+    get '/stop_words',
+      to: 'stop_words#index'
+
+    post '/stop_words',
+      to: 'stop_words#create'
+
+    put '/stop_words',
+      to: 'stop_words#update'
+
+    get '/stop_words/check_lock',
+      to: 'stop_words#check_lock'
 
     scope module:'faq' do
       get '/articles/search',

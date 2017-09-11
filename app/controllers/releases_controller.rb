@@ -59,6 +59,7 @@ class ReleasesController < ApplicationController
     @release.intents.each { |intent| intent.unlock }
     @release.field_data_types.each { |fdt| fdt.unlock }
     @release.single_word_rules.each { |swr| swr.unlock }
+    @release.stop_words.each { |sw| sw.unlock }
 
     if params[:commit] == 'Accept'
       @release.update(state: 'approved', git_tag: params[:git_tag])

@@ -1,0 +1,28 @@
+<% if StopWord.first.locked_by_other_user?( @current_user ) %>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div class='file-locked'>
+        The Stop Words are currently being edited by <%= StopWord.first.file_lock.user_email %>.
+        You are able to view it but not save any changes.
+      </div>
+    </div>
+  </div>
+<% elsif StopWord.first.has_open_release? %>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div class='file-locked'>
+        There is already a release candidate pertaining to the Stop Words. That candidate must be
+        accepted or rejected before you can further edit the Stop Words.
+      </div>
+    </div>
+  </div>
+<% elsif StopWord.first.locked_by_current_user?( @current_user ) %>
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div class='file-locked'>
+        <strong>You have locked the Stop Words.</strong><br>
+        Other user's cannot modify these words unless you click the 'Clear Changes' button.
+      </div>
+    </div>
+  </div>
+<% end %>
