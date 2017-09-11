@@ -43,7 +43,7 @@ class Release
         SingleWordRule.first
       end
 
-      stop_word = aggregate_db_objects_for( attributes[:files], :single_word_rule ).map do |obj|
+      stop_word = aggregate_db_objects_for( attributes[:files], :stop_word ).map do |obj|
         StopWord.first
       end
 
