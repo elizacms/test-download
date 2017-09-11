@@ -9,6 +9,7 @@ const styles = {
     width: 600,
   },
   buttons: {
+    display: 'inline-block',
     marginBottom: 10,
   },
   urlInputContainer: {
@@ -120,9 +121,7 @@ export default class TextEditor extends Component {
   }
 
   throttledHandleMouseOver(e) {
-    console.log('throttledHandleMouseOver', e.target);
     this.focus();
-
   }
 
   promptForLink(e) {
@@ -242,13 +241,18 @@ export default class TextEditor extends Component {
         {
           !urlInput && (
             <div style={styles.buttons}>
+
               <button
                 onMouseDown={this.promptForLink}
+                className='RichEditor-styleButton'
                 style={{marginRight: 10}}
               >
                 Add Link
               </button>
-              <button onMouseDown={this.removeLink}>
+              <button
+                className='RichEditor-styleButton'
+                onMouseDown={this.removeLink}
+              >
                 Remove Link
               </button>
             </div>
@@ -352,11 +356,11 @@ const BlockStyleControls = (props) => {
     {
       BLOCK_TYPES.map((type) => (
         <StyleButton
-        key={type.label}
-        active={type.style === blockType}
-        label={type.label}
-        onToggle={props.onToggle}
-        style={type.style}
+          key={type.label}
+          active={type.style === blockType}
+          label={type.label}
+          onToggle={props.onToggle}
+          style={type.style}
         />
       ))
     }

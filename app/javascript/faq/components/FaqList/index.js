@@ -77,7 +77,7 @@ export default class FaqList extends Component {
 		{
 		  this.state.enabledSortDirection
 		  ? <button className="btn-desc" onClick={this.handleSortByEnabledClick(false)}><img src={angleUp} alt={angleUp} /></button>
-		  : <button className="btn-asc" onClick={this.handleSortByEnabledClick(true)}><img src={angleDown} alt={angleDownDownDown} /></button>
+		  : <button className="btn-asc" onClick={this.handleSortByEnabledClick(true)}><img src={angleDown} alt={angleDown} /></button>
 		}
 	      </th>
 	    </tr>
