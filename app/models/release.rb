@@ -54,7 +54,7 @@ class Release
       self.intents           = intents
       self.field_data_types  = field_data_types
       self.single_word_rules = single_word_rule
-      self.stop_word         = stop_word
+      self.stop_words        = stop_word
       self.user              = user
       self.branch_name       = @branch_name
       self.commit_sha        = @commit

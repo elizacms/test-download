@@ -36,7 +36,7 @@ describe StopWordFileManager do
     end
   end
 
-  describe '#insert and #update with extra lines',:focus do
+  describe '#insert and #update with extra lines' do
     it 'should allow an insert and then an update and return correctly' do
       File.write(stop_words_file,File.read('spec/data-files/stop-words-with-blank-lines.txt'))
       expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["zwölf"]]
