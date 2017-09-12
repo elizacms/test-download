@@ -1,0 +1,46 @@
+<%= render partial: 'lock' %>
+
+<div>
+  <div class="page-head">
+    <h1>
+      Stop Words
+    </h1>
+    <% if !StopWord.first.locked_for?( @current_user ) %>
+      <%= form_tag( clear_stop_word_changes_path ) do %>
+        <%= submit_tag(
+          'Clear Changes',
+          data: { confirm: "Are you sure you would like to delete your changes?\nThis will allow other users to edit the Stop Words.".html_safe },
+          class: 'btn lg ghost clear-changes-btn'
+        ) %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="stop-words-table">
+    <table class="full-width">
+      <tr>
+        <td>
+          <input type="text" class="stop-words-input add" />
+        </td>
+        <td class="stop-words-input-view stop-words-input-add-btn">
+          <% if StopWord.first.locked_by_current_user?( @current_user ) %>
+            <a href="#" class='add-stop-words-btn btn md black'>Add</a>
+          <% end %>
+        </td>
+      </tr>
+    </table>
+
+    <br>
+
+    <table class="full-width" style="table-layout: fixed;">
+      <thead>
+        <tr>
+          <th>Words</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="stopWordsTable">
+      </tbody>
+    </table>
+  </div>
+</div>

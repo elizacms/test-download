@@ -16,5 +16,6 @@
 //= require bootstrap
 //= require jquery_ujs
 //= require_tree ./single_word_rule
+//= require_tree ./stop_words
 //= require turbolinks
 //= require data_uploader

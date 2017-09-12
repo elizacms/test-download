@@ -102,6 +102,9 @@ require 'sidekiq/web'
     as: :clear_single_word_rule_changes
 
   get '/stop-words',
+    to: 'stop_words#landing'
+
+  get '/stop-words',
     to: 'stop_words#index'
 
   post '/stop-words/clear-changes',

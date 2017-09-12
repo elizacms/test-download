@@ -99,7 +99,6 @@ var addAction = function() {
     var new_word_intent = $('select.intents-options.add').val();
 
     var data = { "text": new_word, "intent_ref": "{{intent:"+new_word_intent+"}}" };
-    console.log( data );
 
     $.ajax({
       type: 'POST',
@@ -158,7 +157,6 @@ var saveAction = function() {
     var edit_word_intent = $(this).parents().eq(1).find('select').val();
 
     var data = { "row_num": row_num, "text": edit_word, "intent_ref": "{{intent:"+edit_word_intent+"}}" };
-    console.log( data );
 
     $.ajax({
       type: 'PUT',

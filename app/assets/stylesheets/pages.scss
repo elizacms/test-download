@@ -78,6 +78,9 @@ h4 {
   }
 }
 
+.full-width{
+  width: 100%;
+}
 .page-head{
   position: relative;
 }
@@ -101,4 +104,11 @@ h4 {
 }
 .hide-visibility{
   visibility: hidden;
+}
+.stop-words-table{
+  width: 80%;
+  margin: 0 auto;
+}
+.stop-words-edit-save-btn{
+  padding-left: 230px;
 }
