@@ -16,7 +16,8 @@ describe 'Requests for stop word controller' do
 
       expect( last_response.status ).to eq 201
       expect( StopWordFileManager.new.load_file.count ).to eq 4
-      expect( StopWordFileManager.new.load_file       ).to eq [ ["aber"], ["cinco"], ["zwischen"], ["zwölf"] ]
+      expect( StopWordFileManager.new.load_file       ).to eq [ ["aber"], ["zwischen"],
+                                                                ["zwölf"], ["cinco"] ]
     end
   end
 

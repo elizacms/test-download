@@ -9,14 +9,14 @@ describe StopWordFileManager do
     it 'should succeed' do
       StopWordFileManager.new.insert( 'state' )
 
-      expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["state"], ["zwischen"], ["zwölf"]]
+      expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["zwölf"], ["state"]]
     end
 
     it 'should succeed even with extra blank lines' do
       File.write(single_word_rule_file,File.read('spec/data-files/stop-words-with-blank-lines.txt'))
       StopWordFileManager.new.insert( 'state' )
 
-      expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["state"], ["zwischen"], ["zwölf"]]
+      expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["zwölf"], ["state"]]
     end
   end
 
@@ -42,18 +42,18 @@ describe StopWordFileManager do
       expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["zwölf"]]
 
       StopWordFileManager.new.insert( 'state' )
-      expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["state"], ["zwischen"], ["zwölf"]]
+      expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["zwölf"], ["state"]]
 
       StopWordFileManager.new.update( '2', 'ofglen' )
-      expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["ofglen"], ["state"], ["zwölf"]]
+      expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["ofglen"], ["state"]]
 
       StopWordFileManager.new.insert( 'great' )
-      expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["great"], ["ofglen"],
-                                                         ["state"],["zwölf"]]
+      expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["ofglen"],
+                                                         ["state"],["great"]]
 
       StopWordFileManager.new.update( '3', 'aaaaa' )
-      expect( StopWordFileManager.new.load_file ).to eq [["aaaaa"], ["aber"], ["great"],
-                                                         ["ofglen"], ["zwölf"]]
+      expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["ofglen"],
+                                                         ["aaaaa"],["great"]]
     end
   end
 
@@ -63,8 +63,8 @@ describe StopWordFileManager do
       StopWordFileManager.new.insert( 'back' )
       StopWordFileManager.new.insert( 'act' )
 
-      expect( StopWordFileManager.new.load_file ).to eq [ ["aber"], ["act"], ["back"],
-                                                          ["cab"], ["zwischen"], ["zwölf"] ]
+      expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["zwölf"],
+                                                         ["cab"], ["back"], ["act"]]
     end
   end
 end

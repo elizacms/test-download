@@ -13,24 +13,10 @@ class StopWordFileManager
     open_temp_file_and_loop_single_word_file( text, size, nil )
 
     delete_original_and_rename
-
-    alphabetical_order
   end
 
   def update row_num, text
     open_temp_file_and_loop_single_word_file( text, nil, row_num )
-
-    delete_original_and_rename
-
-    alphabetical_order
-  end
-
-  def alphabetical_order
-    CSV.open( new_temp_file, 'w' ) do |csv_out|
-      CSV.foreach( stop_words_file ).select(&:any?).sort_by{ |word| word }.each do |row|
-        csv_out << row
-      end
-    end
 
     delete_original_and_rename
   end
