@@ -133,6 +133,7 @@ describe 'Release Feature Specs' do
       click_link 'Entities'
       click_link 'Text'
 
+      sleep 0.5
       execute_script("$('#files').show();")
       attach_file 'entity_data', File.absolute_path( 'spec/data-files/entity_data.csv' )
       click_button 'Upload'
@@ -156,6 +157,7 @@ describe 'Release Feature Specs' do
       click_link 'Entities'
       click_link 'Text'
 
+      sleep 0.5
       execute_script("$('#files').show();")
       attach_file 'entity_data', File.absolute_path( 'spec/data-files/training_data.csv' )
       click_button 'Upload'
