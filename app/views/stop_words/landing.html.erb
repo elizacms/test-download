@@ -20,7 +20,7 @@
     <table class="full-width">
       <tr>
         <td>
-          <input type="text" class="stop-words-input add" />
+          <input name="stop_words_input" type="text" class="stop-words-input add" />
         </td>
         <td class="stop-words-input-view stop-words-input-add-btn">
           <% if StopWord.first.locked_by_current_user?( @current_user ) %>

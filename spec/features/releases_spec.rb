@@ -228,8 +228,8 @@ describe 'Release Feature Specs' do
     specify do
       click_link 'Single Word'
 
-      execute_script('$("input.single-word-rule-input.add").val("Wie geht es dir?");')
-      execute_script('$("a.add-btn").click();')
+      fill_in :single_word_rule_input, with: 'Wie geht es dir?'
+      find( 'a.add-btn' ).click
 
       click_link 'Releases'
       click_link 'Create New Release Candidate'
@@ -238,12 +238,13 @@ describe 'Release Feature Specs' do
     end
   end
 
-  describe 'Stop Words',:js do
+  describe 'Stop Words',:js, :focus do
     specify do
       click_link 'Stop Words'
 
-      execute_script('$("input.stop-words-input.add").val("Wie geht es dir?");')
-      execute_script('$("a.add-btn").click();')
+      fill_in :stop_words_input, with: 'Wie geht es dir?'
+      binding.pry
+      find( 'a.add-stop-words-btn' ).click
 
       click_link 'Releases'
       click_link 'Create New Release Candidate'
