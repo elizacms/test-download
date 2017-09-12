@@ -238,12 +238,11 @@ describe 'Release Feature Specs' do
     end
   end
 
-  describe 'Stop Words',:js, :focus do
+  describe 'Stop Words',:js do
     specify do
       click_link 'Stop Words'
 
       fill_in :stop_words_input, with: 'Wie geht es dir?'
-      binding.pry
       find( 'a.add-stop-words-btn' ).click
 
       click_link 'Releases'

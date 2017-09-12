@@ -29,7 +29,7 @@ class StopWordsController < ApplicationController
 
   # GET /api/single_word_rules/check_lock
   def check_lock
-    is_locked = StopWord.first.locked_for?( current_user )
+    is_locked = StopWord.first.try( :locked_for?, current_user )
 
     render json:{is_locked:is_locked}, status:200
   end
