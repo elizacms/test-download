@@ -90,7 +90,7 @@ class Release
         {field_data_type: file}
       elsif file =~ /german-intents-singleword-rules.csv/
         {single_word_rule: file}
-      elsif file =~ /stop_words\/stop_word_de.text/
+      elsif file =~ /stop_words\/stop_word_de.txt/
         {stop_word: file}
       end
     end.uniq
