@@ -1,79 +1,19 @@
 import React, { Component } from 'react';
-import { AtomicBlockUtils, CompositeDecorator, ContentState, Editor, EditorState, RichUtils, convertFromRaw } from 'draft-js';
 import throttle from 'lodash/throttle';
 
-const styles = {
-  root: {
-    fontFamily: '\'Georgia\', serif',
-    padding: 20,
-    width: 600,
-  },
-  buttons: {
-    display: 'inline-block',
-    marginBottom: 10,
-  },
-  urlInputContainer: {
-    marginBottom: 10,
-  },
-  urlInput: {
-    fontFamily: '\'Georgia\', serif',
-    marginRight: 10,
-    padding: 3,
-  },
-  editor: {
-    border: '1px solid #ccc',
-    cursor: 'text',
-    minHeight: 80,
-    padding: 10,
-  },
-  button: {
-    marginTop: 10,
-    textAlign: 'center',
-  },
-  link: {
-    color: '#3b5998',
-    textDecoration: 'underline',
-  },
-      media: {
-        width: '100%',
-        // Fix an issue with Firefox rendering video controls
-        // with 'pre-wrap' white-space
-        whiteSpace: 'initial'
-      },
-};
+import {
+  AtomicBlockUtils,
+  CompositeDecorator,
+  ContentState,
+  Editor,
+  EditorState,
+  RichUtils
+} from 'draft-js';
 
-const Audio = (props) => {
-  return <audio controls src={props.src} style={styles.media} />;
-};
-
-const Image = (props) => {
-  return <img src={props.src} style={styles.media} title={props.src} alt={props.src} />;
-};
-
-const Video = (props) => {
-  return <video controls src={props.src} style={styles.media} />;
-};
-
-const Media = (props) => {
-  const entity = props.contentState.getEntity(
-    props.block.getEntityAt(0)
-  );
-  const {src} = entity.getData();
-  const type = entity.getType();
-  let media = null;
-  if (type === 'audio') {
-    media = <Audio src={src} />;
-  }
-
-  if (type === 'image') {
-    media = <Image src={src} />;
-  }
-
-  if (type === 'video') {
-    media = <Video src={src} />;
-  }
-  return media;
-};
+import Media from './Media';
+import Link from './Link';
+import BlockStyleControls from './BlockStyleControls';
+import InlineStyleControls from './InlineStyleControls';
 
 export default class TextEditor extends Component {
   constructor(props) {
@@ -88,10 +28,10 @@ export default class TextEditor extends Component {
       editorState: EditorState.set(props.editorState, {decorator: addLinkDecorator}),
       showURLInput: false,
       showImageInput: false,
+      showVideoInput: false,
       urlValue: '',
       urlType: '',
     };
-
 
     this.focus = () => this.editor && this.editor.focus();
     this.onChange = this.onChange.bind(this);
@@ -102,14 +42,171 @@ export default class TextEditor extends Component {
     this.toggleInlineStyle = this.toggleInlineStyle.bind(this);
     this.promptForLink = this.promptForLink.bind(this);
     this.promptForImage = this.promptForImage.bind(this);
+    this.promptForVideo = this.promptForVideo.bind(this);
     this.onURLChange = (e) =>  this.setState({urlValue: e.target.value ? e.target.value : '', showURLInput: true});
     this.onURLForImageChange = (e) =>  this.setState({urlValue: e.target.value ? e.target.value : '', showImageInput: true});
+    this.onURLForVideoChange = (e) =>  this.setState({urlValue: e.target.value ? e.target.value : '', showVideoInput: true});
     this.confirmLink = this.confirmLink.bind(this);
     this.confirmImage = this.confirmImage.bind(this);
+    this.confirmVideo = this.confirmVideo.bind(this);
     this.onLinkInputKeyDown = this.onLinkInputKeyDown.bind(this);
     this.removeLink = this.removeLink.bind(this);
     this.handleMouseOver = this.handleMouseOver.bind(this);
     this.throttledHandleMouseOver = throttle(this.throttledHandleMouseOver, 75).bind(this);
+  }
+
+  render() {
+    let urlInput = null;
+    let imageInput = null;
+    let videoInput = null;
+    const {editorState} = this.state;
+    if(!editorState) return null;
+    // If the user changes block type before entering any text, we can
+    // either style the placeholder or hide it. Let's just hide it now.
+    let className = 'RichEditor-editor';
+    var contentState = editorState.getCurrentContent();
+    if (!contentState.hasText()) {
+      if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+        className += ' RichEditor-hidePlaceholder';
+      }
+    }
+
+    if (this.state.showURLInput) {
+      urlInput = (
+        <div style={styles.urlInputContainer}>
+          <form onSubmit={this.onURLChange}>
+            <p>Add Url (http://example.com):</p>
+            <input
+              onInput={this.onURLChange}
+              ref={ urlComponent => this.urlComponent = urlComponent }
+              style={styles.urlInput}
+              type="text"
+              value={this.state.urlValue}
+              onKeyDown={this.onLinkInputKeyDown}
+            />
+            <button onClick={this.confirmLink }>Confirm</button>
+          </form>
+        </div>
+      );
+    }
+
+    if (this.state.showImageInput) {
+      imageInput =
+        <div style={styles.urlInputContainer}>
+          <form onSubmit={this.onURLForImageChange}>
+            <p>Add Src (http://example.com):</p>
+            <input
+              onInput={this.onURLForImageChange}
+              ref={ imageComponent => this.imageComponent = imageComponent }
+              style={styles.urlInput}
+              type="text"
+              value={this.state.urlValue}
+              onKeyDown={this.onImageInputKeyDown}
+            />
+            <button onClick={this.confirmImage}>Confirm</button>
+          </form>
+        </div>;
+    }
+
+    if (this.state.showVideoInput) {
+      videoInput =
+        <div style={styles.urlInputContainer}>
+          <form onSubmit={this.onURLForVideoChange}>
+            <p>Add Src (http://example.com):</p>
+            <input
+              onInput={this.onURLForVideoChange}
+              ref={ videoComponent => this.videoComponent = videoComponent }
+              style={styles.urlInput}
+              type="text"
+              value={this.state.urlValue}
+              onKeyDown={this.onVideoInputKeyDown}
+            />
+            <button onClick={this.confirmVideo}>Confirm</button>
+          </form>
+        </div>;
+    }
+
+    var contentState = editorState.getCurrentContent();
+    if (!contentState.hasText()) {
+      if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+        className += ' RichEditor-hidePlaceholder';
+      }
+    }
+
+    return (
+      <div className="RichEditor-root">
+        <InlineStyleControls
+          editorState={editorState}
+          onToggle={this.toggleInlineStyle}
+        />
+        <BlockStyleControls
+          editorState={editorState}
+          onToggle={this.toggleBlockType}
+        />
+        {
+            <div style={styles.buttons}>
+            <button
+              onMouseDown={this.promptForLink}
+              className='RichEditor-styleButton'
+              style={{marginRight: 10}}
+            >
+              Add Link
+            </button>
+            <button
+              className='RichEditor-styleButton'
+              onMouseDown={this.removeLink}
+            >
+            Remove Link
+            </button>
+            </div>
+        }
+        {
+
+            <button
+              onMouseDown={this.promptForImage}
+              className='RichEditor-styleButton'
+              style={{marginRight: 10}}
+            >
+            Add Image
+            </button>
+        }
+        {
+
+            <button
+              onMouseDown={this.promptForVideo}
+              className='RichEditor-styleButton'
+              style={{marginRight: 10}}
+            >
+            Add Video
+            </button>
+        }
+      <div>
+        {urlInput}
+        {imageInput}
+        {videoInput}
+      </div>
+        <div tabIndex={0}
+          onMouseOver={this.handleMouseOver}
+          onClick={this.focus}
+        >
+        {
+          !urlInput && !imageInput && !videoInput && (
+            <Editor
+              blockStyleFn={getBlockStyle}
+              blockRendererFn={mediaBlockRenderer}
+              tabIndex={0}
+              editorState={editorState}
+              handleKeyCommand={this.handleKeyCommand}
+              onChange={this.onChange}
+              onTab={this.onTab}
+              placeholder="Tell a story."
+              ref={ editor => this.editor = editor }
+            />
+          )
+        }
+        </div>
+      </div>
+  );
   }
 
   onChange(editorState) {
@@ -273,6 +370,7 @@ export default class TextEditor extends Component {
 
   confirmImage(e) {
     e.preventDefault();
+
     const {editorState, urlValue} = this.state;
     const contentState = editorState.getCurrentContent();
     const contentStateWithEntity = contentState.createEntity(
@@ -284,143 +382,59 @@ export default class TextEditor extends Component {
     const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
 
     this.setState({
-      editorState: AtomicBlockUtils.insertAtomicBlock(
-        newEditorState,
-        entityKey,
-        ' ',
-      ),
+      editorState: AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, ' ',),
       showImageInput: false,
       urlValue: '',
-    }, this.focus )
+    }, this.focus)
   }
 
-  render() {
-    let urlInput = null;
-    let imageInput = null;
+  promptForVideo(e) {
+    e.preventDefault();
     const {editorState} = this.state;
-    if(!editorState) return null;
-    // If the user changes block type before entering any text, we can
-    // either style the placeholder or hide it. Let's just hide it now.
-    if (this.state.showURLInput) {
-      urlInput =
-        <div style={styles.urlInputContainer}>
-        <form onSubmit={this.onURLChange}>
-        <p>Add Url (http://example.com):</p>
-          <input
-          onInput={this.onURLChange}
-          ref={ urlComponent => this.urlComponent = urlComponent }
-          style={styles.urlInput}
-          type="text"
-          value={this.state.urlValue}
-          onKeyDown={this.onLinkInputKeyDown}
-          />
-          <button onClick={this.confirmLink }>
-          Confirm
-          </button>
-          </form>
-          </div>;
-    }
+    const selection = editorState.getSelection();
 
-    let className = 'RichEditor-editor';
-    var contentState = editorState.getCurrentContent();
-    if (!contentState.hasText()) {
-      if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-        className += ' RichEditor-hidePlaceholder';
-      }
-    }
-
-    if (this.state.showImageInput) {
-      imageInput =
-        <div style={styles.urlInputContainer}>
-        <form onSubmit={this.onURLForImageChange}>
-        <p>Add Src (http://example.com):</p>
-          <input
-            onInput={this.onURLForImageChange}
-            ref={ imageComponent => this.imageComponent = imageComponent }
-            style={styles.urlInput}
-            type="text"
-            value={this.state.urlValue}
-            onKeyDown={this.onImageInputKeyDown}
-          />
-          <button onClick={this.confirmImage}>
-            Confirm
-          </button>
-          </form>
-          </div>;
+    const createVideoEntity = () => {
+      if (!selection.isCollapsed()) {
+        const contentState = editorState.getCurrentContent();
+        const startKey = editorState.getSelection().getStartKey();
+        const startOffset = editorState.getSelection().getStartOffset();
+        const blockWithVideoAtBeginning = contentState.getBlockForKey(startKey);
+        const videoKey = blockWithVideoAtBeginning.getEntityAt(startOffset);
+        let url = '';
+        if (videoKey) {
+          const videoInstance = contentState.getEntity(videoKey);
+          url = videoInstance.getData().url;
         }
-
-    var contentState = editorState.getCurrentContent();
-    if (!contentState.hasText()) {
-      if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-        className += ' RichEditor-hidePlaceholder';
+        this.setState({
+          showVideoInput: true,
+          urlValue: url,
+          urlType: 'video',
+        }, () => {
+          this.videoComponent && this.videoComponent.focus();
+        });
       }
     }
-    return (
-      <div className="RichEditor-root">
-      <InlineStyleControls
-      editorState={editorState}
-      onToggle={this.toggleInlineStyle}
-      />
-      <BlockStyleControls
-      editorState={editorState}
-      onToggle={this.toggleBlockType}
-      />
-      {urlInput}
-      {imageInput}
-      {
-        !urlInput && !imageInput && (
-          <div style={styles.buttons}>
+    this.setState({ showVideoInput: true }, createVideoEntity);
+  }
 
-          <button
-            onMouseDown={this.promptForLink}
-            className='RichEditor-styleButton'
-            style={{marginRight: 10}}
-          >
-          Add Link
-          </button>
-          <button
-            className='RichEditor-styleButton'
-            onMouseDown={this.removeLink}
-          >
-          Remove Link
-          </button>
-          </div>
-        )
-      }
-      {
-        !urlInput && !imageInput && (
+  confirmVideo(e) {
+    e.preventDefault();
 
-          <button
-            onMouseDown={this.promptForImage}
-            className='RichEditor-styleButton'
-            style={{marginRight: 10}}
-          >
-          Add Image
-          </button>
-        )
-      }
-      <div tabIndex={0}
-        onMouseOver={this.handleMouseOver}
-        onClick={this.focus}
-      >
-        {
-          !urlInput && !imageInput && (
-            <Editor
-              blockStyleFn={getBlockStyle}
-              blockRendererFn={mediaBlockRenderer}
-              tabIndex={0}
-              editorState={editorState}
-              handleKeyCommand={this.handleKeyCommand}
-              onChange={this.onChange}
-              onTab={this.onTab}
-              placeholder="Tell a story."
-              ref={ editor => this.editor = editor }
-            />
-          )
-        }
-      </div>
-    </div>
-  );
+    const {editorState, urlValue} = this.state;
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
+      'video',
+      'IMMUTABLE',
+      {src: urlValue}
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
+
+    this.setState({
+      editorState: AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, ' ',),
+      showVideoInput: false,
+      urlValue: '',
+    }, this.focus)
   }
 }
 
@@ -442,29 +456,6 @@ function getBlockStyle(block) {
   }
 }
 
-class StyleButton extends React.Component {
-  constructor() {
-    super();
-    this.onToggle = (e) => {
-      e.preventDefault();
-      this.props.onToggle(this.props.style);
-    };
-  }
-
-  render() {
-    let className = 'RichEditor-styleButton';
-
-    if (this.props.active) {
-      className += ' RichEditor-activeButton';
-    }
-    return (
-      <span className={className} onMouseDown={this.onToggle}>
-      {this.props.label}
-      </span>
-    );
-  }
-}
-
 function findLinkEntities(contentBlock, callback, contentState) {
   contentBlock.findEntityRanges(
     (character) => {
@@ -473,19 +464,10 @@ function findLinkEntities(contentBlock, callback, contentState) {
         entityKey !== null &&
         contentState.getEntity(entityKey).getType() === 'LINK'
       );
-    },
-    callback
+    }, callback
   );
 }
 
-const Link = (props) => {
-  const {url} = props.contentState.getEntity(props.entityKey).getData();
-  return (
-    <a href={url} style={styles.link}>
-    {props.children}
-    </a>
-  );
-};
 
 function findImageEntities(contentBlock, callback, contentState) {
   contentBlock.findEntityRanges(
@@ -493,65 +475,54 @@ function findImageEntities(contentBlock, callback, contentState) {
       const entityKey = character.getEntity();
       return (
         entityKey !== null &&
-        contentState.getEntity(entityKey).getType() === 'IMAGE'
+        contentState.getEntity(entityKey).getType() === 'image'
       );
     },
     callback
   );
 }
 
-const BLOCK_TYPES = [
-  {label: 'Blockquote', style: 'blockquote'},
-  {label: 'List', style: 'unordered-list-item'},
-];
-
-const BlockStyleControls = (props) => {
-  const {editorState} = props;
-  const selection = editorState.getSelection();
-  const blockType = editorState
-    .getCurrentContent()
-    .getBlockForKey(selection.getStartKey())
-    .getType();
-
-  return (
-    <div className="RichEditor-controls">
-    {
-      BLOCK_TYPES.map((type) => (
-        <StyleButton
-        key={type.label}
-        active={type.style === blockType}
-        label={type.label}
-        onToggle={props.onToggle}
-        style={type.style}
-        />
-      ))
-    }
-    </div>
+function findVideoEntities(contentBlock, callback, contentState) {
+  contentBlock.findEntityRanges(
+    (character) => {
+      const entityKey = character.getEntity();
+      return (
+        entityKey !== null &&
+        contentState.getEntity(entityKey).getType() === 'video'
+      );
+    },
+    callback
   );
+}
+const styles = {
+  root: {
+    fontFamily: '\'Georgia\', serif',
+    padding: 20,
+    width: 600,
+  },
+  buttons: {
+    display: 'inline-block',
+    marginBottom: 10,
+  },
+  urlInputContainer: {
+    marginBottom: 10,
+  },
+  urlInput: {
+    fontFamily: '\'Georgia\', serif',
+    marginRight: 10,
+    padding: 3,
+  },
+  editor: {
+    border: '1px solid #ccc',
+    cursor: 'text',
+    minHeight: 80,
+    padding: 10,
+  },
+  button: {
+    marginTop: 10,
+    textAlign: 'center',
+  },
 };
 
-var INLINE_STYLES = [
-  {label: 'Bold', style: 'BOLD'},
-  {label: 'Italic', style: 'ITALIC'},
-  {label: 'Underline', style: 'UNDERLINE'},
-];
 
-const InlineStyleControls = (props) => {
-  var currentStyle = props.editorState.getCurrentInlineStyle();
-  return (
-    <div className="RichEditor-controls">
-    {
-      INLINE_STYLES.map(type =>
-        <StyleButton
-        key={type.label}
-        active={currentStyle.has(type.style)}
-        label={type.label}
-        onToggle={props.onToggle}
-        style={type.style}
-        />
-      )
-    }
-    </div>
-  );
-};
 
