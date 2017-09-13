@@ -14,7 +14,7 @@ class StopWordsController < ApplicationController
 
   # POST /api/single_word_rules
   def create
-    StopWordFileManager.new.insert( single_word_params[:text] )
+    StopWordFileManager.new.append( single_word_params[:text] )
 
     render json:{}.to_json, status:201
   end

@@ -5,16 +5,16 @@ describe StopWordFileManager do
     end
   end
 
-  describe '#insert' do
+  describe '#append' do
     it 'should succeed' do
-      StopWordFileManager.new.insert( 'state' )
+      StopWordFileManager.new.append( 'state' )
 
       expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["zwölf"], ["state"]]
     end
 
     it 'should succeed even with extra blank lines' do
       File.write(single_word_rule_file,File.read('spec/data-files/stop-words-with-blank-lines.txt'))
-      StopWordFileManager.new.insert( 'state' )
+      StopWordFileManager.new.append( 'state' )
 
       expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["zwölf"], ["state"]]
     end
@@ -36,18 +36,18 @@ describe StopWordFileManager do
     end
   end
 
-  describe '#insert and #update with extra lines' do
-    it 'should allow an insert and then an update and return correctly' do
+  describe '#append and #update with extra lines' do
+    it 'should allow an append and then an update and return correctly' do
       File.write(stop_words_file,File.read('spec/data-files/stop-words-with-blank-lines.txt'))
       expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["zwölf"]]
 
-      StopWordFileManager.new.insert( 'state' )
+      StopWordFileManager.new.append( 'state' )
       expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["zwölf"], ["state"]]
 
       StopWordFileManager.new.update( '2', 'ofglen' )
       expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["ofglen"], ["state"]]
 
-      StopWordFileManager.new.insert( 'great' )
+      StopWordFileManager.new.append( 'great' )
       expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["ofglen"],
                                                          ["state"],["great"]]
 
@@ -59,9 +59,9 @@ describe StopWordFileManager do
 
   describe '#alphabetical_order' do
     it 'should aplphabetize the file' do
-      StopWordFileManager.new.insert( 'cab' )
-      StopWordFileManager.new.insert( 'back' )
-      StopWordFileManager.new.insert( 'act' )
+      StopWordFileManager.new.append( 'cab' )
+      StopWordFileManager.new.append( 'back' )
+      StopWordFileManager.new.append( 'act' )
 
       expect( StopWordFileManager.new.load_file ).to eq [["aber"], ["zwischen"], ["zwölf"],
                                                          ["cab"], ["back"], ["act"]]
