@@ -14,7 +14,7 @@ class SingleWordRuleController < ApplicationController
 
   # POST /api/single_word_rules
   def create
-    SingleWordRuleFileManager.new.insert( single_word_params[:text],
+    SingleWordRuleFileManager.new.append( single_word_params[:text],
                                           single_word_params[:intent_ref] )
 
     render json:{}.to_json, status:201

@@ -6,9 +6,9 @@ describe SingleWordRuleFileManager do
     end
   end
 
-  describe '#insert' do
+  describe '#append' do
     it 'should succeed' do
-      SingleWordRuleFileManager.new.insert( 'state', '{{intent:bunks}}' )
+      SingleWordRuleFileManager.new.append( 'state', '{{intent:bunks}}' )
 
       expect( SingleWordRuleFileManager.new.load_file ).to eq [['bunny', '{{intent:fiver}}'],
                                                                ['wings', '{{intent:kehar}}'],
@@ -17,7 +17,7 @@ describe SingleWordRuleFileManager do
 
     it 'should succeed even with extra blank lines' do
       File.write(single_word_rule_file,File.read('spec/data-files/singleword-rules-with-blank-lines.csv'))
-      SingleWordRuleFileManager.new.insert( 'state', '{{intent:bunks}}' )
+      SingleWordRuleFileManager.new.append( 'state', '{{intent:bunks}}' )
 
       expect( SingleWordRuleFileManager.new.load_file ).to eq [['bunny', '{{intent:fiver}}'],
                                                                ['wings', '{{intent:kehar}}'],
@@ -44,10 +44,10 @@ describe SingleWordRuleFileManager do
   end
 
   describe '#create and #update with extra lines' do
-    it 'should allow an insert and then an update and return correctly' do
+    it 'should allow an append and then an update and return correctly' do
       File.write(single_word_rule_file,File.read('spec/data-files/singleword-rules-with-blank-lines.csv'))
 
-      SingleWordRuleFileManager.new.insert( 'state', '{{intent:bunks}}' )
+      SingleWordRuleFileManager.new.append( 'state', '{{intent:bunks}}' )
 
       expect( SingleWordRuleFileManager.new.load_file ).to eq [['bunny', '{{intent:fiver}}'],
                                                                ['wings', '{{intent:kehar}}'],
@@ -59,7 +59,7 @@ describe SingleWordRuleFileManager do
                                                                ['wings', '{{intent:kehar}}'],
                                                                ['state', '{{intent:funks}}']]
 
-      SingleWordRuleFileManager.new.insert( 'great', '{{intent:funny_chicken}}')
+      SingleWordRuleFileManager.new.append( 'great', '{{intent:funny_chicken}}')
 
       expect( SingleWordRuleFileManager.new.load_file ).to eq [['bunny', '{{intent:fiver}}'],
                                                                ['wings', '{{intent:kehar}}'],
