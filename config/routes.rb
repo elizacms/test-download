@@ -102,13 +102,13 @@ require 'sidekiq/web'
     as: :clear_single_word_rule_changes
 
   get '/stop-words',
-    to: 'stop_words#landing'
+    to: 'stop_word#landing'
 
   get '/stop-words',
-    to: 'stop_words#index'
+    to: 'stop_word#index'
 
   post '/stop-words/clear-changes',
-    to: 'stop_words#clear_changes',
+    to: 'stop_word#clear_changes',
     as: :clear_stop_word_changes
 
   resources :skills do
@@ -169,16 +169,16 @@ require 'sidekiq/web'
       to: 'single_word_rule#check_lock'
 
     get '/stop_words',
-      to: 'stop_words#index'
+      to: 'stop_word#index'
 
     post '/stop_words',
-      to: 'stop_words#create'
+      to: 'stop_word#create'
 
     put '/stop_words',
-      to: 'stop_words#update'
+      to: 'stop_word#update'
 
     get '/stop_words/check_lock',
-      to: 'stop_words#check_lock'
+      to: 'stop_word#check_lock'
 
     scope module:'faq' do
       get '/articles/search',

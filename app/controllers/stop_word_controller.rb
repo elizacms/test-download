@@ -1,0 +1,2 @@
+class StopWordController < WordFileController
+end
