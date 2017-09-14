@@ -26,3 +26,9 @@
 .icon-cross:after{
   content:'\2717';
 }
+
+@media screen and (max-width: 767px) {
+  #desktop-menu{
+    display: block !important;
+  }
+}
