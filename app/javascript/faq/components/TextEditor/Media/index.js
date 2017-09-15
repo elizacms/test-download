@@ -5,17 +5,11 @@ export default function Media (props) {
   const {src} = entity.getData();
   const type = entity.getType();
   let media = null;
-  if (type === 'audio') {
-    media = <Audio src={src} />;
+
+  if (type === 'video' || type === 'image' || type === 'pagePush')  {
+    media = <p>{src}</p>;
   }
 
-  if (type === 'image') {
-    media = <Image src={src} />;
-  }
-
-  if (type === 'video') {
-    media = <Video src={src} />;
-  }
   return media;
 };
 
@@ -24,11 +18,11 @@ const Audio = (props) => {
 };
 
 const Image = (props) => {
-  return <img src={props.src} style={styles.media} title={props.src} alt={props.src} />;
+  return <p>{props.src} </p>;
 };
 
 const Video = (props) => {
-  return <video controls src={props.src} style={styles.media} />;
+  return <p>{props.src} </p>;
 };
 
 const styles = {

@@ -7,8 +7,8 @@ import EditFaqView from '../EditFaqView/';
 import ee from '../../EventEmitter';
 
 export default class EditFaq extends Component {
-  constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props);
 
     //const {kbId, isEnabled, questions, answers} = props;
     this.state = {
@@ -29,6 +29,9 @@ export default class EditFaq extends Component {
     this.addAnswer = this.addAnswer.bind(this);
     this.deleteQuestion = this.deleteQuestion.bind(this);
     this.deleteAnswer = this.deleteAnswer.bind(this);
+    this.addVideoUrl = this.addVideoUrl.bind(this);
+    this.addImageUrl = this.addImageUrl.bind(this);
+    this.addPagePushUrl = this.addPagePushUrl.bind(this);
   }
 
   componentDidMount() {
@@ -41,6 +44,9 @@ export default class EditFaq extends Component {
     this.ee.on('addAnswer', this.addAnswer);
     this.ee.on('deleteQuestion', this.deleteQuestion);
     this.ee.on('deleteAnswer', this.deleteAnswer);
+    this.ee.on('addVideoUrl', this.addVideoUrl);
+    this.ee.on('addImageUrl', this.addImageUrl);
+    this.ee.on('addPagePushUrl', this.addPagePushUrl);
   }
 
   componentWillUnmount() {
@@ -51,6 +57,8 @@ export default class EditFaq extends Component {
     this.ee.off('addAnswer');
     this.ee.off('deleteQuestion');
     this.ee.off('deleteAnswer');
+    this.ee.off('addVideoUrl');
+    this.ee.off('addImageUrl');
   }
 
   addQuestion(question) {
@@ -109,8 +117,6 @@ export default class EditFaq extends Component {
 
     let answer = {
       active: answerData.active,
-      links: [],
-      metadata: {},
       text: answerData.text
     }
 
@@ -131,9 +137,46 @@ export default class EditFaq extends Component {
     this.setState({ currentArticle }, this.saveArticle);
   }
 
-  render() {
+  addVideoUrl(videoUrlData) {
+    let currentArticle = this.state.currentArticle;
+    let currentAnswer = currentArticle.answers[videoUrlData.index];
+    let currentMetaData = currentAnswer.metadata || {};
+
+    currentMetaData.videolink = videoUrlData.url;
+    currentAnswer.text = videoUrlData.text;
+    currentAnswer.metadata = currentMetaData;
+
+    this.setState({ currentArticle }, this.saveArticle);
+  }
+
+  addImageUrl(imageUrlData) {
+
+    let currentArticle = this.state.currentArticle;
+    let currentAnswer = currentArticle.answers[imageUrlData.index];
+    let currentMetaData = currentAnswer.metadata || {};
+
+    currentMetaData.imagelink = imageUrlData.url;
+    currentAnswer.text = imageUrlData.text;
+    currentAnswer.metadata = currentMetaData;
+
+    this.setState({ currentArticle }, this.saveArticle);
+  }
+
+  addPagePushUrl(pagePushUrlData) {
+    let currentArticle = this.state.currentArticle;
+    let currentAnswer = currentArticle.answers[pagePushUrlData.index];
+    let currentMetaData = currentAnswer.metadata || {};
+
+    currentMetaData.pagepush = pagePushUrlData.url;
+    currentAnswer.text = pagePushUrlData.text;
+    currentAnswer.metadata = currentMetaData;
+
+    this.setState({ currentArticle }, this.saveArticle);
+
+  }
+	render() {
     const {currentArticle} =  this.state;
-    return (
+		return (
       <EditFaqView
         key={shortid.generate()}
         isEnabled={currentArticle ? currentArticle.enabled : false}
@@ -141,6 +184,6 @@ export default class EditFaq extends Component {
         questions={currentArticle ? currentArticle.questions : []}
         answers={currentArticle ? currentArticle.answers : []}
       />
-    )
-  }
+		)
+	}
 }

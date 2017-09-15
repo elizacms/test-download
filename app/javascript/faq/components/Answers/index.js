@@ -57,6 +57,33 @@ export default class Answers extends Component {
     this.handleTextEditorChange = this.handleTextEditorChange.bind(this);
   }
 
+  render() {
+    const { data } = this.props;
+    if(!data) return null;
+
+    return (
+      <div className="Answers">
+        <div className="flex-container">
+          <h3 className="flex-left">Answers</h3>
+          <button
+            onClick={this.handleAddClick}
+            className="btn md grey flex-right"
+          >+ Add New Answer
+          </button>
+        </div>
+        {
+          this.state.addingNewAnswer && (
+            this.renderNewAnswer()
+          )
+        }
+        {
+          (data.length === 0) && !this.state.addingNewAnswer
+            ? (<p>You don't have any answers</p>)
+            : data.map((answer, index) => this.renderAnswer(answer,index))
+        }
+      </div>
+    )
+  }
 
   handleChange(e) {
     if(!e) return ;
@@ -67,10 +94,8 @@ export default class Answers extends Component {
 
   handleNewAnswerCheckboxChange(id, e) {
     return () => {
-
       this.ee.emit('addAnswer', {text: this.state.currentAnswerText, active: !this.state.newAnswerActive})
       this.setState({ newAnswerActive: !this.state.newAnswerActive});
-
     }
   }
 
@@ -174,6 +199,24 @@ export default class Answers extends Component {
           index={index}
           editorState={editorState}
         />
+        {
+          answer.metadata && answer.metadata.videolink && (
+              <p>Video url: {answer.metadata.videolink}</p>
+          )
+
+        }
+        {
+          answer.metadata && answer.metadata.imagelink && (
+              <p>Image url: {answer.metadata.imagelink}</p>
+          )
+
+        }
+        {
+          answer.metadata && answer.metadata.pagepush && (
+              <p>PagePush url: {answer.metadata.pagepush}</p>
+          )
+
+        }
         <div className="flex-container">
           <button
             onMouseOver={this.handleMouseOver}
@@ -224,33 +267,6 @@ export default class Answers extends Component {
       Delete Answer
       </button>
       </div>
-      </div>
-    )
-  }
-  render() {
-    const { data } = this.props;
-    if(!data) return null;
-
-    return (
-      <div className="Answers">
-        <div className="flex-container">
-          <h3 className="flex-left">Answers</h3>
-          <button
-            onClick={this.handleAddClick}
-            className="btn md grey flex-right"
-          >+ Add New Answer
-          </button>
-        </div>
-        {
-          this.state.addingNewAnswer && (
-            this.renderNewAnswer()
-          )
-        }
-        {
-          (data.length === 0) && !this.state.addingNewAnswer
-            ? (<p>You don't have any answers</p>)
-            : data.map((answer, index) => this.renderAnswer(answer,index))
-        }
       </div>
     )
   }

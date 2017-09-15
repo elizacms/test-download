@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import throttle from 'lodash/throttle';
+import { stateToHTML } from 'draft-js-export-html';
+import toMarkdown from 'to-markdown';
+
+import ee from '../../EventEmitter';
 
 import {
   AtomicBlockUtils,
@@ -24,11 +28,14 @@ export default class TextEditor extends Component {
       { strategy: findImageEntities, component: Image},
     ]);
 
+    this.ee = ee; ''
     this.state = {
+      index: props.index,
       editorState: EditorState.set(props.editorState, {decorator: addLinkDecorator}),
       showURLInput: false,
       showImageInput: false,
       showVideoInput: false,
+      showPagePushInput: false,
       urlValue: '',
       urlType: '',
     };
@@ -41,14 +48,17 @@ export default class TextEditor extends Component {
     this.toggleBlockType = this.toggleBlockType.bind(this);
     this.toggleInlineStyle = this.toggleInlineStyle.bind(this);
     this.promptForLink = this.promptForLink.bind(this);
+    this.confirmLink = this.confirmLink.bind(this);
     this.promptForImage = this.promptForImage.bind(this);
+    this.confirmImage = this.confirmImage.bind(this);
     this.promptForVideo = this.promptForVideo.bind(this);
+    this.confirmVideo = this.confirmVideo.bind(this);
+    this.promptForPagePush = this.promptForPagePush.bind(this);
+    this.confirmPagePush = this.confirmPagePush.bind(this);
     this.onURLChange = (e) =>  this.setState({urlValue: e.target.value ? e.target.value : '', showURLInput: true});
     this.onURLForImageChange = (e) =>  this.setState({urlValue: e.target.value ? e.target.value : '', showImageInput: true});
     this.onURLForVideoChange = (e) =>  this.setState({urlValue: e.target.value ? e.target.value : '', showVideoInput: true});
-    this.confirmLink = this.confirmLink.bind(this);
-    this.confirmImage = this.confirmImage.bind(this);
-    this.confirmVideo = this.confirmVideo.bind(this);
+    this.onURLForPagePushChange = (e) =>  this.setState({urlValue: e.target.value ? e.target.value : '', showPagePushInput: true});
     this.onLinkInputKeyDown = this.onLinkInputKeyDown.bind(this);
     this.removeLink = this.removeLink.bind(this);
     this.handleMouseOver = this.handleMouseOver.bind(this);
@@ -59,6 +69,7 @@ export default class TextEditor extends Component {
     let urlInput = null;
     let imageInput = null;
     let videoInput = null;
+    let pagePushInput = null;
     const {editorState} = this.state;
     if(!editorState) return null;
     // If the user changes block type before entering any text, we can
@@ -126,6 +137,23 @@ export default class TextEditor extends Component {
         </div>;
     }
 
+    if (this.state.showPagePushInput) {
+      pagePushInput =
+        <div style={styles.urlInputContainer}>
+          <form onSubmit={this.onURLForPagePushChange}>
+            <p>Add Src (http://example.com):</p>
+            <input
+              onInput={this.onURLForPagePushChange}
+              ref={ videoComponent => this.videoComponent = videoComponent }
+              style={styles.urlInput}
+              type="text"
+              value={this.state.urlValue}
+              onKeyDown={this.onPagePushInputKeyDown}
+            />
+            <button onClick={this.confirmPagePush}>Confirm</button>
+          </form>
+        </div>;
+    }
     var contentState = editorState.getCurrentContent();
     if (!contentState.hasText()) {
       if (contentState.getBlockMap().first().getType() !== 'unstyled') {
@@ -180,17 +208,28 @@ export default class TextEditor extends Component {
             Add Video
             </button>
         }
-      <div>
-        {urlInput}
-        {imageInput}
-        {videoInput}
-      </div>
+        {
+
+            <button
+              onMouseDown={this.promptForPagePush}
+              className='RichEditor-styleButton'
+              style={{marginRight: 10}}
+            >
+            Add PagePush Url
+            </button>
+        }
+        <div>
+          {urlInput}
+          {imageInput}
+          {videoInput}
+          {pagePushInput}
+        </div>
         <div tabIndex={0}
           onMouseOver={this.handleMouseOver}
           onClick={this.focus}
         >
         {
-          !urlInput && !imageInput && !videoInput && (
+          !urlInput && !imageInput && !videoInput && !pagePushInput && (
             <Editor
               blockStyleFn={getBlockStyle}
               blockRendererFn={mediaBlockRenderer}
@@ -381,8 +420,14 @@ export default class TextEditor extends Component {
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
     const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
 
+    let text = stateToHTML(this.state.editorState.getCurrentContent()) || '';
+    let imageUrlData = {
+      text,
+      url: urlValue,
+      index: this.state.index,
+    }
+    this.ee.emit('addImageUrl', imageUrlData);
     this.setState({
-      editorState: AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, ' ',),
       showImageInput: false,
       urlValue: '',
     }, this.focus)
@@ -401,10 +446,12 @@ export default class TextEditor extends Component {
         const blockWithVideoAtBeginning = contentState.getBlockForKey(startKey);
         const videoKey = blockWithVideoAtBeginning.getEntityAt(startOffset);
         let url = '';
+
         if (videoKey) {
           const videoInstance = contentState.getEntity(videoKey);
           url = videoInstance.getData().url;
         }
+
         this.setState({
           showVideoInput: true,
           urlValue: url,
@@ -412,8 +459,10 @@ export default class TextEditor extends Component {
         }, () => {
           this.videoComponent && this.videoComponent.focus();
         });
+
       }
     }
+
     this.setState({ showVideoInput: true }, createVideoEntity);
   }
 
@@ -430,9 +479,78 @@ export default class TextEditor extends Component {
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
     const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
 
+    let text = stateToHTML(this.state.editorState.getCurrentContent());
+    let videoUrlData = {
+      text,
+      url: urlValue,
+      index: this.state.index,
+    }
+    this.ee.emit('addVideoUrl', videoUrlData);
+
     this.setState({
       editorState: AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, ' ',),
       showVideoInput: false,
+      urlValue: '',
+    }, this.focus)
+  }
+
+  promptForPagePush(e) {
+    e.preventDefault();
+    const {editorState} = this.state;
+    const selection = editorState.getSelection();
+
+    const createPagePushEntity = () => {
+      if (!selection.isCollapsed()) {
+        const contentState = editorState.getCurrentContent();
+        const startKey = editorState.getSelection().getStartKey();
+        const startOffset = editorState.getSelection().getStartOffset();
+        const blockWithPagePushAtBeginning = contentState.getBlockForKey(startKey);
+        const pagePushKey = blockWithPagePushAtBeginning.getEntityAt(startOffset);
+        let url = '';
+
+        if (pagePushKey) {
+          const pagePushInstance = contentState.getEntity(pagePushKey);
+          url = pagePushInstance.getData().url;
+        }
+
+        this.setState({
+          showPagePushInput: true,
+          urlValue: url,
+          urlType: 'pagepush',
+        }, () => {
+          this.pagePushComponent && this.pagePushComponent.focus();
+        });
+
+      }
+    }
+
+    this.setState({ showPagePushInput: true }, createPagePushEntity);
+  }
+
+  confirmPagePush(e) {
+    e.preventDefault();
+
+    const {editorState, urlValue} = this.state;
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
+      'pagepush',
+      'IMMUTABLE',
+      {src: urlValue}
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
+
+    let text = stateToHTML(this.state.editorState.getCurrentContent());
+    let pagePushUrlData = {
+      text,
+      url: urlValue,
+      index: this.state.index,
+    }
+    this.ee.emit('addPagePushUrl', pagePushUrlData);
+
+    this.setState({
+      editorState: AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, ' ',),
+      showPagePushInput: false,
       urlValue: '',
     }, this.focus)
   }
