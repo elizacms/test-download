@@ -4,30 +4,14 @@ module FAQ
 
     include FilePath
 
-    def import
-      CSV.open( faq_article_file )
-         .select( &:any? )
-         .each do | query, hash |
-            create_for query, hash
-         end
-    end
-
     def export
       CSV.open( faq_article_file, 'wt' ) do | csv |
-        Article.each do | a |
-          dup = a.response.dup
-
-          # Move versionId to end of hash to match existing format
-          dup[ :versionId ] = dup.delete( :versionId )
-
-          response = { ResponseValue:dup         ,
+        Question.each do | question |
+          response = { ResponseValue:response_value_for( question ),
                        ResponseType:RESPONSE_TYPE }
           response_json = JSON.generate( response, space:' ' )
-                              .gsub( ',"',   ', "' )
-                              .gsub( ', ",', ',",' )
-                              .gsub( ',{',   ', {' )
 
-          csv << [ a.query, response_json ]
+          csv << [ question.text, response_json ]
         end
       end
     end
@@ -35,14 +19,22 @@ module FAQ
 
     private
 
-    def create_for query, hash
-      response = JSON.parse( hash, symbolize_names:true )[ :ResponseValue ]
+    def response_value_for question
+      answers_ary = question
+                      .article
+                      .answers.map do | a |
+                        { Answers:answers_for( a )}
+                    end
 
-      params = { query:    query,
-                 kbid:     response.delete( :id ),
-                 response: response }
+      { isFaq:question.is_faq.to_s.upcase,
+        Answers:answers_ary,
+        id: question.article.kbid }
+    end
 
-      Article.create! params
+    def answers_for answer
+      { outputMetaData:answer.metadata,
+        isDefault:answer.active.to_s.upcase,
+        Answer:answer.text }
     end
   end
 end

@@ -3,7 +3,8 @@ class FAQ::Question
   include Mongoid::Timestamps
   include Mongoid::Search
 
-  field :text, type:String
+  field :text,   type:String
+  field :is_faq, type:Boolean
 
   belongs_to :article, class_name: 'FAQ::Article'
 
