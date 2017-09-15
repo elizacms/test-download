@@ -29,7 +29,7 @@ export function fetchSingleArticle(id) {
 
 export function putArticle(article) {
   let urlWithPath = `${apiUrl}/${article.kbid}/`
-  console.log(article);
+  console.log('putArticle', JSON.stringify(article));
   return fetch(urlWithPath, {
     method: 'PUT' ,
     headers: {
@@ -101,7 +101,6 @@ export function deleteArticle(kbid) {
     method: 'Delete',
   })
     .then(response => {
-      console.log('delete response', response);
       return response.json();
     })
     .then(json => {

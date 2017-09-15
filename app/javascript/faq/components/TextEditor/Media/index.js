@@ -10,6 +10,10 @@ export default function Media (props) {
     media = <p>{src}</p>;
   }
 
+  if(type === 'waittime') {
+    media = (<span>{`{{waittime=${src}}}`}</span>);
+  }
+
   return media;
 };
 

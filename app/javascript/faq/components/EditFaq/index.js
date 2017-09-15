@@ -174,6 +174,9 @@ export default class EditFaq extends Component {
     this.setState({ currentArticle }, this.saveArticle);
 
   }
+  addWaitTime() {
+
+  }
 	render() {
     const {currentArticle} =  this.state;
 		return (

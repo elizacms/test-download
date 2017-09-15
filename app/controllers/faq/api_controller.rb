@@ -87,7 +87,7 @@ module FAQ
     private
 
     def article_params
-      params.permit(:kbid, :enabled, questions:[], answers:[:links, :metadata, :text, :active])
+      params.permit(:kbid, :enabled, questions:[], answers:[:metadata, :text, :active, links:[]])
     end
 
     def articles
@@ -105,7 +105,6 @@ module FAQ
     def offset
       page = params[ :page ].to_i
       page = 1 if page < 1
-
       ( page - 1 ) * 10
     end
 

@@ -36,6 +36,7 @@ export default class TextEditor extends Component {
       showImageInput: false,
       showVideoInput: false,
       showPagePushInput: false,
+      showWaitTimeInput: false,
       urlValue: '',
       urlType: '',
     };
@@ -55,10 +56,13 @@ export default class TextEditor extends Component {
     this.confirmVideo = this.confirmVideo.bind(this);
     this.promptForPagePush = this.promptForPagePush.bind(this);
     this.confirmPagePush = this.confirmPagePush.bind(this);
+    this.promptForWaitTime = this.promptForWaitTime.bind(this);
+    this.confirmWaitTime = this.confirmWaitTime.bind(this);
     this.onURLChange = (e) =>  this.setState({urlValue: e.target.value ? e.target.value : '', showURLInput: true});
     this.onURLForImageChange = (e) =>  this.setState({urlValue: e.target.value ? e.target.value : '', showImageInput: true});
     this.onURLForVideoChange = (e) =>  this.setState({urlValue: e.target.value ? e.target.value : '', showVideoInput: true});
     this.onURLForPagePushChange = (e) =>  this.setState({urlValue: e.target.value ? e.target.value : '', showPagePushInput: true});
+    this.onWaitTimeChange = (e) =>  this.setState({urlValue: e.target.value ? e.target.value : '', showWaitTimeInput: true});
     this.onLinkInputKeyDown = this.onLinkInputKeyDown.bind(this);
     this.removeLink = this.removeLink.bind(this);
     this.handleMouseOver = this.handleMouseOver.bind(this);
@@ -70,6 +74,7 @@ export default class TextEditor extends Component {
     let imageInput = null;
     let videoInput = null;
     let pagePushInput = null;
+    let waitTimeInput = null;
     const {editorState} = this.state;
     if(!editorState) return null;
     // If the user changes block type before entering any text, we can
@@ -85,7 +90,7 @@ export default class TextEditor extends Component {
     if (this.state.showURLInput) {
       urlInput = (
         <div style={styles.urlInputContainer}>
-          <form onSubmit={this.onURLChange}>
+          <form onSubmit={this.confirmLink}>
             <p>Add Url (http://example.com):</p>
             <input
               onInput={this.onURLChange}
@@ -144,7 +149,7 @@ export default class TextEditor extends Component {
             <p>Add Src (http://example.com):</p>
             <input
               onInput={this.onURLForPagePushChange}
-              ref={ videoComponent => this.videoComponent = videoComponent }
+              ref={ pagePushComponent => this.pagePushComponent = pagePushComponent }
               style={styles.urlInput}
               type="text"
               value={this.state.urlValue}
@@ -154,6 +159,25 @@ export default class TextEditor extends Component {
           </form>
         </div>;
     }
+
+    if (this.state.showWaitTimeInput) {
+      waitTimeInput =
+        <div style={styles.urlInputContainer}>
+          <form onSubmit={this.confirmWaitTime}>
+            <p>Add Src (http://example.com):</p>
+            <input
+              onInput={this.onWaitTimeChange}
+              ref={ waitTimeComponent => this.waitTimeComponent = waitTimeComponent }
+              style={styles.urlInput}
+              type="text"
+              value={this.state.urlValue}
+              onKeyDown={this.onWaitTimeInputKeyDown}
+            />
+            <button onClick={this.confirmWaitTime}>Confirm</button>
+          </form>
+        </div>;
+    }
+
     var contentState = editorState.getCurrentContent();
     if (!contentState.hasText()) {
       if (contentState.getBlockMap().first().getType() !== 'unstyled') {
@@ -191,6 +215,16 @@ export default class TextEditor extends Component {
         {
 
             <button
+              onMouseDown={this.promptForWaitTime}
+              className='RichEditor-styleButton'
+              style={{marginRight: 10}}
+            >
+            Add Wait Time
+            </button>
+        }
+        {
+
+            <button
               onMouseDown={this.promptForImage}
               className='RichEditor-styleButton'
               style={{marginRight: 10}}
@@ -218,18 +252,29 @@ export default class TextEditor extends Component {
             Add PagePush Url
             </button>
         }
+        {
+
+            <button
+              onMouseDown={this.promptForWaitTime}
+              className='RichEditor-styleButton'
+              style={{marginRight: 10}}
+            >
+            Add Wait Time
+            </button>
+        }
         <div>
           {urlInput}
           {imageInput}
           {videoInput}
           {pagePushInput}
+          {waitTimeInput}
         </div>
         <div tabIndex={0}
           onMouseOver={this.handleMouseOver}
           onClick={this.focus}
         >
         {
-          !urlInput && !imageInput && !videoInput && !pagePushInput && (
+          !urlInput && !imageInput && !videoInput && !pagePushInput && !waitTimeInput && (
             <Editor
               blockStyleFn={getBlockStyle}
               blockRendererFn={mediaBlockRenderer}
@@ -553,6 +598,72 @@ export default class TextEditor extends Component {
       showPagePushInput: false,
       urlValue: '',
     }, this.focus)
+  }
+
+
+
+  promptForWaitTime(e) {
+    e.preventDefault();
+    const {editorState} = this.state;
+    const selection = editorState.getSelection();
+
+    const createWaitTimeEntity = () => {
+      if (!selection.isCollapsed()) {
+        const contentState = editorState.getCurrentContent();
+        const startKey = editorState.getSelection().getStartKey();
+        const startOffset = editorState.getSelection().getStartOffset();
+        const blockWithWaitTimeAtBeginning = contentState.getBlockForKey(startKey);
+        const waitTimeKey = blockWithWaitTimeAtBeginning.getEntityAt(startOffset);
+        let url = '';
+
+        if (waitTimeKey) {
+          const waitTimeInstance = contentState.getEntity(waitTimeKey);
+          url = waitTimeInstance.getData().url;
+        }
+
+        this.setState({
+          showWaitTimeInput: true,
+          urlValue: url,
+          urlType: 'waittime',
+        }, () => {
+          this.waitTimeComponent && this.waitTimeComponent.focus();
+        });
+
+      }
+    }
+
+    this.setState({ showWaitTimeInput: true }, createWaitTimeEntity);
+  }
+
+  confirmWaitTime(e) {
+    e.preventDefault();
+
+    const {editorState, urlValue} = this.state;
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
+      'waittime',
+      'IMMUTABLE',
+      {src: urlValue}
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
+
+    let text = toMarkdown(stateToHTML(this.state.editorState.getCurrentContent()));
+    let waitTimeData = {
+      text,
+      url: urlValue,
+      index: this.state.index,
+    }
+
+    this.setState({
+      editorState: AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, ' ',),
+      showWaitTimeInput: false,
+      urlValue: '',
+    }, () => {
+
+this.focus();
+    this.ee.emit('addWaitTime', waitTimeData);
+    })
   }
 }
 
